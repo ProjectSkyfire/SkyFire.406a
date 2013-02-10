@@ -4960,7 +4960,7 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     // If the player can't be teleported, send him a notification
                     if (unitTarget->HasAura(44867))
                     {
-                        ((Player*)unitTarget)->GetSession()->SendNotification(LANG_FAIL_ENTER_SPECTRAL_REALM);
+                        ((Player*)unitTarget)->GetSession()->SendNotification(LANGUAGE_FAIL_ENTER_SPECTRAL_REALM);
                         return;
                     }
 
@@ -7550,7 +7550,7 @@ void Spell::EffectPlayerNotification(SpellEffIndex effIndex)
     {
         case 58730: // Restricted Flight Area
         case 58600: // Restricted Flight Area
-            unitTarget->ToPlayer()->GetSession()->SendNotification(LANG_ZONE_NOFLYZONE);
+            unitTarget->ToPlayer()->GetSession()->SendNotification(LANGUAGE_ZONE_NOFLYZONE);
             unitTarget->PlayDirectSound(9417); // Fel Reaver sound
             break;
     }

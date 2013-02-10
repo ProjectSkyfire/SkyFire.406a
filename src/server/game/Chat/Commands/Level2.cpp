@@ -87,7 +87,7 @@ bool ChatHandler::HandleMuteCommand(const char* args)
 
         stmt->setInt64(0, muteTime);
 
-        ChatHandler(target).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notspeaktime, mutereasonstr.c_str());
+        ChatHandler(target).PSendSysMessage(LANGUAGE_YOUR_CHAT_DISABLED, notspeaktime, mutereasonstr.c_str());
     }
     else
     {
@@ -103,7 +103,7 @@ bool ChatHandler::HandleMuteCommand(const char* args)
 
     std::string nameLink = playerLink(target_name);
 
-    PSendSysMessage(target ? LANG_YOU_DISABLE_CHAT : LANG_COMMAND_DISABLE_CHAT_DELAYED, nameLink.c_str(), notspeaktime, mutereasonstr.c_str());
+    PSendSysMessage(target ? LANGUAGE_YOU_DISABLE_CHAT : LANGUAGE_COMMAND_DISABLE_CHAT_DELAYED, nameLink.c_str(), notspeaktime, mutereasonstr.c_str());
 
     return true;
 }
@@ -132,7 +132,7 @@ bool ChatHandler::HandleUnmuteCommand(const char* args)
     {
         if (target->CanSpeak())
         {
-            SendSysMessage(LANG_CHAT_ALREADY_ENABLED);
+            SendSysMessage(LANGUAGE_CHAT_ALREADY_ENABLED);
             SetSentErrorMessage(true);
             return false;
         }
@@ -148,11 +148,11 @@ bool ChatHandler::HandleUnmuteCommand(const char* args)
     LoginDatabase.Execute(stmt);
 
     if (target)
-        ChatHandler(target).PSendSysMessage(LANG_YOUR_CHAT_ENABLED);
+        ChatHandler(target).PSendSysMessage(LANGUAGE_YOUR_CHAT_ENABLED);
 
     std::string nameLink = playerLink(target_name);
 
-    PSendSysMessage(LANG_YOU_ENABLE_CHAT, nameLink.c_str());
+    PSendSysMessage(LANGUAGE_YOU_ENABLE_CHAT, nameLink.c_str());
     return true;
 }
 
@@ -162,12 +162,12 @@ bool ChatHandler::HandleGUIDCommand(const char* /*args*/)
 
     if (guid == 0)
     {
-        SendSysMessage(LANG_NO_SELECTION);
+        SendSysMessage(LANGUAGE_NO_SELECTION);
         SetSentErrorMessage(true);
         return false;
     }
 
-    PSendSysMessage(LANG_OBJECT_GUID, GUID_LOPART(guid), GUID_HIPART(guid));
+    PSendSysMessage(LANGUAGE_OBJECT_GUID, GUID_LOPART(guid), GUID_HIPART(guid));
     return true;
 }
 
@@ -231,7 +231,7 @@ bool ChatHandler::HandleKickPlayerCommand(const char *args)
 
     if (m_session && target == m_session->GetPlayer())
     {
-        SendSysMessage(LANG_COMMAND_KICKSELF);
+        SendSysMessage(LANGUAGE_COMMAND_KICKSELF);
         SetSentErrorMessage(true);
         return false;
     }
@@ -241,9 +241,9 @@ bool ChatHandler::HandleKickPlayerCommand(const char *args)
         return false;
 
     if (sWorld->getBoolConfig(CONFIG_SHOW_KICK_IN_WORLD))
-        sWorld->SendWorldText(LANG_COMMAND_KICKMESSAGE, playerName.c_str());
+        sWorld->SendWorldText(LANGUAGE_COMMAND_KICKMESSAGE, playerName.c_str());
     else
-        PSendSysMessage(LANG_COMMAND_KICKMESSAGE, playerName.c_str());
+        PSendSysMessage(LANGUAGE_COMMAND_KICKMESSAGE, playerName.c_str());
 
     target->GetSession()->KickPlayer();
     return true;
@@ -305,7 +305,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
         if (HasLowerSecurity(NULL, target_guid))
             return false;
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CHAR_PINFO);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_PINFO);
         stmt->setUInt32(0, GUID_LOPART(target_guid));
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
         
@@ -323,11 +323,11 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
         areaId                  = fields[7].GetUInt16();
     }
 
-    std::string username        = GetSkyFireString(LANG_ERROR);
-    std::string email           = GetSkyFireString(LANG_ERROR);
-    std::string last_ip         = GetSkyFireString(LANG_ERROR);
+    std::string username        = GetSkyFireString(LANGUAGE_ERROR);
+    std::string email           = GetSkyFireString(LANGUAGE_ERROR);
+    std::string last_ip         = GetSkyFireString(LANGUAGE_ERROR);
     uint32 security             = 0;
-    std::string last_login      = GetSkyFireString(LANG_ERROR);
+    std::string last_login      = GetSkyFireString(LANGUAGE_ERROR);
 
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO);
     stmt->setInt32(0, int32(realmID));
@@ -359,7 +359,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
 
     std::string nameLink = playerLink(target_name);
 
-    PSendSysMessage(LANG_PINFO_ACCOUNT, (target?"":GetSkyFireString(LANG_OFFLINE)), nameLink.c_str(), GUID_LOPART(target_guid), username.c_str(), accId, email.c_str(), security, last_ip.c_str(), last_login.c_str(), latency);
+    PSendSysMessage(LANGUAGE_PINFO_ACCOUNT, (target?"":GetSkyFireString(LANGUAGE_OFFLINE)), nameLink.c_str(), GUID_LOPART(target_guid), username.c_str(), accId, email.c_str(), security, last_ip.c_str(), last_login.c_str(), latency);
 
     std::string bannedby = "unknown";
     std::string banreason = "";
@@ -369,7 +369,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     PreparedQueryResult result2 = LoginDatabase.Query(stmt);
     if (!result2)
     {
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_PINFO_BANS);
+        stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_PINFO_BANS);
         stmt->setUInt32(0, GUID_LOPART(target_guid));
         result2 = CharacterDatabase.Query(stmt);
     }
@@ -383,10 +383,10 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     }
 
     if (muteTime > 0)
-        PSendSysMessage(LANG_PINFO_MUTE, secsToTimeString(muteTime - time(NULL), true).c_str());
+        PSendSysMessage(LANGUAGE_PINFO_MUTE, secsToTimeString(muteTime - time(NULL), true).c_str());
 
     if (banTime >= 0)
-        PSendSysMessage(LANG_PINFO_BAN, banTime > 0 ? secsToTimeString(banTime - time(NULL), true).c_str() : "permanently", bannedby.c_str(), banreason.c_str());
+        PSendSysMessage(LANGUAGE_PINFO_BAN, banTime > 0 ? secsToTimeString(banTime - time(NULL), true).c_str() : "permanently", bannedby.c_str(), banreason.c_str());
 
     std::string race_s, Class_s;
     switch (race)
@@ -422,7 +422,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     uint32 gold = money /GOLD;
     uint32 silv = (money % GOLD) / SILVER;
     uint32 copp = (money % GOLD) % SILVER;
-    PSendSysMessage(LANG_PINFO_LEVEL, race_s.c_str(), Class_s.c_str(), timeStr.c_str(), level, gold, silv, copp);
+    PSendSysMessage(LANGUAGE_PINFO_LEVEL, race_s.c_str(), Class_s.c_str(), timeStr.c_str(), level, gold, silv, copp);
 
     // Add map, zone, subzone and phase to output
     int locale = GetSessionDbcLocale();
@@ -445,12 +445,12 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     if (target)
     {
         if (!zoneName.empty())
-            PSendSysMessage(LANG_PINFO_MAP_ONLINE, map->name, zoneName.c_str(), areaName.c_str(), phase);
+            PSendSysMessage(LANGUAGE_PINFO_MAP_ONLINE, map->name, zoneName.c_str(), areaName.c_str(), phase);
         else
-            PSendSysMessage(LANG_PINFO_MAP_ONLINE, map->name, areaName.c_str(), "<unknown>", phase);
+            PSendSysMessage(LANGUAGE_PINFO_MAP_ONLINE, map->name, areaName.c_str(), "<unknown>", phase);
     }
     else
-        PSendSysMessage(LANG_PINFO_MAP_OFFLINE, map->name, areaName.c_str());
+        PSendSysMessage(LANGUAGE_PINFO_MAP_OFFLINE, map->name, areaName.c_str());
 
     return true;
 }
@@ -488,16 +488,16 @@ bool ChatHandler::HandleLookupEventCommand(const char* args)
         {
             if (maxResults && count++ == maxResults)
             {
-                PSendSysMessage(LANG_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
+                PSendSysMessage(LANGUAGE_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
                 return true;
             }
 
-            char const* active = activeEvents.find(id) != activeEvents.end() ? GetSkyFireString(LANG_ACTIVE) : "";
+            char const* active = activeEvents.find(id) != activeEvents.end() ? GetSkyFireString(LANGUAGE_ACTIVE) : "";
 
             if (m_session)
-                PSendSysMessage(LANG_EVENT_ENTRY_LIST_CHAT, id, id, eventData.description.c_str(), active);
+                PSendSysMessage(LANGUAGE_EVENT_ENTRY_LIST_CHAT, id, id, eventData.description.c_str(), active);
             else
-                PSendSysMessage(LANG_EVENT_ENTRY_LIST_CONSOLE, id, eventData.description.c_str(), active);
+                PSendSysMessage(LANGUAGE_EVENT_ENTRY_LIST_CONSOLE, id, eventData.description.c_str(), active);
 
             if (!found)
                 found = true;
@@ -505,7 +505,7 @@ bool ChatHandler::HandleLookupEventCommand(const char* args)
     }
 
     if (!found)
-        SendSysMessage(LANG_NOEVENTFOUND);
+        SendSysMessage(LANGUAGE_NOEVENTFOUND);
 
     return true;
 }
@@ -594,7 +594,7 @@ bool ChatHandler::LookupPlayerSearchCommand(PreparedQueryResult result, int32 li
 {
     if (!result)
     {
-        PSendSysMessage(LANG_NO_PLAYERS_FOUND);
+        PSendSysMessage(LANGUAGE_NO_PLAYERS_FOUND);
         SetSentErrorMessage(true);
         return false;
     }
@@ -606,7 +606,7 @@ bool ChatHandler::LookupPlayerSearchCommand(PreparedQueryResult result, int32 li
     {
         if (maxResults && count++ == maxResults)
         {
-            PSendSysMessage(LANG_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
+            PSendSysMessage(LANGUAGE_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
             return true;
         }
 
@@ -614,13 +614,13 @@ bool ChatHandler::LookupPlayerSearchCommand(PreparedQueryResult result, int32 li
         uint32 acc_id = fields[0].GetUInt32();
         std::string acc_name = fields[1].GetString();
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CHAR_GUID_NAME_BY_ACC);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_GUID_NAME_BY_ACC);
         stmt->setUInt32(0, acc_id);
         PreparedQueryResult result2 = CharacterDatabase.Query(stmt);
 
         if (result2)
         {
-            PSendSysMessage(LANG_LOOKUP_PLAYER_ACCOUNT, acc_name.c_str(), acc_id);
+            PSendSysMessage(LANGUAGE_LOOKUP_PLAYER_ACCOUNT, acc_name.c_str(), acc_id);
 
             uint64 guid = 0;
             std::string name;
@@ -631,7 +631,7 @@ bool ChatHandler::LookupPlayerSearchCommand(PreparedQueryResult result, int32 li
                 guid = charfields[0].GetUInt32();
                 name = charfields[1].GetString();
 
-                PSendSysMessage(LANG_LOOKUP_PLAYER_CHARACTER, name.c_str(), guid);
+                PSendSysMessage(LANGUAGE_LOOKUP_PLAYER_CHARACTER, name.c_str(), guid);
                 ++i;
             } while (result2->NextRow() && (limit == -1 || i < limit));
         }
@@ -639,7 +639,7 @@ bool ChatHandler::LookupPlayerSearchCommand(PreparedQueryResult result, int32 li
 
     if (i == 0)                                                // empty accounts only
     {
-        PSendSysMessage(LANG_NO_PLAYERS_FOUND);
+        PSendSysMessage(LANGUAGE_NO_PLAYERS_FOUND);
         SetSentErrorMessage(true);
         return false;
     }
@@ -660,9 +660,9 @@ bool ChatHandler::HandleRepairitemsCommand(const char* args)
     // Repair items
     target->DurabilityRepairAll(false, 0, false);
 
-    PSendSysMessage(LANG_YOU_REPAIR_ITEMS, GetNameLink(target).c_str());
+    PSendSysMessage(LANGUAGE_YOU_REPAIR_ITEMS, GetNameLink(target).c_str());
     if (needReportToTarget(target))
-        ChatHandler(target).PSendSysMessage(LANG_YOUR_ITEMS_REPAIRED, GetNameLink().c_str());
+        ChatHandler(target).PSendSysMessage(LANGUAGE_YOUR_ITEMS_REPAIRED, GetNameLink().c_str());
     return true;
 }
 
@@ -675,7 +675,7 @@ bool ChatHandler::HandleWaterwalkCommand(const char* args)
 
     if (!player)
     {
-        PSendSysMessage(LANG_NO_CHAR_SELECTED);
+        PSendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
         SetSentErrorMessage(true);
         return false;
     }
@@ -690,13 +690,13 @@ bool ChatHandler::HandleWaterwalkCommand(const char* args)
         player->SetMovement(MOVE_LAND_WALK);                // OFF
     else
     {
-        SendSysMessage(LANG_USE_BOL);
+        SendSysMessage(LANGUAGE_USE_BOL);
         return false;
     }
 
-    PSendSysMessage(LANG_YOU_SET_WATERWALK, args, GetNameLink(player).c_str());
+    PSendSysMessage(LANGUAGE_YOU_SET_WATERWALK, args, GetNameLink(player).c_str());
     if (needReportToTarget(player))
-        ChatHandler(player).PSendSysMessage(LANG_YOUR_WATERWALK_SET, args, GetNameLink().c_str());
+        ChatHandler(player).PSendSysMessage(LANGUAGE_YOUR_WATERWALK_SET, args, GetNameLink().c_str());
     return true;
 }
 
@@ -707,7 +707,7 @@ bool ChatHandler::HandleCreatePetCommand(const char* /*args*/)
 
     if (!creatureTarget || creatureTarget->isPet() || creatureTarget->GetTypeId() == TYPEID_PLAYER)
     {
-        PSendSysMessage(LANG_SELECT_CREATURE);
+        PSendSysMessage(LANGUAGE_SELECT_CREATURE);
         SetSentErrorMessage(true);
         return false;
     }
@@ -805,7 +805,7 @@ bool ChatHandler::HandlePetLearnCommand(const char* args)
     SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spellId);
     if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo))
     {
-        PSendSysMessage(LANG_COMMAND_SPELL_BROKEN, spellId);
+        PSendSysMessage(LANGUAGE_COMMAND_SPELL_BROKEN, spellId);
         SetSentErrorMessage(true);
         return false;
     }
@@ -896,14 +896,14 @@ bool ChatHandler::HandleLookupTitleCommand(const char* args)
             {
                 if (maxResults && counter == maxResults)
                 {
-                    PSendSysMessage(LANG_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
+                    PSendSysMessage(LANGUAGE_COMMAND_LOOKUP_MAX_RESULTS, maxResults);
                     return true;
                 }
 
-                char const* knownStr = target && target->HasTitle(titleInfo) ? GetSkyFireString(LANG_KNOWN) : "";
+                char const* knownStr = target && target->HasTitle(titleInfo) ? GetSkyFireString(LANGUAGE_KNOWN) : "";
 
                 char const* activeStr = target && target->GetUInt32Value(PLAYER_CHOSEN_TITLE) == titleInfo->bit_index
-                    ? GetSkyFireString(LANG_ACTIVE)
+                    ? GetSkyFireString(LANGUAGE_ACTIVE)
                     : "";
 
                 char titleNameStr[80];
@@ -911,15 +911,15 @@ bool ChatHandler::HandleLookupTitleCommand(const char* args)
 
                 // send title in "id (idx:idx) - [namedlink locale]" format
                 if (m_session)
-                    PSendSysMessage(LANG_TITLE_LIST_CHAT, id, titleInfo->bit_index, id, titleNameStr, localeNames[loc], knownStr, activeStr);
+                    PSendSysMessage(LANGUAGE_TITLE_LIST_CHAT, id, titleInfo->bit_index, id, titleNameStr, localeNames[loc], knownStr, activeStr);
                 else
-                    PSendSysMessage(LANG_TITLE_LIST_CONSOLE, id, titleInfo->bit_index, titleNameStr, localeNames[loc], knownStr, activeStr);
+                    PSendSysMessage(LANGUAGE_TITLE_LIST_CONSOLE, id, titleInfo->bit_index, titleNameStr, localeNames[loc], knownStr, activeStr);
 
                 ++counter;
             }
         }
     }
     if (counter == 0)                                       // if counter == 0 then we found nth
-        SendSysMessage(LANG_COMMAND_NOTITLEFOUND);
+        SendSysMessage(LANGUAGE_COMMAND_NOTITLEFOUND);
     return true;
 }

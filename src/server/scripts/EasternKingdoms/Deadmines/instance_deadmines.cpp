@@ -181,7 +181,7 @@ class instance_deadmines : public InstanceMapScript
                         CannonBlast_Timer = DATA_CANNON_BLAST_TIMER;
                         // it's a hack - Mr. Smite should do that but his too far away
                         ironCladDoor->SetName("Mr. Smite");
-                        ironCladDoor->MonsterYell(SAY_MR_SMITE_ALARM1, LANG_UNIVERSAL, 0);
+                        ironCladDoor->MonsterYell(SAY_MR_SMITE_ALARM1, LANGUAGE_UNIVERSAL, 0);
                         DoPlaySound(ironCladDoor, SOUND_MR_SMITE_ALARM1);
                         State = CANNON_BLAST_INITIATED;
                         break;
@@ -193,7 +193,7 @@ class instance_deadmines : public InstanceMapScript
                             ShootCannon();
                             BlastOutDoor();
                             LeverStucked();
-                            ironCladDoor->MonsterYell(SAY_MR_SMITE_ALARM2, LANG_UNIVERSAL, 0);
+                            ironCladDoor->MonsterYell(SAY_MR_SMITE_ALARM2, LANGUAGE_UNIVERSAL, 0);
                             DoPlaySound(ironCladDoor, SOUND_MR_SMITE_ALARM2);
                             State = PIRATES_ATTACK;
                         } else CannonBlast_Timer -= diff;

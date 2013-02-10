@@ -47,7 +47,7 @@ namespace SkyFire
         char const* text = sObjectMgr->GetSkyFireString(i_textId, loc_idx);
 
         data << uint8(i_msgtype);
-        data << uint32(LANG_UNIVERSAL);
+        data << uint32(LANGUAGE_UNIVERSAL);
         data << uint64(i_player.GetGUID());
         data << uint32(5);
         data << uint64(i_player.GetGUID());

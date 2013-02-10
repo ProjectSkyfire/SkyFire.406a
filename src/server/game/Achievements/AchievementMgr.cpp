@@ -233,7 +233,7 @@ void AchievementMgr::LoadFromDB(PreparedQueryResult achievementResult, PreparedQ
                 // we will remove not existed criteria for all characters
                 sLog->outError("Non-existing achievement criteria %u data removed from table `character_achievement_progress`.", id);
 
-                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_INVALID_ACHIEV_PROGRESS_CRITERIA);
+                PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_INVALID_ACHIEV_PROGRESS_CRITERIA);
 
                 stmt->setUInt16(0, uint16(id));
 
@@ -268,7 +268,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
 
     if (Guild* guild = sGuildMgr->GetGuildById(GetPlayer()->GetGuildId()))
     {
-        SkyFire::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
+        SkyFire::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_GUILD_ACHIEVEMENT, LANGUAGE_ACHIEVEMENT_EARNED, achievement->ID);
         SkyFire::LocalizedPacketDo<SkyFire::AchievementChatBuilder> say_do(say_builder);
         guild->BroadcastWorker(say_do, GetPlayer());
     }
@@ -291,7 +291,7 @@ void AchievementMgr::SendAchievementEarned(AchievementEntry const* achievement) 
         Cell cell(p);
         cell.SetNoCreate();
 
-        SkyFire::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_ACHIEVEMENT, LANG_ACHIEVEMENT_EARNED, achievement->ID);
+        SkyFire::AchievementChatBuilder say_builder(*GetPlayer(), CHAT_MSG_ACHIEVEMENT, LANGUAGE_ACHIEVEMENT_EARNED, achievement->ID);
         SkyFire::LocalizedPacketDo<SkyFire::AchievementChatBuilder> say_do(say_builder);
         SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::AchievementChatBuilder> > say_worker(GetPlayer(), sWorld->getFloatConfig(CONFIG_LISTEN_RANGE_SAY), say_do);
         TypeContainerVisitor<SkyFire::PlayerDistWorker<SkyFire::LocalizedPacketDo<SkyFire::AchievementChatBuilder> >, WorldTypeMapContainer > message(say_worker);
@@ -779,7 +779,7 @@ void AchievementGlobalMgr::LoadCompletedAchievements()
             // Remove non existent achievements from all characters
             sLog->outError("Non-existing achievement %u data removed from table `character_achievement`.", achievementId);
 
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_INVALID_ACHIEVMENT);
+            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_INVALID_ACHIEVMENT);
 
             stmt->setUInt16(0, uint16(achievementId));
 

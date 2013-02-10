@@ -309,7 +309,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
     // not accept case incorrect money amount
     if (!_player->HasEnoughMoney(my_trade->GetMoney()))
     {
-        SendNotification(LANG_NOT_ENOUGH_GOLD);
+        SendNotification(LANGUAGE_NOT_ENOUGH_GOLD);
         my_trade->SetAccepted(false, true);
         return;
     }
@@ -317,7 +317,7 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
     // not accept case incorrect money amount
     if (!trader->HasEnoughMoney(his_trade->GetMoney()))
     {
-        trader->GetSession()->SendNotification(LANG_NOT_ENOUGH_GOLD);
+        trader->GetSession()->SendNotification(LANGUAGE_NOT_ENOUGH_GOLD);
         his_trade->SetAccepted(false, true);
         return;
     }
@@ -452,8 +452,8 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
         {
             clearAcceptTradeMode(my_trade, his_trade);
 
-            SendNotification(LANG_NOT_FREE_TRADE_SLOTS);
-            trader->GetSession()->SendNotification(LANG_NOT_PARTNER_FREE_TRADE_SLOTS);
+            SendNotification(LANGUAGE_NOT_FREE_TRADE_SLOTS);
+            trader->GetSession()->SendNotification(LANGUAGE_NOT_PARTNER_FREE_TRADE_SLOTS);
             my_trade->SetAccepted(false);
             his_trade->SetAccepted(false);
             return;
@@ -462,8 +462,8 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& /*recvPacket*/)
         {
             clearAcceptTradeMode(my_trade, his_trade);
 
-            SendNotification(LANG_NOT_PARTNER_FREE_TRADE_SLOTS);
-            trader->GetSession()->SendNotification(LANG_NOT_FREE_TRADE_SLOTS);
+            SendNotification(LANGUAGE_NOT_PARTNER_FREE_TRADE_SLOTS);
+            trader->GetSession()->SendNotification(LANGUAGE_NOT_FREE_TRADE_SLOTS);
             my_trade->SetAccepted(false);
             his_trade->SetAccepted(false);
             return;
@@ -607,7 +607,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 
     if (GetPlayer()->getLevel() < sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ))
     {
-        SendNotification(GetSkyFireString(LANG_TRADE_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
+        SendNotification(GetSkyFireString(LANGUAGE_TRADE_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
         return;
     }
 
@@ -671,7 +671,7 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 
     if (pOther->getLevel() < sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ))
     {
-        SendNotification(GetSkyFireString(LANG_TRADE_OTHER_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
+        SendNotification(GetSkyFireString(LANGUAGE_TRADE_OTHER_REQ), sWorld->getIntConfig(CONFIG_TRADE_LEVEL_REQ));
         return;
     }
 

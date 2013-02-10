@@ -41,7 +41,7 @@ bool ChatHandler::HandleHelpCommand(const char* args)
     else
     {
         if (!ShowHelpForCommand(getCommandTable(), cmd))
-            SendSysMessage(LANG_NO_HELP_CMD);
+            SendSysMessage(LANGUAGE_NO_HELP_CMD);
     }
 
     return true;
@@ -59,14 +59,14 @@ bool ChatHandler::HandleStartCommand(const char* /*args*/)
 
     if (chr->isInFlight())
     {
-        SendSysMessage(LANG_YOU_IN_FLIGHT);
+        SendSysMessage(LANGUAGE_YOU_IN_FLIGHT);
         SetSentErrorMessage(true);
         return false;
     }
 
     if (chr->isInCombat())
     {
-        SendSysMessage(LANG_YOU_IN_COMBAT);
+        SendSysMessage(LANGUAGE_YOU_IN_COMBAT);
         SetSentErrorMessage(true);
         return false;
     }
@@ -88,14 +88,14 @@ bool ChatHandler::HandleDismountCommand(const char* /*args*/)
     //If player is not mounted, so go out :)
     if (!m_session->GetPlayer()->IsMounted())
     {
-        SendSysMessage(LANG_CHAR_NON_MOUNTED);
+        SendSysMessage(LANGUAGE_CHARACTER_NON_MOUNTED);
         SetSentErrorMessage(true);
         return false;
     }
 
     if (m_session->GetPlayer()->isInFlight())
     {
-        SendSysMessage(LANG_YOU_IN_FLIGHT);
+        SendSysMessage(LANGUAGE_YOU_IN_FLIGHT);
         SetSentErrorMessage(true);
         return false;
     }
@@ -116,7 +116,7 @@ bool ChatHandler::HandleSaveCommand(const char* /*args*/)
             target->SaveToDB();
         else
             player->SaveToDB();
-        SendSysMessage(LANG_PLAYER_SAVED);
+        SendSysMessage(LANGUAGE_PLAYER_SAVED);
         return true;
     }
 

@@ -384,10 +384,10 @@ void Map::ScriptsProcess()
                         switch (step.script->Talk.ChatType)
                         {
                             case CHAT_TYPE_SAY:
-                                pSource->Say(text, LANG_UNIVERSAL);
+                                pSource->Say(text, LANGUAGE_UNIVERSAL);
                                 break;
                             case CHAT_TYPE_YELL:
-                                pSource->Yell(text, LANG_UNIVERSAL);
+                                pSource->Yell(text, LANGUAGE_UNIVERSAL);
                                 break;
                             case CHAT_TYPE_TEXT_EMOTE:
                             case CHAT_TYPE_BOSS_EMOTE:
@@ -400,7 +400,7 @@ void Map::ScriptsProcess()
                                 if (!targetGUID || !IS_PLAYER_GUID(targetGUID))
                                     sLog->outError("%s attempt to whisper to non-player unit, skipping.", step.script->GetDebugInfo().c_str());
                                 else
-                                    pSource->Whisper(text, LANG_UNIVERSAL, targetGUID);
+                                    pSource->Whisper(text, LANGUAGE_UNIVERSAL, targetGUID);
                                 break;
                             }
                             default:
@@ -417,10 +417,10 @@ void Map::ScriptsProcess()
                         switch (step.script->Talk.ChatType)
                         {
                             case CHAT_TYPE_SAY:
-                                cSource->Say(step.script->Talk.TextID, LANG_UNIVERSAL, targetGUID);
+                                cSource->Say(step.script->Talk.TextID, LANGUAGE_UNIVERSAL, targetGUID);
                                 break;
                             case CHAT_TYPE_YELL:
-                                cSource->Yell(step.script->Talk.TextID, LANG_UNIVERSAL, targetGUID);
+                                cSource->Yell(step.script->Talk.TextID, LANGUAGE_UNIVERSAL, targetGUID);
                                 break;
                             case CHAT_TYPE_TEXT_EMOTE:
                                 cSource->TextEmote(step.script->Talk.TextID, targetGUID);

@@ -421,14 +421,14 @@ public:
 
             if (!result)
             {
-                handler->PSendSysMessage(LANG_COMMAND_CREATURETEMPLATE_NOTFOUND, entry);
+                handler->PSendSysMessage(LANGUAGE_COMMAND_CREATURETEMPLATE_NOTFOUND, entry);
                 continue;
             }
 
             CreatureTemplate* cInfo = const_cast<CreatureTemplate*>(sObjectMgr->GetCreatureTemplate(entry));
             if (!cInfo)
             {
-                handler->PSendSysMessage(LANG_COMMAND_CREATURESTORAGE_NOTFOUND, entry);
+                handler->PSendSysMessage(LANGUAGE_COMMAND_CREATURESTORAGE_NOTFOUND, entry);
                 continue;
             }
 

@@ -334,7 +334,7 @@ public:
             {
                 case 0:
                     if (WaitTimer == WAIT_SECS)
-                        me->MonsterSay(NPCSAY_INIT, LANG_UNIVERSAL, 0); //no blizzlike
+                        me->MonsterSay(NPCSAY_INIT, LANGUAGE_UNIVERSAL, 0); //no blizzlike
 
                     if (WaitTimer <= diff)
                     {
@@ -364,7 +364,7 @@ public:
                     {
                         if (Player* player = Unit::GetPlayer(*me, PlayerGUID))
                         {
-                            me->MonsterSay(NPCSAY_END, LANG_UNIVERSAL, 0); //not blizzlike
+                            me->MonsterSay(NPCSAY_END, LANGUAGE_UNIVERSAL, 0); //not blizzlike
                             player->GroupEventHappens(QUEST_PYREWOOD_AMBUSH, me);
                         }
                     }

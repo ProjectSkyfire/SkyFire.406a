@@ -899,8 +899,8 @@ struct AccessRequirement
 
 enum CharDeleteMethod
 {
-    CHAR_DELETE_REMOVE = 0,                      // Completely remove from the database
-    CHAR_DELETE_UNLINK = 1                       // The character gets unlinked from the account,
+    CHARACTER_DELETE_REMOVE = 0,                      // Completely remove from the database
+    CHARACTER_DELETE_UNLINK = 1                       // The character gets unlinked from the account,
                                                  // the name gets freed up and appears as deleted ingame
 };
 

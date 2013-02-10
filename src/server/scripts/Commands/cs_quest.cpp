@@ -54,7 +54,7 @@ public:
         Player* player = handler->getSelectedPlayer();
         if (!player)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -71,7 +71,7 @@ public:
 
         if (!quest)
         {
-            handler->PSendSysMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_QUEST_NOTFOUND, entry);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -82,7 +82,7 @@ public:
 
         if (result != itc->end())
         {
-            handler->PSendSysMessage(LANG_COMMAND_QUEST_STARTFROMITEM, entry, result->second.ItemId);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_QUEST_STARTFROMITEM, entry, result->second.ItemId);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -104,7 +104,7 @@ public:
         Player* player = handler->getSelectedPlayer();
         if (!player)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -121,7 +121,7 @@ public:
 
         if (!quest)
         {
-            handler->PSendSysMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_QUEST_NOTFOUND, entry);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -142,7 +142,7 @@ public:
         player->RemoveActiveQuest(entry);
         player->RemoveRewardedQuest(entry);
 
-        handler->SendSysMessage(LANG_COMMAND_QUEST_REMOVED);
+        handler->SendSysMessage(LANGUAGE_COMMAND_QUEST_REMOVED);
         return true;
     }
 
@@ -151,7 +151,7 @@ public:
         Player* player = handler->getSelectedPlayer();
         if (!player)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -169,7 +169,7 @@ public:
         // If player doesn't have the quest
         if (!quest || player->GetQuestStatus(entry) == QUEST_STATUS_NONE)
         {
-            handler->PSendSysMessage(LANG_COMMAND_QUEST_NOTFOUND, entry);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_QUEST_NOTFOUND, entry);
             handler->SetSentErrorMessage(true);
             return false;
         }

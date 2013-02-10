@@ -77,7 +77,7 @@ public:
 
         if (!targetPlayer)
         {
-            handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -93,7 +93,7 @@ public:
         SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(spell);
         if (!spellInfo || !SpellMgr::IsSpellValid(spellInfo, handler->GetSession()->GetPlayer()))
         {
-            handler->PSendSysMessage(LANG_COMMAND_SPELL_BROKEN, spell);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_SPELL_BROKEN, spell);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -101,9 +101,9 @@ public:
         if (!allRanks && targetPlayer->HasSpell(spell))
         {
             if (targetPlayer == handler->GetSession()->GetPlayer())
-                handler->SendSysMessage(LANG_YOU_KNOWN_SPELL);
+                handler->SendSysMessage(LANGUAGE_YOU_KNOWN_SPELL);
             else
-                handler->PSendSysMessage(LANG_TARGET_KNOWN_SPELL, handler->GetNameLink(targetPlayer).c_str());
+                handler->PSendSysMessage(LANGUAGE_TARGET_KNOWN_SPELL, handler->GetNameLink(targetPlayer).c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -134,7 +134,7 @@ public:
             handler->GetSession()->GetPlayer()->learnSpell(i, false);
         }
 
-        handler->SendSysMessage(LANG_LEARNING_GM_SKILLS);
+        handler->SendSysMessage(LANGUAGE_LEARNING_GM_SKILLS);
         return true;
     }
 
@@ -186,7 +186,7 @@ public:
             handler->GetSession()->GetPlayer()->learnSpell(spellInfo->Id, false);
         }
 
-        handler->SendSysMessage(LANG_COMMAND_LEARN_CLASS_SPELLS);
+        handler->SendSysMessage(LANGUAGE_COMMAND_LEARN_CLASS_SPELLS);
         return true;
     }
 
@@ -233,7 +233,7 @@ public:
 
         player->SetFreeTalentPoints(0);
 
-        handler->SendSysMessage(LANG_COMMAND_LEARN_CLASS_TALENTS);
+        handler->SendSysMessage(LANGUAGE_COMMAND_LEARN_CLASS_TALENTS);
         return true;
     }
 
@@ -244,7 +244,7 @@ public:
         Pet* pet = player->GetPet();
         if (!pet)
         {
-            handler->SendSysMessage(LANG_NO_PET_FOUND);
+            handler->SendSysMessage(LANGUAGE_NO_PET_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -252,7 +252,7 @@ public:
         CreatureTemplate const* creatureInfo = pet->GetCreatureTemplate();
         if (!creatureInfo)
         {
-            handler->SendSysMessage(LANG_WRONG_PET_TYPE);
+            handler->SendSysMessage(LANGUAGE_WRONG_PET_TYPE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -260,14 +260,14 @@ public:
         CreatureFamilyEntry const* petFamily = sCreatureFamilyStore.LookupEntry(creatureInfo->family);
         if (!petFamily)
         {
-            handler->SendSysMessage(LANG_WRONG_PET_TYPE);
+            handler->SendSysMessage(LANGUAGE_WRONG_PET_TYPE);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
         if (petFamily->petTalentType == PET_TALENT_TYPE_NOT_HUNTER_PET)       // not hunter pet
         {
-            handler->SendSysMessage(LANG_WRONG_PET_TYPE);
+            handler->SendSysMessage(LANGUAGE_WRONG_PET_TYPE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -311,7 +311,7 @@ public:
 
         pet->SetFreeTalentPoints(0);
 
-        handler->SendSysMessage(LANG_COMMAND_LEARN_PET_TALENTS);
+        handler->SendSysMessage(LANGUAGE_COMMAND_LEARN_PET_TALENTS);
         return true;
     }
 
@@ -321,7 +321,7 @@ public:
         for (uint8 i = 1; i < LANGUAGES_COUNT; ++i)
             handler->GetSession()->GetPlayer()->learnSpell(lang_description[i].spell_id, false);
 
-        handler->SendSysMessage(LANG_COMMAND_LEARN_ALL_LANG);
+        handler->SendSysMessage(LANGUAGE_COMMAND_LEARN_ALL_LANG);
         return true;
     }
 
@@ -334,7 +334,7 @@ public:
         target->learnDefaultSpells();
         target->learnQuestRewardedSpells();
 
-        handler->PSendSysMessage(LANG_COMMAND_LEARN_ALL_DEFAULT_AND_QUEST, handler->GetNameLink(target).c_str());
+        handler->PSendSysMessage(LANGUAGE_COMMAND_LEARN_ALL_DEFAULT_AND_QUEST, handler->GetNameLink(target).c_str());
         return true;
     }
 
@@ -353,7 +353,7 @@ public:
             }
         }
 
-        handler->SendSysMessage(LANG_COMMAND_LEARN_ALL_CRAFT);
+        handler->SendSysMessage(LANGUAGE_COMMAND_LEARN_ALL_CRAFT);
         return true;
     }
 
@@ -365,7 +365,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             return false;
         }
 
@@ -430,7 +430,7 @@ public:
 
         uint16 maxLevel = target->GetPureMaxSkillValue(targetSkillInfo->id);
         target->SetSkill(targetSkillInfo->id, target->GetSkillStep(targetSkillInfo->id), maxLevel, maxLevel);
-        handler->PSendSysMessage(LANG_COMMAND_LEARN_ALL_RECIPES, name.c_str());
+        handler->PSendSysMessage(LANGUAGE_COMMAND_LEARN_ALL_RECIPES, name.c_str());
         return true;
     }
 

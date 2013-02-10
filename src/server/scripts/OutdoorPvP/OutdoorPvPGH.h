@@ -47,10 +47,10 @@ enum Misc
     GH_CONTROL_NPC_NUM      = 21,
 
     // Grizzly Hills text
-    LANG_OPVP_GH_CAPTURE_A              = 12002,
-    LANG_OPVP_GH_LOOSE_A                = 12004,
-    LANG_OPVP_GH_CAPTURE_H              = 12001,
-    LANG_OPVP_GH_LOOSE_H                = 12003,
+    LANGUAGE_OPVP_GH_CAPTURE_A              = 12002,
+    LANGUAGE_OPVP_GH_LOOSE_A                = 12004,
+    LANGUAGE_OPVP_GH_CAPTURE_H              = 12001,
+    LANGUAGE_OPVP_GH_LOOSE_H                = 12003,
 };
 
 const creature_type HordeControlNPCs[GH_CONTROL_NPC_NUM] =

@@ -62,7 +62,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -81,7 +81,7 @@ public:
         Unit* target = handler->getSelectedUnit();
         if (!target)
         {
-            handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -99,7 +99,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }

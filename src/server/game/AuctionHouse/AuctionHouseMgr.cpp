@@ -115,14 +115,14 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry* auction, SQLTransaction& 
             if (!AccountMgr::IsPlayerAccount(bidder_security)) // not do redundant DB requests
             {
                 if (!sObjectMgr->GetPlayerNameByGUID(bidder_guid, bidder_name))
-                    bidder_name = sObjectMgr->GetSkyFireStringForDBCLocale(LANG_UNKNOWN);
+                    bidder_name = sObjectMgr->GetSkyFireStringForDBCLocale(LANGUAGE_UNKNOWN);
             }
         }
         if (!AccountMgr::IsPlayerAccount(bidder_security))
         {
             std::string owner_name;
             if (!sObjectMgr->GetPlayerNameByGUID(auction->owner, owner_name))
-                owner_name = sObjectMgr->GetSkyFireStringForDBCLocale(LANG_UNKNOWN);
+                owner_name = sObjectMgr->GetSkyFireStringForDBCLocale(LANGUAGE_UNKNOWN);
 
             uint32 owner_accid = sObjectMgr->GetPlayerAccountIdByGUID(auction->owner);
 
@@ -145,7 +145,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry* auction, SQLTransaction& 
 
         // set owner to bidder (to prevent delete item with sender char deleting)
         // owner in `data` will set at mail receive and item extracting
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_ITEM_OWNER);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_ITEM_OWNER);
         stmt->setUInt32(0, auction->bidder);
         stmt->setUInt32(1, pItem->GetGUIDLow());
         trans->Append(stmt);
@@ -308,7 +308,7 @@ void AuctionHouseMgr::LoadAuctionItems()
     uint32 oldMSTime = getMSTime();
 
     // data needs to be at first place for Item::LoadFromDB
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_AUCTION_ITEMS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_AUCTION_ITEMS);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
     if (!result)
@@ -354,7 +354,7 @@ void AuctionHouseMgr::LoadAuctions()
 {
     uint32 oldMSTime = getMSTime();
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_AUCTIONS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_AUCTIONS);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
     if (!result)
@@ -481,7 +481,7 @@ void AuctionHouseObject::Update()
     if (AuctionsMap.empty())
         return;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_AUCTION_BY_TIME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_AUCTION_BY_TIME);
     stmt->setUInt32(0, (uint32)curTime+60);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
 
@@ -697,14 +697,14 @@ uint64 AuctionEntry::GetAuctionOutBid() const
 
 void AuctionEntry::DeleteFromDB(SQLTransaction& trans) const
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_AUCTION);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_AUCTION);
     stmt->setUInt32(0, Id);
     trans->Append(stmt);
 }
 
 void AuctionEntry::SaveToDB(SQLTransaction& trans) const
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INSERT_AUCTION);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_AUCTION);
     stmt->setUInt32(0, Id);
     stmt->setUInt32(1, auctioneer);
     stmt->setUInt32(2, item_guidlow);
@@ -776,7 +776,7 @@ void AuctionHouseMgr::DeleteExpiredAuctionsAtStartup()
     time_t curTime       = sWorld->GetGameTime();
 
     // Query the DB to see if there are any expired auctions
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_EXPIRED_AUCTIONS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_EXPIRED_AUCTIONS);
     stmt->setUInt32(0, (uint32)curTime+60);
     PreparedQueryResult expAuctions = CharacterDatabase.Query(stmt);
 

@@ -90,7 +90,7 @@ public:
             if (instance && IsEvent)
                 instance->SetData(DATA_RAGEWINTERCHILLEVENT, IN_PROGRESS);
             DoPlaySoundToSet(me, SOUND_ONAGGRO);
-            me->MonsterYell(SAY_ONAGGRO, LANG_UNIVERSAL, 0);
+            me->MonsterYell(SAY_ONAGGRO, LANGUAGE_UNIVERSAL, 0);
         }
 
         void KilledUnit(Unit* /*victim*/)
@@ -99,11 +99,11 @@ public:
             {
                 case 0:
                     DoPlaySoundToSet(me, SOUND_ONSLAY1);
-                    me->MonsterYell(SAY_ONSLAY1, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ONSLAY1, LANGUAGE_UNIVERSAL, 0);
                     break;
                 case 1:
                     DoPlaySoundToSet(me, SOUND_ONSLAY2);
-                    me->MonsterYell(SAY_ONSLAY2, LANG_UNIVERSAL, 0);
+                    me->MonsterYell(SAY_ONSLAY2, LANGUAGE_UNIVERSAL, 0);
                     break;
             }
         }
@@ -125,7 +125,7 @@ public:
             if (instance && IsEvent)
                 instance->SetData(DATA_RAGEWINTERCHILLEVENT, DONE);
             DoPlaySoundToSet(me, SOUND_ONDEATH);
-            me->MonsterYell(SAY_ONDEATH, LANG_UNIVERSAL, 0);
+            me->MonsterYell(SAY_ONDEATH, LANGUAGE_UNIVERSAL, 0);
         }
 
         void UpdateAI(const uint32 diff)
@@ -170,11 +170,11 @@ public:
                 {
                     case 0:
                         DoPlaySoundToSet(me, SOUND_DECAY1);
-                        me->MonsterYell(SAY_DECAY1, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_DECAY1, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 1:
                         DoPlaySoundToSet(me, SOUND_DECAY2);
-                        me->MonsterYell(SAY_DECAY2, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_DECAY2, LANGUAGE_UNIVERSAL, 0);
                         break;
                 }
             } else DecayTimer -= diff;
@@ -186,11 +186,11 @@ public:
                 {
                     case 0:
                         DoPlaySoundToSet(me, SOUND_NOVA1);
-                        me->MonsterYell(SAY_NOVA1, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_NOVA1, LANGUAGE_UNIVERSAL, 0);
                         break;
                     case 1:
                         DoPlaySoundToSet(me, SOUND_NOVA2);
-                        me->MonsterYell(SAY_NOVA2, LANG_UNIVERSAL, 0);
+                        me->MonsterYell(SAY_NOVA2, LANGUAGE_UNIVERSAL, 0);
                         break;
                 }
             } else NovaTimer -= diff;

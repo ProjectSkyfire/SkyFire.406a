@@ -96,7 +96,7 @@ void GmTicket::SaveToDB(SQLTransaction& trans) const
     //     0       1     2      3          4        5      6     7     8           9            10         11         12        13        14        15
     // ticketId, guid, name, message, createTime, mapId, posX, posY, posZ, lastModifiedTime, closedBy, assignedTo, comment, completed, escalated, viewed
     uint8 index = 0;
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REPLACE_GM_TICKETS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_REPLACE_GM_TICKETS);
     stmt->setUInt32(  index, _id);
     stmt->setUInt32(++index, GUID_LOPART(_playerGuid));
     stmt->setString(++index, _playerName);
@@ -119,7 +119,7 @@ void GmTicket::SaveToDB(SQLTransaction& trans) const
 
 void GmTicket::DeleteFromDB()
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_GM_TICKETS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_GM_TICKETS);
     stmt->setUInt32(0, _id);
     CharacterDatabase.Execute(stmt);
 }
@@ -158,20 +158,20 @@ std::string GmTicket::FormatMessageString(ChatHandler& handler, bool detailed) c
     time_t curTime = time(NULL);
 
     std::stringstream ss;
-    ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTGUID, _id);
-    ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTNAME, _playerName.c_str());
-    ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTAGECREATE, (secsToTimeString(curTime - _createTime, true, false)).c_str());
-    ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTAGE, (secsToTimeString(curTime - _lastModifiedTime, true, false)).c_str());
+    ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTGUID, _id);
+    ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTNAME, _playerName.c_str());
+    ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTAGECREATE, (secsToTimeString(curTime - _createTime, true, false)).c_str());
+    ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTAGE, (secsToTimeString(curTime - _lastModifiedTime, true, false)).c_str());
 
     std::string name;
     if (sObjectMgr->GetPlayerNameByGUID(_assignedTo, name))
-        ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTASSIGNEDTO, name.c_str());
+        ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTASSIGNEDTO, name.c_str());
 
     if (detailed)
     {
-        ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTMESSAGE, _message.c_str());
+        ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTMESSAGE, _message.c_str());
         if (!_comment.empty())
-            ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTCOMMENT, _comment.c_str());
+            ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTCOMMENT, _comment.c_str());
     }
     return ss.str();
 }
@@ -179,16 +179,16 @@ std::string GmTicket::FormatMessageString(ChatHandler& handler, bool detailed) c
 std::string GmTicket::FormatMessageString(ChatHandler& handler, const char* szClosedName, const char* szAssignedToName, const char* szUnassignedName, const char* szDeletedName) const
 {
     std::stringstream ss;
-    ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTGUID, _id);
-    ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTNAME, _playerName.c_str());
+    ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTGUID, _id);
+    ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTNAME, _playerName.c_str());
     if (szClosedName)
-        ss << handler.PGetParseString(LANG_COMMAND_TICKETCLOSED, szClosedName);
+        ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETCLOSED, szClosedName);
     if (szAssignedToName)
-        ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTASSIGNEDTO, szAssignedToName);
+        ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTASSIGNEDTO, szAssignedToName);
     if (szUnassignedName)
-        ss << handler.PGetParseString(LANG_COMMAND_TICKETLISTUNASSIGNED, szUnassignedName);
+        ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETLISTUNASSIGNED, szUnassignedName);
     if (szDeletedName)
-        ss << handler.PGetParseString(LANG_COMMAND_TICKETDELETED, szDeletedName);
+        ss << handler.PGetParseString(LANGUAGE_COMMAND_TICKETDELETED, szDeletedName);
     return ss.str();
 }
 
@@ -231,7 +231,7 @@ void TicketMgr::ResetTickets()
 
     _lastTicketId = 0;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_ALL_GM_TICKETS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_ALL_GM_TICKETS);
 
     CharacterDatabase.Execute(stmt);
 }
@@ -247,7 +247,7 @@ void TicketMgr::LoadTickets()
     _lastTicketId = 0;
     _openTicketCount = 0;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_GM_TICKETS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_GM_TICKETS);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
     {
@@ -328,7 +328,7 @@ void TicketMgr::RemoveTicket(uint32 ticketId)
 
 void TicketMgr::ShowList(ChatHandler& handler, bool onlineOnly) const
 {
-    handler.SendSysMessage(onlineOnly ? LANG_COMMAND_TICKETSHOWONLINELIST : LANG_COMMAND_TICKETSHOWLIST);
+    handler.SendSysMessage(onlineOnly ? LANGUAGE_COMMAND_TICKETSHOWONLINELIST : LANGUAGE_COMMAND_TICKETSHOWLIST);
     for (GmTicketList::const_iterator itr = _ticketList.begin(); itr != _ticketList.end(); ++itr)
         if (!itr->second->IsClosed() && !itr->second->IsCompleted())
             if (!onlineOnly || itr->second->GetPlayer())
@@ -337,7 +337,7 @@ void TicketMgr::ShowList(ChatHandler& handler, bool onlineOnly) const
 
 void TicketMgr::ShowClosedList(ChatHandler& handler) const
 {
-    handler.SendSysMessage(LANG_COMMAND_TICKETSHOWCLOSEDLIST);
+    handler.SendSysMessage(LANGUAGE_COMMAND_TICKETSHOWCLOSEDLIST);
     for (GmTicketList::const_iterator itr = _ticketList.begin(); itr != _ticketList.end(); ++itr)
         if (itr->second->IsClosed())
             handler.SendSysMessage(itr->second->FormatMessageString(handler).c_str());
@@ -345,7 +345,7 @@ void TicketMgr::ShowClosedList(ChatHandler& handler) const
 
 void TicketMgr::ShowEscalatedList(ChatHandler& handler) const
 {
-    handler.SendSysMessage(LANG_COMMAND_TICKETSHOWESCALATEDLIST);
+    handler.SendSysMessage(LANGUAGE_COMMAND_TICKETSHOWESCALATEDLIST);
     for (GmTicketList::const_iterator itr = _ticketList.begin(); itr != _ticketList.end(); ++itr)
         if (!itr->second->IsClosed() && itr->second->GetEscalatedStatus() == TICKET_IN_ESCALATION_QUEUE)
             handler.SendSysMessage(itr->second->FormatMessageString(handler).c_str());

@@ -405,7 +405,7 @@ public:
             {
                 damage = 0;
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                me->Yell(SUFF_SAY_RECAP, LANG_UNIVERSAL, 0);
+                me->Yell(SUFF_SAY_RECAP, LANGUAGE_UNIVERSAL, 0);
                 DoScriptText(SUFF_SAY_RECAP, me);
             }
         }

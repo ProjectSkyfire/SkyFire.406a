@@ -162,27 +162,27 @@ bool normalizePlayerName(std::string& name)
 
 LanguageDesc lang_description[LANGUAGES_COUNT] =
 {
-    { LANG_ADDON,           0, 0                       },
-    { LANG_UNIVERSAL,       0, 0                       },
-    { LANG_ORCISH,        669, SKILL_LANG_ORCISH       },
-    { LANG_DARNASSIAN,    671, SKILL_LANG_DARNASSIAN   },
-    { LANG_TAURAHE,       670, SKILL_LANG_TAURAHE      },
-    { LANG_DWARVISH,      672, SKILL_LANG_DWARVEN      },
-    { LANG_COMMON,        668, SKILL_LANG_COMMON       },
-    { LANG_DEMONIC,       815, SKILL_LANG_DEMON_TONGUE },
-    { LANG_TITAN,         816, SKILL_LANG_TITAN        },
-    { LANG_THALASSIAN,    813, SKILL_LANG_THALASSIAN   },
-    { LANG_DRACONIC,      814, SKILL_LANG_DRACONIC     },
-    { LANG_KALIMAG,       817, SKILL_LANG_OLD_TONGUE   },
-    { LANG_GNOMISH,      7340, SKILL_LANG_GNOMISH      },
-    { LANG_TROLL,        7341, SKILL_LANG_TROLL        },
-    { LANG_GUTTERSPEAK, 17737, SKILL_LANG_GUTTERSPEAK  },
-    { LANG_DRAENEI,     29932, SKILL_LANG_DRAENEI      },
-    { LANG_ZOMBIE,          0, 0                       },
-    { LANG_GNOMISH_BINARY,  0, 0                       },
-    { LANG_GOBLIN_BINARY,   0, 0                       },
-    { LANG_WORGEN,      69270, SKILL_LANG_WORGEN       },
-    { LANG_GOBLIN,      69269, SKILL_LANG_GOBLIN       }
+    { LANGUAGE_ADDON,           0, 0                       },
+    { LANGUAGE_UNIVERSAL,       0, 0                       },
+    { LANGUAGE_ORCISH,        669, SKILL_LANGUAGE_ORCISH       },
+    { LANGUAGE_DARNASSIAN,    671, SKILL_LANGUAGE_DARNASSIAN   },
+    { LANGUAGE_TAURAHE,       670, SKILL_LANGUAGE_TAURAHE      },
+    { LANGUAGE_DWARVISH,      672, SKILL_LANGUAGE_DWARVEN      },
+    { LANGUAGE_COMMON,        668, SKILL_LANGUAGE_COMMON       },
+    { LANGUAGE_DEMONIC,       815, SKILL_LANGUAGE_DEMON_TONGUE },
+    { LANGUAGE_TITAN,         816, SKILL_LANGUAGE_TITAN        },
+    { LANGUAGE_THALASSIAN,    813, SKILL_LANGUAGE_THALASSIAN   },
+    { LANGUAGE_DRACONIC,      814, SKILL_LANGUAGE_DRACONIC     },
+    { LANGUAGE_KALIMAG,       817, SKILL_LANGUAGE_OLD_TONGUE   },
+    { LANGUAGE_GNOMISH,      7340, SKILL_LANGUAGE_GNOMISH      },
+    { LANGUAGE_TROLL,        7341, SKILL_LANGUAGE_TROLL        },
+    { LANGUAGE_GUTTERSPEAK, 17737, SKILL_LANGUAGE_GUTTERSPEAK  },
+    { LANGUAGE_DRAENEI,     29932, SKILL_LANGUAGE_DRAENEI      },
+    { LANGUAGE_ZOMBIE,          0, 0                       },
+    { LANGUAGE_GNOMISH_BINARY,  0, 0                       },
+    { LANGUAGE_GOBLIN_BINARY,   0, 0                       },
+    { LANGUAGE_WORGEN,      69270, SKILL_LANGUAGE_WORGEN       },
+    { LANGUAGE_GOBLIN,      69269, SKILL_LANGUAGE_GOBLIN       }
 };
 
 LanguageDesc const* GetLanguageDescByID(uint32 lang)
@@ -1891,7 +1891,7 @@ void ObjectMgr::LoadCreatureRespawnTimes()
 
     uint32 count = 0;
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CREATURE_RESPAWNS));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CREATURE_RESPAWNS));
     if (!result)
     {
         sLog->outString(">> Loaded 0 creature respawn time.");
@@ -1925,7 +1925,7 @@ void ObjectMgr::LoadGameobjectRespawnTimes()
 
     uint32 count = 0;
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SELECT_GO_RESPAWNS));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_GO_RESPAWNS));
     if (!result)
     {
         sLog->outString(">> Loaded 0 gameobject respawn times. DB table `gameobject_respawn` is empty!");
@@ -1962,7 +1962,7 @@ uint64 ObjectMgr::GetPlayerGUIDByName(std::string name) const
     uint64 guid = 0;
 
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_GUID_BY_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_GUID_BY_NAME);
 
     stmt->setString(0, name);
 
@@ -1983,7 +1983,7 @@ bool ObjectMgr::GetPlayerNameByGUID(uint64 guid, std::string &name) const
         return true;
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CHARACTER_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_NAME);
 
     stmt->setUInt32(0, GUID_LOPART(guid));
 
@@ -2006,7 +2006,7 @@ uint32 ObjectMgr::GetPlayerTeamByGUID(uint64 guid) const
         return Player::TeamForRace(player->getRace());
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CHAR_RACE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_RACE);
 
     stmt->setUInt32(0, GUID_LOPART(guid));
 
@@ -2029,7 +2029,7 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(uint64 guid) const
         return player->GetSession()->GetAccountId();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_ACCOUNT_BY_GUID);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_ACCOUNT_BY_GUID);
 
     stmt->setUInt32(0, GUID_LOPART(guid));
 
@@ -2046,7 +2046,7 @@ uint32 ObjectMgr::GetPlayerAccountIdByGUID(uint64 guid) const
 
 uint32 ObjectMgr::GetPlayerAccountIdByPlayerName(const std::string& name) const
 {
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_ACCOUNT_BY_NAME);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_ACCOUNT_BY_NAME);
 
     stmt->setString(0, name);
 
@@ -5559,11 +5559,11 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     // Delete all old mails without item and without body immediately, if starting server
     if (!serverUp)
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_EMPTY_EXPIRED_MAIL);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_EMPTY_EXPIRED_MAIL);
         stmt->setUInt64(0, basetime);
         CharacterDatabase.Execute(stmt);
     }
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_EXPIRED_MAIL);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_EXPIRED_MAIL);
     stmt->setUInt64(0, basetime);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
     if (!result)
@@ -5574,7 +5574,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
     }
 
     std::map<uint32 /*messageId*/, MailItemInfoVec> itemsCache;
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_SELECT_EXPIRED_MAIL_ITEMS);
+    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_EXPIRED_MAIL_ITEMS);
     stmt->setUInt64(0, basetime);
     if (PreparedQueryResult items = CharacterDatabase.Query(stmt))
     {
@@ -5629,7 +5629,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
                 // mail open and then not returned
                 for (MailItemInfoVec::iterator itr2 = m->items.begin(); itr2 != m->items.end(); ++itr2)
                 {
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_ITEM_INSTANCE);
+                    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_ITEM_INSTANCE);
                     stmt->setUInt32(0, itr2->item_guid);
                     CharacterDatabase.Execute(stmt);
                 }
@@ -5637,7 +5637,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
             else
             {
                 // Mail will be returned
-                stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_MAIL_RETURNED);
+                stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_MAIL_RETURNED);
                 stmt->setUInt32(0, m->receiver);
                 stmt->setUInt32(1, m->sender);
                 stmt->setUInt64(2, basetime + 30 * DAY);
@@ -5648,12 +5648,12 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
                 for (MailItemInfoVec::iterator itr2 = m->items.begin(); itr2 != m->items.end(); ++itr2)
                 {
                     // Update receiver in mail items for its proper delivery, and in instance_item for avoid lost item at sender delete
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_MAIL_ITEM_RECEIVER);
+                    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_MAIL_ITEM_RECEIVER);
                     stmt->setUInt32(0, m->sender);
                     stmt->setUInt32(1, itr2->item_guid);
                     CharacterDatabase.Execute(stmt);
 
-                    stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPDATE_ITEM_OWNER);
+                    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_ITEM_OWNER);
                     stmt->setUInt32(0, m->sender);
                     stmt->setUInt32(1, itr2->item_guid);
                     CharacterDatabase.Execute(stmt);
@@ -5664,7 +5664,7 @@ void ObjectMgr::ReturnOrDeleteOldMails(bool serverUp)
             }
         }
 
-        stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_MAIL);
+        stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_MAIL);
         stmt->setUInt32(0, m->messageID);
         CharacterDatabase.Execute(stmt);
         delete m;
@@ -7014,7 +7014,7 @@ void ObjectMgr::LoadCorpses()
 {
     uint32 oldMSTime = getMSTime();
 
-    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHAR_SELECT_CORPSES));
+    PreparedQueryResult result = CharacterDatabase.Query(CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CORPSES));
     if (!result)
     {
         sLog->outString(">> Loaded 0 corpses. DB table `corpse` is empty.");
@@ -7546,7 +7546,7 @@ void ObjectMgr::SaveCreatureRespawnTime(uint32 loguid, uint32 instance, time_t t
         _creatureRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REPLACE_CREATURE_RESPAWNS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_REPLACE_CREATURE_RESPAWNS);
     stmt->setUInt32(0, loguid);
     stmt->setUInt64(1, uint64(t));
     stmt->setUInt32(2, instance);
@@ -7562,7 +7562,7 @@ void ObjectMgr::RemoveCreatureRespawnTime(uint32 loguid, uint32 instance)
         _creatureRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_CREATURE_RESPAWNS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_CREATURE_RESPAWNS);
     stmt->setUInt32(0, loguid);
     stmt->setUInt32(1, instance);
     CharacterDatabase.Execute(stmt);
@@ -7594,7 +7594,7 @@ void ObjectMgr::SaveGORespawnTime(uint32 loguid, uint32 instance, time_t t)
         _goRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_REPLACE_GO_RESPAWNS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_REPLACE_GO_RESPAWNS);
     stmt->setUInt32(0, loguid);
     stmt->setUInt64(1, uint64(t));
     stmt->setUInt32(2, instance);
@@ -7610,7 +7610,7 @@ void ObjectMgr::RemoveGORespawnTime(uint32 loguid, uint32 instance)
         _goRespawnTimesMutex.release();
     }
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_GO_RESPAWNS);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_GO_RESPAWNS);
     stmt->setUInt32(0, loguid);
     stmt->setUInt32(1, instance);
     CharacterDatabase.Execute(stmt);
@@ -7645,10 +7645,10 @@ void ObjectMgr::DeleteRespawnTimeForInstance(uint32 instance)
         }
         _creatureRespawnTimesMutex.release();
     }
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_CREATURE_RESPAWN_BY_INSTANCE);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_CREATURE_RESPAWN_BY_INSTANCE);
     stmt->setUInt32(0, instance);
     CharacterDatabase.Execute(stmt);
-    stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_GO_RESPAWNS_BY_INSTANCE);
+    stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_GO_RESPAWNS_BY_INSTANCE);
     stmt->setUInt32(0, instance);
     CharacterDatabase.Execute(stmt);
 }
@@ -8803,7 +8803,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (!cInfo)
     {
         if (player)
-            ChatHandler(player).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
+            ChatHandler(player).SendSysMessage(LANGUAGE_COMMAND_VENDORSELECTION);
         else
             sLog->outErrorDb("Table `(game_event_)npc_vendor` have data for not existed creature template (Entry: %u), ignore", vendor_entry);
         return false;
@@ -8814,7 +8814,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
         if (!skip_vendors || skip_vendors->count(vendor_entry) == 0)
         {
             if (player)
-                ChatHandler(player).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
+                ChatHandler(player).SendSysMessage(LANGUAGE_COMMAND_VENDORSELECTION);
             else
                 sLog->outErrorDb("Table `(game_event_)npc_vendor` have data for not creature template (Entry: %u) without vendor flag, ignore", vendor_entry);
 
@@ -8827,7 +8827,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (!sObjectMgr->GetItemTemplate(item_id))
     {
         if (player)
-            ChatHandler(player).PSendSysMessage(LANG_ITEM_NOT_FOUND, item_id);
+            ChatHandler(player).PSendSysMessage(LANGUAGE_ITEM_NOT_FOUND, item_id);
         else
             sLog->outErrorDb("Table `(game_event_)npc_vendor` for Vendor (Entry: %u) have in item list non-existed item (%u), ignore", vendor_entry, item_id);
         return false;
@@ -8836,7 +8836,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (ExtendedCost && !sItemExtendedCostStore.LookupEntry(ExtendedCost))
     {
         if (player)
-            ChatHandler(player).PSendSysMessage(LANG_EXTENDED_COST_NOT_EXIST, ExtendedCost);
+            ChatHandler(player).PSendSysMessage(LANGUAGE_EXTENDED_COST_NOT_EXIST, ExtendedCost);
         else
             sLog->outErrorDb("Table `(game_event_)npc_vendor` have Item (Entry: %u) with wrong ExtendedCost (%u) for vendor (%u), ignore", item_id, ExtendedCost, vendor_entry);
         return false;
@@ -8866,7 +8866,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (vItems->FindItemCostPair(item_id, ExtendedCost))
     {
         if (player)
-            ChatHandler(player).PSendSysMessage(LANG_ITEM_ALREADY_IN_LIST, item_id, ExtendedCost);
+            ChatHandler(player).PSendSysMessage(LANGUAGE_ITEM_ALREADY_IN_LIST, item_id, ExtendedCost);
         else
             sLog->outErrorDb("Table `npc_vendor` has duplicate items %u (with extended cost %u) for vendor (Entry: %u), ignoring", item_id, ExtendedCost, vendor_entry);
         return false;
@@ -8875,7 +8875,7 @@ bool ObjectMgr::IsVendorItemValid(uint32 vendor_entry, uint32 item_id, int32 max
     if (vItems->GetItemCount() >= MAX_VENDOR_ITEMS)
     {
         if (player)
-            ChatHandler(player).SendSysMessage(LANG_COMMAND_ADDVENDORITEMITEMS);
+            ChatHandler(player).SendSysMessage(LANGUAGE_COMMAND_ADDVENDORITEMITEMS);
         else
             sLog->outErrorDb("Table `npc_vendor` has too many items (%u >= %i) for vendor (Entry: %u), ignore", vItems->GetItemCount(), MAX_VENDOR_ITEMS, vendor_entry);
         return false;

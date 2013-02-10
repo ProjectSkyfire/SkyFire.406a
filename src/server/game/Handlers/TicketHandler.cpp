@@ -35,7 +35,7 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
 
     if (GetPlayer()->getLevel() < sWorld->getIntConfig(CONFIG_TICKET_LEVEL_REQ))
     {
-        SendNotification(GetSkyFireString(LANG_TICKET_REQ), sWorld->getIntConfig(CONFIG_TICKET_LEVEL_REQ));
+        SendNotification(GetSkyFireString(LANGUAGE_TICKET_REQ), sWorld->getIntConfig(CONFIG_TICKET_LEVEL_REQ));
         return;
     }
 
@@ -47,7 +47,7 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
         sTicketMgr->AddTicket(ticket);
         sTicketMgr->UpdateLastChange();
 
-        sWorld->SendGMText(LANG_COMMAND_TICKETNEW, GetPlayer()->GetName(), ticket->GetId());
+        sWorld->SendGMText(LANGUAGE_COMMAND_TICKETNEW, GetPlayer()->GetName(), ticket->GetId());
 
         response = GMTICKET_RESPONSE_CREATE_SUCCESS;
     }
@@ -69,7 +69,7 @@ void WorldSession::HandleGMTicketUpdateOpcode(WorldPacket& recvData)
         ticket->SetMessage(message);
         ticket->SaveToDB(trans);
 
-        sWorld->SendGMText(LANG_COMMAND_TICKETUPDATED, GetPlayer()->GetName(), ticket->GetId());
+        sWorld->SendGMText(LANGUAGE_COMMAND_TICKETUPDATED, GetPlayer()->GetName(), ticket->GetId());
 
         response = GMTICKET_RESPONSE_UPDATE_SUCCESS;
     }
@@ -87,7 +87,7 @@ void WorldSession::HandleGMTicketDeleteOpcode(WorldPacket & /*recvData*/)
         data << uint32(GMTICKET_RESPONSE_TICKET_DELETED);
         SendPacket(&data);
 
-        sWorld->SendGMText(LANG_COMMAND_TICKETPLAYERABANDON, GetPlayer()->GetName(), ticket->GetId());
+        sWorld->SendGMText(LANGUAGE_COMMAND_TICKETPLAYERABANDON, GetPlayer()->GetName(), ticket->GetId());
 
         sTicketMgr->CloseTicket(ticket->GetId(), GetPlayer()->GetGUID());
         sTicketMgr->SendTicket(this, NULL);
@@ -138,7 +138,7 @@ void WorldSession::HandleGMSurveySubmit(WorldPacket& recvData)
         std::string comment; // comment ("Usage: GMSurveyAnswerSubmit(question, rank, comment)")
         recvData >> comment;
 
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INSERT_GM_SUBSURVEY);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_GM_SUBSURVEY);
         stmt->setUInt32(0, nextSurveyID);
         stmt->setUInt32(1, subSurveyId);
         stmt->setUInt32(2, rank);
@@ -149,7 +149,7 @@ void WorldSession::HandleGMSurveySubmit(WorldPacket& recvData)
     std::string comment; // just a guess
     recvData >> comment;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INSERT_GM_SURVEY);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_GM_SURVEY);
     stmt->setUInt32(0, GUID_LOPART(GetPlayer()->GetGUID()));
     stmt->setUInt32(1, nextSurveyID);
     stmt->setUInt32(2, mainSurvey);
@@ -170,7 +170,7 @@ void WorldSession::HandleReportLag(WorldPacket& recvData)
     recvData >> y;
     recvData >> z;
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_INSERT_LAG_REPORT);
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_LAG_REPORT);
     stmt->setUInt32(0, GUID_LOPART(GetPlayer()->GetGUID()));
     stmt->setUInt8 (1, lagType);
     stmt->setUInt16(2, mapId);

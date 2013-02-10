@@ -226,7 +226,7 @@ int32 OPvPCapturePointZM_GraveYard::HandleOpenGo(Player* player, uint64 guid)
         if (player->HasAura(ZM_BATTLE_STANDARD_A) && m_GraveYardState != ZM_GRAVEYARD_A)
         {
             if (m_GraveYardState == ZM_GRAVEYARD_H)
-                sWorld->SendZoneText(ZM_GRAVEYARD_ZONE, sObjectMgr->GetSkyFireStringForDBCLocale(LANG_OPVP_ZM_LOSE_GY_H));
+                sWorld->SendZoneText(ZM_GRAVEYARD_ZONE, sObjectMgr->GetSkyFireStringForDBCLocale(LANGUAGE_OPVP_ZM_LOSE_GY_H));
             m_GraveYardState = ZM_GRAVEYARD_A;
             DelObject(0);   // only one gotype is used in the whole outdoor pvp, no need to call it a constant
             AddObject(0, ZM_Banner_A.entry, ZM_Banner_A.map, ZM_Banner_A.x, ZM_Banner_A.y, ZM_Banner_A.z, ZM_Banner_A.o, ZM_Banner_A.rot0, ZM_Banner_A.rot1, ZM_Banner_A.rot2, ZM_Banner_A.rot3);
@@ -234,12 +234,12 @@ int32 OPvPCapturePointZM_GraveYard::HandleOpenGo(Player* player, uint64 guid)
             sObjectMgr->AddGraveYardLink(ZM_GRAVEYARD_ID, ZM_GRAVEYARD_ZONE, ALLIANCE, false);   // add gy
             m_PvP->TeamApplyBuff(TEAM_ALLIANCE, ZM_CAPTURE_BUFF);
             player->RemoveAurasDueToSpell(ZM_BATTLE_STANDARD_A);
-            sWorld->SendZoneText(ZM_GRAVEYARD_ZONE, sObjectMgr->GetSkyFireStringForDBCLocale(LANG_OPVP_ZM_CAPTURE_GY_A));
+            sWorld->SendZoneText(ZM_GRAVEYARD_ZONE, sObjectMgr->GetSkyFireStringForDBCLocale(LANGUAGE_OPVP_ZM_CAPTURE_GY_A));
         }
         else if (player->HasAura(ZM_BATTLE_STANDARD_H) && m_GraveYardState != ZM_GRAVEYARD_H)
         {
             if (m_GraveYardState == ZM_GRAVEYARD_A)
-                sWorld->SendZoneText(ZM_GRAVEYARD_ZONE, sObjectMgr->GetSkyFireStringForDBCLocale(LANG_OPVP_ZM_LOSE_GY_A));
+                sWorld->SendZoneText(ZM_GRAVEYARD_ZONE, sObjectMgr->GetSkyFireStringForDBCLocale(LANGUAGE_OPVP_ZM_LOSE_GY_A));
             m_GraveYardState = ZM_GRAVEYARD_H;
             DelObject(0);   // only one gotype is used in the whole outdoor pvp, no need to call it a constant
             AddObject(0, ZM_Banner_H.entry, ZM_Banner_H.map, ZM_Banner_H.x, ZM_Banner_H.y, ZM_Banner_H.z, ZM_Banner_H.o, ZM_Banner_H.rot0, ZM_Banner_H.rot1, ZM_Banner_H.rot2, ZM_Banner_H.rot3);
@@ -247,7 +247,7 @@ int32 OPvPCapturePointZM_GraveYard::HandleOpenGo(Player* player, uint64 guid)
             sObjectMgr->AddGraveYardLink(ZM_GRAVEYARD_ID, ZM_GRAVEYARD_ZONE, HORDE, false);   // add gy
             m_PvP->TeamApplyBuff(TEAM_HORDE, ZM_CAPTURE_BUFF);
             player->RemoveAurasDueToSpell(ZM_BATTLE_STANDARD_H);
-            sWorld->SendZoneText(ZM_GRAVEYARD_ZONE, sObjectMgr->GetSkyFireStringForDBCLocale(LANG_OPVP_ZM_CAPTURE_GY_H));
+            sWorld->SendZoneText(ZM_GRAVEYARD_ZONE, sObjectMgr->GetSkyFireStringForDBCLocale(LANGUAGE_OPVP_ZM_CAPTURE_GY_H));
         }
         UpdateTowerState();
     }

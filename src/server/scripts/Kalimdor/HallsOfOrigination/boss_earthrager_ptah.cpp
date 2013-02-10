@@ -144,7 +144,7 @@ class boss_ptah : public CreatureScript
                         events.ScheduleEvent(EVENT_RAGING_SMASH, urand(4000, 10000));
                         return;
                     case EVENT_EARTH_POINT:
-                        me->MonsterYell(SAY_SPELL, LANG_UNIVERSAL, NULL);
+                        me->MonsterYell(SAY_SPELL, LANGUAGE_UNIVERSAL, NULL);
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 100, true))
                             DoCast(target, SPELL_EARTH_POINT);
                         events.ScheduleEvent(EVENT_EARTH_POINT, 8000);

@@ -735,7 +735,7 @@ public:
     bool Validate();
 
     // Broadcasts
-    void BroadcastToGuild(WorldSession* session, bool officerOnly, const std::string& msg, uint32 language = LANG_UNIVERSAL) const;
+    void BroadcastToGuild(WorldSession* session, bool officerOnly, const std::string& msg, uint32 language = LANGUAGE_UNIVERSAL) const;
     void BroadcastPacketToRank(WorldPacket* packet, uint8 rankId) const;
     void BroadcastPacket(WorldPacket* packet) const;
 
@@ -843,7 +843,7 @@ private:
     }
     inline void _DeleteMemberFromDB(uint32 lowguid) const
     {
-        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_DELETE_GUILD_MEMBER);
+        PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_DELETE_GUILD_MEMBER);
         stmt->setUInt32(0, lowguid);
         CharacterDatabase.Execute(stmt);
     }

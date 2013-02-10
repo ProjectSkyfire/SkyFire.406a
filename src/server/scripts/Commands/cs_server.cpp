@@ -122,20 +122,20 @@ public:
         handler->PSendSysMessage("Revision Hash: "_HASH);
         handler->PSendSysMessage("Build Date: "_DATE);
         handler->PSendSysMessage("Using World DB: %s", sWorld->GetDBVersion());
-        handler->PSendSysMessage(LANG_CONNECTED_PLAYERS, playersNum, maxPlayersNum);
-        handler->PSendSysMessage(LANG_CONNECTED_USERS, activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);
-        handler->PSendSysMessage(LANG_UPTIME, uptime.c_str());
-        handler->PSendSysMessage(LANG_UPDATE_DIFF, updateTime);
+        handler->PSendSysMessage(LANGUAGE_CONNECTED_PLAYERS, playersNum, maxPlayersNum);
+        handler->PSendSysMessage(LANGUAGE_CONNECTED_USERS, activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);
+        handler->PSendSysMessage(LANGUAGE_UPTIME, uptime.c_str());
+        handler->PSendSysMessage(LANGUAGE_UPDATE_DIFF, updateTime);
         //! Can't use sWorld->ShutdownMsg here in case of console command
         if (sWorld->IsShuttingDown())
-            handler->PSendSysMessage(LANG_SHUTDOWN_TIMELEFT, secsToTimeString(sWorld->GetShutDownTimeLeft()).c_str());
+            handler->PSendSysMessage(LANGUAGE_SHUTDOWN_TIMELEFT, secsToTimeString(sWorld->GetShutDownTimeLeft()).c_str());
 
         return true;
     }
     // Display the 'Message of the day' for the realm
     static bool HandleServerMotdCommand(ChatHandler* handler, char const* /*args*/)
     {
-        handler->PSendSysMessage(LANG_MOTD_CURRENT, sWorld->GetMotd());
+        handler->PSendSysMessage(LANGUAGE_MOTD_CURRENT, sWorld->GetMotd());
         return true;
     }
 
@@ -337,7 +337,7 @@ public:
     // Exit the realm
     static bool HandleServerExitCommand(ChatHandler* handler, char const* /*args*/)
     {
-        handler->SendSysMessage(LANG_COMMAND_EXIT);
+        handler->SendSysMessage(LANGUAGE_COMMAND_EXIT);
         World::StopNow(SHUTDOWN_EXIT_CODE);
         return true;
     }
@@ -346,7 +346,7 @@ public:
     static bool HandleServerSetMotdCommand(ChatHandler* handler, char const* args)
     {
         sWorld->SetMotd(args);
-        handler->PSendSysMessage(LANG_MOTD_NEW, args);
+        handler->PSendSysMessage(LANGUAGE_MOTD_NEW, args);
         return true;
     }
 
@@ -355,18 +355,18 @@ public:
     {
         if (strncmp(args, "on", 3) == 0)
         {
-        handler->SendSysMessage(LANG_WORLD_CLOSED);
+        handler->SendSysMessage(LANGUAGE_WORLD_CLOSED);
         sWorld->SetClosed(true);
         return true;
         }
         else if (strncmp(args, "off", 4) == 0)
         {
-        handler->SendSysMessage(LANG_WORLD_OPENED);
+        handler->SendSysMessage(LANGUAGE_WORLD_OPENED);
         sWorld->SetClosed(false);
         return true;
         }
 
-        handler->SendSysMessage(LANG_USE_BOL);
+        handler->SendSysMessage(LANGUAGE_USE_BOL);
         handler->SetSentErrorMessage(true);
         return false;
     }
@@ -423,9 +423,9 @@ public:
     {
         sLog->SetSQLDriverQueryLogging(!sLog->GetSQLDriverQueryLogging());
         if (sLog->GetSQLDriverQueryLogging())
-            handler->PSendSysMessage(LANG_SQLDRIVER_QUERY_LOGGING_ENABLED);
+            handler->PSendSysMessage(LANGUAGE_SQLDRIVER_QUERY_LOGGING_ENABLED);
         else
-            handler->PSendSysMessage(LANG_SQLDRIVER_QUERY_LOGGING_DISABLED);
+            handler->PSendSysMessage(LANGUAGE_SQLDRIVER_QUERY_LOGGING_DISABLED);
 
         return true;
     }

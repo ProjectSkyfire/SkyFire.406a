@@ -660,7 +660,7 @@ public:
         {
         switch (i)
             {
-            case 0:me->Say(SAY_DUGHAL_FREE, LANG_UNIVERSAL, PlayerGUID); break;
+            case 0:me->Say(SAY_DUGHAL_FREE, LANGUAGE_UNIVERSAL, PlayerGUID); break;
             case 1:instance->SetData(DATA_DUGHAL, ENCOUNTER_STATE_OBJECTIVE_COMPLETED);break;
             case 2:
                 me->SetVisibility(VISIBILITY_OFF);
@@ -782,18 +782,18 @@ public:
         switch (i)
             {
             case 1:
-                me->Say(SAY_WINDSOR_1, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_WINDSOR_1, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 7:
                 me->HandleEmoteCommand(EMOTE_STATE_POINT);
-                me->Say(SAY_WINDSOR_4_1, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_WINDSOR_4_1, LANGUAGE_UNIVERSAL, PlayerGUID);
                 IsOnHold=true;
                 break;
             case 10:
                 me->setFaction(534);
                 break;
             case 12:
-                me->Say(SAY_WINDSOR_6, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_WINDSOR_6, LANGUAGE_UNIVERSAL, PlayerGUID);
                 instance->SetData(DATA_SUPPLY_ROOM, ENCOUNTER_STATE_IN_PROGRESS);
                 break;
             case 13:
@@ -804,7 +804,7 @@ public:
                 me->setFaction(11);
                 break;
             case 16:
-                me->Say(SAY_WINDSOR_9, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_WINDSOR_9, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 17:
                 me->HandleEmoteCommand(EMOTE_STATE_USESTANDING);//EMOTE_STATE_WORK
@@ -826,9 +826,9 @@ public:
             {
             switch (urand(0, 2))
             {
-                case 0: me->Say(SAY_WINDSOR_AGGRO1, LANG_UNIVERSAL, PlayerGUID); break;
-                case 1: me->Say(SAY_WINDSOR_AGGRO2, LANG_UNIVERSAL, PlayerGUID); break;
-                case 2: me->Say(SAY_WINDSOR_AGGRO3, LANG_UNIVERSAL, PlayerGUID); break;
+                case 0: me->Say(SAY_WINDSOR_AGGRO1, LANGUAGE_UNIVERSAL, PlayerGUID); break;
+                case 1: me->Say(SAY_WINDSOR_AGGRO2, LANGUAGE_UNIVERSAL, PlayerGUID); break;
+                case 2: me->Say(SAY_WINDSOR_AGGRO3, LANGUAGE_UNIVERSAL, PlayerGUID); break;
             }
             }
 
@@ -846,12 +846,12 @@ public:
                 SetEscortPaused(false);
             if (!instance->GetData(DATA_GATE_D) && instance->GetData(DATA_DUGHAL) == ENCOUNTER_STATE_NOT_STARTED)
                 {
-                me->Say(SAY_WINDSOR_4_2, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_WINDSOR_4_2, LANGUAGE_UNIVERSAL, PlayerGUID);
                 instance->SetData(DATA_DUGHAL, ENCOUNTER_STATE_BEFORE_START);
                 }
             if (instance->GetData(DATA_DUGHAL) == ENCOUNTER_STATE_OBJECTIVE_COMPLETED)
                 {
-                me->Say(SAY_WINDSOR_4_3, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_WINDSOR_4_3, LANGUAGE_UNIVERSAL, PlayerGUID);
                 instance->SetData(DATA_DUGHAL, ENCOUNTER_STATE_ENDED);
                 }
             if ((instance->GetData(DATA_QUEST_JAIL_BREAK) == ENCOUNTER_STATE_IN_PROGRESS || instance->GetData(DATA_QUEST_JAIL_BREAK) == ENCOUNTER_STATE_FAILED || instance->GetData(DATA_QUEST_JAIL_BREAK) == ENCOUNTER_STATE_ENDED)&& instance->GetData(DATA_SUPPLY_ROOM) == ENCOUNTER_STATE_ENDED)
@@ -956,51 +956,51 @@ public:
             {
             case 0:
                 me->setFaction(11);
-                me->Say(SAY_REGINALD_WINDSOR_0_1, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_0_1, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 1:
-                me->Say(SAY_REGINALD_WINDSOR_0_2, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_0_2, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 7:
                 me->HandleEmoteCommand(EMOTE_STATE_POINT);
-                me->Say(SAY_REGINALD_WINDSOR_5_1, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_5_1, LANGUAGE_UNIVERSAL, PlayerGUID);
                 IsOnHold=true;
                 break;
             case 8:
-                me->Say(SAY_REGINALD_WINDSOR_5_2, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_5_2, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 11:
                 me->HandleEmoteCommand(EMOTE_STATE_POINT);
-                me->Say(SAY_REGINALD_WINDSOR_7_1, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_7_1, LANGUAGE_UNIVERSAL, PlayerGUID);
                 IsOnHold=true;
                 break;
             case 12:
-                me->Say(SAY_REGINALD_WINDSOR_7_2, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_7_2, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 13:
-                me->Say(SAY_REGINALD_WINDSOR_7_3, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_7_3, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 20:
                 me->HandleEmoteCommand(EMOTE_STATE_POINT);
-                me->Say(SAY_REGINALD_WINDSOR_13_1, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_13_1, LANGUAGE_UNIVERSAL, PlayerGUID);
                 IsOnHold=true;
                 break;
             case 21:
-                me->Say(SAY_REGINALD_WINDSOR_13_3, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_13_3, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 23:
                 me->HandleEmoteCommand(EMOTE_STATE_POINT);
-                me->Say(SAY_REGINALD_WINDSOR_14_1, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_14_1, LANGUAGE_UNIVERSAL, PlayerGUID);
                 IsOnHold=true;
                 break;
             case 24:
-                me->Say(SAY_REGINALD_WINDSOR_14_2, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_14_2, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 31:
-                me->Say(SAY_REGINALD_WINDSOR_20_1, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_20_1, LANGUAGE_UNIVERSAL, PlayerGUID);
                 break;
             case 32:
-                me->Say(SAY_REGINALD_WINDSOR_20_2, LANG_UNIVERSAL, PlayerGUID);
+                me->Say(SAY_REGINALD_WINDSOR_20_2, LANGUAGE_UNIVERSAL, PlayerGUID);
                 PlayerStart->GroupEventHappens(QUEST_JAIL_BREAK, me);
                 instance->SetData(DATA_SHILL, ENCOUNTER_STATE_ENDED);
                 break;
@@ -1030,9 +1030,9 @@ public:
             {
             switch (urand(0, 2))
             {
-                case 0: me->Say(SAY_WINDSOR_AGGRO1, LANG_UNIVERSAL, PlayerGUID); break;
-                case 1: me->Say(SAY_WINDSOR_AGGRO2, LANG_UNIVERSAL, PlayerGUID); break;
-                case 2: me->Say(SAY_WINDSOR_AGGRO3, LANG_UNIVERSAL, PlayerGUID); break;
+                case 0: me->Say(SAY_WINDSOR_AGGRO1, LANGUAGE_UNIVERSAL, PlayerGUID); break;
+                case 1: me->Say(SAY_WINDSOR_AGGRO2, LANGUAGE_UNIVERSAL, PlayerGUID); break;
+                case 2: me->Say(SAY_WINDSOR_AGGRO3, LANGUAGE_UNIVERSAL, PlayerGUID); break;
             }
             }
         void Reset() {}
@@ -1076,7 +1076,7 @@ public:
                 if (!instance->GetData(DATA_GATE_C) && instance->GetData(DATA_CREST) == ENCOUNTER_STATE_NOT_STARTED)
                     {
                         instance->SetData(DATA_CREATURE_CREST, 1);
-                        me->Say(SAY_REGINALD_WINDSOR_13_2, LANG_UNIVERSAL, PlayerGUID);
+                        me->Say(SAY_REGINALD_WINDSOR_13_2, LANGUAGE_UNIVERSAL, PlayerGUID);
                         instance->SetData(DATA_CREST, ENCOUNTER_STATE_IN_PROGRESS);
                     }
                 if (instance->GetData(DATA_CREATURE_CREST) && instance->GetData(DATA_CREST) == ENCOUNTER_STATE_IN_PROGRESS)
@@ -1160,7 +1160,7 @@ public:
         {
         switch (i)
             {
-            case 0:me->Say(SAY_TOBIAS_FREE, LANG_UNIVERSAL, PlayerGUID); break;
+            case 0:me->Say(SAY_TOBIAS_FREE, LANGUAGE_UNIVERSAL, PlayerGUID); break;
             case 2:
                 instance->SetData(DATA_TOBIAS, ENCOUNTER_STATE_OBJECTIVE_COMPLETED);break;
             case 4:

@@ -384,7 +384,7 @@ public:
                 me->SetDisplayId(DISPLAYID_EYE_HUGE);
                 // need to finish working on texts
                 //Talk(SAY_EYE_LAUNCHED);
-                me->MonsterSay(SAY_EYE_EMOTE1, LANG_UNIVERSAL, 0);
+                me->MonsterSay(SAY_EYE_EMOTE1, LANGUAGE_UNIVERSAL, 0);
                 me->SetHomePosition(2361.21f, -5660.45f, 496.7444f, 0);
                 me->GetMotionMaster()->MoveCharge(1758.007f, -5876.785f, 166.8667f, 0); //position center
                 me->SetReactState(REACT_AGGRESSIVE);
@@ -438,7 +438,7 @@ public:
             me->CastSpell(me, SPELL_EYE_FL_BOOST_FLY, true);
             // need to finish working on texts
             //Talk(SAY_EYE_UNDER_CONTROL);
-            me->MonsterSay(SAY_EYE_EMOTE2, LANG_UNIVERSAL, 0);
+            me->MonsterSay(SAY_EYE_EMOTE2, LANGUAGE_UNIVERSAL, 0);
             ((Player*)(me->GetCharmer()))->SetClientControl(me, 1);
         }
     };
@@ -680,7 +680,7 @@ public:
                 switch (Phase)
                 {
                    case 0:
-                        me->MonsterSay(SAY_DARK_RIDER, LANG_UNIVERSAL, 0);
+                        me->MonsterSay(SAY_DARK_RIDER, LANGUAGE_UNIVERSAL, 0);
                         PhaseTimer = 5000;
                         Phase = 1;
                         break;
@@ -920,7 +920,7 @@ public:
             // Ghouls should display their Birth Animation
             // Crawling out of the ground
             //DoCast(me, 35177, true);
-            //me->MonsterSay("Mommy?", LANG_UNIVERSAL, 0);
+            //me->MonsterSay("Mommy?", LANGUAGE_UNIVERSAL, 0);
             me->SetReactState(REACT_DEFENSIVE);
         }
 
@@ -1131,7 +1131,7 @@ public:
                         me->SetInFront(car);
                         me->SendMovementFlagUpdate();
                     }
-                    me->MonsterSay(SAY_SCARLET_MINER1, LANG_UNIVERSAL, 0);
+                    me->MonsterSay(SAY_SCARLET_MINER1, LANGUAGE_UNIVERSAL, 0);
                     SetRun(true);
                     IntroTimer = 4000;
                     IntroPhase = 1;
@@ -1145,7 +1145,7 @@ public:
                         car->StopMoving();
                         car->RemoveAura(SPELL_CART_DRAG);
                     }
-                    me->MonsterSay(SAY_SCARLET_MINER2, LANG_UNIVERSAL, 0);
+                    me->MonsterSay(SAY_SCARLET_MINER2, LANGUAGE_UNIVERSAL, 0);
                     break;
                 default:
                     break;

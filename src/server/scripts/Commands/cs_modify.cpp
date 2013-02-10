@@ -82,7 +82,7 @@ public:
 
         if (hp < 1 || hpm < 1 || hpm < hp)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -90,7 +90,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -98,9 +98,9 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_HP, handler->GetNameLink(target).c_str(), hp, hpm);
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_HP, handler->GetNameLink(target).c_str(), hp, hpm);
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_HP_CHANGED, handler->GetNameLink().c_str(), hp, hpm);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_HP_CHANGED, handler->GetNameLink().c_str(), hp, hpm);
 
         target->SetMaxHealth(hpm);
         target->SetHealth(hp);
@@ -119,7 +119,7 @@ public:
 
         if (mana <= 0 || manam <= 0 || manam < mana)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -127,7 +127,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -136,9 +136,9 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_MANA, handler->GetNameLink(target).c_str(), mana, manam);
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_MANA, handler->GetNameLink(target).c_str(), mana, manam);
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_MANA_CHANGED, handler->GetNameLink().c_str(), mana, manam);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_MANA_CHANGED, handler->GetNameLink().c_str(), mana, manam);
 
         target->SetMaxPower(POWER_MANA, manam);
         target->SetPower(POWER_MANA, mana);
@@ -168,7 +168,7 @@ public:
 
         if (energy <= 0 || energym <= 0 || energym < energy)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -176,7 +176,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -185,14 +185,14 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_ENERGY, handler->GetNameLink(target).c_str(), energy/10, energym/10);
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_ENERGY, handler->GetNameLink(target).c_str(), energy/10, energym/10);
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_ENERGY_CHANGED, handler->GetNameLink().c_str(), energy/10, energym/10);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_ENERGY_CHANGED, handler->GetNameLink().c_str(), energy/10, energym/10);
 
         target->SetMaxPower(POWER_ENERGY, energym);
         target->SetPower(POWER_ENERGY, energy);
 
-        sLog->outDetail(handler->GetSkyFireString(LANG_CURRENT_ENERGY), target->GetMaxPower(POWER_ENERGY));
+        sLog->outDetail(handler->GetSkyFireString(LANGUAGE_CURRENT_ENERGY), target->GetMaxPower(POWER_ENERGY));
 
         return true;
     }
@@ -219,7 +219,7 @@ public:
 
         if (rage <= 0 || ragem <= 0 || ragem < rage)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -227,7 +227,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -236,9 +236,9 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_RAGE, handler->GetNameLink(target).c_str(), rage/10, ragem/10);
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_RAGE, handler->GetNameLink(target).c_str(), rage/10, ragem/10);
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_RAGE_CHANGED, handler->GetNameLink().c_str(), rage/10, ragem/10);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_RAGE_CHANGED, handler->GetNameLink().c_str(), rage/10, ragem/10);
 
         target->SetMaxPower(POWER_RAGE, ragem);
         target->SetPower(POWER_RAGE, rage);
@@ -257,7 +257,7 @@ public:
 
         if (rune <= 0 || runem <= 0 || runem < rune)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -265,14 +265,14 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_RUNIC_POWER, handler->GetNameLink(target).c_str(), rune/10, runem/10);
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_RUNIC_POWER, handler->GetNameLink(target).c_str(), rune/10, runem/10);
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_RUNIC_POWER_CHANGED, handler->GetNameLink().c_str(), rune/10, runem/10);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_RUNIC_POWER_CHANGED, handler->GetNameLink().c_str(), rune/10, runem/10);
 
         target->SetMaxPower(POWER_RUNIC_POWER, runem);
         target->SetPower(POWER_RUNIC_POWER, rune);
@@ -291,7 +291,7 @@ public:
         Creature* target = handler->getSelectedCreature();
         if (!target)
         {
-            handler->SendSysMessage(LANG_SELECT_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -304,14 +304,14 @@ public:
                 uint32 flag      = target->GetUInt32Value(UNIT_FIELD_FLAGS);
                 uint32 npcflag   = target->GetUInt32Value(UNIT_NPC_FLAGS);
                 uint32 dyflag    = target->GetUInt32Value(UNIT_DYNAMIC_FLAGS);
-                handler->PSendSysMessage(LANG_CURRENT_FACTION, target->GetGUIDLow(), factionid, flag, npcflag, dyflag);
+                handler->PSendSysMessage(LANGUAGE_CURRENT_FACTION, target->GetGUIDLow(), factionid, flag, npcflag, dyflag);
             }
             return true;
         }
 
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -343,12 +343,12 @@ public:
 
         if (!sFactionTemplateStore.LookupEntry(factionid))
         {
-            handler->PSendSysMessage(LANG_WRONG_FACTION, factionid);
+            handler->PSendSysMessage(LANGUAGE_WRONG_FACTION, factionid);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_FACTION, target->GetGUIDLow(), factionid, flag, npcflag, dyflag);
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_FACTION, target->GetGUIDLow(), factionid, flag, npcflag, dyflag);
 
         target->setFaction(factionid);
         target->SetUInt32Value(UNIT_FIELD_FLAGS, flag);
@@ -389,7 +389,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (target == NULL)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -398,9 +398,9 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_SPELLFLATID, spellflatid, val, mark, handler->GetNameLink(target).c_str());
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_SPELLFLATID, spellflatid, val, mark, handler->GetNameLink(target).c_str());
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_SPELLFLATID_CHANGED, handler->GetNameLink().c_str(), spellflatid, val, mark);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_SPELLFLATID_CHANGED, handler->GetNameLink().c_str(), spellflatid, val, mark);
 
         WorldPacket data(SMSG_SET_FLAT_SPELL_MODIFIER, (1+1+2+2));
         data << uint8(spellflatid);
@@ -425,7 +425,7 @@ public:
         Unit* target = handler->getSelectedUnit();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -453,7 +453,7 @@ public:
             }
         }
 
-        handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+        handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
         handler->SetSentErrorMessage(true);
         return false;
     }
@@ -468,7 +468,7 @@ public:
 
         if (ASpeed > 50.0f || ASpeed < 0.1f)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -476,7 +476,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -489,14 +489,14 @@ public:
 
         if (target->isInFlight())
         {
-            handler->PSendSysMessage(LANG_CHAR_IN_FLIGHT, targetNameLink.c_str());
+            handler->PSendSysMessage(LANGUAGE_CHARACTER_IN_FLIGHT, targetNameLink.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_ASPEED, ASpeed, targetNameLink.c_str());
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_ASPEED, ASpeed, targetNameLink.c_str());
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_ASPEED_CHANGED, handler->GetNameLink().c_str(), ASpeed);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_ASPEED_CHANGED, handler->GetNameLink().c_str(), ASpeed);
 
         target->SetSpeed(MOVE_WALK,    ASpeed, true);
         target->SetSpeed(MOVE_RUN,     ASpeed, true);
@@ -516,7 +516,7 @@ public:
 
         if (Speed > 50.0f || Speed < 0.1f)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -524,7 +524,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -537,14 +537,14 @@ public:
 
         if (target->isInFlight())
         {
-            handler->PSendSysMessage(LANG_CHAR_IN_FLIGHT, targetNameLink.c_str());
+            handler->PSendSysMessage(LANGUAGE_CHARACTER_IN_FLIGHT, targetNameLink.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_SPEED, Speed, targetNameLink.c_str());
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_SPEED, Speed, targetNameLink.c_str());
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_SPEED_CHANGED, handler->GetNameLink().c_str(), Speed);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_SPEED_CHANGED, handler->GetNameLink().c_str(), Speed);
 
         target->SetSpeed(MOVE_RUN, Speed, true);
 
@@ -561,7 +561,7 @@ public:
 
         if (Swim > 50.0f || Swim < 0.1f)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -569,7 +569,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -582,14 +582,14 @@ public:
 
         if (target->isInFlight())
         {
-            handler->PSendSysMessage(LANG_CHAR_IN_FLIGHT, targetNameLink.c_str());
+            handler->PSendSysMessage(LANGUAGE_CHARACTER_IN_FLIGHT, targetNameLink.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_SWIM_SPEED, Swim, targetNameLink.c_str());
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_SWIM_SPEED, Swim, targetNameLink.c_str());
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_SWIM_SPEED_CHANGED, handler->GetNameLink().c_str(), Swim);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_SWIM_SPEED_CHANGED, handler->GetNameLink().c_str(), Swim);
 
         target->SetSpeed(MOVE_SWIM, Swim, true);
 
@@ -606,7 +606,7 @@ public:
 
         if (BSpeed > 50.0f || BSpeed < 0.1f)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -614,7 +614,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -627,14 +627,14 @@ public:
 
         if (target->isInFlight())
         {
-            handler->PSendSysMessage(LANG_CHAR_IN_FLIGHT, targetNameLink.c_str());
+            handler->PSendSysMessage(LANGUAGE_CHARACTER_IN_FLIGHT, targetNameLink.c_str());
             handler->SetSentErrorMessage(true);
             return false;
         }
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_BACK_SPEED, BSpeed, targetNameLink.c_str());
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_BACK_SPEED, BSpeed, targetNameLink.c_str());
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_BACK_SPEED_CHANGED, handler->GetNameLink().c_str(), BSpeed);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_BACK_SPEED_CHANGED, handler->GetNameLink().c_str(), BSpeed);
 
         target->SetSpeed(MOVE_RUN_BACK, BSpeed, true);
 
@@ -651,7 +651,7 @@ public:
 
         if (FSpeed > 50.0f || FSpeed < 0.1f)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -659,7 +659,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -668,9 +668,9 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_FLY_SPEED, FSpeed, handler->GetNameLink(target).c_str());
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_FLY_SPEED, FSpeed, handler->GetNameLink(target).c_str());
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOURS_FLY_SPEED_CHANGED, handler->GetNameLink().c_str(), FSpeed);
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_FLY_SPEED_CHANGED, handler->GetNameLink().c_str(), FSpeed);
 
         target->SetSpeed(MOVE_FLIGHT, FSpeed, true);
 
@@ -686,7 +686,7 @@ public:
         float Scale = (float)atof((char*)args);
         if (Scale > 10.0f || Scale < 0.1f)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -694,7 +694,7 @@ public:
         Unit* target = handler->getSelectedUnit();
         if (!target)
         {
-            handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+            handler->SendSysMessage(LANGUAGE_SELECT_CHARACTER_OR_CREATURE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -705,9 +705,9 @@ public:
             if (handler->HasLowerSecurity(player, 0))
                 return false;
 
-            handler->PSendSysMessage(LANG_YOU_CHANGE_SIZE, Scale, handler->GetNameLink(player).c_str());
+            handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_SIZE, Scale, handler->GetNameLink(player).c_str());
             if (handler->needReportToTarget(player))
-                (ChatHandler(player)).PSendSysMessage(LANG_YOURS_SIZE_CHANGED, handler->GetNameLink().c_str(), Scale);
+                (ChatHandler(player)).PSendSysMessage(LANGUAGE_YOURS_SIZE_CHANGED, handler->GetNameLink().c_str(), Scale);
         }
 
         target->SetFloatValue(OBJECT_FIELD_SCALE_X, Scale);
@@ -936,7 +936,7 @@ public:
             mId=2346;
             break;
         default:
-            handler->SendSysMessage(LANG_NO_MOUNT);
+            handler->SendSysMessage(LANGUAGE_NO_MOUNT);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -944,7 +944,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -953,9 +953,9 @@ public:
         if (handler->HasLowerSecurity(target, 0))
             return false;
 
-        handler->PSendSysMessage(LANG_YOU_GIVE_MOUNT, handler->GetNameLink(target).c_str());
+        handler->PSendSysMessage(LANGUAGE_YOU_GIVE_MOUNT, handler->GetNameLink(target).c_str());
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_MOUNT_GIVED, handler->GetNameLink().c_str());
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_MOUNT_GIVED, handler->GetNameLink().c_str());
 
         target->SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
         target->Mount(mId);
@@ -985,7 +985,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1002,12 +1002,12 @@ public:
         {
             int32 newmoney = int32(moneyuser) + addmoney;
 
-            sLog->outDetail(handler->GetSkyFireString(LANG_CURRENT_MONEY), moneyuser, addmoney, newmoney);
+            sLog->outDetail(handler->GetSkyFireString(LANGUAGE_CURRENT_MONEY), moneyuser, addmoney, newmoney);
             if (newmoney <= 0)
             {
-                handler->PSendSysMessage(LANG_YOU_TAKE_ALL_MONEY, handler->GetNameLink(target).c_str());
+                handler->PSendSysMessage(LANGUAGE_YOU_TAKE_ALL_MONEY, handler->GetNameLink(target).c_str());
                 if (handler->needReportToTarget(target))
-                    (ChatHandler(target)).PSendSysMessage(LANG_YOURS_ALL_MONEY_GONE, handler->GetNameLink().c_str());
+                    (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_ALL_MONEY_GONE, handler->GetNameLink().c_str());
 
                 target->SetMoney(0);
             }
@@ -1016,17 +1016,17 @@ public:
                 if (newmoney > MAX_MONEY_AMOUNT)
                     newmoney = MAX_MONEY_AMOUNT;
 
-                handler->PSendSysMessage(LANG_YOU_TAKE_MONEY, abs(addmoney), handler->GetNameLink(target).c_str());
+                handler->PSendSysMessage(LANGUAGE_YOU_TAKE_MONEY, abs(addmoney), handler->GetNameLink(target).c_str());
                 if (handler->needReportToTarget(target))
-                    (ChatHandler(target)).PSendSysMessage(LANG_YOURS_MONEY_TAKEN, handler->GetNameLink().c_str(), abs(addmoney));
+                    (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_MONEY_TAKEN, handler->GetNameLink().c_str(), abs(addmoney));
                 target->SetMoney(newmoney);
             }
         }
         else
         {
-            handler->PSendSysMessage(LANG_YOU_GIVE_MONEY, addmoney, handler->GetNameLink(target).c_str());
+            handler->PSendSysMessage(LANGUAGE_YOU_GIVE_MONEY, addmoney, handler->GetNameLink(target).c_str());
             if (handler->needReportToTarget(target))
-                (ChatHandler(target)).PSendSysMessage(LANG_YOURS_MONEY_GIVEN, handler->GetNameLink().c_str(), addmoney);
+                (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOURS_MONEY_GIVEN, handler->GetNameLink().c_str(), addmoney);
 
             if (addmoney >=MAX_MONEY_AMOUNT)
                 target->SetMoney(MAX_MONEY_AMOUNT);
@@ -1034,7 +1034,7 @@ public:
                 target->ModifyMoney(addmoney);
         }
 
-        sLog->outDetail(handler->GetSkyFireString(LANG_NEW_MONEY), moneyuser, addmoney, target->GetMoney());
+        sLog->outDetail(handler->GetSkyFireString(LANGUAGE_NEW_MONEY), moneyuser, addmoney, target->GetMoney());
 
         return true;
     }
@@ -1048,7 +1048,7 @@ public:
         Unit* target = handler->getSelectedUnit();
         if (!target)
         {
-            handler->SendSysMessage(LANG_NO_CHAR_SELECTED);
+            handler->SendSysMessage(LANGUAGE_NO_CHARACTER_SELECTED);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1070,13 +1070,13 @@ public:
 
         if (field < OBJECT_END || field >= target->GetValuesCount())
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
         if (bit < 1 || bit > 32)
         {
-            handler->SendSysMessage(LANG_BAD_VALUE);
+            handler->SendSysMessage(LANGUAGE_BAD_VALUE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1084,12 +1084,12 @@ public:
         if (target->HasFlag(field, (1<<(bit-1))))
         {
             target->RemoveFlag(field, (1<<(bit-1)));
-            handler->PSendSysMessage(LANG_REMOVE_BIT, bit, field);
+            handler->PSendSysMessage(LANGUAGE_REMOVE_BIT, bit, field);
         }
         else
         {
             target->SetFlag(field, (1<<(bit-1)));
-            handler->PSendSysMessage(LANG_SET_BIT, bit, field);
+            handler->PSendSysMessage(LANGUAGE_SET_BIT, bit, field);
         }
         return true;
     }
@@ -1102,7 +1102,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1114,7 +1114,7 @@ public:
         int32 amount = (uint32)atoi(args);
 
         target->ModifyCurrency(CURRENCY_TYPE_HONOR_POINTS, amount);
-        handler->PSendSysMessage(LANG_COMMAND_MODIFY_HONOR, handler->GetNameLink(target).c_str(), target->GetCurrency(CURRENCY_TYPE_HONOR_POINTS));
+        handler->PSendSysMessage(LANGUAGE_COMMAND_MODIFY_HONOR, handler->GetNameLink(target).c_str(), target->GetCurrency(CURRENCY_TYPE_HONOR_POINTS));
 
         return true;
     }
@@ -1147,7 +1147,7 @@ public:
 
         if (!target)
         {
-            handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1198,7 +1198,7 @@ public:
                         int32 delta = atoi(deltaTxt);
                         if ((delta < 0) || (delta > ReputationMgr::PointsInRank[r] -1))
                         {
-                            handler->PSendSysMessage(LANG_COMMAND_FACTION_DELTA, (ReputationMgr::PointsInRank[r]-1));
+                            handler->PSendSysMessage(LANGUAGE_COMMAND_FACTION_DELTA, (ReputationMgr::PointsInRank[r]-1));
                             handler->SetSentErrorMessage(true);
                             return false;
                         }
@@ -1210,7 +1210,7 @@ public:
             }
             if (r >= MAX_REPUTATION_RANK)
             {
-                handler->PSendSysMessage(LANG_COMMAND_FACTION_INVPARAM, rankTxt);
+                handler->PSendSysMessage(LANGUAGE_COMMAND_FACTION_INVPARAM, rankTxt);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -1220,20 +1220,20 @@ public:
 
         if (!factionEntry)
         {
-            handler->PSendSysMessage(LANG_COMMAND_FACTION_UNKNOWN, factionId);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_FACTION_UNKNOWN, factionId);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
         if (factionEntry->reputationListID < 0)
         {
-            handler->PSendSysMessage(LANG_COMMAND_FACTION_NOREP_ERROR, factionEntry->name, factionId);
+            handler->PSendSysMessage(LANGUAGE_COMMAND_FACTION_NOREP_ERROR, factionEntry->name, factionId);
             handler->SetSentErrorMessage(true);
             return false;
         }
 
         target->GetReputationMgr().SetReputation(factionEntry, amount);
-        handler->PSendSysMessage(LANG_COMMAND_MODIFY_REP, factionEntry->name, factionId,
+        handler->PSendSysMessage(LANGUAGE_COMMAND_MODIFY_REP, factionEntry->name, factionId,
             handler->GetNameLink(target).c_str(), target->GetReputationMgr().GetReputation(factionEntry));
         return true;
     }
@@ -1300,7 +1300,7 @@ public:
         Player* target = handler->getSelectedPlayer();
         if (!target)
         {
-            handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1309,7 +1309,7 @@ public:
 
         target->ModifyCurrency(CURRENCY_TYPE_CONQUEST_POINTS, amount);
 
-        handler->PSendSysMessage(LANG_COMMAND_MODIFY_ARENA, handler->GetNameLink(target).c_str(), target->GetCurrency(CURRENCY_TYPE_CONQUEST_POINTS));
+        handler->PSendSysMessage(LANGUAGE_COMMAND_MODIFY_ARENA, handler->GetNameLink(target).c_str(), target->GetCurrency(CURRENCY_TYPE_CONQUEST_POINTS));
 
         return true;
     }
@@ -1323,7 +1323,7 @@ public:
 
         if (!target)
         {
-            handler->PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+            handler->PSendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1353,7 +1353,7 @@ public:
         }
         else
         {
-            handler->SendSysMessage(LANG_MUST_MALE_OR_FEMALE);
+            handler->SendSysMessage(LANGUAGE_MUST_MALE_OR_FEMALE);
             handler->SetSentErrorMessage(true);
             return false;
         }
@@ -1367,10 +1367,10 @@ public:
 
         char const* gender_full = gender ? "female" : "male";
 
-        handler->PSendSysMessage(LANG_YOU_CHANGE_GENDER, handler->GetNameLink(target).c_str(), gender_full);
+        handler->PSendSysMessage(LANGUAGE_YOU_CHANGE_GENDER, handler->GetNameLink(target).c_str(), gender_full);
 
         if (handler->needReportToTarget(target))
-            (ChatHandler(target)).PSendSysMessage(LANG_YOUR_GENDER_CHANGED, gender_full, handler->GetNameLink().c_str());
+            (ChatHandler(target)).PSendSysMessage(LANGUAGE_YOUR_GENDER_CHANGED, gender_full, handler->GetNameLink().c_str());
 
         return true;
     }

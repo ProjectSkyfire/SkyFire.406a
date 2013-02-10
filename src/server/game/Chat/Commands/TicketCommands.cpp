@@ -60,7 +60,7 @@ bool ChatHandler::HandleGMTicketGetByIdCommand(const char* args)
     GmTicket *ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket || ticket->IsClosed() || ticket->IsCompleted())
     {
-        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
@@ -91,7 +91,7 @@ bool ChatHandler::HandleGMTicketGetByNameCommand(const char* args)
     // Target must exist
     if (!guid)
     {
-        SendSysMessage(LANG_NO_PLAYERS_FOUND);
+        SendSysMessage(LANGUAGE_NO_PLAYERS_FOUND);
         return true;
     }
 
@@ -99,7 +99,7 @@ bool ChatHandler::HandleGMTicketGetByNameCommand(const char* args)
     GmTicket *ticket = sTicketMgr->GetTicketByPlayer(guid);
     if (!ticket)
     {
-        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
@@ -120,7 +120,7 @@ bool ChatHandler::HandleGMTicketCloseByIdCommand(const char* args)
     GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket || ticket->IsClosed() || ticket->IsCompleted())
     {
-        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
@@ -129,7 +129,7 @@ bool ChatHandler::HandleGMTicketCloseByIdCommand(const char* args)
     Player* player = m_session ? m_session->GetPlayer() : NULL;
     if (player && ticket->IsAssignedNotTo(player->GetGUID()))
     {
-        PSendSysMessage(LANG_COMMAND_TICKETCANNOTCLOSE, ticket->GetId());
+        PSendSysMessage(LANGUAGE_COMMAND_TICKETCANNOTCLOSE, ticket->GetId());
         return true;
     }
 
@@ -171,7 +171,7 @@ bool ChatHandler::HandleGMTicketAssignToCommand(const char* args)
     GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket || ticket->IsClosed())
     {
-        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
@@ -183,14 +183,14 @@ bool ChatHandler::HandleGMTicketAssignToCommand(const char* args)
     // Target must exist and have administrative rights
     if (!targetGuid || AccountMgr::IsPlayerAccount(targetGmLevel))
     {
-        SendSysMessage(LANG_COMMAND_TICKETASSIGNERROR_A);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETASSIGNERROR_A);
         return true;
     }
 
     // If already assigned, leave
     if (ticket->IsAssignedTo(targetGuid))
     {
-        PSendSysMessage(LANG_COMMAND_TICKETASSIGNERROR_B, ticket->GetId());
+        PSendSysMessage(LANGUAGE_COMMAND_TICKETASSIGNERROR_B, ticket->GetId());
         return true;
     }
 
@@ -199,7 +199,7 @@ bool ChatHandler::HandleGMTicketAssignToCommand(const char* args)
     Player* player = m_session ? m_session->GetPlayer() : NULL;
     if (player && ticket->IsAssignedNotTo(player->GetGUID()))
     {
-        PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId(), target.c_str());
+        PSendSysMessage(LANGUAGE_COMMAND_TICKETALREADYASSIGNED, ticket->GetId(), target.c_str());
         return true;
     }
 
@@ -223,13 +223,13 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(const char* args)
     GmTicket *ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket || ticket->IsClosed())
     {
-        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
     // Ticket must be assigned
     if (!ticket->IsAssigned())
     {
-        PSendSysMessage(LANG_COMMAND_TICKETNOTASSIGNED, ticket->GetId());
+        PSendSysMessage(LANGUAGE_COMMAND_TICKETNOTASSIGNED, ticket->GetId());
         return true;
     }
 
@@ -250,7 +250,7 @@ bool ChatHandler::HandleGMTicketUnAssignCommand(const char* args)
     uint32 mySecurity = m_session ? m_session->GetSecurity() : SEC_CONSOLE;
     if (security > mySecurity)
     {
-        SendSysMessage(LANG_COMMAND_TICKETUNASSIGNSECURITY);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETUNASSIGNSECURITY);
         return true;
     }
 
@@ -280,7 +280,7 @@ bool ChatHandler::HandleGMTicketCommentCommand(const char* args)
     GmTicket *ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket || ticket->IsClosed())
     {
-        PSendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        PSendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
@@ -289,7 +289,7 @@ bool ChatHandler::HandleGMTicketCommentCommand(const char* args)
     Player* player = m_session ? m_session->GetPlayer() : NULL;
     if (player && ticket->IsAssignedNotTo(player->GetGUID()))
     {
-        PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId());
+        PSendSysMessage(LANGUAGE_COMMAND_TICKETALREADYASSIGNED, ticket->GetId());
         return true;
     }
 
@@ -299,7 +299,7 @@ bool ChatHandler::HandleGMTicketCommentCommand(const char* args)
     sTicketMgr->UpdateLastChange();
 
     std::string msg = ticket->FormatMessageString(*this, NULL, ticket->GetAssignedToName().c_str(), NULL, NULL);
-    msg += PGetParseString(LANG_COMMAND_TICKETLISTADDCOMMENT, player ? player->GetName() : "Console", comment);
+    msg += PGetParseString(LANGUAGE_COMMAND_TICKETLISTADDCOMMENT, player ? player->GetName() : "Console", comment);
     SendGlobalGMSysMessage(msg.c_str());
 
     return true;
@@ -314,13 +314,13 @@ bool ChatHandler::HandleGMTicketDeleteByIdCommand(const char* args)
     GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket)
     {
-        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
     if (!ticket->IsClosed())
     {
-        SendSysMessage(LANG_COMMAND_TICKETCLOSEFIRST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETCLOSEFIRST);
         return true;
     }
 
@@ -347,13 +347,13 @@ bool ChatHandler::HandleGMTicketResetCommand(const char* /* args */)
 {
     if (sTicketMgr->GetOpenTicketCount() > 0)
     {
-        SendSysMessage(LANG_COMMAND_TICKETPENDING);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETPENDING);
         return true;
     }
     else
     {
         sTicketMgr->ResetTickets();
-        SendSysMessage(LANG_COMMAND_TICKETRESET);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETRESET);
     }
 
     return true;
@@ -363,7 +363,7 @@ bool ChatHandler::HandleToggleGMTicketSystem(const char* /* args */)
 {
     bool status = !sTicketMgr->GetStatus();
     sTicketMgr->SetStatus(status);
-    PSendSysMessage(status ? LANG_ALLOW_TICKETS : LANG_DISALLOW_TICKETS);
+    PSendSysMessage(status ? LANGUAGE_ALLOW_TICKETS : LANGUAGE_DISALLOW_TICKETS);
     return true;
 }
 
@@ -376,7 +376,7 @@ bool ChatHandler::HandleGMTicketEscalateCommand(const char *args)
     GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket || ticket->IsClosed() || ticket->IsCompleted() || ticket->GetEscalatedStatus() != TICKET_UNASSIGNED)
     {
-        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
@@ -399,7 +399,7 @@ bool ChatHandler::HandleGMTicketCompleteCommand(const char* args)
     GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket || ticket->IsClosed() || ticket->IsCompleted())
     {
-        SendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        SendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
@@ -426,7 +426,7 @@ inline bool ChatHandler::_HandleGMTicketResponseAppendCommand(const char* args, 
     GmTicket* ticket = sTicketMgr->GetTicket(ticketId);
     if (!ticket || ticket->IsClosed())
     {
-        PSendSysMessage(LANG_COMMAND_TICKETNOTEXIST);
+        PSendSysMessage(LANGUAGE_COMMAND_TICKETNOTEXIST);
         return true;
     }
 
@@ -435,7 +435,7 @@ inline bool ChatHandler::_HandleGMTicketResponseAppendCommand(const char* args, 
     Player* player = m_session ? m_session->GetPlayer() : NULL;
     if (player && ticket->IsAssignedNotTo(player->GetGUID()))
     {
-        PSendSysMessage(LANG_COMMAND_TICKETALREADYASSIGNED, ticket->GetId());
+        PSendSysMessage(LANGUAGE_COMMAND_TICKETALREADYASSIGNED, ticket->GetId());
         return true;
     }
 

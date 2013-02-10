@@ -403,7 +403,7 @@ public:
                                 WintergraspPortal = me->SummonGameObject(GO_WINTERGRASP_PORTAL, 5686.974609f, 773.303711f, 647.753235f, 5.572729f, 0, 0, 0.324484f, -0.945891f, 0);
                                 me->SetOrientation(5.515240f);
                                 me->SendMovementFlagUpdate();
-                                me->MonsterYell("Reinforcements are needed on the Wintergrasp battlefield! I have opened a portal for quick travel to the battle at The Silver Enclave.", LANG_UNIVERSAL, 0);
+                                me->MonsterYell("Reinforcements are needed on the Wintergrasp battlefield! I have opened a portal for quick travel to the battle at The Silver Enclave.", LANGUAGE_UNIVERSAL, 0);
                                 ++portalPhase;
                                 portalTimer = 1000;
                                 break;

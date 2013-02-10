@@ -32,10 +32,10 @@ BattlegroundAV::BattlegroundAV()
     BgObjects.resize(BG_AV_OBJECT_MAX);
     BgCreatures.resize(AV_CPLACE_MAX+AV_STATICCPLACE_MAX);
 
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_AV_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_AV_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_AV_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_AV_HAS_BEGUN;
+    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANGUAGE_BG_AV_START_TWO_MINUTES;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANGUAGE_BG_AV_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANGUAGE_BG_AV_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANGUAGE_BG_AV_HAS_BEGUN;
 }
 
 BattlegroundAV::~BattlegroundAV()
@@ -105,7 +105,7 @@ void BattlegroundAV::HandleKillUnit(Creature* unit, Player* killer)
             SpawnBGObject(BG_AV_OBJECT_BURN_BUILDING_ALLIANCE+i, RESPAWN_IMMEDIATELY);
         Creature* creature = GetBGCreature(AV_CPLACE_HERALD);
         if (creature)
-            YellToAll(creature, GetSkyFireString(LANG_BG_AV_A_CAPTAIN_DEAD), LANG_UNIVERSAL);
+            YellToAll(creature, GetSkyFireString(LANGUAGE_BG_AV_A_CAPTAIN_DEAD), LANGUAGE_UNIVERSAL);
         DelCreature(AV_CPLACE_TRIGGER16);
     }
     else if (entry == BG_AV_CreatureInfo[AV_NPC_H_CAPTAIN][0])
@@ -124,7 +124,7 @@ void BattlegroundAV::HandleKillUnit(Creature* unit, Player* killer)
             SpawnBGObject(BG_AV_OBJECT_BURN_BUILDING_HORDE+i, RESPAWN_IMMEDIATELY);
         Creature* creature = GetBGCreature(AV_CPLACE_HERALD);
         if (creature)
-            YellToAll(creature, GetSkyFireString(LANG_BG_AV_H_CAPTAIN_DEAD), LANG_UNIVERSAL);
+            YellToAll(creature, GetSkyFireString(LANGUAGE_BG_AV_H_CAPTAIN_DEAD), LANGUAGE_UNIVERSAL);
         DelCreature(AV_CPLACE_TRIGGER18);
     }
     else if (entry == BG_AV_CreatureInfo[AV_NPC_N_MINE_N_4][0] || entry == BG_AV_CreatureInfo[AV_NPC_N_MINE_A_4][0] || entry == BG_AV_CreatureInfo[AV_NPC_N_MINE_H_4][0])
@@ -252,7 +252,7 @@ void BattlegroundAV::UpdateScore(uint16 team, int16 points)
         }
         else if (!m_IsInformedNearVictory[teamindex] && m_Team_Scores[teamindex] < SEND_MSG_NEAR_LOSE)
         {
-            SendMessageToAll(teamindex == BG_TEAM_HORDE?LANG_BG_AV_H_NEAR_LOSE:LANG_BG_AV_A_NEAR_LOSE, teamindex == BG_TEAM_HORDE ? CHAT_MSG_BG_SYSTEM_HORDE : CHAT_MSG_BG_SYSTEM_ALLIANCE);
+            SendMessageToAll(teamindex == BG_TEAM_HORDE?LANGUAGE_BG_AV_H_NEAR_LOSE:LANGUAGE_BG_AV_A_NEAR_LOSE, teamindex == BG_TEAM_HORDE ? CHAT_MSG_BG_SYSTEM_HORDE : CHAT_MSG_BG_SYSTEM_ALLIANCE);
             PlaySoundToAll(AV_SOUND_NEAR_VICTORY);
             m_IsInformedNearVictory[teamindex] = true;
         }
@@ -356,14 +356,14 @@ void BattlegroundAV::PostUpdateImpl(uint32 diff)
                     CastSpellOnTeam(AV_BUFF_A_CAPTAIN, ALLIANCE);
                     Creature* creature = GetBGCreature(AV_CPLACE_MAX + 61);
                     if (creature)
-                        YellToAll(creature, LANG_BG_AV_A_CAPTAIN_BUFF, LANG_COMMON);
+                        YellToAll(creature, LANGUAGE_BG_AV_A_CAPTAIN_BUFF, LANGUAGE_COMMON);
                 }
                 else
                 {
                     CastSpellOnTeam(AV_BUFF_H_CAPTAIN, HORDE);
                     Creature* creature = GetBGCreature(AV_CPLACE_MAX + 59); //TODO: make the captains a dynamic creature
                     if (creature)
-                        YellToAll(creature, LANG_BG_AV_H_CAPTAIN_BUFF, LANG_ORCISH);
+                        YellToAll(creature, LANGUAGE_BG_AV_H_CAPTAIN_BUFF, LANGUAGE_ORCISH);
                 }
                 m_CaptainBuffTimer[i] = 120000 + urand(0, 4)* 60000; //as far as i could see, the buff is randomly so i make 2minutes (thats the duration of the buff itself) + 0-4minutes TODO get the right times
             }
@@ -618,13 +618,13 @@ void BattlegroundAV::EventPlayerDestroyedPoint(BG_AV_Nodes node)
     //send a nice message to all :)
     char buf[256];
     if (IsTower(node))
-        sprintf(buf, GetSkyFireString(LANG_BG_AV_TOWER_TAKEN), GetNodeName(node), (owner == ALLIANCE) ? GetSkyFireString(LANG_BG_AV_ALLY) : GetSkyFireString(LANG_BG_AV_HORDE));
+        sprintf(buf, GetSkyFireString(LANGUAGE_BG_AV_TOWER_TAKEN), GetNodeName(node), (owner == ALLIANCE) ? GetSkyFireString(LANGUAGE_BG_AV_ALLY) : GetSkyFireString(LANGUAGE_BG_AV_HORDE));
     else
-        sprintf(buf, GetSkyFireString(LANG_BG_AV_GRAVE_TAKEN), GetNodeName(node), (owner == ALLIANCE) ? GetSkyFireString(LANG_BG_AV_ALLY) :GetSkyFireString(LANG_BG_AV_HORDE));
+        sprintf(buf, GetSkyFireString(LANGUAGE_BG_AV_GRAVE_TAKEN), GetNodeName(node), (owner == ALLIANCE) ? GetSkyFireString(LANGUAGE_BG_AV_ALLY) :GetSkyFireString(LANGUAGE_BG_AV_HORDE));
 
     Creature* creature = GetBGCreature(AV_CPLACE_HERALD);
     if (creature)
-        YellToAll(creature, buf, LANG_UNIVERSAL);
+        YellToAll(creature, buf, LANGUAGE_UNIVERSAL);
 }
 
 void BattlegroundAV::ChangeMineOwner(uint8 mine, uint32 team, bool initial)
@@ -701,17 +701,17 @@ void BattlegroundAV::ChangeMineOwner(uint8 mine, uint32 team, bool initial)
     {
         m_Mine_Reclaim_Timer[mine]=AV_MINE_RECLAIM_TIMER;
         char buf[256];
-        sprintf(buf, GetSkyFireString(LANG_BG_AV_MINE_TAKEN), GetSkyFireString((mine == AV_NORTH_MINE) ? LANG_BG_AV_MINE_NORTH : LANG_BG_AV_MINE_SOUTH), (team == ALLIANCE) ?  GetSkyFireString(LANG_BG_AV_ALLY) : GetSkyFireString(LANG_BG_AV_HORDE));
+        sprintf(buf, GetSkyFireString(LANGUAGE_BG_AV_MINE_TAKEN), GetSkyFireString((mine == AV_NORTH_MINE) ? LANGUAGE_BG_AV_MINE_NORTH : LANGUAGE_BG_AV_MINE_SOUTH), (team == ALLIANCE) ?  GetSkyFireString(LANGUAGE_BG_AV_ALLY) : GetSkyFireString(LANGUAGE_BG_AV_HORDE));
         Creature* creature = GetBGCreature(AV_CPLACE_HERALD);
         if (creature)
-            YellToAll(creature, buf, LANG_UNIVERSAL);
+            YellToAll(creature, buf, LANGUAGE_UNIVERSAL);
     }
     else
     {
         if (mine == AV_SOUTH_MINE) //i think this gets called all the time
         {
             if (Creature* creature = GetBGCreature(AV_CPLACE_MINE_S_3))
-                YellToAll(creature, LANG_BG_AV_S_MINE_BOSS_CLAIMS, LANG_UNIVERSAL);
+                YellToAll(creature, LANGUAGE_BG_AV_S_MINE_BOSS_CLAIMS, LANGUAGE_UNIVERSAL);
         }
     }
     return;
@@ -939,10 +939,10 @@ void BattlegroundAV::EventPlayerDefendsPoint(Player* player, uint32 object)
     }
     //send a nice message to all :)
     char buf[256];
-    sprintf(buf, GetSkyFireString((IsTower(node)) ? LANG_BG_AV_TOWER_DEFENDED : LANG_BG_AV_GRAVE_DEFENDED), GetNodeName(node), (team == ALLIANCE) ?  GetSkyFireString(LANG_BG_AV_ALLY) : GetSkyFireString(LANG_BG_AV_HORDE));
+    sprintf(buf, GetSkyFireString((IsTower(node)) ? LANGUAGE_BG_AV_TOWER_DEFENDED : LANGUAGE_BG_AV_GRAVE_DEFENDED), GetNodeName(node), (team == ALLIANCE) ?  GetSkyFireString(LANGUAGE_BG_AV_ALLY) : GetSkyFireString(LANGUAGE_BG_AV_HORDE));
     Creature* creature = GetBGCreature(AV_CPLACE_HERALD);
     if (creature)
-        YellToAll(creature, buf, LANG_UNIVERSAL);
+        YellToAll(creature, buf, LANGUAGE_UNIVERSAL);
     //update the statistic for the defending player
     UpdatePlayerScore(player, (IsTower(node)) ? SCORE_TOWERS_DEFENDED : SCORE_GRAVEYARDS_DEFENDED, 1);
     if (IsTower(node))
@@ -1053,10 +1053,10 @@ void BattlegroundAV::EventPlayerAssaultsPoint(Player* player, uint32 object)
 
     //send a nice message to all :)
     char buf[256];
-    sprintf(buf, (IsTower(node)) ? GetSkyFireString(LANG_BG_AV_TOWER_ASSAULTED) : GetSkyFireString(LANG_BG_AV_GRAVE_ASSAULTED), GetNodeName(node), (team == ALLIANCE) ?  GetSkyFireString(LANG_BG_AV_ALLY) : GetSkyFireString(LANG_BG_AV_HORDE));
+    sprintf(buf, (IsTower(node)) ? GetSkyFireString(LANGUAGE_BG_AV_TOWER_ASSAULTED) : GetSkyFireString(LANGUAGE_BG_AV_GRAVE_ASSAULTED), GetNodeName(node), (team == ALLIANCE) ?  GetSkyFireString(LANGUAGE_BG_AV_ALLY) : GetSkyFireString(LANGUAGE_BG_AV_HORDE));
     Creature* creature = GetBGCreature(AV_CPLACE_HERALD);
     if (creature)
-        YellToAll(creature, buf, LANG_UNIVERSAL);
+        YellToAll(creature, buf, LANGUAGE_UNIVERSAL);
     //update the statistic for the assaulting player
     UpdatePlayerScore(player, (IsTower(node)) ? SCORE_TOWERS_ASSAULTED : SCORE_GRAVEYARDS_ASSAULTED, 1);
     PlaySoundToAll((team == ALLIANCE)?AV_SOUND_ALLIANCE_ASSAULTS:AV_SOUND_HORDE_ASSAULTS);
@@ -1373,21 +1373,21 @@ const char* BattlegroundAV::GetNodeName(BG_AV_Nodes node)
 {
     switch (node)
     {
-        case BG_AV_NODES_FIRSTAID_STATION:  return GetSkyFireString(LANG_BG_AV_NODE_GRAVE_STORM_AID);
-        case BG_AV_NODES_DUNBALDAR_SOUTH:   return GetSkyFireString(LANG_BG_AV_NODE_TOWER_DUN_S);
-        case BG_AV_NODES_DUNBALDAR_NORTH:   return GetSkyFireString(LANG_BG_AV_NODE_TOWER_DUN_N);
-        case BG_AV_NODES_STORMPIKE_GRAVE:   return GetSkyFireString(LANG_BG_AV_NODE_GRAVE_STORMPIKE);
-        case BG_AV_NODES_ICEWING_BUNKER:    return GetSkyFireString(LANG_BG_AV_NODE_TOWER_ICEWING);
-        case BG_AV_NODES_STONEHEART_GRAVE:  return GetSkyFireString(LANG_BG_AV_NODE_GRAVE_STONE);
-        case BG_AV_NODES_STONEHEART_BUNKER: return GetSkyFireString(LANG_BG_AV_NODE_TOWER_STONE);
-        case BG_AV_NODES_SNOWFALL_GRAVE:    return GetSkyFireString(LANG_BG_AV_NODE_GRAVE_SNOW);
-        case BG_AV_NODES_ICEBLOOD_TOWER:    return GetSkyFireString(LANG_BG_AV_NODE_TOWER_ICE);
-        case BG_AV_NODES_ICEBLOOD_GRAVE:    return GetSkyFireString(LANG_BG_AV_NODE_GRAVE_ICE);
-        case BG_AV_NODES_TOWER_POINT:       return GetSkyFireString(LANG_BG_AV_NODE_TOWER_POINT);
-        case BG_AV_NODES_FROSTWOLF_GRAVE:   return GetSkyFireString(LANG_BG_AV_NODE_GRAVE_FROST);
-        case BG_AV_NODES_FROSTWOLF_ETOWER:  return GetSkyFireString(LANG_BG_AV_NODE_TOWER_FROST_E);
-        case BG_AV_NODES_FROSTWOLF_WTOWER:  return GetSkyFireString(LANG_BG_AV_NODE_TOWER_FROST_W);
-        case BG_AV_NODES_FROSTWOLF_HUT:     return GetSkyFireString(LANG_BG_AV_NODE_GRAVE_FROST_HUT);
+        case BG_AV_NODES_FIRSTAID_STATION:  return GetSkyFireString(LANGUAGE_BG_AV_NODE_GRAVE_STORM_AID);
+        case BG_AV_NODES_DUNBALDAR_SOUTH:   return GetSkyFireString(LANGUAGE_BG_AV_NODE_TOWER_DUN_S);
+        case BG_AV_NODES_DUNBALDAR_NORTH:   return GetSkyFireString(LANGUAGE_BG_AV_NODE_TOWER_DUN_N);
+        case BG_AV_NODES_STORMPIKE_GRAVE:   return GetSkyFireString(LANGUAGE_BG_AV_NODE_GRAVE_STORMPIKE);
+        case BG_AV_NODES_ICEWING_BUNKER:    return GetSkyFireString(LANGUAGE_BG_AV_NODE_TOWER_ICEWING);
+        case BG_AV_NODES_STONEHEART_GRAVE:  return GetSkyFireString(LANGUAGE_BG_AV_NODE_GRAVE_STONE);
+        case BG_AV_NODES_STONEHEART_BUNKER: return GetSkyFireString(LANGUAGE_BG_AV_NODE_TOWER_STONE);
+        case BG_AV_NODES_SNOWFALL_GRAVE:    return GetSkyFireString(LANGUAGE_BG_AV_NODE_GRAVE_SNOW);
+        case BG_AV_NODES_ICEBLOOD_TOWER:    return GetSkyFireString(LANGUAGE_BG_AV_NODE_TOWER_ICE);
+        case BG_AV_NODES_ICEBLOOD_GRAVE:    return GetSkyFireString(LANGUAGE_BG_AV_NODE_GRAVE_ICE);
+        case BG_AV_NODES_TOWER_POINT:       return GetSkyFireString(LANGUAGE_BG_AV_NODE_TOWER_POINT);
+        case BG_AV_NODES_FROSTWOLF_GRAVE:   return GetSkyFireString(LANGUAGE_BG_AV_NODE_GRAVE_FROST);
+        case BG_AV_NODES_FROSTWOLF_ETOWER:  return GetSkyFireString(LANGUAGE_BG_AV_NODE_TOWER_FROST_E);
+        case BG_AV_NODES_FROSTWOLF_WTOWER:  return GetSkyFireString(LANGUAGE_BG_AV_NODE_TOWER_FROST_W);
+        case BG_AV_NODES_FROSTWOLF_HUT:     return GetSkyFireString(LANGUAGE_BG_AV_NODE_GRAVE_FROST_HUT);
         default:
             sLog->outError("tried to get name for node %u", node);
             break;

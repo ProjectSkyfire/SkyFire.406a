@@ -1123,18 +1123,18 @@ void BattlegroundMgr::ToggleTesting()
 {
     m_Testing = !m_Testing;
     if (m_Testing)
-        sWorld->SendWorldText(LANG_DEBUG_BG_ON);
+        sWorld->SendWorldText(LANGUAGE_DEBUG_BG_ON);
     else
-        sWorld->SendWorldText(LANG_DEBUG_BG_OFF);
+        sWorld->SendWorldText(LANGUAGE_DEBUG_BG_OFF);
 }
 
 void BattlegroundMgr::ToggleArenaTesting()
 {
     m_ArenaTesting = !m_ArenaTesting;
     if (m_ArenaTesting)
-        sWorld->SendWorldText(LANG_DEBUG_ARENA_ON);
+        sWorld->SendWorldText(LANGUAGE_DEBUG_ARENA_ON);
     else
-        sWorld->SendWorldText(LANG_DEBUG_ARENA_OFF);
+        sWorld->SendWorldText(LANGUAGE_DEBUG_ARENA_OFF);
 }
 
 void BattlegroundMgr::SetHolidayWeekends(uint32 mask)

@@ -68,7 +68,7 @@ namespace SkyFire
                 uint64 target_guid = _source ? _source->GetGUID() : 0;
 
                 data << uint8 (_msgtype);
-                data << uint32(LANG_UNIVERSAL);
+                data << uint32(LANGUAGE_UNIVERSAL);
                 data << uint64(target_guid);                // there 0 for BG messages
                 data << uint32(0);                          // can be chat msg group or something
                 data << uint64(target_guid);
@@ -100,7 +100,7 @@ namespace SkyFire
                 uint64 target_guid = _source  ? _source->GetGUID() : 0;
 
                 data << uint8 (_msgtype);
-                data << uint32(LANG_UNIVERSAL);
+                data << uint32(LANGUAGE_UNIVERSAL);
                 data << uint64(target_guid);                // there 0 for BG messages
                 data << uint32(0);                          // can be chat msg group or something
                 data << uint64(target_guid);
@@ -203,10 +203,10 @@ Battleground::Battleground()
     StartDelayTimes[BG_STARTING_EVENT_THIRD]  = BG_START_DELAY_30S;
     StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
     //we must set to some default existing values
-    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANG_BG_WS_START_TWO_MINUTES;
-    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_WS_START_ONE_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANG_BG_WS_START_HALF_MINUTE;
-    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_WS_HAS_BEGUN;
+    StartMessageIds[BG_STARTING_EVENT_FIRST]  = LANGUAGE_BG_WS_START_TWO_MINUTES;
+    StartMessageIds[BG_STARTING_EVENT_SECOND] = LANGUAGE_BG_WS_START_ONE_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_THIRD]  = LANGUAGE_BG_WS_START_HALF_MINUTE;
+    StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANGUAGE_BG_WS_HAS_BEGUN;
 }
 
 Battleground::~Battleground()
@@ -408,13 +408,13 @@ inline void Battleground::_ProcessProgress(uint32 diff)
         if (newtime > (MINUTE * IN_MILLISECONDS))
         {
             if (newtime / (MINUTE * IN_MILLISECONDS) != _PrematureCountDownTimer / (MINUTE * IN_MILLISECONDS))
-                PSendMessageToAll(LANG_BATTLEGROUND_PREMATURE_FINISH_WARNING, CHAT_MSG_SYSTEM, NULL, (uint32)(_PrematureCountDownTimer / (MINUTE * IN_MILLISECONDS)));
+                PSendMessageToAll(LANGUAGE_BATTLEGROUND_PREMATURE_FINISH_WARNING, CHAT_MSG_SYSTEM, NULL, (uint32)(_PrematureCountDownTimer / (MINUTE * IN_MILLISECONDS)));
         }
         else
         {
             //announce every 15 seconds
             if (newtime / (15 * IN_MILLISECONDS) != _PrematureCountDownTimer / (15 * IN_MILLISECONDS))
-                PSendMessageToAll(LANG_BATTLEGROUND_PREMATURE_FINISH_WARNING_SECS, CHAT_MSG_SYSTEM, NULL, (uint32)(_PrematureCountDownTimer / IN_MILLISECONDS));
+                PSendMessageToAll(LANGUAGE_BATTLEGROUND_PREMATURE_FINISH_WARNING_SECS, CHAT_MSG_SYSTEM, NULL, (uint32)(_PrematureCountDownTimer / IN_MILLISECONDS));
         }
         _PrematureCountDownTimer = newtime;
     }
@@ -528,7 +528,7 @@ inline void Battleground::_ProcessJoin(uint32 diff)
                 }
             // Announce BG starting
             if (sWorld->getBoolConfig(CONFIG_BATTLEGROUND_QUEUE_ANNOUNCER_ENABLE))
-                sWorld->SendWorldText(LANG_BG_STARTED_ANNOUNCE_WORLD, GetName(), GetMinLevel(), GetMaxLevel());
+                sWorld->SendWorldText(LANGUAGE_BG_STARTED_ANNOUNCE_WORLD, GetName(), GetMinLevel(), GetMaxLevel());
         }
     }
 
@@ -734,7 +734,7 @@ void Battleground::EndBattleground(uint32 winner)
 
     if (winner == ALLIANCE)
     {
-        winmsg_id = isBattleground() ? LANG_BG_A_WINS : LANG_ARENA_GOLD_WINS;
+        winmsg_id = isBattleground() ? LANGUAGE_BG_A_WINS : LANGUAGE_ARENA_GOLD_WINS;
 
         PlaySoundToAll(SOUND_ALLIANCE_WINS);                // alliance wins sound
 
@@ -742,7 +742,7 @@ void Battleground::EndBattleground(uint32 winner)
     }
     else if (winner == HORDE)
     {
-        winmsg_id = isBattleground() ? LANG_BG_H_WINS : LANG_ARENA_GREEN_WINS;
+        winmsg_id = isBattleground() ? LANGUAGE_BG_H_WINS : LANGUAGE_ARENA_GREEN_WINS;
 
         PlaySoundToAll(SOUND_HORDE_WINS);                   // horde wins sound
 
@@ -1718,7 +1718,7 @@ void Battleground::SendWarningToAll(int32 entry, ...)
     WorldPacket data(SMSG_MESSAGECHAT, 200);
 
     data << (uint8)CHAT_MSG_RAID_BOSS_EMOTE;
-    data << (uint32)LANG_UNIVERSAL;
+    data << (uint32)LANGUAGE_UNIVERSAL;
     data << (uint64)0;
     data << (uint32)0;                                     // 2.1.0
     data << (uint32)1;

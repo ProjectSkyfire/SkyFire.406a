@@ -54,7 +54,7 @@ public:
 
             if (!obj)
             {
-                handler->SendSysMessage(LANG_PLAYER_NOT_FOUND);
+                handler->SendSysMessage(LANGUAGE_PLAYER_NOT_FOUND);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -65,7 +65,7 @@ public:
 
             if (!obj)
             {
-                handler->SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+                handler->SendSysMessage(LANGUAGE_SELECT_CHARACTER_OR_CREATURE);
                 handler->SetSentErrorMessage(true);
                 return false;
             }
@@ -107,7 +107,7 @@ public:
         }
         else handler->PSendSysMessage("no VMAP available for area info");
 
-        handler->PSendSysMessage(LANG_MAP_POSITION,
+        handler->PSendSysMessage(LANGUAGE_MAP_POSITION,
             obj->GetMapId(), (mapEntry ? mapEntry->name : "<unknown>"),
             zone_id, (zoneEntry ? zoneEntry->area_name : "<unknown>"),
             area_id, (areaEntry ? areaEntry->area_name : "<unknown>"),
@@ -120,7 +120,7 @@ public:
         ZLiquidStatus res = map->getLiquidStatus(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), MAP_ALL_LIQUIDS, &liquid_status);
         if (res)
         {
-            handler->PSendSysMessage(LANG_LIQUID_STATUS, liquid_status.level, liquid_status.depth_level, liquid_status.type, res);
+            handler->PSendSysMessage(LANGUAGE_LIQUID_STATUS, liquid_status.level, liquid_status.depth_level, liquid_status.type, res);
         }
         return true;
     }
