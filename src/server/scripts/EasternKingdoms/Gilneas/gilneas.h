@@ -50,7 +50,14 @@ enum CreatureIds
     NPC_WORGEN_ALPHA_C2                               = 35167, // Quest - By the skin of his teeth spawns
     NPC_WORGEN_RUNT_C1                                = 35188, // Quest - By the skin of his teeth spawns
     NPC_WORGEN_RUNT_C2                                = 35456, // Quest - By the skin of his teeth spawns
-    NPC_SEAN_DEMPSEY                                  = 35081 // Quest - By the skin of his teeth controller
+    NPC_SEAN_DEMPSEY                                  = 35081, // Quest - By the skin of his teeth controller= 35370,
+    NPC_JOSIAH_AVERY_P4                               = 35370, // NPC for worgen bite
+    NPC_JOSIAH_AVERY_TRIGGER                          = 50415, // Controller for Worgen Bite
+    NPC_LORNA_CROWLEY_P4                              = 35378, // Quest - From the Shadows
+    NPC_BLOODFANG_RIPPER_P4                           = 35505, // General AI spawns
+    NPC_GILNEAN_MASTIFF                               = 35631,
+    NPC_GILNEAS_CITY_GUARD_P8                         = 50474,
+    NPC_AFFLICTED_GILNEAN_P8                          = 50471
 };
 
 enum GameObjectIds
@@ -61,9 +68,14 @@ enum QuestIds
 {
     QUEST_LOCKDOWN                                     = 14078,
     QUEST_EVAC_MERC_SQUA                               = 14098,
+    QUEST_SOMETHINGS_AMISS                             = 14091,
+    QUEST_ALL_HELL_BREAKS_LOOSE                        = 14093,
+    QUEST_ROYAL_ORDERS                                 = 14099,
     QUEST_BY_THE_SKIN_ON_HIS_TEETH                     = 14154,
     QUEST_SAVE_KRENNAN_ARANAS                          = 14293,
-    QUEST_SACRIFICES                                   = 14212
+    QUEST_SACRIFICES                                   = 14212,
+    QUEST_THE_REBEL_LORDS_ARSENAL                      = 14159,
+    QUEST_FROM_THE_SHADOWS                             = 14204
 };
 
 enum SpellIds
@@ -77,7 +89,19 @@ enum SpellIds
     SPELL_LEFT_HOOK                                    = 67825,
     SPELL_DEMORALIZING_SHOUT                           = 61044,
     SPELL_SNAP_KICK                                    = 67827,
-    SPELL_BY_THE_SKIN_ON_HIS_TEETH                     = 66914
+    SPELL_BY_THE_SKIN_ON_HIS_TEETH                     = 66914,
+    SPELL_SHOOT                                        = 6660,
+    SPELL_WORGEN_BITE                                  = 72870,
+    SPELL_SUMMON_JOSIAH_AVERY                          = 67350,
+    SPELL_GET_SHOT                                     = 67349,
+    SPELL_SUMMON_JOSIAH                                = 67350,
+    SPELL_PULL_TO                                      = 67357,
+    SPELL_PHASE_QUEST_2                                = 59073,
+    SPELL_SUMMON_GILNEAN_MASTIFF                       = 67807,
+    SPELL_DISMISS_GILNEAN_MASTIFF                      = 43511,
+    SPELL_ATTACK_LURKER                                = 67805,
+    SPELL_SHADOWSTALKER_STEALTH                        = 5916,
+    SPELL_PING_GILNEAN_CROW                            = 93275
 };
 
 enum NpcTextIds
@@ -121,7 +145,13 @@ enum NpcTextIds
     SAY_KRENNAN_C2                                     = -1999972,
     SAY_GREYMANE_HORSE                                 = -1999971,
     SAY_CROWLEY_HORSE_1                                = 0,    // Let''s round up as many of them as we can.  Every worgen chasing us is one less worgen chasing the survivors!
-    SAY_CROWLEY_HORSE_2                                = 1    // You'll never catch us, you blasted mongrels! || Come and get us, you motherless beasts! || Over here, you flea bags!
+    SAY_CROWLEY_HORSE_2                                = 1,    // You'll never catch us, you blasted mongrels! || Come and get us, you motherless beasts! || Over here, you flea bags!
+    SAY_JOSIAH_AVERY_P2                                = 1,
+    SAY_JOSAIH_AVERY_P4                                = 1,
+    SAY_JOSAIH_AVERY_TRIGGER                           = 1,
+    SAY_LORNA_CROWLEY_P4                               = 0,
+    SAY_KING_GENN_GREYMANE_P4                          = 1,
+    SAY_GILNEAS_CITY_GUARD_P8                          = 1
 };
 
 enum SoundIds
@@ -158,8 +188,8 @@ Waypoint SW_WAYPOINT_LOC1[2]=
 
 Waypoint SW_WAYPOINT_LOC2[2]=
 {
-    { -1718.31f, 1526.62f, 55.91f }, // Worgen Runt 2 Corner where we turn
-    { -1717.86f, 1487.00f, 57.07f }  // Worgen Runt 2 Edge of Roof Waypoint
+    { -1718.31f, 1526.62f, 55.91f }, // Worgen Alpha 1 Corner where we turn
+    { -1717.86f, 1487.00f, 57.07f }  // Worgen Alpha 1 Edge of Roof Waypoint
 };
 
 Waypoint N_WAYPOINT_LOC[1]=

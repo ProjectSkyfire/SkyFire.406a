@@ -27,10 +27,10 @@ DELETE FROM creature_template WHERE entry IN (3871204, 35077);
 INSERT INTO creature_template VALUES
 (35077,0,0,0,0,0,29593,0,0,0,"Lord Darius Crowley",'','',0,88,88,0,2163,2163,3,1,1.14286,1,1,5,8,0,40,1.5,1111,0,1,0,0,0,0,0,0,0,8,11,0,7,262148,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,15,33,'',0,1,11,1,1,0,0,0,0,0,0,0,0,1,0,613097436,0,"npc_lord_darius_crowley_c1",13623);
 
-UPDATE creature_template SET AIName = "", scriptname = "npc_worgen_alpha_c1" WHERE ENTRY = 35170;
-UPDATE creature_template SET AIName = "", scriptname = "npc_worgen_alpha_c2" WHERE ENTRY = 35167;
-UPDATE creature_template SET AIName = "", scriptname = "npc_worgen_runt_c1" WHERE ENTRY = 35188;
-UPDATE creature_template SET AIName = "", scriptname = "npc_worgen_runt_c2" WHERE ENTRY = 35456;
+UPDATE creature_template SET AIName = "", flags_extra = 64, scriptname = "npc_worgen_alpha_c1" WHERE ENTRY = 35170;
+UPDATE creature_template SET AIName = "", flags_extra = 64, scriptname = "npc_worgen_alpha_c2" WHERE ENTRY = 35167;
+UPDATE creature_template SET AIName = "", flags_extra = 64, scriptname = "npc_worgen_runt_c1" WHERE ENTRY = 35188;
+UPDATE creature_template SET AIName = "", flags_extra = 64, scriptname = "npc_worgen_runt_c2" WHERE ENTRY = 35456;
 UPDATE creature_template SET AIName = "", scriptname = "npc_sean_dempsey" WHERE ENTRY = 35081;
 
 UPDATE quest_template SET reqcreatureorgoid1 = "0", reqcreatureorgocount1 = "0" WHERE entry = 14154;
