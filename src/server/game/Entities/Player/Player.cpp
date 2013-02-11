@@ -2656,6 +2656,8 @@ void Player::Regenerate(Powers power)
 }
 
 void Player::RegenerateHealth()
+// Dispite what many have argued in terms of spirit effecting health regen, patch notes for patch 4.0.1 specifically state health regen rate does NOT effect health regen rates!!
+// Furthermore, statistical data retrieved from live servers indicates previous hp regen calculations are far from accurate with cataclysm system
 {
     uint32 curValue = GetHealth();
     uint32 maxValue = GetMaxHealth();
@@ -2665,8 +2667,10 @@ void Player::RegenerateHealth()
 
     float HealthIncreaseRate = sWorld->getRate(RATE_HEALTH);
 
-    if (getLevel() < 15)
-        HealthIncreaseRate = sWorld->getRate(RATE_HEALTH) * (2.066f - (getLevel() * 0.066f));
+    if (getLevel() < 20) // Health regen is much higher % while under level 20
+        HealthIncreaseRate = sWorld->getRate(RATE_HEALTH) * ((25.0f - getLevel()) / (100.0f + getLevel())); // As close as possible to statistical data retrieved from live servers - Will need update when actual formula is discovered!!!
+    else // Once above 20, health regen is a base flat 1% of max hp (other auras and items can increase this)
+        HealthIncreaseRate = sWorld->getRate(RATE_HEALTH) * .01f; // Identical to statistical data retrieved through lvl 85
 
     float addvalue = 0.0f;
 
@@ -2676,7 +2680,7 @@ void Player::RegenerateHealth()
     // normal regen case (maybe partly in combat case)
     else if (!isInCombat() || HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT))
     {
-        addvalue = 0.015f*((float)GetMaxHealth())*HealthIncreaseRate;  // 2 secs: 0.75*2 :-) source: wowpedia.
+        addvalue = (float)GetMaxHealth()*HealthIncreaseRate; // Cataclysm is now flat % based regen based on max HP
         if (!isInCombat())
         {
             AuraEffectList const& mModHealthRegenPct = GetAuraEffectsByType(SPELL_AURA_MOD_HEALTH_REGEN_PERCENT);
@@ -2689,7 +2693,10 @@ void Player::RegenerateHealth()
             ApplyPctN(addvalue, GetTotalAuraModifier(SPELL_AURA_MOD_REGEN_DURING_COMBAT));
 
         if (!IsStandState())
-            addvalue *= 1.5f;
+            addvalue *= 1.333333f; // Regen is 33% faster while sitting
+
+        if (RACE_TROLL)
+            addvalue *= 1.1f; // Trolls Regen 10% Faster
     }
 
     // always regeneration bonus (including combat)
