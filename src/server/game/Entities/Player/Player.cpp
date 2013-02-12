@@ -1894,8 +1894,8 @@ bool Player::BuildEnumData(PreparedQueryResult result, WorldPacket* data)
     *data << uint8(playerBytes2 & 0xFF);                  // facial hair
 
     *data << uint8(fields[7].GetUInt8());                 // level
-    *data << uint32(fields[8].GetUInt32());                // zone
-    *data << uint32(fields[9].GetUInt32());                // map
+    *data << uint32(fields[8].GetUInt16());                // zone
+    *data << uint32(fields[9].GetUInt16());                // map
 
     *data << fields[10].GetFloat();                       // x
     *data << fields[11].GetFloat();                       // y
@@ -7731,7 +7731,7 @@ uint32 Player::GetZoneIdFromDB(uint64 guid)
         return 0;
 
     Field* fields = result->Fetch();
-    uint32 zone = fields[0].GetUInt32();
+    uint32 zone = fields[0].GetUInt16();
 
     if (!zone)
     {
@@ -7743,7 +7743,7 @@ uint32 Player::GetZoneIdFromDB(uint64 guid)
         if (!result)
             return 0;
         fields = result->Fetch();
-        uint32 map = fields[0].GetUInt32();
+        uint32 map = fields[0].GetUInt16();
         float posx = fields[1].GetFloat();
         float posy = fields[2].GetFloat();
         float posz = fields[3].GetFloat();
@@ -17441,7 +17441,7 @@ bool Player::LoadPositionFromDB(uint32& mapid, float& x, float& y, float& z, flo
     y = fields[1].GetFloat();
     z = fields[2].GetFloat();
     o = fields[3].GetFloat();
-    mapid = fields[4].GetUInt32();
+    mapid = fields[4].GetUInt16();
     in_flight = !fields[5].GetString().empty();
 
     return true;
@@ -17581,7 +17581,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     SetUInt32Value(PLAYER_BYTES, fields[9].GetUInt32());
     SetUInt32Value(PLAYER_BYTES_2, fields[10].GetUInt32());
-    SetUInt32Value(PLAYER_BYTES_3, (fields[45].GetUInt16() & 0xFFFE) | fields[5].GetUInt8());
+    SetUInt32Value(PLAYER_BYTES_3, (fields[45].GetUInt8() & 0xFFFE) | fields[5].GetUInt8());
     SetUInt32Value(PLAYER_FLAGS, fields[11].GetUInt32());
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fields[44].GetUInt32());
 
