@@ -710,6 +710,7 @@ void WorldSession::HandleOfferPetitionOpcode(WorldPacket& recvData)
     stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_PETITION_SIGNATURES);
 
     stmt->setUInt32(0, GUID_LOPART(petitionguid));
+    stmt->setUInt32(1, GUID_LOPART(petitionguid));
 
     result = CharacterDatabase.Query(stmt);
     
