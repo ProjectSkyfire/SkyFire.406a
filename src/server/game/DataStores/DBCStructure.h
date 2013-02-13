@@ -1670,11 +1670,11 @@ struct SoundEntriesEntry
 // SpellAuraOptions.dbc
 struct SpellAuraOptionsEntry
 {
-    uint32    Id;                                           // 0        m_ID
-    uint32    StackAmount;                                  // 1        m_cumulativeAura
-    uint32    procChance;                                   // 2        m_procChance
-    uint32    procCharges;                                  // 3        m_procCharges
-    uint32    procFlags;                                    // 4        m_procTypeMask
+    uint32    Id;                                           // 0       	m_ID
+    uint32    StackAmount;                                  // 1       	m_cumulativeAura
+    uint32    procChance;                                   // 2       	m_procChance
+    uint32    procCharges;                                  // 3       	m_procCharges
+    uint32    procFlags;                                    // 4       	m_procTypeMask
 };
 
 // SpellAuraRestrictions.dbc
