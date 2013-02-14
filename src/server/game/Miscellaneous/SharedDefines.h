@@ -26,14 +26,14 @@
 
 enum SpellEffIndex
 {
-    EFFECT_0											= 0,
-    EFFECT_1											= 1,
-    EFFECT_2											= 2,
+    EFFECT_0                                            = 0,
+    EFFECT_1                                            = 1,
+    EFFECT_2                                            = 2,
 };
 
 // used in script definitions
-#define EFFECT_FIRST_FOUND		254
-#define EFFECT_ALL				255
+#define EFFECT_FIRST_FOUND      254
+#define EFFECT_ALL              255
 
 enum LootModes
 {
@@ -132,7 +132,7 @@ enum UnitClass
 
 #define CLASSMASK_WAND_USERS ((1 << (CLASS_PRIEST -1)) | (1 << (CLASS_MAGE -1)) | (1 << (CLASS_WARLOCK -1)))
 
-#define PLAYER_MAX_BATTLEGROUND_QUEUES		2
+#define PLAYER_MAX_BATTLEGROUND_QUEUES      2
 
 enum ReputationRank
 {
@@ -146,10 +146,10 @@ enum ReputationRank
     REP_EXALTED                                         = 7
 };
 
-#define MIN_REPUTATION_RANK		(REP_HATED)
-#define MAX_REPUTATION_RANK		8
+#define MIN_REPUTATION_RANK     (REP_HATED)
+#define MAX_REPUTATION_RANK     8
 
-#define MAX_SPILLOVER_FACTIONS		5
+#define MAX_SPILLOVER_FACTIONS      5
 
 enum MoneyConstants
 {
@@ -588,13 +588,13 @@ enum SpellAttr8
     SPELL_ATTR8_UNK31                                   = 0x80000000  // 31
 };
 
-#define MIN_TALENT_SPEC				0
-#define MAX_TALENT_SPEC				1
-#define MIN_TALENT_SPECS			1
-#define MAX_TALENT_SPECS			2
-#define MAX_GLYPH_SLOT_INDEX    	9
-#define REQ_PRIMARY_TREE_TALENTS 	31
-   
+#define MIN_TALENT_SPEC             0
+#define MAX_TALENT_SPEC             1
+#define MIN_TALENT_SPECS            1
+#define MAX_TALENT_SPECS            2
+#define MAX_GLYPH_SLOT_INDEX        9
+#define REQ_PRIMARY_TREE_TALENTS    31
+
 // Custom values
 enum SpellClickUserTypes
 {
@@ -1098,9 +1098,9 @@ enum SpellCastResult // 4.0.6a 13623
     SPELL_FAILED_NOT_IN_ARENA                           = 199,
     SPELL_FAILED_TARGET_NOT_GROUNDED                    = 200,
     SPELL_FAILED_EXCEEDED_WEEKLY_USAGE                  = 201,
-    SPELL_FAILED_NOT_IN_LFG_DUNGEON					    = 202,
-    SPELL_FAILED_UNKNOWN							    = 254, // custom value, default case
-    SPELL_CAST_OK									    = 255  // custom value, must not be sent to client
+    SPELL_FAILED_NOT_IN_LFG_DUNGEON                     = 202,
+    SPELL_FAILED_UNKNOWN                                = 254, // custom value, default case
+    SPELL_CAST_OK                                       = 255  // custom value, must not be sent to client
 };
 
 enum SpellCustomErrors
@@ -1284,8 +1284,8 @@ enum AuraStateType
 // Spell mechanics
 enum Mechanics
 {
-    MECHANIC_NONE		                               = 0,
-    MECHANIC_CHARM			                           = 1,
+    MECHANIC_NONE                                      = 0,
+    MECHANIC_CHARM                                     = 1,
     MECHANIC_DISORIENTED                               = 2,
     MECHANIC_DISARM                                    = 3,
     MECHANIC_DISTRACT                                  = 4,
@@ -1320,19 +1320,19 @@ enum Mechanics
 
 // Used for spell 42292 Immune Movement Impairment and Loss of Control (0x49967ca6)
 #define IMMUNE_TO_MOVEMENT_IMPAIRMENT_AND_LOSS_CONTROL_MASK (\
-    (1 << MECHANIC_CHARM)	  | (1 << MECHANIC_DISORIENTED) | (1 << MECHANIC_FEAR)     | \
-    (1 << MECHANIC_ROOT)      | (1 << MECHANIC_SLEEP)	    | (1 << MECHANIC_SNARE)    | \
-    (1 << MECHANIC_STUN)      | (1 << MECHANIC_FREEZE)	    | (1 << MECHANIC_KNOCKOUT) | \
-    (1 << MECHANIC_POLYMORPH) | (1 << MECHANIC_BANISH)	    | (1 << MECHANIC_SHACKLE)  | \
-    (1 << MECHANIC_TURN)      | (1 << MECHANIC_HORROR)      | (1 << MECHANIC_DAZE)	   | \
+    (1 << MECHANIC_CHARM)     | (1 << MECHANIC_DISORIENTED) | (1 << MECHANIC_FEAR)     | \
+    (1 << MECHANIC_ROOT)      | (1 << MECHANIC_SLEEP)       | (1 << MECHANIC_SNARE)    | \
+    (1 << MECHANIC_STUN)      | (1 << MECHANIC_FREEZE)      | (1 << MECHANIC_KNOCKOUT) | \
+    (1 << MECHANIC_POLYMORPH) | (1 << MECHANIC_BANISH)      | (1 << MECHANIC_SHACKLE)  | \
+    (1 << MECHANIC_TURN)      | (1 << MECHANIC_HORROR)      | (1 << MECHANIC_DAZE)     | \
     (1 << MECHANIC_SAPPED))
 
 // Spell dispel type
 enum DispelType
 {
-    DISPEL_NONE				                           = 0,
-    DISPEL_MAGIC			                           = 1,
-    DISPEL_CURSE			                           = 2,
+    DISPEL_NONE                                        = 0,
+    DISPEL_MAGIC                                       = 1,
+    DISPEL_CURSE                                       = 2,
     DISPEL_DISEASE                                     = 3,
     DISPEL_POISON                                      = 4,
     DISPEL_STEALTH                                     = 5,
@@ -1485,7 +1485,7 @@ enum SpellMissInfo
     SPELL_MISS_BLOCK                                   = 5,
     SPELL_MISS_EVADE                                   = 6,
     SPELL_MISS_IMMUNE                                  = 7,
-    SPELL_MISS_IMMUNE2                                 = 8,			// one of these 2 is MISS_TEMPIMMUNE
+    SPELL_MISS_IMMUNE2                                 = 8,         // one of these 2 is MISS_TEMPIMMUNE
     SPELL_MISS_DEFLECT                                 = 9,
     SPELL_MISS_ABSORB                                  = 10,
     SPELL_MISS_REFLECT                                 = 11
@@ -1493,17 +1493,17 @@ enum SpellMissInfo
 
 enum SpellHitType
 {
-    SPELL_HIT_TYPE_UNK1					               = 0x00001,
-    SPELL_HIT_TYPE_CRIT					               = 0x00002,
+    SPELL_HIT_TYPE_UNK1                                = 0x00001,
+    SPELL_HIT_TYPE_CRIT                                = 0x00002,
     SPELL_HIT_TYPE_UNK3                                = 0x00004,
     SPELL_HIT_TYPE_UNK4                                = 0x00008,
-    SPELL_HIT_TYPE_UNK5                                = 0x00010,	// replace caster?
+    SPELL_HIT_TYPE_UNK5                                = 0x00010,   // replace caster?
     SPELL_HIT_TYPE_UNK6                                = 0x00020
 };
 
 enum SpellDmgClass
 {
-    SPELL_DAMAGE_CLASS_NONE				               = 0,
+    SPELL_DAMAGE_CLASS_NONE                            = 0,
     SPELL_DAMAGE_CLASS_MAGIC                           = 1,
     SPELL_DAMAGE_CLASS_MELEE                           = 2,
     SPELL_DAMAGE_CLASS_RANGED                          = 3
@@ -2443,7 +2443,7 @@ enum HolidayIds
     HOLIDAY_DAY_OF_DEAD                                = 409,
     HOLIDAY_CALL_TO_ARMS_IC                            = 420,                 // Call to Arms: Isle of Conquest
     HOLIDAY_LOVE_IN_THE_AIR                            = 423,
-    HOLIDAY_KALUAK_FISHIN_DERBY                        = 424,                 // Weekly Event      
+    HOLIDAY_KALUAK_FISHIN_DERBY                        = 424,                 // Weekly Event
     HOLIDAY_CALL_TO_ARMS_BG                            = 435,                 // Call to Arms: The Battle for Gilneas
     HOLIDAY_CALL_TO_ARMS_TP                            = 436,                 // Call to Arms: Twin Peaks
     HOLIDAY_10_V_10                                    = 441,                 // Rated BG: 10v10
@@ -2947,12 +2947,12 @@ enum DiminishingGroup
     DIMINISHING_NONE                                       = 0,
     DIMINISHING_BANISH                                     = 1,
     DIMINISHING_CHARGE                                     = 2,
-    DIMINISHING_OPENING_STUN                               = 3,				// Cheap Shot and Pounce
+    DIMINISHING_OPENING_STUN                               = 3,             // Cheap Shot and Pounce
     DIMINISHING_CONTROLLED_STUN                            = 4,
     DIMINISHING_CONTROLLED_ROOT                            = 5,
     DIMINISHING_CYCLONE                                    = 6,
     DIMINISHING_DISARM                                     = 7,
-    DIMINISHING_DISORIENT                                  = 8,				// Several spells where name cant be generalized.
+    DIMINISHING_DISORIENT                                  = 8,             // Several spells where name cant be generalized.
     DIMINISHING_ENTRAPMENT                                 = 9,
     DIMINISHING_FEAR                                       = 10,
     DIMINISHING_HORROR                                     = 11,
