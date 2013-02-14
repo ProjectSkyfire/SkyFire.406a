@@ -1535,10 +1535,6 @@ void LoadLootTemplates_Gameobject()
     {
         if (uint32 lootid = itr->second.GetLootId())
         {
-            //if (sObjectMgr->IsGoOfSpecificEntrySpawned(itr->second.entry) && ids_set.find(lootid) == ids_set.end())
-            //LootIdSet ids_set, ids_setUsed;
-            //LootIdSet lootIdSet, lootIdSetUsed;
-            
             if (ids_set.find(lootid) == ids_setUsed.end())
                 LootTemplates_Gameobject.ReportNotExistedId(lootid);
             else
