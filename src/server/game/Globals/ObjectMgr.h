@@ -1050,15 +1050,6 @@ class ObjectMgr
             return &itr->second;
         }
 
-        bool IsGoOfSpecificEntrySpawned(uint32 entry) const
-        {
-            for (GameObjectDataContainer::const_iterator it = _gameObjectDataStore.begin(); it != _gameObjectDataStore.end(); ++it)
-                if (it->second.id == entry)
-                    return true;
-
-            return false;
-        }
-
         GameObjectData const* GetGOData(uint32 guid) const
         {
             GameObjectDataContainer::const_iterator itr = _gameObjectDataStore.find(guid);
