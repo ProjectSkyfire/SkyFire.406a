@@ -3971,13 +3971,13 @@ void AuraEffect::HandleModTotalPercentStat(AuraApplication const* aurApp, uint8 
 
     Unit* target = aurApp->GetTarget();
 
-    // save current and max HP before applying aura
-    uint32 curHPValue = target->GetHealth();
-    uint32 maxHPValue = target->GetMaxHealth();
+    // save current health state
+    float healthPct = target->GetHealthPct();
+    bool alive = target->isAlive();
 
     for (int32 i = STAT_STRENGTH; i < MAX_STATS; i++)
     {
-        if (GetMiscValueB() & (1<<i))
+        if (GetMiscValueB() & 1 << i || !GetMiscValueB()) // 0 is also used for all stats
         {
             target->HandleStatModifier(UnitMods(UNIT_MOD_STAT_START + i), TOTAL_PCT, float(GetAmount()), apply);
             if (target->GetTypeId() == TYPEID_PLAYER || target->ToCreature()->isPet())
@@ -3986,13 +3986,8 @@ void AuraEffect::HandleModTotalPercentStat(AuraApplication const* aurApp, uint8 
     }
 
     // recalculate current HP/MP after applying aura modifications (only for spells with SPELL_ATTR0_UNK4 0x00000010 flag)
-    if ((GetMiscValueB() & (1<<STAT_STAMINA)) && (maxHPValue > 0) && (m_spellInfo->Attributes & SPELL_ATTR0_ABILITY))
-    {
-        uint32 newHPValue = target->CountPctFromMaxHealth(int32(100.0f * curHPValue / maxHPValue));
-        if (!newHPValue)
-            newHPValue = 1;
-        target->SetHealth(newHPValue);
-    }
+    if (GetMiscValueB() & 1 << STAT_STAMINA && (m_spellInfo->Attributes & SPELL_ATTR0_ABILITY))
+        target->SetHealth(std::max<uint32>(uint32(healthPct * target->GetMaxHealth() * 0.01f), (alive ? 1 : 0)));
 }
 
 void AuraEffect::HandleAuraModResistenceOfStatPercent(AuraApplication const* aurApp, uint8 mode, bool /*apply*/) const

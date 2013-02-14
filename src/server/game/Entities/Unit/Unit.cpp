@@ -1468,13 +1468,13 @@ uint32 Unit::CalcArmorReducedDamage(Unit* victim, const uint32 damage, SpellInfo
     uint32 newdamage = 0;
     float armor = float(victim->GetArmor());
 
-    // decrease enemy armor effectiveness by SPELL_AURA_MOD_ARMOR_EFFECTIVENESS_FOR_CASTER
-    int32 auraEffectivenessReduction = 0;
+    // bypass enemy armor by SPELL_AURA_BYPASS_ARMOR_FOR_CASTER
+    int32 armorBypassPct = 0;
     AuraEffectList const & reductionAuras = victim->GetAuraEffectsByType(SPELL_AURA_MOD_ARMOR_EFFECTIVENESS_FOR_CASTER);
     for (AuraEffectList::const_iterator i = reductionAuras.begin(); i != reductionAuras.end(); ++i)
         if ((*i)->GetCasterGUID() == GetGUID())
-            auraEffectivenessReduction += (*i)->GetAmount();
-    armor = CalculatePctN(armor, 100 - std::min(auraEffectivenessReduction, 100));
+            armorBypassPct += (*i)->GetAmount();
+    armor = CalculatePctN(armor, 100 - std::min(armorBypassPct, 100));
 
     // Ignore enemy armor by SPELL_AURA_MOD_TARGET_RESISTANCE aura
     armor += GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_TARGET_RESISTANCE, SPELL_SCHOOL_MASK_NORMAL);
@@ -11468,6 +11468,11 @@ bool Unit::isSpellCrit(Unit* victim, SpellInfo const* spellProto, SpellSchoolMas
     if (Player* modOwner = GetSpellModOwner())
         modOwner->ApplySpellMod(spellProto->Id, SPELLMOD_CRITICAL_CHANCE, crit_chance, NULL, victim);
 
+    AuraEffectList const& critAuras = victim->GetAuraEffectsByType(SPELL_AURA_MOD_CRIT_CHANCE_FOR_CASTER_SPELL);
+    for (AuraEffectList::const_iterator i = critAuras.begin(); i != critAuras.end(); ++i)
+        if ((*i)->GetCasterGUID() == GetGUID() && (*i)->IsAffectedOnSpell(spellProto))
+            crit_chance += (*i)->GetAmount();
+
     crit_chance = crit_chance > 0.0f ? crit_chance : 0.0f;
     if (roll_chance_f(crit_chance))
         return true;
@@ -12154,6 +12159,22 @@ void Unit::MeleeDamageBonus(Unit* victim, uint32 *pdamage, WeaponAttackType attT
     float TakenTotalMod = 1.0f;
 
     // ..done
+    // SPELL_AURA_MOD_AUTOATTACK_DAMAGE
+    if (!spellProto)
+    {
+        AuraEffectList const & autoattackDamage = GetAuraEffectsByType(SPELL_AURA_MOD_AUTOATTACK_DAMAGE);
+        for (AuraEffectList::const_iterator i = autoattackDamage.begin(); i != autoattackDamage.end(); ++i)
+        {
+            int32 amount = (*i)->GetAmount();
+            if ((*i)->GetSpellInfo()->EquippedItemClass == -1)
+                AddPctN(DoneTotalMod, amount);
+            else if (!((*i)->GetSpellInfo()->AttributesEx5 & SPELL_ATTR5_SPECIAL_ITEM_CLASS_CHECK) && ((*i)->GetSpellInfo()->EquippedItemSubClassMask == 0))
+                AddPctN(DoneTotalMod, amount);
+            else if (ToPlayer() && ToPlayer()->HasItemFitToSpellRequirements((*i)->GetSpellInfo()))
+                AddPctN(DoneTotalMod, amount);
+        }
+    }
+
     AuraEffectList const& mModDamagePercentDone = GetAuraEffectsByType(SPELL_AURA_MOD_DAMAGE_PERCENT_DONE);
     for (AuraEffectList::const_iterator i = mModDamagePercentDone.begin(); i != mModDamagePercentDone.end(); ++i)
     {
