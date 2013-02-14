@@ -9,3 +9,4 @@ ALTER TABLE `characters`
 	CHANGE COLUMN `power8` `power8` INT(10) NOT NULL DEFAULT '0' AFTER `power7`,
 	CHANGE COLUMN `power9` `power9` INT(10) NOT NULL DEFAULT '0' AFTER `power8`,
 	CHANGE COLUMN `power10` `power10` INT(10) NOT NULL DEFAULT '0' AFTER `power9`;
+	
