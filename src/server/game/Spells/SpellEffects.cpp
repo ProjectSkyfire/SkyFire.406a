@@ -659,8 +659,9 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                     case 49966: // Smack
                     case 53508: // Wolverine Bite
                     {
-                        damage += int32((m_caster->GetOwner()->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.4f) / 2);
-                        break;
+                        if (Unit* owner = m_caster->GetOwner())
+                            damage += int32((owner->GetTotalAttackPowerValue(RANGED_ATTACK) * 0.4f) / 2);
+                         break;
                     }
                 }
                 // Gore

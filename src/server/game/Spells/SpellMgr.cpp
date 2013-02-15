@@ -217,8 +217,8 @@ DiminishingGroup GetDiminishingReturnsGroupForSpell(SpellInfo const* spellproto,
         return DIMINISHING_SLEEP;
     if (mechanic & ((1 << MECHANIC_SAPPED) | (1 << MECHANIC_POLYMORPH) | (1 << MECHANIC_SHACKLE)))
         return DIMINISHING_DISORIENT;
-    // Mechanic Knockout, except Blast Wave
-    if (mechanic & (1 << MECHANIC_KNOCKOUT) && spellproto->SpellIconID != 292)
+    // Mechanic Knockout
+    if (mechanic & (1 << MECHANIC_KNOCKOUT))
         return DIMINISHING_DISORIENT;
     if (mechanic & (1 << MECHANIC_DISARM))
         return DIMINISHING_DISARM;
