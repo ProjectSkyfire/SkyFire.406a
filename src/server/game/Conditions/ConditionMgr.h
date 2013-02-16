@@ -50,9 +50,9 @@ enum ConditionTypes
     CONDITION_RACE                  = 16,                   // race             0              0                  true if player's race is equal to race
     CONDITION_ACHIEVEMENT           = 17,                   // achievement_id   0              0                  true if achievement is complete
     CONDITION_TITLE                 = 18,                   // title id         0              0                  true if player has title
-    CONDITION_UNUSED_19             = 19,                   //
-    CONDITION_UNUSED_20             = 20,                   //
-    CONDITION_UNUSED_21             = 21,                   //
+    CONDITION_SPAWNMASK             = 19,                   // spawnMask        0              0                  true if in spawnMask
+    CONDITION_GENDER                = 20,                   // gender           0              0                  true if player's gender is equal to gender
+    CONDITION_UNIT_STATE            = 21,                   // unitState        0              0                  true if unit has unitState
     CONDITION_MAPID                 = 22,                   // map_id           0              0                  true if in map_id
     CONDITION_AREAID                = 23,                   // area_id          0              0                  true if in area_id
     CONDITION_UNUSED_24             = 24,                   //
