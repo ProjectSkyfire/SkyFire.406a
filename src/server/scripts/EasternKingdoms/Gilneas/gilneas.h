@@ -57,7 +57,10 @@ enum CreatureIds
     NPC_BLOODFANG_RIPPER_P4                           = 35505, // General AI spawns
     NPC_GILNEAN_MASTIFF                               = 35631,
     NPC_GILNEAS_CITY_GUARD_P8                         = 50474,
-    NPC_AFFLICTED_GILNEAN_P8                          = 50471
+    NPC_AFFLICTED_GILNEAN_P8                          = 50471,
+    NPC_COMMANDEERED_CANNON                           = 35914,
+    NPC_KRENNAN_ARANAS_TREE                           = 35753,
+    NPC_GREYMANE_HORSE_P4                             = 35905
 };
 
 enum GameObjectIds
@@ -92,6 +95,9 @@ enum SpellIds
     SPELL_BY_THE_SKIN_ON_HIS_TEETH                     = 66914,
     SPELL_SHOOT                                        = 6660,
     SPELL_WORGEN_BITE                                  = 72870,
+    SPELL_INFECTED_BITE                                = 72872,
+    SPELL_CANNON_FIRE                                  = 68235,
+    SPELL_GILNEAS_CANNON_CAMERA                        = 93555,
     SPELL_SUMMON_JOSIAH_AVERY                          = 67350,
     SPELL_GET_SHOT                                     = 67349,
     SPELL_SUMMON_JOSIAH                                = 67350,
@@ -141,9 +147,8 @@ enum NpcTextIds
     SAY_CITIZEN_4b                                     = -1638014,
     SAY_CITIZEN_5b                                     = -1638015,
 
-    YELL_KRENNAN_C1                                    = -1999973,
-    SAY_KRENNAN_C2                                     = -1999972,
-    SAY_GREYMANE_HORSE                                 = -1999971,
+    SAY_KRENNAN_C2                                     = 0,
+    SAY_GREYMANE_HORSE                                 = 0,
     SAY_CROWLEY_HORSE_1                                = 0,    // Let''s round up as many of them as we can.  Every worgen chasing us is one less worgen chasing the survivors!
     SAY_CROWLEY_HORSE_2                                = 1,    // You'll never catch us, you blasted mongrels! || Come and get us, you motherless beasts! || Over here, you flea bags!
     SAY_JOSIAH_AVERY_P2                                = 1,
@@ -151,7 +156,9 @@ enum NpcTextIds
     SAY_JOSAIH_AVERY_TRIGGER                           = 1,
     SAY_LORNA_CROWLEY_P4                               = 0,
     SAY_KING_GENN_GREYMANE_P4                          = 1,
-    SAY_GILNEAS_CITY_GUARD_P8                          = 1
+    SAY_GILNEAS_CITY_GUARD_P8                          = 1,
+    SAY_LORD_GODFREY_P4                                = 0,
+    SAY_NPC_KRENNAN_ARANAS_TREE                        = 0
 };
 
 enum SoundIds

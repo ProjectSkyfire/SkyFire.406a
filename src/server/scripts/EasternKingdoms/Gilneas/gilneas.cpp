@@ -2271,12 +2271,17 @@ class npc_greymane_horse : public CreatureScript
 public:
     npc_greymane_horse() : CreatureScript("npc_greymane_horse") { }
 
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_greymane_horseAI (creature);
+    }
+
     struct npc_greymane_horseAI : public npc_escortAI
     {
         npc_greymane_horseAI(Creature* creature) : npc_escortAI(creature) {}
 
         uint32 krennansay;
-        bool AfterJump;
+        bool PlayerOn, KrennanOn;
 
         void AttackStart(Unit* /*who*/) {}
         void EnterCombat(Unit* /*who*/) {}
@@ -2284,14 +2289,16 @@ public:
 
         void Reset()
         {
-             krennansay = 500;//Check every 500ms initially
-             AfterJump = false;
+             krennansay     = 500;//Check every 500ms initially
+             PlayerOn       = false;
+             KrennanOn      = false;
         }
 
         void PassengerBoarded(Unit* who, int8 /*seatId*/, bool apply)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
             {
+                PlayerOn = true;
                 if (apply)
                 {
                     Start(false, true, who->GetGUID());
@@ -2299,6 +2306,7 @@ public:
             }
             else if (who->GetTypeId() == TYPEID_UNIT)
             {
+                KrennanOn = true;
                 SetEscortPaused(false);
             }
         }
@@ -2310,12 +2318,11 @@ public:
             switch(i)
             {
                 case 5:
-                    me->GetMotionMaster()->MoveJump(-1679.089f,1348.42f,15.31f,25.0f, 15.0f);
-                    AfterJump = true;
+                    Talk(SAY_GREYMANE_HORSE, player->GetGUID());
+                    me->GetMotionMaster()->MoveJump(-1679.089f, 1348.42f, 15.31f, 25.0f, 15.0f);
                     if (me->GetVehicleKit()->HasEmptySeat(1))
                     {
                         SetEscortPaused(true);
-                        player->SetClientControl(me, 0);
                         break;
                     }
                     else
@@ -2342,16 +2349,20 @@ public:
             npc_escortAI::UpdateAI(diff);
             Player* player = GetPlayerForEscort();
 
-            if (AfterJump && (me->IsWithinDist3d(-1679.089f, 1348.42f, 15.31f, 1.0f)))
+            if (PlayerOn)
             {
-                Talk(0,player->GetGUID());
-                AfterJump = false;
+                player->SetClientControl(me, 0);
+                PlayerOn = false;
             }
+
+            if (KrennanOn) // Do Not yell for help after krennan is on
+                return;
 
             if (krennansay <=diff)
             {
-                if (Creature* krennan = me->FindNearestCreature(3871227, 30, true))
+                if (Creature* krennan = me->FindNearestCreature(NPC_KRENNAN_ARANAS_TREE, 70.0f, true))
                 {
+                    krennan->AI()->Talk(SAY_NPC_KRENNAN_ARANAS_TREE, player->GetGUID());
                     krennansay = urand(4000,7000);//Repeat every 4 to 7 seconds
                 }
             }
@@ -2359,11 +2370,6 @@ public:
                 krennansay -= diff;
         }
     };
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_greymane_horseAI (creature);
-    }
 };
 
 /*######
@@ -2374,14 +2380,16 @@ class npc_krennan_aranas_c2 : public CreatureScript
 public:
     npc_krennan_aranas_c2() : CreatureScript("npc_krennan_aranas_c2") { }
 
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_krennan_aranas_c2AI(creature);
+    }
+
     struct npc_krennan_aranas_c2AI : public ScriptedAI
     {
         npc_krennan_aranas_c2AI(Creature* creature) : ScriptedAI(creature) {}
 
-        bool Say;
-        bool Move;
-        bool Cast;
-        bool KrennanDead;
+        bool Say, Move, Cast, KrennanDead;
         uint32 SayTimer;
 
         void AttackStart(Unit* /*who*/) {}
@@ -2390,16 +2398,16 @@ public:
 
         void Reset()
         {
-            Say = false;
-            Move = true;
-            Cast = true;
-            KrennanDead = false;
-            SayTimer = 500;
+            Say             = false;
+            Move            = true;
+            Cast            = true;
+            KrennanDead     = false;
+            SayTimer        = 500;
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if (Creature* krennan = me->FindNearestCreature(3871227, 50))
+            if (Creature* krennan = me->FindNearestCreature(NPC_KRENNAN_ARANAS_TREE, 50.0f))
             {
                 if (!KrennanDead)
                 {
@@ -2408,7 +2416,7 @@ public:
                 }
             }
 
-            if (Creature* horse = me->FindNearestCreature(35905, 20.0f))//Jump onto horse in seat 2
+            if (Creature* horse = me->FindNearestCreature(NPC_GREYMANE_HORSE_P4, 20.0f))//Jump onto horse in seat 2
             {
                 if (Cast)
                 {
@@ -2431,7 +2439,7 @@ public:
 
             if (Say && SayTimer <= diff)
             {
-                DoScriptText(SAY_KRENNAN_C2, me);
+                Talk(SAY_KRENNAN_C2);
                 me->ForcedDespawn(6000);
                 Say = false;
             }
@@ -2439,10 +2447,105 @@ public:
                 SayTimer -= diff;
         }
     };
+};
+
+/*######
+## npc_commandeered_cannon
+######*/
+
+class npc_commandeered_cannon : public CreatureScript
+{
+public:
+    npc_commandeered_cannon() : CreatureScript("npc_commandeered_cannon") { }
 
     CreatureAI* GetAI(Creature* creature) const
     {
-        return new npc_krennan_aranas_c2AI(creature);
+        return new npc_commandeered_cannonAI (creature);
+    }
+
+    struct npc_commandeered_cannonAI : public ScriptedAI
+    {
+        npc_commandeered_cannonAI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 tEvent;
+        uint8 Count, Phase;
+        bool EventStart;
+
+        void Reset()
+        {
+            tEvent          = 1400;
+            Phase           = 0;
+            Count           = 0;
+            EventStart      = false;
+        }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (!EventStart)
+                return;
+
+            if (Count > 2)
+            {
+                Reset();
+                return;
+            }
+
+            if (tEvent <= diff)
+            {
+                switch (Phase)
+                {
+                case (0):
+                    for (int i = 0; i < 12; i++)
+                    {
+                        me->SummonCreature(NPC_BLOODFANG_WORGEN, -1757.65f + irand(-6, 6), 1384.01f + irand(-6, 6), 19.872f, urand(0, 6), TEMPSUMMON_TIMED_DESPAWN, 5000);
+                    }
+                    tEvent = 400;
+                    Phase++;
+                    break;
+
+                case (1):
+                    if (Creature* Worgen = me->FindNearestCreature(NPC_BLOODFANG_WORGEN, 50.0f, true))
+                    {
+                        me->CastSpell(Worgen, SPELL_CANNON_FIRE, true);
+                        tEvent = 1700;
+                        Phase = 0;
+                        Count++;
+                    }
+                    break;
+                }
+            } else tEvent -= diff;
+        }
+
+        void JustSummoned(Creature* summon)
+        {
+            summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
+        }
+    };
+};
+
+/*######
+## npc_lord_godfrey_p4_8
+######*/
+class npc_lord_godfrey_p4_8 : public CreatureScript
+{
+public:
+    npc_lord_godfrey_p4_8() : CreatureScript("npc_lord_godfrey_p4_8") { }
+
+    bool OnQuestReward(Player* player, Creature* godfrey, Quest const* quest, uint32 opt)
+    {
+        if (quest->GetQuestId() == QUEST_SAVE_KRENNAN_ARANAS)
+        {
+            godfrey->AI()->Talk(SAY_LORD_GODFREY_P4);
+            player->RemoveAurasDueToSpell(SPELL_WORGEN_BITE);
+            godfrey->AddAura(SPELL_INFECTED_BITE, player);
+            player->CastSpell(player, SPELL_GILNEAS_CANNON_CAMERA);
+            player->SaveToDB();
+            if (Creature* cannon = GetClosestCreatureWithEntry(godfrey, NPC_COMMANDEERED_CANNON, 50.0f))
+            {
+                CAST_AI(npc_commandeered_cannon::npc_commandeered_cannonAI, cannon->AI())->EventStart = true; // Start Event
+            }
+        }
+        return true;
     }
 };
 
@@ -2834,6 +2937,8 @@ void AddSC_gilneas()
     new spell_keg_placed();
     new npc_greymane_horse();
     new npc_krennan_aranas_c2();
+    new npc_lord_godfrey_p4_8();
+    new npc_commandeered_cannon();
     new npc_bloodfang_stalker_c1();
     new npc_gilnean_crow();
 }
