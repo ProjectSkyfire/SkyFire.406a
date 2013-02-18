@@ -1526,8 +1526,8 @@ void LoadLootTemplates_Gameobject()
 
     uint32 oldMSTime = getMSTime();
 
-    LootIdSet ids_set, ids_setUsed;
-    uint32 count = LootTemplates_Gameobject.LoadAndCollectLootIds(ids_set);
+    LootIdSet lootIdSet, lootIdSetUsed;
+    uint32 count = LootTemplates_Gameobject.LoadAndCollectLootIds(lootIdSet);
 
     // remove real entries and check existence loot
     GameObjectTemplateContainer const* gotc = sObjectMgr->GetGameObjectTemplates();
@@ -1535,18 +1535,21 @@ void LoadLootTemplates_Gameobject()
     {
         if (uint32 lootid = itr->second.GetLootId())
         {
-            if (ids_set.find(lootid) == ids_set.end())
-                LootTemplates_Gameobject.ReportNotExistedId(lootid);
+            if (lootIdSet.find(lootid) == lootIdSet.end())
+                // Added a check to ignore non lootable gameobjects.
+                if (lootid == -1){}
+                else
+                    LootTemplates_Gameobject.ReportNotExistedId(lootid);
             else
-                ids_setUsed.insert(lootid);
+                lootIdSetUsed.insert(lootid);
         }
     }
 
-    for (LootIdSet::const_iterator itr = ids_setUsed.begin(); itr != ids_setUsed.end(); ++itr)
-        ids_set.erase(*itr);
+    for (LootIdSet::const_iterator itr = lootIdSetUsed.begin(); itr != lootIdSetUsed.end(); ++itr)
+        lootIdSet.erase(*itr);
 
     // output error for any still listed (not referenced from appropriate table) ids
-    LootTemplates_Gameobject.ReportUnusedIds(ids_set);
+    LootTemplates_Gameobject.ReportUnusedIds(lootIdSet);
 
     if (count)
         sLog->outString(">> Loaded %u gameobject loot templates in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
