@@ -105,6 +105,12 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
                 condMeets = unit->getRaceMask() & ConditionValue1;
             break;
         }
+        case CONDITION_GENDER:
+        {
+            if (Player* player = object->ToPlayer())
+                condMeets = player->getGender() == ConditionValue1;
+            break;
+        }
         case CONDITION_SKILL:
         {
             if (Player* player = object->ToPlayer())
@@ -280,6 +286,17 @@ bool Condition::Meets(ConditionSourceInfo& sourceInfo)
                 condMeets = player->HasTitle(ConditionValue1);
             break;
         }
+        case CONDITION_SPAWNMASK:
+        {
+            condMeets = ((1 << object->GetMap()->GetSpawnMode()) & ConditionValue1);
+            break;
+        }
+        case CONDITION_UNIT_STATE:
+        {
+            if (Unit* unit = object->ToUnit())
+                condMeets = unit->HasUnitState(ConditionValue1);
+            break;
+        }
         default:
             condMeets = false;
             break;
@@ -430,6 +447,15 @@ uint32 Condition::GetSearcherTypeMaskForCondition()
             break;
         case CONDITION_TITLE:
             mask |= GRID_MAP_TYPE_MASK_PLAYER;
+            break;
+        case CONDITION_SPAWNMASK:
+            mask |= GRID_MAP_TYPE_MASK_ALL;
+            break;
+        case CONDITION_GENDER:
+            mask |= GRID_MAP_TYPE_MASK_PLAYER;
+            break;
+        case CONDITION_UNIT_STATE:
+            mask |= GRID_MAP_TYPE_MASK_CREATURE | GRID_MAP_TYPE_MASK_PLAYER;
             break;
         default:
             ASSERT(false && "Condition::GetSearcherTypeMaskForCondition - missing condition handling!");
@@ -1591,6 +1617,20 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
                 sLog->outErrorDb("Race condition has useless data in value3 (%u)!", cond->ConditionValue3);
             break;
         }
+        case CONDITION_GENDER:
+        {
+            if (!Player::IsValidGender(uint8(cond->ConditionValue1)))
+            {
+                sLog->outErrorDb("Gender condition has invalid gender (%u), skipped", cond->ConditionValue1);
+                return false;
+            }
+
+            if (cond->ConditionValue2)
+                sLog->outErrorDb("Gender condition has useless data in value2 (%u)!", cond->ConditionValue2);
+            if (cond->ConditionValue3)
+                sLog->outErrorDb("Gender condition has useless data in value3 (%u)!", cond->ConditionValue3);
+            break;
+        }
         case CONDITION_MAPID:
         {
             MapEntry const* me = sMapStore.LookupEntry(cond->ConditionValue1);
@@ -1841,15 +1881,24 @@ bool ConditionMgr::isConditionTypeValid(Condition* cond)
             }
             break;
         }
-        case CONDITION_UNUSED_19:
-            sLog->outErrorDb("Found ConditionTypeOrReference = CONDITION_UNUSED_19 in `conditions` table - ignoring");
-            return false;
-        case CONDITION_UNUSED_20:
-            sLog->outErrorDb("Found ConditionTypeOrReference = CONDITION_UNUSED_20 in `conditions` table - ignoring");
-            return false;
-        case CONDITION_UNUSED_21:
-            sLog->outErrorDb("Found ConditionTypeOrReference = CONDITION_UNUSED_21 in `conditions` table - ignoring");
-            return false;
+        case CONDITION_SPAWNMASK:
+        {
+            if (cond->ConditionValue1 > SPAWNMASK_RAID_ALL)
+            {
+                sLog->outErrorDb("SpawnMask condition has non existing SpawnMask in value1 (%u), skipped", cond->ConditionValue1);
+                return false;
+            }
+            break;
+        }
+        case CONDITION_UNIT_STATE:
+        {
+            if (cond->ConditionValue1 > uint32(UNIT_STATE_ALL_STATE))
+            {
+                sLog->outErrorDb("UnitState condition has non existing UnitState in value1 (%u), skipped", cond->ConditionValue1);
+                return false;
+            }
+            break;
+        }
         case CONDITION_UNUSED_24:
             sLog->outErrorDb("Found ConditionTypeOrReference = CONDITION_UNUSED_24 in `conditions` table - ignoring");
             return false;
