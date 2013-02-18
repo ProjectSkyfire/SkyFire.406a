@@ -164,45 +164,46 @@ public:
     };
 };
 
-class spell_parasitic_infection : public SpellScriptLoader
-{
-    public:
-        spell_parasitic_infection() : SpellScriptLoader("spell_parasitic_infection") { }
-
-        class spell_parasitic_infection_AuraScript : public AuraScript
-        {
-            PrepareAuraScript(spell_parasitic_infection_AuraScript);
-
-            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-            {
-                Unit * caster = GetCaster();
-                for (int i = 0; i < 2; ++i)
-                {
-                    Unit* Summoned = caster->SummonCreature(42321, caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 240000);
-                    /*if (Summoned)
-                    {
-                        Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0);
-                        if (target)
-                            Summoned->AddThreat(target, 1.0f);
-                    }*/
-                }
-            }
-
-            void Register()
-            {
-                OnEffectRemove += AuraEffectRemoveFn(spell_parasitic_infection_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
-            }
-        };
-
-        AuraScript* GetAuraScript() const
-        {
-            return new spell_parasitic_infection_AuraScript();
-        }
-};
+// Comment this out untill I have a chance to fix it.
+//class spell_parasitic_infection : public SpellScriptLoader
+//{
+//    public:
+//        spell_parasitic_infection() : SpellScriptLoader("spell_parasitic_infection") { }
+//
+//        class spell_parasitic_infection_AuraScript : public AuraScript
+//        {
+//            PrepareAuraScript(spell_parasitic_infection_AuraScript);
+//
+//            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+//            {
+//                Unit * caster = GetCaster();
+//                for (int i = 0; i < 2; ++i)
+//                {
+//                    Unit* Summoned = caster->SummonCreature(42321, caster->GetPositionX(), caster->GetPositionY(), caster->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 240000);
+//                    /*if (Summoned)
+//                    {
+//                        Unit *target = SelectUnit(SELECT_TARGET_RANDOM, 0);
+//                        if (target)
+//                            Summoned->AddThreat(target, 1.0f);
+//                    }*/
+//                }
+//            }
+//
+//            void Register()
+//            {
+//                OnEffectRemove += AuraEffectRemoveFn(spell_parasitic_infection_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+//            }
+//        };
+//
+//        AuraScript* GetAuraScript() const
+//        {
+//            return new spell_parasitic_infection_AuraScript();
+//        }
+//};
 
 void AddSC_boss_magmaw()
 {
     new boss_magmaw();
     new mobs_lava_parasite();
-    new spell_parasitic_infection();
+    //new spell_parasitic_infection();
 }
