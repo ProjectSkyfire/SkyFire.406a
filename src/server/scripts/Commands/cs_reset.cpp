@@ -40,6 +40,7 @@ public:
     {
         static ChatCommand resetCommandTable[] =
         {
+            { "achievements",   SEC_ADMINISTRATOR,  true,  &HandleResetAchievementsCommand,     "", NULL },
             { "honor",          SEC_ADMINISTRATOR,  true,  &HandleResetHonorCommand,            "", NULL },
             { "level",          SEC_ADMINISTRATOR,  true,  &HandleResetLevelCommand,            "", NULL },
             { "spells",         SEC_ADMINISTRATOR,  true,  &HandleResetSpellsCommand,           "", NULL },
@@ -54,6 +55,21 @@ public:
             { NULL,             0,                  false, NULL,                                "", NULL }
         };
         return commandTable;
+    }
+
+    static bool HandleResetAchievementsCommand(ChatHandler* handler, char const* args)
+    {
+        Player* target;
+        uint64 targetGuid;
+        if (!handler->extractPlayerTarget((char*)args, &target, &targetGuid))
+            return false;
+
+        if (target)
+            target->GetAchievementMgr().Reset();
+        else
+            AchievementMgr::DeleteFromDB(GUID_LOPART(targetGuid));
+
+        return true;
     }
 
     static bool HandleResetHonorCommand(ChatHandler* handler, char const* args)
