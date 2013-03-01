@@ -7712,7 +7712,7 @@ uint32 Player::GetArenaTeamIdFromDB(uint64 guid, uint8 type)
     stmt->setUInt32(0, GUID_LOPART(guid));
     stmt->setUInt8(1, type);
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (!result)
         return 0;
 
@@ -7739,7 +7739,7 @@ uint32 Player::GetZoneIdFromDB(uint64 guid)
         PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_POSITION_XYZ);
         stmt->setUInt32(0, guidLow);
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
-        
+
         if (!result)
             return 0;
         fields = result->Fetch();
@@ -7769,7 +7769,7 @@ uint32 Player::GetLevelFromDB(uint64 guid)
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_LEVEL);
     stmt->setUInt32(0, GUID_LOPART(guid));
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (!result)
         return 0;
 
@@ -17431,7 +17431,7 @@ bool Player::LoadPositionFromDB(uint32& mapid, float& x, float& y, float& z, flo
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_POSITION);
     stmt->setUInt32(0, GUID_LOPART(guid));
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (!result)
         return false;
 
@@ -18658,7 +18658,7 @@ void Player::_LoadMail()
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_MAIL);
     stmt->setUInt32(0, GetGUIDLow());
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
     {
         do
@@ -20431,7 +20431,7 @@ void Player::Customize(uint64 guid, uint8 gender, uint8 skin, uint8 face, uint8 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_CHARACTER_PLAYERBYTES2);
     stmt->setUInt32(0, GUID_LOPART(guid));
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (!result)
         return;
 
@@ -20610,7 +20610,7 @@ void Player::UpdateContestedPvP(uint32 diff)
 
 void Player::UpdatePvPFlag(time_t currTime)
 {
-    if (!IsPvP())
+    if (!IsPvP() || InBattleground() || InArena())
         return;
     if (pvpInfo.endTimer == 0 || currTime < (pvpInfo.endTimer + 300) || pvpInfo.inHostileArea)
         return;
@@ -21123,7 +21123,7 @@ void Player::RemovePetitionsAndSigns(uint64 guid, uint32 type)
 
     stmt->setUInt32(0, GUID_LOPART(guid));
     PreparedQueryResult result = CharacterDatabase.Query(stmt);
-    
+
     if (result)
     {
         do                                                  // this part effectively does nothing, since the deletion / modification only takes place _after_ the PetitionQuery. Though I don't know if the result remains intact if I execute the delete query beforehand.
