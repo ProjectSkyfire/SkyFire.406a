@@ -1483,6 +1483,19 @@ void Aura::HandleAuraSpecificMods(AuraApplication const* aurApp, Unit* caster, b
                     }
                 }
                 break;
+            case SPELLFAMILY_WARLOCK:
+                if (!caster)
+                    break;
+                // Curse of Doom
+                if (GetSpellInfo()->SpellFamilyFlags[1] & 0x02)
+                {
+                    if (removeMode == AURA_REMOVE_BY_DEATH)
+                    {
+                        if (caster->GetTypeId() == TYPEID_PLAYER && caster->ToPlayer()->isHonorOrXPTarget(target))
+                            caster->CastSpell(target, 18662, true, NULL, GetEffect(0));
+                    }
+                }
+                break;
             case SPELLFAMILY_PRIEST:
                 if (!caster)
                     break;
