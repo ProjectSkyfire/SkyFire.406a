@@ -229,7 +229,7 @@ void Guild::RankInfo::WritePacket(WorldPacket& data) const
         data << uint32(m_bankTabRightsAndSlots[i].rights);
     for (uint8 i = 0; i < GUILD_BANK_MAX_TABS; i++)
         data << uint32(m_bankTabRightsAndSlots[i].slots);
-    
+
     data << uint32(m_bankMoneyPerDay) / GOLD; // In game set in gold, in core is in bronze
 }
 
@@ -546,10 +546,10 @@ void Guild::Member::SetStats(Player* player)
 
             if (prev_skill == skill)
                 continue;
-            
+
             value = player->GetSkillValue(skill);
             rank = sSpellMgr->GetSpellRank(spellIter->first);
-            
+
             SetProfession(count_prof, value, skill, rank);
 
             prev_skill = skill;
@@ -1293,10 +1293,10 @@ void Guild::UpdateMemberData(Player* player, uint8 dataid, uint32 value)
 
                         if (prev_skill == skill)
                             continue;
-                        
+
                         value = player->GetSkillValue(skill);
                         rank = sSpellMgr->GetSpellRank(spellIter->first);
-                        
+
                         member->SetProfession(count_prof, value, skill, rank);
 
                         prev_skill = skill;
@@ -1484,7 +1484,7 @@ void Guild::SendGuildRankInfo(WorldSession* session)
         session->SendPacket(&data7);
     else
         BroadcastPacket(&data7);
-    
+
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_RANK)");
 }
 
@@ -1504,15 +1504,7 @@ void Guild::HandleQuery(WorldSession* session)
             data << uint8(0);                                       // Empty string
     }
 
-    for (uint8 i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
-    {
-        if (i < _GetRanksSize())
-            data << uint32(i);
-        else
-            data << uint32(0);
-    }
-
-    for (uint8 i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)
+    for (uint8 i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)              // Always show 10 ranks
     {
         if (i < _GetRanksSize())
             data << uint32(i);
@@ -1521,11 +1513,11 @@ void Guild::HandleQuery(WorldSession* session)
     }
 
     m_emblemInfo.WritePacket(data);
-    data << uint32(_GetRanksSize());                                                // Something new in WotLK
+    data << uint32(_GetRanksSize());                              // Amount of Ranks
 
     session->SendPacket(&data);
 
-    if (session->GetPlayer() && session->GetPlayer()->GetGuildId() == GetId()) 
+    if (session->GetPlayer() && session->GetPlayer()->GetGuildId() == GetId())
         HandleRoster(session);
 
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_QUERY_RESPONSE)");
