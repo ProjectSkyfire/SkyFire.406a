@@ -1512,6 +1512,14 @@ void Guild::HandleQuery(WorldSession* session)
             data << uint32(0);
     }
 
+    for (uint8 i = 0; i < GUILD_RANKS_MAX_COUNT; ++i)              // Always show 10 ranks
+    {
+        if (i < _GetRanksSize())
+            data << uint32(i);
+        else
+            data << uint32(0);
+    }
+
     m_emblemInfo.WritePacket(data);
     data << uint32(_GetRanksSize());                              // Amount of Ranks
 
