@@ -335,20 +335,15 @@ enum EyeOfAcherus
 
     SPELL_EYE_PHASEMASK         = 70889,
     SPELL_EYE_VISUAL            = 51892,
-    SPELL_EYE_FL_BOOST_RUN      = 51923,
-    SPELL_EYE_FL_BOOST_FLY      = 51890,
-    SPELL_EYE_CONTROL           = 51852,
+    SPELL_EYE_FL_BOOST_RUN      = 51923, // Flight boost to reach new avalon
+    SPELL_EYE_FL_BOOST_FLY      = 51890, // Player flight control
+    SPELL_EYE_CONTROL           = 51852, // Player control aura
+
+    POINT_EYE_DESTINATION       = 0,
+
+    EMOTE_DESTINATION           = -1609017,
+    EMOTE_CONTROL               = -1609018
 };
-
-/*enum Texts
-{
-    SAY_EYE_LAUNCHED            = 1,
-    SAY_EYE_UNDER_CONTROL       = 2,
-};*/
-
-#define SAY_EYE_EMOTE1  "The Eye of Acherus launches towards its destination"
-
-#define SAY_EYE_EMOTE2  "The Eye of Acherus is in your control"
 
 static Position Center[]=
 {
@@ -379,25 +374,25 @@ public:
         {
             if (Unit* controller = me->GetCharmer())
                 me->SetLevel(controller->getLevel());
-
-                me->CastSpell(me, SPELL_EYE_FL_BOOST_FLY, true);
+                me->CastSpell(me, SPELL_EYE_FL_BOOST_FLY, true);                
+                
                 me->SetDisplayId(DISPLAYID_EYE_HUGE);
-                // need to finish working on texts
-                //Talk(SAY_EYE_LAUNCHED);
-                me->MonsterSay(SAY_EYE_EMOTE1, LANGUAGE_UNIVERSAL, 0);
                 me->SetHomePosition(2361.21f, -5660.45f, 496.7444f, 0);
-                me->GetMotionMaster()->MoveCharge(1758.007f, -5876.785f, 166.8667f, 0); //position center
+                me->GetMotionMaster()->MoveCharge(1758.007f, -5876.785f, 166.8667f, 0); // Position center                
+                if (Player* player = me->GetCharmerOrOwnerPlayerOrPlayerItself())
+                DoScriptText(EMOTE_DESTINATION, me, player);
+                
                 me->SetReactState(REACT_AGGRESSIVE);
                 me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_STUNNED);
 
             IsActive   = false;
-            startTimer = 2000;
+            startTimer = 4500; // Increased startTimer for testing (orig.2000)
         }
 
         void AttackStart(Unit *) {}
         void MoveInLineOfSight(Unit *) {}
 
-        void JustDied(Unit* /*killer*/)
+        void JustDied(Unit* /*who*/)
         {
             if (Unit* charmer = me->GetCharmer())
                charmer->RemoveAurasDueToSpell(SPELL_EYE_CONTROL);
@@ -407,15 +402,15 @@ public:
         {
             if (me->isCharmed())
             {
-                if (startTimer <=  diff && !IsActive)    // fly to start point
+                if (startTimer <= diff && !IsActive)    // Summon to start point
                 {
                     me->CastSpell(me, SPELL_EYE_PHASEMASK, true);
                     me->CastSpell(me, SPELL_EYE_VISUAL, true);
                     me->CastSpell(me, SPELL_EYE_FL_BOOST_FLY, true);
 
                     me->CastSpell(me, SPELL_EYE_FL_BOOST_RUN, true);
-                    me->SetSpeed(MOVE_FLIGHT, 4.5f, true);
-                    me->GetMotionMaster()->MovePoint(0, 1758.0f, -5876.7f, 166.8f);
+                    me->SetSpeed(MOVE_FLIGHT, 3.5f, true); // 6.5spd by sniffs, much to fast.
+                    me->GetMotionMaster()->MovePoint(0, 1758.0f, -5876.7f, 166.8f); // Travel to end point.
                     return;
                 }
                 else
@@ -425,21 +420,19 @@ public:
                 me->ForcedDespawn();
         }
 
-        void MovementInform(uint32 type, uint32 pointId)
+        void MovementInform(Player* player, uint32 type, uint32 pointId)
         {
-            if (type != POINT_MOTION_TYPE || pointId != 0)
+            if (type != POINT_MOTION_TYPE || pointId != POINT_EYE_DESTINATION)
                return;
 
-            // this should never happen
+            // This should never happen
             me->SetDisplayId(DISPLAYID_EYE_SMALL);
 
-            // this spell does not work if casted before the wp movement.
+            // This spell does not work if casted before the wp movement.
             me->CastSpell(me, SPELL_EYE_VISUAL, true);
             me->CastSpell(me, SPELL_EYE_FL_BOOST_FLY, true);
-            // need to finish working on texts
-            //Talk(SAY_EYE_UNDER_CONTROL);
-            me->MonsterSay(SAY_EYE_EMOTE2, LANGUAGE_UNIVERSAL, 0);
             ((Player*)(me->GetCharmer()))->SetClientControl(me, 1);
+            DoScriptText(EMOTE_CONTROL, me, player); 
         }
     };
 };
@@ -467,7 +460,7 @@ enum DuelEnums
     SPELL_DUEL_VICTORY          = 52994,
     SPELL_DUEL_FLAG             = 52991,
     SPELL_GROVEL                = 7267,
-    
+
     QUEST_DEATH_CHALLENGE       = 12733,
     FACTION_HOSTILE             = 2068
 };
@@ -728,7 +721,7 @@ enum SalanarTheHorseman
     REALM_OF_SHADOWS            = 52693,
     EFFECT_STOLEN_HORSE         = 52263,
     DELIVER_STOLEN_HORSE        = 52264,
-    CALL_DARK_RIDER             = 52266, 
+    CALL_DARK_RIDER             = 52266,
     SPELL_EFFECT_OVERTAKE       = 52349,
     QUEST_REALM_OF_SHADOWS      = 12687,
     NPC_DARK_RIDER_OF_ACHERUS   = 28654,
@@ -857,7 +850,7 @@ enum SG
 {
     NPC_SCARLET_GHOULS     = 28845,
     NPC_SCARLET_GHOSTS     = 28846,
-    
+
     QUEST_GIFT_THAT_KEEPS_GIVING   = 12698,
     SPELL_SCARLET_GHOUL_CREDIT     = 52517
 };
