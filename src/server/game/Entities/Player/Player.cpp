@@ -1003,7 +1003,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     SetUInt32Value(PLAYER_GUILDRANK, 0);
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
     SetUInt32Value(PLAYER_GUILDDELETE_DATE, 0);
-    SetUInt32Value(PLAYER_GUILDLEVEL, 1);
+    SetUInt32Value(PLAYER_GUILDLEVEL, 0);
 
     for (int i = 0; i < KNOWN_TITLES_SIZE; ++i)
         SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + i, 0);  // 0=disabled
@@ -15902,7 +15902,7 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
         if (guildRep < 1)
             guildRep = 1;
 
-        guild->GainXP(guildXP);
+        guild->GainXP(guildXP, this);
         GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(1168), guildRep);
     }
 
@@ -17572,7 +17572,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     SetUInt32Value(PLAYER_GUILDRANK, 0);
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
     SetUInt32Value(PLAYER_GUILDDELETE_DATE, 0);
-    SetUInt32Value(PLAYER_GUILDLEVEL, 1);
+    SetUInt32Value(PLAYER_GUILDLEVEL, 0);
 
     uint32 money = fields[8].GetUInt32();
     if (money > MAX_MONEY_AMOUNT)
@@ -26304,6 +26304,7 @@ void Player::SetInGuild(uint32 GuildId)
         SetUInt64Value(OBJECT_FIELD_DATA, 0);
         SetUInt32Value(OBJECT_FIELD_TYPE, GetUInt32Value(OBJECT_FIELD_TYPE) & ~TYPEMASK_IN_GUILD);
     }
+    ApplyModFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED, GuildId != 0 && sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED));
 }
 
 bool Player::IsInWhisperWhiteList(uint64 guid)

@@ -1352,6 +1352,22 @@ GuildAdvancement.Enabled = 0
 GuildAdvancement.MaxLevel = 25
 
 #        
+#    GuildAdvancement.DailyXPCap
+#        Max XP a guild can earn in a day 
+#        Only has effect if Guild Advancement is enabled
+#        Default: 6246000
+
+GuildAdvancement.DailyXPCap = 6246000
+
+#        
+#    GuildAdvancement.UncappedLevel
+#        Level the guild must reach to remove the daily XP limit 
+#        Only has effect if Guild Advancement is enabled
+#        Default: 23
+
+GuildAdvancement.UncappedLevel = 23
+
+#        
 #    GuildAdvancement.ResetHour
 #        Reset Hourly XP Cap at specified hour of the day (0-23)
 #        Default: 3
