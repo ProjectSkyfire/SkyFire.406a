@@ -818,8 +818,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
                 // reputation discount
                 int32 price = item->IsGoldRequired(itemTemplate) ? uint32(floor(itemTemplate->BuyPrice * discountMod)) : 0;
                 //aura discount
-                if (price && auraMod >= 1)
-                    price -= uint32(floor(price * (auraMod/100)));
+                price = price ? price - uint32(floor(price * (auraMod/100))) : 0;
 
                 data << uint32(slot + 1);       // client expects counting to start at 1
                 data << uint32(1); // unk 4.0.1 always 1
