@@ -949,30 +949,20 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
         Field* fields = resultGuild->Fetch();
         pCurrChar->SetInGuild(fields[0].GetUInt32());
         pCurrChar->SetRank(fields[1].GetUInt8());
+        if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
+            pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL, guild->GetLevel());
     }
     else if (pCurrChar->GetGuildId())                        // clear guild related fields in case wrong data about non existed membership
     {
         pCurrChar->SetInGuild(0);
         pCurrChar->SetRank(0);
+        pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL, 0);
     }
 
     if (pCurrChar->GetGuildId() != 0)
     {
         if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
-        {
             guild->SendLoginInfo(this);
-            pCurrChar->SetUInt32Value(PLAYER_GUILDLEVEL, uint32(guild->GetLevel()));
-
-            if (sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED))
-            {
-                pCurrChar->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED);
-
-                /// Learn perks to him
-                for (int i = 0; i < guild->GetLevel(); ++i)
-                    if (const GuildPerksEntry* perk = sGuildPerksStore.LookupEntry(i))
-                        pCurrChar->learnSpell(perk->SpellId, true);
-            }
-        }
         else
         {
             // remove wrong guild data

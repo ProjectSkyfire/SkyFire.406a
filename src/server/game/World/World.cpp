@@ -903,6 +903,8 @@ void World::LoadConfigSettings(bool reload)
         sLog->outError("GuildAdvancement.MaxLevel must be in range 1-25. Setting to default 25");
         m_int_configs[CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL] = 25;
     }
+    m_int_configs[CONFIG_GUILD_ADVANCEMENT_DAILY_CAP] = ConfigMgr::GetIntDefault("Guild.DailyXPCap", 6246000);
+    m_int_configs[CONFIG_GUILD_ADVANCEMENT_UNCAPPED] = ConfigMgr::GetIntDefault("GuildAdvancement.UncappedLevel", 23);
 
     m_int_configs[CONFIG_GUILD_DAILY_XP_RESET_HOUR] = ConfigMgr::GetIntDefault("GuildAdvancement.ResetHour", 3);
     if (m_int_configs[CONFIG_GUILD_DAILY_XP_RESET_HOUR] > 23)
@@ -1871,6 +1873,9 @@ void World::SetInitialWorldSettings()
     sLog->outString("Calculate random battleground reset time..." );
     InitRandomBGResetTime();
 
+    sLog->outString("Calculate Guild cap reset time...");
+    InitGuildResetTime();
+
     sLog->outString("Calculate weekly currency cap reset time..." );
     InitCurrencyResetTime();
 
@@ -2038,6 +2043,9 @@ void World::Update(uint32 diff)
 
     if (m_gameTime > m_NextRandomBGReset)
         ResetRandomBG();
+
+    if (m_gameTime > m_NextGuildReset)
+        ResetGuildCap();
 
     /// <ul><li> Handle auctions when the timer has passed
     if (m_timers[WUPDATE_AUCTIONS].Passed())
@@ -2848,6 +2856,33 @@ void World::InitRandomBGResetTime()
         sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
 }
 
+void World::InitGuildResetTime()
+{
+    time_t gtime = uint64(getWorldState(WS_GUILD_AD_HOURLY_RESET_TIME));
+    if (!gtime)
+        m_NextGuildReset = time_t(time(NULL));         // game time not yet init
+
+    // generate time by config
+    time_t curTime = time(NULL);
+    tm localTm = *localtime(&curTime);
+    localTm.tm_hour = getIntConfig(CONFIG_GUILD_DAILY_XP_RESET_HOUR);
+    localTm.tm_min = 0;
+    localTm.tm_sec = 0;
+
+    // current day reset time
+    time_t nextDayResetTime = mktime(&localTm);
+
+    // next reset time before current moment
+    if (curTime >= nextDayResetTime)
+        nextDayResetTime += DAY;
+
+    // normalize reset time
+    m_NextGuildReset = gtime < curTime ? nextDayResetTime - DAY : nextDayResetTime;
+
+    if (!gtime)
+        sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextGuildReset));
+}
+
 void World::InitCurrencyResetTime()
 {
     time_t wsTime = getWorldState(WS_CURRENCY_RESET_TIME);
@@ -2929,6 +2964,14 @@ void World::ResetRandomBG()
 
     m_NextRandomBGReset = time_t(m_NextRandomBGReset + DAY);
     sWorld->setWorldState(WS_BG_DAILY_RESET_TIME, uint64(m_NextRandomBGReset));
+}
+
+void World::ResetGuildCap()
+{
+    m_NextGuildReset = time_t(m_NextGuildReset + DAY);
+    sWorld->setWorldState(WS_GUILD_AD_HOURLY_RESET_TIME, uint64(m_NextGuildReset));
+    sLog->outDetail("Daily Guild XP reset for all guilds.");
+    sGuildMgr->ResetTimes();
 }
 
 void World::ResetCurrencyWeekCap()
