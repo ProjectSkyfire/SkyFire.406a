@@ -7579,6 +7579,10 @@ void Player::ModifyCurrency(uint32 id, int32 count)
         oldWeekCount = itr->second.weekCount;
     }
 
+    float mod = float(GetMaxPositiveAuraModifierByMiscValue(SPELL_AURA_MODIFY_CURRENCY_GAIN,int32(id)));
+    if (abs(mod) > 0 && count > 0)
+        count += int32(floor(count * (mod/100)));
+
     int32 newTotalCount = oldTotalCount + count;
     if (newTotalCount < 0)
         newTotalCount = 0;
