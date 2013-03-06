@@ -15868,7 +15868,7 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
 
     for (int8 i = 0; i < QUEST_CURRENCY_COUNT; ++i)
         if (quest->RewCurrencyId[i] && quest->RewCurrencyCount[i])
-            ModifyCurrency(quest->RewCurrencyId[i], quest->RewCurrencyCount[i]);
+            ModifyCurrency(quest->RewCurrencyId[i], quest->RewCurrencyCount[i] * PLAYER_CURRENCY_PRECISION);
 
     uint16 log_slot = FindQuestSlot(quest_id);
     if (log_slot < MAX_QUEST_LOG_SIZE)
