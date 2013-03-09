@@ -770,6 +770,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     data << uint8(count);
 
     float discountMod = _player->GetReputationPriceDiscount(vendor);
+    float auraMod = float(_player->GetTotalAuraModifier(SPELL_AURA_REDUCE_BUY_PRICES));
 
     for (uint32 slot = 0; slot < itemCount; ++slot)
     {
@@ -816,6 +817,8 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
 
                 // reputation discount
                 int32 price = item->IsGoldRequired(itemTemplate) ? uint32(floor(itemTemplate->BuyPrice * discountMod)) : 0;
+                //aura discount
+                price = price ? price - uint32(floor(price * (auraMod/100))) : 0;
 
                 data << uint32(slot + 1);       // client expects counting to start at 1
                 data << uint32(1); // unk 4.0.1 always 1

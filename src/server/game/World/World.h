@@ -324,6 +324,8 @@ enum WorldIntConfigs
     CONFIG_PERSISTENT_CHARACTER_CLEAN_FLAGS,
     CONFIG_MAX_INSTANCES_PER_HOUR,
     CONFIG_GUILD_ADVANCEMENT_MAX_LEVEL,
+    CONFIG_GUILD_ADVANCEMENT_DAILY_CAP,
+    CONFIG_GUILD_ADVANCEMENT_UNCAPPED,
     CONFIG_WINTERGRASP_PLAYER_MAX,
     CONFIG_WINTERGRASP_PLAYER_MIN,
     CONFIG_WINTERGRASP_PLAYER_MIN_LVL,
@@ -794,11 +796,13 @@ class World
         void InitDailyQuestResetTime();
         void InitWeeklyQuestResetTime();
         void InitRandomBGResetTime();
+        void InitGuildResetTime();
         void InitCurrencyResetTime();
         void ResetDailyQuests();
         void ResetWeeklyQuests();
         void ResetCurrencyWeekCap();
         void ResetRandomBG();
+        void ResetGuildCap();
     private:
         static ACE_Atomic_Op<ACE_Thread_Mutex, bool> m_stopEvent;
         static uint8 m_ExitCode;
@@ -860,6 +864,7 @@ class World
         time_t m_NextWeeklyQuestReset;
         time_t m_NextCurrencyReset;
         time_t m_NextRandomBGReset;
+        time_t m_NextGuildReset;
         time_t m_NextDailyXPReset;
         time_t m_NextHourlyXPReset;
 

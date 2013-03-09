@@ -55,6 +55,7 @@ public:
     void SetNextGuildId(uint32 Id) { NextGuildId = Id; }
 
     void LoadGuildRewards();
+    void ResetTimes();
     //void LoadGuildMemberProfessions(std::vector<Guild*>& GuildVector, QueryResult& result);  // g.professions aren't finished yet
 protected:
     uint32 NextGuildId;

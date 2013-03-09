@@ -1003,7 +1003,7 @@ bool Player::Create(uint32 guidlow, CharacterCreateInfo* createInfo)
     SetUInt32Value(PLAYER_GUILDRANK, 0);
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
     SetUInt32Value(PLAYER_GUILDDELETE_DATE, 0);
-    SetUInt32Value(PLAYER_GUILDLEVEL, 1);
+    SetUInt32Value(PLAYER_GUILDLEVEL, 0);
 
     for (int i = 0; i < KNOWN_TITLES_SIZE; ++i)
         SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + i, 0);  // 0=disabled
@@ -7578,6 +7578,10 @@ void Player::ModifyCurrency(uint32 id, int32 count)
         oldTotalCount = itr->second.totalCount;
         oldWeekCount = itr->second.weekCount;
     }
+
+    float mod = float(GetMaxPositiveAuraModifierByMiscValue(SPELL_AURA_MODIFY_CURRENCY_GAIN,int32(id)));
+    if (count > 0)
+        count += int32(floor(count * (mod/100)));
 
     int32 newTotalCount = oldTotalCount + count;
     if (newTotalCount < 0)
@@ -15868,7 +15872,7 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
 
     for (int8 i = 0; i < QUEST_CURRENCY_COUNT; ++i)
         if (quest->RewCurrencyId[i] && quest->RewCurrencyCount[i])
-            ModifyCurrency(quest->RewCurrencyId[i], quest->RewCurrencyCount[i]);
+            ModifyCurrency(quest->RewCurrencyId[i], quest->RewCurrencyCount[i] * PLAYER_CURRENCY_PRECISION);
 
     uint16 log_slot = FindQuestSlot(quest_id);
     if (log_slot < MAX_QUEST_LOG_SIZE)
@@ -15902,7 +15906,7 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
         if (guildRep < 1)
             guildRep = 1;
 
-        guild->GainXP(guildXP);
+        guild->GainXP(guildXP, this);
         GetReputationMgr().ModifyReputation(sFactionStore.LookupEntry(1168), guildRep);
     }
 
@@ -17572,7 +17576,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     SetUInt32Value(PLAYER_GUILDRANK, 0);
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
     SetUInt32Value(PLAYER_GUILDDELETE_DATE, 0);
-    SetUInt32Value(PLAYER_GUILDLEVEL, 1);
+    SetUInt32Value(PLAYER_GUILDLEVEL, 0);
 
     uint32 money = fields[8].GetUInt32();
     if (money > MAX_MONEY_AMOUNT)
@@ -21801,6 +21805,9 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
 
         // reputation discount
         price = uint32(floor(price * GetReputationPriceDiscount(creature)));
+        //aura discount
+        float auraMod = float(GetTotalAuraModifier(SPELL_AURA_REDUCE_BUY_PRICES));
+        price -= uint32(floor(price * (auraMod/100)));
 
         if (!HasEnoughMoney(price))
         {
@@ -26304,6 +26311,7 @@ void Player::SetInGuild(uint32 GuildId)
         SetUInt64Value(OBJECT_FIELD_DATA, 0);
         SetUInt32Value(OBJECT_FIELD_TYPE, GetUInt32Value(OBJECT_FIELD_TYPE) & ~TYPEMASK_IN_GUILD);
     }
+    ApplyModFlag(PLAYER_FLAGS, PLAYER_FLAGS_GLEVEL_ENABLED, GuildId != 0 && sWorld->getBoolConfig(CONFIG_GUILD_ADVANCEMENT_ENABLED));
 }
 
 bool Player::IsInWhisperWhiteList(uint64 guid)

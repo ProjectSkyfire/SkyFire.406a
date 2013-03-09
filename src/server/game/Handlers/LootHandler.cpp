@@ -109,7 +109,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket& recvData)
         for (std::list<CurrencyLoot>::iterator i = temp.begin(); i != temp.end(); ++i)
         {
             if (currencys == lootSlot)
-                player->SetCurrency(i->CurrencyId, i->CurrencyAmount * 100);
+                player->ModifyCurrency(i->CurrencyId, i->CurrencyAmount * PLAYER_CURRENCY_PRECISION);
             ++currencys;
         }
     }
@@ -209,7 +209,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recvData*/)
                 data << uint8(playersNear.size() > 1 ? 0 : 1);     // Controls the text displayed in chat. 0 is "Your share is..." and 1 is "You loot..."
                 if (Guild* guild = sGuildMgr->GetGuildById((*i)->GetGuildId()))
                 {
-                    float mod = float((*i)->GetTotalAuraModifier(SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT));
+                    float mod = float((*i)->GetMaxPositiveAuraModifier(SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT));
                     if (mod >= 1)
                     {
                         mod /= 100;
@@ -235,13 +235,12 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recvData*/)
             data << uint8(1);   // "You loot..."
             if (Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId()))
             {
-                float mod = float(player->GetTotalAuraModifier(SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT));
-                mod /= 100;
+                float mod = float(player->GetMaxPositiveAuraModifier(SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT));
                 if (mod >= 1)
                 {
-                    uint32 deposit = uint32(loot->gold * mod);
-                    guild->HandleMemberDepositMoney(player->GetSession(), deposit);
-                    data << uint32(deposit);
+                    mod /= 100;
+                    guild->HandleMemberDepositMoney(player->GetSession(), uint32(loot->gold * mod));
+                    data << uint32(loot->gold * mod);
                 }
                 else
                     data << uint32(0);
