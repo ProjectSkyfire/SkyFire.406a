@@ -526,11 +526,11 @@ void GameEventMgr::LoadFromDB()
 
                 uint32 id       = fields[0].GetUInt32();
                 uint32 quest    = fields[1].GetUInt32();
-                int16 event_id = fields[2].GetInt16();
+                uint16 event_id = fields[2].GetUInt8();
 
                 if (event_id >= mGameEventCreatureQuests.size())
                 {
-                    sLog->outErrorDb("`game_event_creature_quest` game event id (%u) is out of range compared to max event id in `game_event`", event_id);
+                    sLog->outError("`game_event_creature_quest` game event id (%u) is out of range compared to max event id in `game_event`", event_id);
                     continue;
                 }
 
