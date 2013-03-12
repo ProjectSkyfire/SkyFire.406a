@@ -15,6 +15,7 @@ set(scripts_STAT_SRCS
   Commands/cs_achievement.cpp
   Commands/cs_bf.cpp
   Commands/cs_debug.cpp
+  Commands/cs_disable.cpp
   Commands/cs_event.cpp
   Commands/cs_gm.cpp
   Commands/cs_go.cpp

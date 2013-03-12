@@ -54,6 +54,7 @@ void AddSC_ban_commandscript();
 void AddSC_bf_commandscript();
 void AddSC_cast_commandscript();
 void AddSC_debug_commandscript();
+void AddSC_disable_commandscript();
 void AddSC_event_commandscript();
 void AddSC_gm_commandscript();
 void AddSC_go_commandscript();
@@ -741,6 +742,7 @@ void AddCommandScripts()
     AddSC_bf_commandscript();
     AddSC_cast_commandscript();
     AddSC_debug_commandscript();
+    AddSC_disable_commandscript();
     AddSC_event_commandscript();
     AddSC_gm_commandscript();
     AddSC_go_commandscript();
@@ -848,7 +850,7 @@ void AddEasternKingdomsScripts()
     AddSC_boss_chimaeron();
     AddSC_instance_blackwing_descent();
     AddSC_deadmines();                      //Deadmines
-    AddSC_instance_deadmines();    
+    AddSC_instance_deadmines();
     AddSC_boss_admiral_ripsnarl();
     AddSC_boss_captain_cookie();
     AddSC_boss_foe_reaper_5000();
