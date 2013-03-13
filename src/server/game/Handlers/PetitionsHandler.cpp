@@ -467,7 +467,6 @@ void WorldSession::HandlePetitionSignOpcode(WorldPacket& recvData)
     recvData >> petitionGuid;                              // petition guid
     recvData >> unk;
 
-
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_PETITION_SIGNATURES);
 
     stmt->setUInt32(0, GUID_LOPART(petitionGuid));
@@ -604,7 +603,6 @@ void WorldSession::HandlePetitionDeclineOpcode(WorldPacket& recvData)
     recvData >> petitionguid;                              // petition guid
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Petition %u declined by %u", GUID_LOPART(petitionguid), _player->GetGUIDLow());
 
-
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_PETITION_OWNER_BY_GUID);
 
     stmt->setUInt32(0, GUID_LOPART(petitionguid));
@@ -641,7 +639,6 @@ void WorldSession::HandleOfferPetitionOpcode(WorldPacket& recvData)
     player = ObjectAccessor::FindPlayer(plguid);
     if (!player)
         return;
-
 
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_PETITION_TYPE);
 

@@ -1961,7 +1961,6 @@ uint64 ObjectMgr::GetPlayerGUIDByName(std::string name) const
 {
     uint64 guid = 0;
 
-
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_GUID_BY_NAME);
 
     stmt->setString(0, name);

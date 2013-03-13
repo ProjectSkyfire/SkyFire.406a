@@ -35,7 +35,6 @@ public:
 
     ChatCommand* GetCommands() const
     {
-
         static ChatCommand disableCommandTable[] =
         {
             { "spell",          SEC_GAMEMASTER,     false, &HandleDisableSpellCommand,         "", NULL },
@@ -54,7 +53,6 @@ public:
         };
         return commandTable;
     }
-
 
     static void HandleDisables(ChatHandler* handler, char const* args, uint8 disableType)
     {
@@ -83,8 +81,6 @@ public:
         std::string disableComment = cComment;
         uint32 entry = (uint32)atoi(cEntry);
         uint8 flags = atoi(cFlags);
-
-
 
         std::string disableTypeStr = "";
 
@@ -115,7 +111,6 @@ public:
         stmt->setUInt8(1, disableType);
         PreparedQueryResult result = WorldDatabase.Query(stmt);
 
-
         if (result)
         {
             handler->PSendSysMessage("This %s (id %u) is already disabled.", disableTypeStr.c_str(), entry);
@@ -131,7 +126,6 @@ public:
 
         handler->PSendSysMessage("Disabled %s %u for reason %s", disableTypeStr.c_str(), entry, disableComment.c_str());
         return;
-
     }
 
     static bool HandleDisableSpellCommand(ChatHandler* handler, char const* args)
@@ -187,7 +181,6 @@ public:
         HandleDisables(handler, args, DISABLE_TYPE_VMAP);
         return true;
     }
-
 };
 
 void AddSC_disable_commandscript()

@@ -129,7 +129,6 @@ class ChatHandler
         // cs_character
         void HandleCharacterLevel(Player* player, uint64 playerGuid, uint32 oldLevel, uint32 newLevel);
 
-
     protected:
         explicit ChatHandler() : m_session(NULL) {}      // for CLI subclass
         static bool SetDataForCommandInTable(ChatCommand* table, const char* text, uint32 security, std::string const& help, std::string const& fullcommand);

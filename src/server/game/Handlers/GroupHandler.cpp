@@ -703,7 +703,7 @@ void WorldSession::HandleRaidReadyCheckOpcode(WorldPacket& recvData)
 
     if (recvData.empty())                                   // request
     {
-        /********************/       
+        /********************/
         /** error handling **/
         if (!group->IsLeader(GetPlayer()->GetGUID()) && !group->IsAssistant(GetPlayer()->GetGUID()))
             return;
@@ -802,7 +802,7 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player* player, WorldPacke
         // if true client clears auras that are not covered by auramask
         // TODO: looks like now client requires all active auras to be in the beginning of the auramask
         //       e.g. if you have holes in the aura mask the values after are ignored.
-        *data << uint8(0);	
+        *data << uint8(0);
 
         uint64 auramask = player->GetAuraUpdateMaskForRaid();
         *data << uint64(auramask);
@@ -1012,7 +1012,7 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket& recvData)
     // GROUP_UPDATE_FLAG_AURAS
         // if true client clears auras that are not covered by auramask
         // TODO: looks like now client requires all active auras to be in the beginning of the auramask
-        //       e.g. if you have holes in the aura mask the values after are ignored.    
+        //       e.g. if you have holes in the aura mask the values after are ignored.
     data << uint8(1);
     uint64 auramask = 0;
     size_t maskPos = data.wpos();
@@ -1056,7 +1056,7 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket& recvData)
         // GROUP_UPDATE_FLAG_PET_AURAS
         // if true client clears auras that are not covered by auramask
         // TODO: looks like now client requires all active auras to be in the beginning of the auramask
-        //       e.g. if you have holes in the aura mask the values after are ignored.        
+        //       e.g. if you have holes in the aura mask the values after are ignored.
         data << uint8(1);
         uint64 petauramask = 0;
         size_t petMaskPos = data.wpos();
