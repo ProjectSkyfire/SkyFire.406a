@@ -145,8 +145,6 @@ void GmTicket::SendResponse(WorldSession* session) const
     data << uint32(1);          // responseID
     data << uint32(_id);        // ticketID
     data << _message.c_str();
-    data << _response.c_str();
-    data << _message.c_str();
 
     size_t len = _response.size();
     char const* s = _response.c_str();
@@ -161,8 +159,10 @@ void GmTicket::SendResponse(WorldSession* session) const
             len -= writeLen;
             s += writeLen;
         }
+
         data << uint8(0);
     }
+
     session->SendPacket(&data);
 }
 
