@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2013 MaNGOS <http://getmangos.com/>
+ * Copyright (C) 2011-2013 Project SkyFire <http:// www.projectskyfire.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http:// www.trinitycore.org/>
+ * Copyright (C) 2005-2013 MaNGOS <http:// getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -14,7 +14,7 @@
  * more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * with this program. If not, see <http:// www.gnu.org/licenses/>.
  */
 
 #include "ScriptPCH.h"
@@ -122,7 +122,7 @@ void ScriptedAI::AttackStartNoMove(Unit* who)
 
 void ScriptedAI::UpdateAI(uint32 const /*diff*/)
 {
-    //Check if we have a current target
+    // Check if we have a current target
     if (!UpdateVictim())
         return;
 
@@ -179,15 +179,15 @@ Creature* ScriptedAI::DoSpawnCreature(uint32 entry, float offsetX, float offsetY
 
 SpellInfo const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mechanic, SelectTargetType targets, uint32 powerCostMin, uint32 powerCostMax, float rangeMin, float rangeMax, SelectEffect effects)
 {
-    //No target so we can't cast
+    // No target so we can't cast
     if (!target)
         return NULL;
 
-    //Silenced so we can't cast
+    // Silenced so we can't cast
     if (me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SILENCED))
         return NULL;
 
-    //Using the extended script system we first create a list of viable spells
+    // Using the extended script system we first create a list of viable spells
     SpellInfo const* apSpell[CREATURE_MAX_SPELLS];
     memset(apSpell, 0, CREATURE_MAX_SPELLS * sizeof(SpellInfo*));
 
@@ -195,59 +195,59 @@ SpellInfo const* ScriptedAI::SelectSpell(Unit* target, uint32 school, uint32 mec
 
     SpellInfo const* tempSpell = NULL;
 
-    //Check if each spell is viable(set it to null if not)
+    // Check if each spell is viable(set it to null if not)
     for (uint32 i = 0; i < CREATURE_MAX_SPELLS; i++)
     {
         tempSpell = sSpellMgr->GetSpellInfo(me->_spells[i]);
 
-        //This spell doesn't exist
+        // This spell doesn't exist
         if (!tempSpell)
             continue;
 
         // Targets and Effects checked first as most used restrictions
-        //Check the spell targets if specified
+        // Check the spell targets if specified
         if (targets && !(SpellSummary[me->_spells[i]].Targets & (1 << (targets-1))))
             continue;
 
-        //Check the type of spell if we are looking for a specific spell type
+        // Check the type of spell if we are looking for a specific spell type
         if (effects && !(SpellSummary[me->_spells[i]].Effects & (1 << (effects-1))))
             continue;
 
-        //Check for school if specified
+        // Check for school if specified
         if (school && (tempSpell->SchoolMask & school) == 0)
             continue;
 
-        //Check for spell mechanic if specified
+        // Check for spell mechanic if specified
         if (mechanic && tempSpell->Mechanic != mechanic)
             continue;
 
-        //Make sure that the spell uses the requested amount of power
+        // Make sure that the spell uses the requested amount of power
         if (powerCostMin && tempSpell->ManaCost < powerCostMin)
             continue;
 
         if (powerCostMax && tempSpell->ManaCost > powerCostMax)
             continue;
 
-        //Continue if we don't have the mana to actually cast this spell
+        // Continue if we don't have the mana to actually cast this spell
         if (tempSpell->ManaCost > uint32(me->GetPower(Powers(tempSpell->PowerType))))
             continue;
 
-        //Check if the spell meets our range requirements
+        // Check if the spell meets our range requirements
         if (rangeMin && me->GetSpellMinRangeForTarget(target, tempSpell) < rangeMin)
             continue;
         if (rangeMax && me->GetSpellMaxRangeForTarget(target, tempSpell) > rangeMax)
             continue;
 
-        //Check if our target is in range
+        // Check if our target is in range
         if (me->IsWithinDistInMap(target, float(me->GetSpellMinRangeForTarget(target, tempSpell))) || !me->IsWithinDistInMap(target, float(me->GetSpellMaxRangeForTarget(target, tempSpell))))
             continue;
 
-        //All good so lets add it to the spell list
+        // All good so lets add it to the spell list
         apSpell[spellCount] = tempSpell;
         ++spellCount;
     }
 
-    //We got our usable spells so now lets randomly pick one
+    // We got our usable spells so now lets randomly pick one
     if (!spellCount)
         return NULL;
 
@@ -422,7 +422,7 @@ bool ScriptedAI::EnterEvadeIfOutOfCombatArea(uint32 const diff)
 
     switch (me->GetEntry())
     {
-        case NPC_BROODLORD:                                         // broodlord (not move down stairs)
+        case NPC_BROODLORD:                                           // broodlord (not move down stairs)
             if (z > 448.60f)
                 return false;
             break;
@@ -430,11 +430,11 @@ bool ScriptedAI::EnterEvadeIfOutOfCombatArea(uint32 const diff)
             if (me->GetDistance2d(432.59f, 371.93f) < 105.0f)
                 return false;
             break;
-        case NPC_JAN_ALAI:                                         // jan'alai (calculate by Z)
+        case NPC_JAN_ALAI:                                            // jan'alai (calculate by Z)
             if (z > 12.0f)
                 return false;
             break;
-        case NPC_SARTHARION:                                         // sartharion (calculate box)
+        case NPC_SARTHARION:                                          // sartharion (calculate box)
             if (x > 3218.86f && x < 3275.69f && y < 572.40f && y > 484.68f)
                 return false;
             break;
