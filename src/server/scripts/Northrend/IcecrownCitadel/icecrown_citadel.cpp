@@ -1912,7 +1912,7 @@ class spell_svalna_revive_champion : public SpellScriptLoader
             void RemoveAliveTarget(std::list<WorldObject*>& targets)
             {
                 targets.remove_if (AliveCheck());
-                SkyFire::RandomResizeList(targets, 2);
+                SkyFire::Containers::RandomResizeList(targets, 2);
             }
 
             void Land(SpellEffIndex /*effIndex*/)

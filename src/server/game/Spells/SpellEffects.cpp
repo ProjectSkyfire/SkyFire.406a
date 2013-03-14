@@ -1488,7 +1488,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     uint32 maxTargets = std::min<uint32>(3, attackers.size());
                     for (uint32 i = 0; i < maxTargets; ++i)
                     {
-                        Unit* attacker = SelectRandomContainerElement(attackers);
+                        Unit* attacker = SkyFire::Containers::SelectRandomContainerElement(attackers);
                         AddUnitTarget(attacker, 1 << 1);
                         attackers.erase(attacker);
                     }

@@ -555,7 +555,8 @@ class boss_the_lich_king : public CreatureScript
                 if (Creature* tirion = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_HIGHLORD_TIRION_FORDRING)))
                     tirion->AI()->EnterEvadeMode();
                 DoCastAOE(SPELL_KILL_FROSTMOURNE_PLAYERS);
-                summons.DoAction(NPC_STRANGULATE_VEHICLE, ACTION_TELEPORT_BACK);
+                EntryCheckPredicate pred(NPC_STRANGULATE_VEHICLE);
+                summons.DoAction(ACTION_TELEPORT_BACK, pred);
             }
 
             void KilledUnit(Unit* victim)
@@ -596,12 +597,16 @@ class boss_the_lich_king : public CreatureScript
                         events.ScheduleEvent(EVENT_OUTRO_TALK_8, 17000, 0, PHASE_OUTRO);
                         break;
                     case ACTION_TELEPORT_BACK:
-                        summons.DoAction(NPC_STRANGULATE_VEHICLE, ACTION_TELEPORT_BACK);
+                    {
+                        EntryCheckPredicate pred(NPC_STRANGULATE_VEHICLE);
+                        summons.DoAction(ACTION_TELEPORT_BACK, pred);
+            
                         if (!IsHeroic())
                             Talk(SAY_LK_FROSTMOURNE_ESCAPE);
                         else
                             DoCastAOE(SPELL_TRIGGER_VILE_SPIRIT_HEROIC);
                         break;
+                    }
                     default:
                         break;
                 }

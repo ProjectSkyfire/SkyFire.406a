@@ -1024,7 +1024,7 @@ bool LFGMgr::CheckCompatibility(LfgGuidList check, LfgProposal*& pProposal)
         ++itDungeon;
 
     // Create a new proposal
-    pProposal = new LfgProposal(*itDungeon);
+    pProposal = new LfgProposal(SkyFire::Containers::SelectRandomContainerElement(compatibleDungeons));
     pProposal->cancelTime = time_t(time(NULL)) + LFG_TIME_PROPOSAL;
     pProposal->state = LFG_PROPOSAL_INITIATING;
     pProposal->queues = check;
