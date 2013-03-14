@@ -328,7 +328,7 @@ public:
             {
                 if (timer <= diff)
                 {
-                    if (Creature* paladinSpawn = Unit::GetCreature((*me), paladinGuid[paladinPhase]))
+                    if (Creature* paladinSpawn = Unit::GetCreature(*me, paladinGuid[paladinPhase]))
                     {
                         CAST_AI(npc_second_trial_paladin::npc_secondTrialAI, paladinSpawn->AI())->Activate(me->GetGUID());
 
@@ -398,7 +398,7 @@ void npc_second_trial_paladin::npc_secondTrialAI::JustDied(Unit* Killer)
 {
     if (Killer->GetTypeId() == TYPEID_PLAYER)
     {
-        if (Creature* summoner = Unit::GetCreature((*me), summonerGuid))
+        if (Creature* summoner = Unit::GetCreature(*me, summonerGuid))
             CAST_AI(npc_second_trial_controller::master_kelerun_bloodmournAI, summoner->AI())->SecondTrialKill();
 
         // last kill quest complete for group

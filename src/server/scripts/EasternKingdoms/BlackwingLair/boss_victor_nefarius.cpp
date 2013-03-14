@@ -373,7 +373,7 @@ public:
             {
                 if (NefCheckTime <= diff)
                 {
-                    Unit* Nefarian = Unit::GetCreature((*me), NefarianGUID);
+                    Unit* Nefarian = Unit::GetCreature(*me, NefarianGUID);
 
                     //If nef is dead then we die to so the players get out of combat
                     //and cannot repeat the event

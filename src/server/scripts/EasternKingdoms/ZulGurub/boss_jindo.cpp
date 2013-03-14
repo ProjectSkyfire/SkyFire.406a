@@ -209,7 +209,7 @@ class mob_healing_ward : public CreatureScript
                 {
                     if (instance)
                     {
-                        Unit* jindo = Unit::GetUnit((*me), instance->GetData64(DATA_JINDO));
+                        Unit* jindo = Unit::GetUnit(*me, instance->GetData64(DATA_JINDO));
                         if (jindo)
                             DoCast(jindo, SPELL_HEAL);
                     }

@@ -669,7 +669,7 @@ public:
             Unit* target = Unit::GetPlayer(*me, m_uiTargetGUID);
             if (!target || !target->isAlive() || !target->HasAura(SPELL_MARK))
             {
-                if (Creature* pAnubarak = Unit::GetCreature((*me), m_instance->GetData64(NPC_ANUBARAK)))
+                if (Creature* pAnubarak = Unit::GetCreature(*me, m_instance->GetData64(NPC_ANUBARAK)))
                     pAnubarak->CastSpell(pAnubarak, SPELL_SPIKE_TELE, false);
                 me->DisappearAndDie();
                 return;

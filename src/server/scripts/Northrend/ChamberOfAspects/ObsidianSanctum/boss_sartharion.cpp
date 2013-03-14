@@ -961,7 +961,7 @@ struct dummy_dragonAI : public ScriptedAI
                 return;
 
             // Twilight Revenge to main boss
-            if (Unit* sartharion = Unit::GetUnit((*me), instance->GetData64(DATA_SARTHARION)))
+            if (Unit* sartharion = Unit::GetUnit(*me, instance->GetData64(DATA_SARTHARION)))
                 if (sartharion->isAlive())
                 {
                     sartharion->RemoveAurasDueToSpell(SpellId);
@@ -1298,13 +1298,13 @@ public:
                 //if not solo figth, buff main boss, else place debuff on mini-boss. both spells TARGET_SCRIPT
                 if (instance->GetData(TYPE_SARTHARION_EVENT) == IN_PROGRESS)
                 {
-                    target = Unit::GetCreature((*me), instance->GetData64(DATA_SARTHARION));
+                    target = Unit::GetCreature(*me, instance->GetData64(DATA_SARTHARION));
                     if (target)
                         target->AddAura(SPELL_GIFT_OF_TWILIGTH_SAR, target);
                 }
                 else
                 {
-                    target = Unit::GetCreature((*me), instance->GetData64(DATA_SHADRON));
+                    target = Unit::GetCreature(*me, instance->GetData64(DATA_SHADRON));
                     if (target)
                         target->AddAura(SPELL_GIFT_OF_TWILIGTH_SHA, target);
                 }

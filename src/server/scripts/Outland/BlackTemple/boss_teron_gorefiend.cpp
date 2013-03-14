@@ -95,7 +95,7 @@ public:
                 {
                     DoZoneInCombat();
 
-                    Creature* Teron = (Unit::GetCreature((*me), TeronGUID));
+                    Creature* Teron = (Unit::GetCreature(*me, TeronGUID));
                     if ((Teron) && (!Teron->isAlive() || Teron->IsInEvadeMode()))
                         Despawn();
                 }
@@ -173,7 +173,7 @@ public:
             std::list<Unit*> targets;
             for (; itr != m_threatlist.end(); ++itr)
             {
-                Unit* unit = Unit::GetUnit((*me), (*itr)->getUnitGuid());
+                Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                 if (unit && unit->isAlive())
                     targets.push_back(unit);
             }
@@ -196,7 +196,7 @@ public:
 
             if (CheckTeronTimer <= diff)
             {
-                Creature* Teron = (Unit::GetCreature((*me), TeronGUID));
+                Creature* Teron = (Unit::GetCreature(*me, TeronGUID));
                 if (!Teron || !Teron->isAlive() || Teron->IsInEvadeMode())
                     me->DealDamage(me, me->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
 
@@ -321,7 +321,7 @@ public:
             std::list<HostileReference*>::const_iterator i = m_threatlist.begin();
             for (i = m_threatlist.begin(); i != m_threatlist.end(); ++i)
             {
-                Unit* unit = Unit::GetUnit((*me), (*i)->getUnitGuid());
+                Unit* unit = Unit::GetUnit(*me, (*i)->getUnitGuid());
                 if (unit && unit->isAlive())
                 {
                     float threat = DoGetThreat(unit);
@@ -341,7 +341,7 @@ public:
 
             Unit* Ghost = NULL;
             if (GhostGUID)
-                Ghost = Unit::GetUnit((*me), GhostGUID);
+                Ghost = Unit::GetUnit(*me, GhostGUID);
             if (Ghost && Ghost->isAlive() && Ghost->HasAura(SPELL_SHADOW_OF_DEATH))
             {
                 /*float x, y, z;
@@ -388,7 +388,7 @@ public:
                     Done = true;
                     if (AggroTargetGUID)
                     {
-                        Unit* unit = Unit::GetUnit((*me), AggroTargetGUID);
+                        Unit* unit = Unit::GetUnit(*me, AggroTargetGUID);
                         if (unit)
                             AttackStart(unit);
 

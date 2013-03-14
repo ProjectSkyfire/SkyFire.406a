@@ -134,7 +134,7 @@ public:
                     SetEscortPaused(true);
                     instance->SetData(DATA_LICHKING_EVENT, SPECIAL);
                     DoScriptText(SAY_LICH_KING_END_DUN, me);
-                    if (Creature* lider = ((Creature*)Unit::GetUnit((*me), instance->GetData64(DATA_ESCAPE_LIDER))))
+                    if (Creature* lider = ((Creature*)Unit::GetUnit(*me, instance->GetData64(DATA_ESCAPE_LIDER))))
                         me->CastSpell(lider, SPELL_HARVEST_SOUL, false);
                     me->setActive(false);
                     break;
@@ -164,7 +164,7 @@ public:
             summoned->setActive(true);
 
             instance->SetData(DATA_SUMMONS, 1);
-            if (Unit* lider = Unit::GetUnit((*me), instance->GetData64(DATA_ESCAPE_LIDER)))
+            if (Unit* lider = Unit::GetUnit(*me, instance->GetData64(DATA_ESCAPE_LIDER)))
             {
                 summoned->GetMotionMaster()->MoveChase(lider);
                 summoned->AddThreat(lider, 100.0f);
@@ -331,7 +331,7 @@ public:
             }
 
             // Leader caught, wipe
-            if (Creature* lider = ((Creature*)Unit::GetUnit((*me), instance->GetData64(DATA_ESCAPE_LIDER))))
+            if (Creature* lider = ((Creature*)Unit::GetUnit(*me, instance->GetData64(DATA_ESCAPE_LIDER))))
             {
                 if (lider->IsWithinDistInMap(me, 2.0f) && instance->GetData(DATA_LICHKING_EVENT) == IN_PROGRESS)
                 {
@@ -435,7 +435,7 @@ public:
             if (instance->GetData(DATA_LICHKING_EVENT) == IN_PROGRESS)
             {
                 LiderGUID = instance->GetData64(DATA_ESCAPE_LIDER);
-                Creature* lider = ((Creature*)Unit::GetUnit((*me), LiderGUID));
+                Creature* lider = ((Creature*)Unit::GetUnit(*me, LiderGUID));
 
                 if (Emerge != true)
                 {
@@ -542,7 +542,7 @@ public:
                     {
                         Emerge = true;
                         LiderGUID = instance->GetData64(DATA_ESCAPE_LIDER);
-                        if (Creature* lider = ((Creature*)Unit::GetUnit((*me), LiderGUID)))
+                        if (Creature* lider = ((Creature*)Unit::GetUnit(*me, LiderGUID)))
                         {
                             DoResetThreat();
                             me->AI()->AttackStart(lider);
@@ -625,7 +625,7 @@ public:
                 {
                     Walk = true;
                     LiderGUID = instance->GetData64(DATA_ESCAPE_LIDER);
-                    if (Creature* lider = ((Creature*)Unit::GetUnit((*me), LiderGUID)))
+                    if (Creature* lider = ((Creature*)Unit::GetUnit(*me, LiderGUID)))
                     {
                         DoResetThreat();
                         me->AI()->AttackStart(lider);

@@ -663,7 +663,7 @@ public:
         void JustDied(Unit* /*killer*/)
         {
             if (instance)
-                if (Creature* vashj = Unit::GetCreature((*me), instance->GetData64(DATA_LADYVASHJ)))
+                if (Creature* vashj = Unit::GetCreature(*me, instance->GetData64(DATA_LADYVASHJ)))
                     CAST_AI(boss_lady_vashj::boss_lady_vashjAI, vashj->AI())->EventTaintedElementalDeath();
         }
 

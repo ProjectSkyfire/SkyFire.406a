@@ -187,7 +187,7 @@ public:
         void RevertThreatOnTarget(uint64 guid)
         {
             Unit* unit = NULL;
-            unit = Unit::GetUnit((*me), guid);
+            unit = Unit::GetUnit(*me, guid);
             if (unit)
             {
                 if (DoGetThreat(unit))

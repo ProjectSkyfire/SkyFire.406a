@@ -274,7 +274,7 @@ struct boss_twin_baseAI : public ScriptedAI
     // Called when sister pointer needed
     Creature* GetSister()
     {
-        return Unit::GetCreature((*me), m_pInstance->GetData64(m_uiSisterNpcId));
+        return Unit::GetCreature(*me, m_pInstance->GetData64(m_uiSisterNpcId));
     }
 
     void EnterCombat(Unit* /*who*/)
