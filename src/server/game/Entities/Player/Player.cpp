@@ -2690,7 +2690,7 @@ void Player::RegenerateHealth()
             ApplyPctN(addvalue, GetTotalAuraModifier(SPELL_AURA_MOD_REGEN_DURING_COMBAT));
 
         if (!IsStandState())
-            addvalue *= 1.5f;
+            addvalue *= 1.5f; // Regen is faster while sitting
 
         if (RACE_TROLL)
             addvalue *= 1.1f; // Trolls Regen 10% Faster 
