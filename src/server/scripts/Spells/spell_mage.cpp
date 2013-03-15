@@ -220,7 +220,6 @@ public:
 
         if (AuraEffect* talentAurEff = target->GetAuraEffectOfRankedSpell(SPELL_MAGE_INCANTERS_ABSORBTION_R1, EFFECT_0))
         {
-
             // Store the normal spellpower to prevent the nonstop aura stacking
             int32 bp = CalculatePctN(absorbAmount, talentAurEff->GetAmount());
 

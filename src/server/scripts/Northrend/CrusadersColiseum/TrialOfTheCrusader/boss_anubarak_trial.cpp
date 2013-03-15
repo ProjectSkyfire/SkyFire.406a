@@ -263,12 +263,13 @@ public:
             me->SetInCombatWithZone();
             if (m_instance)
                 m_instance->SetData(TYPE_ANUBARAK, IN_PROGRESS);
-            //Despawn Scarab Swarms neutral
-            Summons.DoAction(NPC_SCARAB, ACTION_SCARAB_SUBMERGE);
-            //Spawn Burrow
+            // Despawn Scarab Swarms neutral
+            EntryCheckPredicate pred(NPC_SCARAB);
+            Summons.DoAction(ACTION_SCARAB_SUBMERGE, pred);      
+            // Spawn Burrow
             for (int i=0; i < 4; i++)
                 me->SummonCreature(NPC_BURROW, AnubarakLoc[i+2]);
-            //Spawn Frost Spheres
+            // Spawn Frost Spheres
             for (int i=0; i < 6; i++)
                 if (Unit* summoned = me->SummonCreature(NPC_FROST_SPHERE, SphereSpawn[i]))
                     m_aSphereGUID[i] = summoned->GetGUID();
@@ -302,7 +303,8 @@ public:
 
                     if (IsHeroic() && m_uiNerubianShadowStrikeTimer <= uiDiff)
                     {
-                        Summons.DoAction(NPC_BURROWER, ACTION_SHADOW_STRIKE);
+                        EntryCheckPredicate pred(NPC_BURROWER);
+                        Summons.DoAction(ACTION_SHADOW_STRIKE, pred);
                         m_uiNerubianShadowStrikeTimer = 30*IN_MILLISECONDS;
                     } else m_uiNerubianShadowStrikeTimer -= uiDiff;
 
@@ -669,7 +671,7 @@ public:
             Unit* target = Unit::GetPlayer(*me, m_uiTargetGUID);
             if (!target || !target->isAlive() || !target->HasAura(SPELL_MARK))
             {
-                if (Creature* pAnubarak = Unit::GetCreature((*me), m_instance->GetData64(NPC_ANUBARAK)))
+                if (Creature* pAnubarak = Unit::GetCreature(*me, m_instance->GetData64(NPC_ANUBARAK)))
                     pAnubarak->CastSpell(pAnubarak, SPELL_SPIKE_TELE, false);
                 me->DisappearAndDie();
                 return;

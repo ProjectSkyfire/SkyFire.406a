@@ -621,9 +621,9 @@ public:
             if (Conversation[count].creature == ILLIDAN_STORMRAGE)
                 creature = me;
             else if (Conversation[count].creature == AKAMA)
-                creature = (Unit::GetCreature((*me), AkamaGUID));
+                creature = (Unit::GetCreature(*me, AkamaGUID));
             else if (Conversation[count].creature == MAIEV_SHADOWSONG)
-                creature = (Unit::GetCreature((*me), MaievGUID));
+                creature = (Unit::GetCreature(*me, MaievGUID));
 
             if (creature)
             {
@@ -856,7 +856,7 @@ public:
                 {
                     if (GlaiveGUID[i])
                     {
-                        Unit* Glaive = Unit::GetUnit((*me), GlaiveGUID[i]);
+                        Unit* Glaive = Unit::GetUnit(*me, GlaiveGUID[i]);
                         if (Glaive)
                         {
                             Glaive->CastSpell(me, SPELL_GLAIVE_RETURNS, false); // Make it look like the Glaive flies back up to us
@@ -1479,7 +1479,7 @@ public:
             std::vector<Unit*> eliteList;
             for (std::list<HostileReference*>::const_iterator itr = threatList.begin(); itr != threatList.end(); ++itr)
             {
-                Unit* unit = Unit::GetUnit((*me), (*itr)->getUnitGuid());
+                Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                 if (unit && unit->GetEntry() == ILLIDARI_ELITE)
                     eliteList.push_back(unit);
             }
@@ -1639,9 +1639,9 @@ public:
             Unit* Channel = NULL, *Spirit[2] = { NULL, NULL };
             if (ChannelCount <= 5)
             {
-                Channel = Unit::GetUnit((*me), ChannelGUID);
-                Spirit[0] = Unit::GetUnit((*me), SpiritGUID[0]);
-                Spirit[1] = Unit::GetUnit((*me), SpiritGUID[1]);
+                Channel = Unit::GetUnit(*me, ChannelGUID);
+                Spirit[0] = Unit::GetUnit(*me, SpiritGUID[0]);
+                Spirit[1] = Unit::GetUnit(*me, SpiritGUID[1]);
                 if (!Channel || !Spirit[0] || !Spirit[1])
                     return;
             }
@@ -2130,7 +2130,7 @@ public:
 
         void JustDied(Unit* /*killer*/)
         {
-            if (Unit* target = Unit::GetUnit((*me), TargetGUID))
+            if (Unit* target = Unit::GetUnit(*me, TargetGUID))
                 target->RemoveAurasDueToSpell(SPELL_PARALYZE);
         }
 
@@ -2218,7 +2218,7 @@ public:
                 if (!me->getVictim()->HasAura(SPELL_PARASITIC_SHADOWFIEND)
                     && !me->getVictim()->HasAura(SPELL_PARASITIC_SHADOWFIEND2))
                 {
-                    if (Creature* illidan = Unit::GetCreature((*me), IllidanGUID))// summon only in 1. phase
+                    if (Creature* illidan = Unit::GetCreature(*me, IllidanGUID))// summon only in 1. phase
                         if (CAST_AI(boss_illidan_stormrage::boss_illidan_stormrageAI, illidan->AI())->Phase == PHASE_NORMAL)
                             me->CastSpell(me->getVictim(), SPELL_PARASITIC_SHADOWFIEND2, true, 0, 0, IllidanGUID); // do not stack
                 }

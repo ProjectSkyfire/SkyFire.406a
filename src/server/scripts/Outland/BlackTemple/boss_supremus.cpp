@@ -134,7 +134,8 @@ public:
             if (!phase || phase == PHASE_CHASE)
             {
                 phase = PHASE_STRIKE;
-                summons.DoAction(EVENT_VOLCANO, 0);
+                DummyEntryCheckPredicate pred;
+                summons.DoAction(EVENT_VOLCANO, pred);
                 events.ScheduleEvent(EVENT_HATEFUL_STRIKE, 5000, GCD_CAST, PHASE_STRIKE);
                 me->SetSpeed(MOVE_RUN, 1.2f);
                 me->ApplySpellImmune(0, IMMUNITY_STATE, SPELL_AURA_MOD_TAUNT, false);
@@ -177,7 +178,7 @@ public:
             std::list<HostileReference*>::const_iterator i = m_threatlist.begin();
             for (i = m_threatlist.begin(); i!= m_threatlist.end(); ++i)
             {
-                Unit* unit = Unit::GetUnit((*me), (*i)->getUnitGuid());
+                Unit* unit = Unit::GetUnit(*me, (*i)->getUnitGuid());
                 if (unit && me->IsWithinMeleeRange(unit))
                 {
                     if (unit->GetHealth() > health)

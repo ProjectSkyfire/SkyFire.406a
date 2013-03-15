@@ -128,19 +128,19 @@ public:
             {
                 instance->SetData(DATA_GORTOK_PALEHOOF_EVENT, NOT_STARTED);
 
-                Creature* temp = Unit::GetCreature((*me), instance->GetData64(DATA_MOB_FRENZIED_WORGEN));
+                Creature* temp = Unit::GetCreature(*me, instance->GetData64(DATA_MOB_FRENZIED_WORGEN));
                 if (temp && !temp->isAlive())
                     temp->Respawn();
 
-                temp = Unit::GetCreature((*me), instance->GetData64(DATA_MOB_FEROCIOUS_RHINO));
+                temp = Unit::GetCreature(*me, instance->GetData64(DATA_MOB_FEROCIOUS_RHINO));
                 if (temp && !temp->isAlive())
                     temp->Respawn();
 
-                temp = Unit::GetCreature((*me), instance->GetData64(DATA_MOB_MASSIVE_JORMUNGAR));
+                temp = Unit::GetCreature(*me, instance->GetData64(DATA_MOB_MASSIVE_JORMUNGAR));
                 if (temp && !temp->isAlive())
                     temp->Respawn();
 
-                temp = Unit::GetCreature((*me), instance->GetData64(DATA_MOB_RAVENOUS_FURBOLG));
+                temp = Unit::GetCreature(*me, instance->GetData64(DATA_MOB_RAVENOUS_FURBOLG));
                 if (temp && !temp->isAlive())
                     temp->Respawn();
 
@@ -184,7 +184,7 @@ public:
             if (!UpdateVictim())
                 return;
 
-            Creature* temp = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_ORB) : 0);
+            Creature* temp = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_ORB) : 0);
             if (temp && temp->isAlive())
                 temp->DisappearAndDie();
 
@@ -215,7 +215,7 @@ public:
             DoScriptText(SAY_DEATH, me);
             if (instance)
                 instance->SetData(DATA_GORTOK_PALEHOOF_EVENT, DONE);
-            Creature* temp = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_ORB) : 0);
+            Creature* temp = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_ORB) : 0);
             if (temp && temp->isAlive())
                 temp->DisappearAndDie();
         }
@@ -257,7 +257,7 @@ public:
                 move = (Phase)(move % 4);
             }
             //send orb to summon spot
-            Creature* pOrb = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_ORB) : 0);
+            Creature* pOrb = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_ORB) : 0);
             if (pOrb && pOrb->isAlive())
             {
                 if (currentPhase == PHASE_NONE)
@@ -319,7 +319,7 @@ public:
             if (instance)
                 if (instance->GetData(DATA_GORTOK_PALEHOOF_EVENT) == IN_PROGRESS)
                 {
-                    Creature* pPalehoof = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                    Creature* pPalehoof = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                     if (pPalehoof && pPalehoof->isAlive())
                         CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->Reset();
                 }
@@ -373,7 +373,7 @@ public:
         {
             if (instance)
             {
-                Creature* pPalehoof = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                Creature* pPalehoof = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                 if (pPalehoof)
                     CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->NextPhase();
             }
@@ -431,7 +431,7 @@ public:
             if (instance)
                 if (instance->GetData(DATA_GORTOK_PALEHOOF_EVENT) == IN_PROGRESS)
                 {
-                    Creature* pPalehoof = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                    Creature* pPalehoof = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                     if (pPalehoof && pPalehoof->isAlive())
                         CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->Reset();
                 }
@@ -487,7 +487,7 @@ public:
         {
             if (instance)
             {
-                Creature* pPalehoof = Unit::GetCreature((*me), instance->GetData64(DATA_GORTOK_PALEHOOF));
+                Creature* pPalehoof = Unit::GetCreature(*me, instance->GetData64(DATA_GORTOK_PALEHOOF));
                 if (pPalehoof)
                     CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->NextPhase();
             }
@@ -546,7 +546,7 @@ public:
             if (instance)
                 if (instance->GetData(DATA_GORTOK_PALEHOOF_EVENT) == IN_PROGRESS)
                 {
-                    Creature* pPalehoof = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                    Creature* pPalehoof = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                     if (pPalehoof && pPalehoof->isAlive())
                         CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->Reset();
                 }
@@ -601,7 +601,7 @@ public:
         {
             if (instance)
             {
-                Creature* pPalehoof = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                Creature* pPalehoof = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                 if (pPalehoof)
                     CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->NextPhase();
             }
@@ -665,7 +665,7 @@ public:
             if (instance)
                 if (instance->GetData(DATA_GORTOK_PALEHOOF_EVENT) == IN_PROGRESS)
                 {
-                    Creature* pPalehoof = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                    Creature* pPalehoof = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                     if (pPalehoof && pPalehoof->isAlive())
                         CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->Reset();
                 }
@@ -721,7 +721,7 @@ public:
         {
             if (instance)
             {
-                Creature* pPalehoof = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
+                Creature* pPalehoof = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0);
                 if (pPalehoof)
                     CAST_AI(boss_palehoof::boss_palehoofAI, pPalehoof->AI())->NextPhase();
             }
@@ -778,11 +778,11 @@ public:
                    Creature* pNext = NULL;
                    switch (currentPhase)
                    {
-                        case PHASE_FRENZIED_WORGEN: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_FRENZIED_WORGEN) : 0); break;
-                        case PHASE_RAVENOUS_FURLBORG: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_RAVENOUS_FURBOLG) : 0); break;
-                        case PHASE_MASSIVE_JORMUNGAR: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_MASSIVE_JORMUNGAR) : 0); break;
-                        case PHASE_FEROCIOUS_RHINO: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_FEROCIOUS_RHINO) : 0); break;
-                        case PHASE_GORTOK_PALEHOOF: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0); break;
+                        case PHASE_FRENZIED_WORGEN: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_FRENZIED_WORGEN) : 0); break;
+                        case PHASE_RAVENOUS_FURLBORG: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_RAVENOUS_FURBOLG) : 0); break;
+                        case PHASE_MASSIVE_JORMUNGAR: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_MASSIVE_JORMUNGAR) : 0); break;
+                        case PHASE_FEROCIOUS_RHINO: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_FEROCIOUS_RHINO) : 0); break;
+                        case PHASE_GORTOK_PALEHOOF: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0); break;
                         default: break;
                    }
 
@@ -808,11 +808,11 @@ public:
             Creature* pNext = NULL;
             switch (id)
             {
-                case PHASE_FRENZIED_WORGEN: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_FRENZIED_WORGEN) : 0); break;
-                case PHASE_RAVENOUS_FURLBORG: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_RAVENOUS_FURBOLG) : 0); break;
-                case PHASE_MASSIVE_JORMUNGAR: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_MASSIVE_JORMUNGAR) : 0); break;
-                case PHASE_FEROCIOUS_RHINO: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_MOB_FEROCIOUS_RHINO) : 0); break;
-                case PHASE_GORTOK_PALEHOOF: pNext = Unit::GetCreature((*me), instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0); break;
+                case PHASE_FRENZIED_WORGEN: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_FRENZIED_WORGEN) : 0); break;
+                case PHASE_RAVENOUS_FURLBORG: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_RAVENOUS_FURBOLG) : 0); break;
+                case PHASE_MASSIVE_JORMUNGAR: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_MASSIVE_JORMUNGAR) : 0); break;
+                case PHASE_FEROCIOUS_RHINO: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_MOB_FEROCIOUS_RHINO) : 0); break;
+                case PHASE_GORTOK_PALEHOOF: pNext = Unit::GetCreature(*me, instance ? instance->GetData64(DATA_GORTOK_PALEHOOF) : 0); break;
                 default: break;
             }
             if (pNext)

@@ -1466,7 +1466,7 @@ public:
         void HandleDummy(SpellEffIndex /*effIndex*/)
         {
             if (Unit* target = GetHitCreature())
-                if (target->GetEntry() == NPC_LEVIROTH && !target->HealthBelowPct(95))
+                if (target->GetEntry() == NPC_LEVIROTH && target->HealthBelowPct(95))
                     target->CastSpell(target, SPELL_LEVIROTH_SELF_IMPALE, true);
         }
 

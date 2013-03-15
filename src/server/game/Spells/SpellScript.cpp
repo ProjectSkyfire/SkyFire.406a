@@ -306,7 +306,6 @@ bool SpellScript::_Validate(SpellInfo const* entry)
         if (!(*itr).GetAffectedEffectsMask(entry))
             sLog->outError("TSCR: Spell `%u` Effect `%s` of script `%s` did not match dbc effect data - handler bound to hook `OnObjectTargetSelect` of SpellScript won't be executed", entry->Id, (*itr).ToString().c_str(), m_scriptName->c_str());
 
-
     return _SpellScript::_Validate(entry);
 }
 

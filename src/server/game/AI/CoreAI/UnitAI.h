@@ -224,7 +224,7 @@ class UnitAI
                 targetList.reverse();
 
             if (targetType == SELECT_TARGET_RANDOM)
-                SkyFire::RandomResizeList(targetList, maxTargets);
+                SkyFire::Containers::RandomResizeList(targetList, maxTargets);        
             else
                 targetList.resize(maxTargets);
         }

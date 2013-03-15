@@ -636,7 +636,6 @@ public:
         {
             OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_pri_chakra_sanctuary_heal_target_selector_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_DEST_AREA_ALLY);
         }
-
     };
 
     SpellScript* GetSpellScript() const

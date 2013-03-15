@@ -35,7 +35,6 @@ EndContentData */
 
 #include "ScriptPCH.h"
 
-
 enum Northshire
 {
     SAY_BLACKROCK_COMBAT_1    = -1000015,

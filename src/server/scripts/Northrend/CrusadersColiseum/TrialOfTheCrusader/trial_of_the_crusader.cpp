@@ -700,7 +700,7 @@ class npc_tirion_toc : public CreatureScript
                             m_pInstance->SetData(TYPE_EVENT, 3092);
                             break;
                         case 3092:
-                            if (Creature* pChampionController = Unit::GetCreature((*me), m_pInstance->GetData64(NPC_CHAMPIONS_CONTROLLER)))
+                            if (Creature* pChampionController = Unit::GetCreature(*me, m_pInstance->GetData64(NPC_CHAMPIONS_CONTROLLER)))
                                 pChampionController->AI()->SetData(1, NOT_STARTED);
                             m_pInstance->SetData(TYPE_EVENT, 3095);
                             break;
@@ -736,12 +736,12 @@ class npc_tirion_toc : public CreatureScript
                             break;
                         case 4015:
                             m_pInstance->DoUseDoorOrButton(m_pInstance->GetData64(GO_MAIN_GATE_DOOR));
-                            if (Creature* temp = Unit::GetCreature((*me), m_pInstance->GetData64(NPC_LIGHTBANE)))
+                            if (Creature* temp = Unit::GetCreature(*me, m_pInstance->GetData64(NPC_LIGHTBANE)))
                             {
                                 temp->GetMotionMaster()->MovePoint(1, ToCCommonLoc[8].GetPositionX(), ToCCommonLoc[8].GetPositionY(), ToCCommonLoc[8].GetPositionZ());
                                 temp->SetVisible(true);
                             }
-                            if (Creature* temp = Unit::GetCreature((*me), m_pInstance->GetData64(NPC_DARKBANE)))
+                            if (Creature* temp = Unit::GetCreature(*me, m_pInstance->GetData64(NPC_DARKBANE)))
                             {
                                 temp->GetMotionMaster()->MovePoint(1, ToCCommonLoc[9].GetPositionX(), ToCCommonLoc[9].GetPositionY(), ToCCommonLoc[9].GetPositionZ());
                                 temp->SetVisible(true);

@@ -777,7 +777,6 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket& recvData)
         return;
     }
 
-
     PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_SELECT_ACCOUNT_NAME_BY_GUID);
 
     stmt->setUInt32(0, GUID_LOPART(guid));

@@ -413,7 +413,7 @@ public:
                     {
                         if (AffrayChallenger[i])
                         {
-                            Creature* creature = Unit::GetCreature((*me), AffrayChallenger[i]);
+                            Creature* creature = Unit::GetCreature(*me, AffrayChallenger[i]);
                             if (creature) {
                                 if (creature->isAlive())
                                 {
@@ -429,7 +429,7 @@ public:
 
                     if (BigWill)
                     {
-                        Creature* creature = Unit::GetCreature((*me), BigWill);
+                        Creature* creature = Unit::GetCreature(*me, BigWill);
                         if (creature) {
                             if (creature->isAlive()) {
                                 creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
@@ -474,7 +474,7 @@ public:
                         {
                             if (AffrayChallenger[i])
                             {
-                                Creature* creature = Unit::GetCreature((*me), AffrayChallenger[i]);
+                                Creature* creature = Unit::GetCreature(*me, AffrayChallenger[i]);
                                 if ((!creature || (!creature->isAlive())) && !Challenger_down[i])
                                 {
                                     DoScriptText(SAY_TWIGGY_FLATHEAD_DOWN, me);
@@ -490,7 +490,7 @@ public:
                         if (Wave < 6 && AffrayChallenger[Wave] && !EventBigWill)
                         {
                             DoScriptText(SAY_TWIGGY_FLATHEAD_FRAY, me);
-                            Creature* creature = Unit::GetCreature((*me), AffrayChallenger[Wave]);
+                            Creature* creature = Unit::GetCreature(*me, AffrayChallenger[Wave]);
                             if (creature && (creature->isAlive()))
                             {
                                 creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -516,7 +516,7 @@ public:
                         }
                         else if (Wave >= 6 && EventBigWill && BigWill)
                         {
-                            Creature* creature = Unit::GetCreature((*me), BigWill);
+                            Creature* creature = Unit::GetCreature(*me, BigWill);
                             if (!creature || !creature->isAlive())
                             {
                                 DoScriptText(SAY_TWIGGY_FLATHEAD_OVER, me);

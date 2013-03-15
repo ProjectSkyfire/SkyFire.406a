@@ -264,7 +264,7 @@ public:
             {
                 if (PlayerGUID)
                 {
-                    Unit* player = Unit::GetUnit((*me), PlayerGUID);
+                    Unit* player = Unit::GetUnit(*me, PlayerGUID);
                     if (player)
                         DoCast(player, SPELL_FORCE_OF_NELTHARAKU, true);
 
@@ -760,9 +760,9 @@ public:
 
         uint32 NextStep(uint32 Step)
         {
-            Unit* player = Unit::GetUnit((*me), PlayerGUID);
+            Unit* player = Unit::GetUnit(*me, PlayerGUID);
 
-            Unit* Illi = Unit::GetUnit((*me), IllidanGUID);
+            Unit* Illi = Unit::GetUnit(*me, IllidanGUID);
 
             if (!player || !Illi)
             {

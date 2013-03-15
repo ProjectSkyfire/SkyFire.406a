@@ -141,10 +141,8 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-
          me->MonsterYell(SAY_AGGRO, LANGUAGE_UNIVERSAL, 0);
          DoPlaySoundToSet(me, SOUND_AGGRO);
-
         }
 
         void JustDied(Unit* /*Killer*/)
@@ -155,11 +153,9 @@ public:
 
         void KilledUnit(Unit* Victim)
         {
-
             me->MonsterYell(SAY_KILL, LANGUAGE_UNIVERSAL, 0);
             DoPlaySoundToSet(me, SOUND_KILL);
         }
-
 
         void UpdateAI(const uint32 diff)
         {

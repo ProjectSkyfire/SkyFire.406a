@@ -328,7 +328,7 @@ public:
             {
                 if (timer <= diff)
                 {
-                    if (Creature* paladinSpawn = Unit::GetCreature((*me), paladinGuid[paladinPhase]))
+                    if (Creature* paladinSpawn = Unit::GetCreature(*me, paladinGuid[paladinPhase]))
                     {
                         CAST_AI(npc_second_trial_paladin::npc_secondTrialAI, paladinSpawn->AI())->Activate(me->GetGUID());
 
@@ -398,7 +398,7 @@ void npc_second_trial_paladin::npc_secondTrialAI::JustDied(Unit* Killer)
 {
     if (Killer->GetTypeId() == TYPEID_PLAYER)
     {
-        if (Creature* summoner = Unit::GetCreature((*me), summonerGuid))
+        if (Creature* summoner = Unit::GetCreature(*me, summonerGuid))
             CAST_AI(npc_second_trial_controller::master_kelerun_bloodmournAI, summoner->AI())->SecondTrialKill();
 
         // last kill quest complete for group
@@ -491,14 +491,14 @@ public:
         {
             if (PlayerGUID)
                 if (Player* player = Unit::GetPlayer(*me, PlayerGUID))
-                    CAST_PLR(player)->FailQuest(QUEST_UNEXPECTED_RESULT);
+                    player->FailQuest(QUEST_UNEXPECTED_RESULT);
         }
 
         void UpdateAI(const uint32 /*diff*/)
         {
             if (KillCount >= 3 && PlayerGUID)
                 if (Player* player = Unit::GetPlayer(*me, PlayerGUID))
-                    CAST_PLR(player)->CompleteQuest(QUEST_UNEXPECTED_RESULT);
+                    player->CompleteQuest(QUEST_UNEXPECTED_RESULT);
 
             if (Summon)
             {

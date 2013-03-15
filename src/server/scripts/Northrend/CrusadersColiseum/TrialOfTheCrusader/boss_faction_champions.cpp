@@ -274,7 +274,7 @@ struct boss_faction_championsAI : public ScriptedAI
     void JustReachedHome()
     {
         if (m_pInstance)
-            if (Creature* pChampionController = Unit::GetCreature((*me), m_pInstance->GetData64(NPC_CHAMPIONS_CONTROLLER)))
+            if (Creature* pChampionController = Unit::GetCreature(*me, m_pInstance->GetData64(NPC_CHAMPIONS_CONTROLLER)))
                 pChampionController->AI()->SetData(2, FAIL);
         me->DespawnOrUnsummon();
     }
@@ -292,7 +292,7 @@ struct boss_faction_championsAI : public ScriptedAI
         std::list<HostileReference*> const& tList = me->getThreatManager().getThreatList();
         for (std::list<HostileReference*>::const_iterator itr = tList.begin(); itr != tList.end(); ++itr)
         {
-            Unit* unit = Unit::GetUnit((*me), (*itr)->getUnitGuid());
+            Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid());
             if (unit && me->getThreatManager().getThreat(unit))
             {
                 if (unit->GetTypeId()==TYPEID_PLAYER)
@@ -327,7 +327,7 @@ struct boss_faction_championsAI : public ScriptedAI
     {
         if (mAIType != AI_PET)
             if (m_pInstance)
-                if (Creature* pChampionController = Unit::GetCreature((*me), m_pInstance->GetData64(NPC_CHAMPIONS_CONTROLLER)))
+                if (Creature* pChampionController = Unit::GetCreature(*me, m_pInstance->GetData64(NPC_CHAMPIONS_CONTROLLER)))
                     pChampionController->AI()->SetData(2, DONE);
     }
 
@@ -336,7 +336,7 @@ struct boss_faction_championsAI : public ScriptedAI
         DoCast(me, SPELL_ANTI_AOE, true);
         me->SetInCombatWithZone();
         if (m_pInstance)
-            if (Creature* pChampionController = Unit::GetCreature((*me), m_pInstance->GetData64(NPC_CHAMPIONS_CONTROLLER)))
+            if (Creature* pChampionController = Unit::GetCreature(*me, m_pInstance->GetData64(NPC_CHAMPIONS_CONTROLLER)))
                 pChampionController->AI()->SetData(2, IN_PROGRESS);
     }
 
@@ -384,7 +384,7 @@ struct boss_faction_championsAI : public ScriptedAI
         Unit* target;
         for (iter = tList.begin(); iter!=tList.end(); ++iter)
         {
-            target = Unit::GetUnit((*me), (*iter)->getUnitGuid());
+            target = Unit::GetUnit(*me, (*iter)->getUnitGuid());
             if (target && target->getPowerType() == POWER_MANA)
                 return target;
         }
@@ -399,7 +399,7 @@ struct boss_faction_championsAI : public ScriptedAI
         Unit* target;
         for (iter = tList.begin(); iter!=tList.end(); ++iter)
         {
-            target = Unit::GetUnit((*me), (*iter)->getUnitGuid());
+            target = Unit::GetUnit(*me, (*iter)->getUnitGuid());
                 if (target && me->GetDistance2d(target) < distance)
                     ++count;
         }

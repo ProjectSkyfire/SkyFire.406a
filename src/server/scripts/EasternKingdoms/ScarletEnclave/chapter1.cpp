@@ -926,11 +926,11 @@ public:
             {
                 for (std::list<Creature*>::const_iterator itr = MinionList.begin(); itr != MinionList.end(); ++itr)
                 {
-                    if (CAST_CRE(*itr)->GetOwner()->GetGUID() == me->GetOwner()->GetGUID())
+                    if ((*itr)->GetOwner()->GetGUID() == me->GetOwner()->GetGUID())
                     {
-                        if (CAST_CRE(*itr)->isInCombat() && CAST_CRE(*itr)->getAttackerForHelper())
+                        if ((*itr)->isInCombat() && (*itr)->getAttackerForHelper())
                         {
-                            AttackStart(CAST_CRE(*itr)->getAttackerForHelper());
+                            AttackStart((*itr)->getAttackerForHelper());
                         }
                     }
                 }

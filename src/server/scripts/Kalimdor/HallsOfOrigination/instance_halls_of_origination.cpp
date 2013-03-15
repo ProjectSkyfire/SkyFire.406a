@@ -61,16 +61,16 @@ public:
 
         void Initialize()
         {
-            TempleGuardianAnhuur			= 0;
-            EarthragerPtah					= 0;
-            Anraphet						= 0;
-            Isiset							= 0;
-            Ammunae                         = 0;
-            Setesh							= 0;
-            Rajh							= 0;
-            AnhuurBridgeGUID				= 0;
-            uint64 OriginationElevatorGUID	= 0;
-            elementalsDefeated				= 0;
+            TempleGuardianAnhuur = 0;
+            EarthragerPtah = 0;
+            Anraphet = 0;
+            Isiset = 0;
+            Ammunae = 0;
+            Setesh = 0;
+            Rajh = 0;
+            AnhuurBridgeGUID = 0;
+            uint64 OriginationElevatorGUID = 0;
+            elementalsDefeated = 0;
 
             for (uint8 i = 0; i < ENCOUNTERS; ++i)
                 Encounter[i] = NOT_STARTED;
@@ -99,9 +99,9 @@ public:
                     break;
                 case BOSS_ANRAPHET:
                     if(elementalsDefeated < 4)
-                        creature->SetPhaseMask(2,true);
+                        creature->SetPhaseMask(2, true);
                     else
-                        creature->SetPhaseMask(1,true);
+                        creature->SetPhaseMask(1, true);
                     Anraphet = creature->GetGUID();
                     break;
                 case BOSS_ISISET:
@@ -270,7 +270,6 @@ public:
 
             OUT_LOAD_INST_DATA_COMPLETE;
         }
-
     };
 };
 
