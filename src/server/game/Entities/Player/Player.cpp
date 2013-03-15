@@ -2691,6 +2691,9 @@ void Player::RegenerateHealth()
 
         if (!IsStandState())
             addvalue *= 1.5f;
+
+        if (RACE_TROLL)
+            addvalue *= 1.1f; // Trolls Regen 10% Faster 
     }
 
     // always regeneration bonus (including combat)
