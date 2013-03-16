@@ -1,0 +1,385 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_MOD_BY	Bostjan Mihoric	/ccompletion@gmail.com/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	/unofficial modification/
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	/unofficial modification/
+A	AuthSocket.cpp	526;"	local
+A	AuthSocket.cpp	85;"	member	struct:AUTH_LOGON_PROOF_C	file:
+AUTH_LOGON_CHALLENGE	AuthSocket.cpp	38;"	enumerator	enum:eAuthCmd	file:
+AUTH_LOGON_CHALLENGE_C	AuthSocket.cpp	63;"	struct	file:
+AUTH_LOGON_PROOF	AuthSocket.cpp	39;"	enumerator	enum:eAuthCmd	file:
+AUTH_LOGON_PROOF_C	AuthSocket.cpp	82;"	struct	file:
+AUTH_LOGON_PROOF_S	AuthSocket.cpp	92;"	struct	file:
+AUTH_LOGON_PROOF_S_OLD	AuthSocket.cpp	102;"	struct	file:
+AUTH_RECONNECT_CHALLENGE	AuthSocket.cpp	40;"	enumerator	enum:eAuthCmd	file:
+AUTH_RECONNECT_PROOF	AuthSocket.cpp	41;"	enumerator	enum:eAuthCmd	file:
+AUTH_RECONNECT_PROOF_C	AuthSocket.cpp	110;"	struct	file:
+AUTH_TOTAL_COMMANDS	AuthSocket.cpp	194;"	macro	file:
+AmountOfCharacters	AuthSocket.cpp	865;"	local
+AmountOfCharacters	AuthSocket.cpp	886;"	local
+AuthHandler	AuthSocket.cpp	135;"	struct	file:
+AuthHandler	AuthSocket.cpp	140;"	typedef	file:
+AuthSocket	AuthSocket.cpp	200;"	function	class:AuthSocket
+AuthSocket	AuthSocket.h	28;"	class
+AuthSocket	AuthSocket.h	33;"	prototype	class:AuthSocket
+B	AuthSocket.h	61;"	member	class:AuthSocket
+Base	RealmSocket.h	33;"	typedef	class:RealmSocket
+ChunkSize	AuthSocket.cpp	34;"	macro	file:
+Execute	AuthSocket.cpp	292;"	prototype	file:
+Execute	AuthSocket.cpp	360;"	prototype	file:
+Execute	AuthSocket.cpp	405;"	prototype	file:
+Execute	AuthSocket.cpp	616;"	prototype	file:
+Execute	AuthSocket.cpp	661;"	prototype	file:
+Execute	AuthSocket.cpp	681;"	prototype	file:
+Execute	AuthSocket.cpp	691;"	prototype	file:
+Finalize	AuthSocket.cpp	278;"	prototype	file:
+Finalize	AuthSocket.cpp	539;"	prototype	file:
+Finalize	AuthSocket.cpp	554;"	prototype	file:
+Finalize	AuthSocket.cpp	564;"	prototype	file:
+Finalize	AuthSocket.cpp	575;"	prototype	file:
+Finalize	AuthSocket.cpp	579;"	prototype	file:
+Finalize	AuthSocket.cpp	589;"	prototype	file:
+Finalize	AuthSocket.cpp	597;"	prototype	file:
+Finalize	AuthSocket.cpp	623;"	prototype	file:
+Finalize	AuthSocket.cpp	798;"	prototype	file:
+GetHash	AuthSocket.cpp	1076;"	function	class:Patcher
+GetHash	AuthSocket.cpp	175;"	prototype	class:Patcher	file:
+I	AuthSocket.cpp	264;"	local
+I	AuthSocket.cpp	79;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+I_len	AuthSocket.cpp	78;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+Initialize	AuthSocket.cpp	552;"	prototype	file:
+Initialize	AuthSocket.cpp	562;"	prototype	file:
+Initialize	AuthSocket.cpp	573;"	prototype	file:
+Initialize	AuthSocket.cpp	577;"	prototype	file:
+Initialize	AuthSocket.cpp	587;"	prototype	file:
+Initialize	AuthSocket.cpp	593;"	prototype	file:
+Initialize	AuthSocket.cpp	621;"	prototype	file:
+Initialize	AuthSocket.cpp	795;"	prototype	file:
+K	AuthSocket.cpp	766;"	prototype	file:
+K	AuthSocket.h	62;"	member	class:AuthSocket
+K_hex	AuthSocket.cpp	608;"	local
+LoadPatchMD5	AuthSocket.cpp	1042;"	function	class:Patcher
+LoadPatchMD5	AuthSocket.cpp	174;"	prototype	class:Patcher	file:
+LoadPatchesInfo	AuthSocket.cpp	1028;"	function	class:Patcher
+LoadPatchesInfo	AuthSocket.cpp	178;"	prototype	class:Patcher	file:
+LoadPatchesInfo	AuthSocket.cpp	991;"	function	class:Patcher
+M	AuthSocket.cpp	598;"	local
+M1	AuthSocket.cpp	86;"	member	struct:AUTH_LOGON_PROOF_C	file:
+M2	AuthSocket.cpp	106;"	member	struct:AUTH_LOGON_PROOF_S_OLD	file:
+M2	AuthSocket.cpp	96;"	member	struct:AUTH_LOGON_PROOF_S	file:
+MSG_NOSIGNAL	RealmSocket.cpp	28;"	macro	file:
+MaxWrongPassCount	AuthSocket.cpp	655;"	local
+N	AuthSocket.h	60;"	member	class:AuthSocket
+OnAccept	AuthSocket.cpp	212;"	function	class:AuthSocket
+OnAccept	AuthSocket.h	37;"	prototype	class:AuthSocket
+OnAccept	RealmSocket.h	43;"	prototype	class:RealmSocket::Session
+OnClose	AuthSocket.cpp	217;"	function	class:AuthSocket
+OnClose	AuthSocket.h	38;"	prototype	class:AuthSocket
+OnClose	RealmSocket.cpp	254;"	prototype	file:
+OnClose	RealmSocket.h	44;"	prototype	class:RealmSocket::Session
+OnRead	AuthSocket.cpp	223;"	function	class:AuthSocket
+OnRead	AuthSocket.h	36;"	prototype	class:AuthSocket
+OnRead	RealmSocket.cpp	278;"	prototype	file:
+OnRead	RealmSocket.h	42;"	prototype	class:RealmSocket::Session
+PATCH_INFO	AuthSocket.cpp	160;"	struct	file:
+PATCH_INFO	AuthSocket.cpp	163;"	typedef	file:
+Patcher	AuthSocket.cpp	1089;"	function	class:Patcher
+Patcher	AuthSocket.cpp	166;"	class	file:
+Patcher	AuthSocket.cpp	171;"	prototype	class:Patcher	file:
+PatcherRunnable	AuthSocket.cpp	150;"	class	file:
+PatcherRunnable	AuthSocket.cpp	153;"	prototype	class:PatcherRunnable	file:
+PatcherRunnable	AuthSocket.cpp	979;"	function	class:PatcherRunnable
+Patches	AuthSocket.cpp	169;"	typedef	class:Patcher	file:
+PatchesCache	AuthSocket.cpp	197;"	variable
+R1	AuthSocket.cpp	113;"	member	struct:AUTH_RECONNECT_PROOF_C	file:
+R2	AuthSocket.cpp	114;"	member	struct:AUTH_RECONNECT_PROOF_C	file:
+R3	AuthSocket.cpp	115;"	member	struct:AUTH_RECONNECT_PROOF_C	file:
+REALM_LIST	AuthSocket.cpp	42;"	enumerator	enum:eAuthCmd	file:
+RealmAcceptor	RealmAcceptor.h	29;"	class
+RealmAcceptor	RealmAcceptor.h	32;"	function	class:RealmAcceptor
+RealmListSize	AuthSocket.cpp	849;"	local
+RealmListSizeBuffer	AuthSocket.cpp	907;"	local
+RealmSocket	RealmSocket.cpp	35;"	function	class:RealmSocket
+RealmSocket	RealmSocket.h	30;"	class
+RealmSocket	RealmSocket.h	47;"	prototype	class:RealmSocket
+S	AuthSocket.cpp	542;"	local
+STATUS_AUTHED	AuthSocket.cpp	53;"	enumerator	enum:eStatus	file:
+STATUS_CONNECTED	AuthSocket.cpp	52;"	enumerator	enum:eStatus	file:
+Session	RealmSocket.cpp	31;"	function	class:RealmSocket::Session
+Session	RealmSocket.h	36;"	class	class:RealmSocket
+Session	RealmSocket.h	39;"	prototype	class:RealmSocket::Session
+SetBinary	AuthSocket.cpp	280;"	prototype	file:
+SetBinary	AuthSocket.cpp	528;"	prototype	file:
+SetBinary	AuthSocket.cpp	541;"	prototype	file:
+SetBinary	AuthSocket.cpp	569;"	prototype	file:
+SetBinary	AuthSocket.cpp	585;"	prototype	file:
+SetBinary	AuthSocket.cpp	599;"	prototype	file:
+SetBinary	AuthSocket.cpp	792;"	prototype	file:
+SetHexStr	AuthSocket.cpp	265;"	prototype	file:
+SetHexStr	AuthSocket.cpp	440;"	prototype	file:
+SetHexStr	AuthSocket.cpp	441;"	prototype	file:
+UpdateData	AuthSocket.cpp	276;"	prototype	file:
+UpdateData	AuthSocket.cpp	277;"	prototype	file:
+UpdateData	AuthSocket.cpp	553;"	prototype	file:
+UpdateData	AuthSocket.cpp	563;"	prototype	file:
+UpdateData	AuthSocket.cpp	588;"	prototype	file:
+UpdateData	AuthSocket.cpp	595;"	prototype	file:
+UpdateData	AuthSocket.cpp	796;"	prototype	file:
+UpdateIfNeed	AuthSocket.cpp	844;"	prototype	file:
+WrongPassBanTime	AuthSocket.cpp	672;"	local
+WrongPassBanType	AuthSocket.cpp	673;"	local
+XFER_ACCEPT	AuthSocket.cpp	45;"	enumerator	enum:eAuthCmd	file:
+XFER_CANCEL	AuthSocket.cpp	47;"	enumerator	enum:eAuthCmd	file:
+XFER_DATA	AuthSocket.cpp	128;"	struct	file:
+XFER_DATA	AuthSocket.cpp	44;"	enumerator	enum:eAuthCmd	file:
+XFER_DATA_STRUCT	AuthSocket.cpp	133;"	typedef	file:
+XFER_INIT	AuthSocket.cpp	119;"	struct	file:
+XFER_INIT	AuthSocket.cpp	126;"	typedef	file:
+XFER_INITIATE	AuthSocket.cpp	43;"	enumerator	enum:eAuthCmd	file:
+XFER_RESUME	AuthSocket.cpp	46;"	enumerator	enum:eAuthCmd	file:
+_AUTHSOCKET_H	AuthSocket.h	21;"	macro
+_HandleLogonChallenge	AuthSocket.cpp	299;"	function	class:AuthSocket
+_HandleLogonChallenge	AuthSocket.h	40;"	prototype	class:AuthSocket
+_HandleLogonProof	AuthSocket.cpp	507;"	function	class:AuthSocket
+_HandleLogonProof	AuthSocket.h	41;"	prototype	class:AuthSocket
+_HandleRealmList	AuthSocket.cpp	820;"	function	class:AuthSocket
+_HandleRealmList	AuthSocket.h	44;"	prototype	class:AuthSocket
+_HandleReconnectChallenge	AuthSocket.cpp	705;"	function	class:AuthSocket
+_HandleReconnectChallenge	AuthSocket.h	42;"	prototype	class:AuthSocket
+_HandleReconnectProof	AuthSocket.cpp	780;"	function	class:AuthSocket
+_HandleReconnectProof	AuthSocket.h	43;"	prototype	class:AuthSocket
+_HandleXferAccept	AuthSocket.cpp	960;"	function	class:AuthSocket
+_HandleXferAccept	AuthSocket.h	49;"	prototype	class:AuthSocket
+_HandleXferCancel	AuthSocket.cpp	948;"	function	class:AuthSocket
+_HandleXferCancel	AuthSocket.h	48;"	prototype	class:AuthSocket
+_HandleXferResume	AuthSocket.cpp	927;"	function	class:AuthSocket
+_HandleXferResume	AuthSocket.h	47;"	prototype	class:AuthSocket
+_SetVSFields	AuthSocket.cpp	260;"	function	class:AuthSocket
+_SetVSFields	AuthSocket.h	51;"	prototype	class:AuthSocket
+__REALMACCEPTOR_H__	RealmAcceptor.h	21;"	macro
+__REALMSOCKET_H__	RealmSocket.h	21;"	macro
+_accountSecurityLevel	AuthSocket.h	75;"	member	class:AuthSocket
+_authed	AuthSocket.h	65;"	member	class:AuthSocket
+_build	AuthSocket.h	73;"	member	class:AuthSocket
+_cmd	AuthSocket.cpp	225;"	local
+_expversion	AuthSocket.h	74;"	member	class:AuthSocket
+_localizationName	AuthSocket.h	71;"	member	class:AuthSocket
+_login	AuthSocket.h	67;"	member	class:AuthSocket
+_os	AuthSocket.h	72;"	member	class:AuthSocket
+_patches	AuthSocket.cpp	179;"	member	class:Patcher	file:
+_reconnectProof	AuthSocket.h	63;"	member	class:AuthSocket
+_remoteAddress	RealmSocket.h	77;"	member	class:RealmSocket
+_remotePort	RealmSocket.h	78;"	member	class:RealmSocket
+acc_id	AuthSocket.cpp	677;"	local
+addr	RealmSocket.cpp	59;"	local
+append	AuthSocket.cpp	457;"	prototype	file:
+append	AuthSocket.cpp	459;"	prototype	file:
+append	AuthSocket.cpp	461;"	prototype	file:
+append	AuthSocket.cpp	462;"	prototype	file:
+append	AuthSocket.cpp	463;"	prototype	file:
+append	AuthSocket.cpp	773;"	prototype	file:
+append	AuthSocket.cpp	917;"	prototype	file:
+append	AuthSocket.cpp	918;"	prototype	file:
+b	AuthSocket.h	61;"	member	class:AuthSocket
+banresult	AuthSocket.cpp	410;"	local
+begin	AuthSocket.cpp	172;"	function	class:Patcher
+buf	AuthSocket.cpp	1059;"	local
+build	AuthSocket.cpp	72;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+ch	AuthSocket.cpp	324;"	local
+ch	AuthSocket.cpp	730;"	local
+close	RealmSocket.cpp	83;"	function	class:RealmSocket
+close	RealmSocket.h	63;"	prototype	class:RealmSocket
+cmd	AuthSocket.cpp	104;"	member	struct:AUTH_LOGON_PROOF_S_OLD	file:
+cmd	AuthSocket.cpp	112;"	member	struct:AUTH_RECONNECT_PROOF_C	file:
+cmd	AuthSocket.cpp	121;"	member	struct:XFER_INIT	file:
+cmd	AuthSocket.cpp	137;"	member	struct:AuthHandler	file:
+cmd	AuthSocket.cpp	65;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+cmd	AuthSocket.cpp	84;"	member	struct:AUTH_LOGON_PROOF_C	file:
+cmd	AuthSocket.cpp	94;"	member	struct:AUTH_LOGON_PROOF_S	file:
+country	AuthSocket.cpp	75;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+crc_hash	AuthSocket.cpp	87;"	member	struct:AUTH_LOGON_PROOF_C	file:
+crunch	RealmSocket.cpp	279;"	prototype	file:
+ctx	AuthSocket.cpp	1057;"	local
+data	AuthSocket.cpp	132;"	member	struct:XFER_DATA	file:
+data	AuthSocket.cpp	650;"	local
+data_size	AuthSocket.cpp	131;"	member	struct:XFER_DATA	file:
+databaseS	AuthSocket.cpp	431;"	local
+databaseV	AuthSocket.cpp	430;"	local
+dirp	AuthSocket.cpp	993;"	local
+dp	AuthSocket.cpp	994;"	local
+eAuthCmd	AuthSocket.cpp	36;"	enum	file:
+eStatus	AuthSocket.cpp	50;"	enum	file:
+end	AuthSocket.cpp	173;"	function	class:Patcher
+error	AuthSocket.cpp	105;"	member	struct:AUTH_LOGON_PROOF_S_OLD	file:
+error	AuthSocket.cpp	66;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+error	AuthSocket.cpp	95;"	member	struct:AUTH_LOGON_PROOF_S	file:
+failed_logins	AuthSocket.cpp	668;"	local
+fields	AuthSocket.cpp	381;"	local
+fields	AuthSocket.cpp	762;"	local
+fields	AuthSocket.cpp	840;"	local
+fil	AuthSocket.cpp	1030;"	local
+fileName	AuthSocket.cpp	123;"	member	struct:XFER_INIT	file:
+fileNameLen	AuthSocket.cpp	122;"	member	struct:XFER_INIT	file:
+file_size	AuthSocket.cpp	124;"	member	struct:XFER_INIT	file:
+g	AuthSocket.h	60;"	member	class:AuthSocket
+gamename	AuthSocket.cpp	68;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+getRemoteAddress	RealmSocket.cpp	94;"	function	class:RealmSocket
+getRemoteAddress	RealmSocket.h	57;"	prototype	class:RealmSocket
+getRemotePort	RealmSocket.cpp	99;"	function	class:RealmSocket
+getRemotePort	RealmSocket.h	59;"	prototype	class:RealmSocket
+gmod	AuthSocket.cpp	445;"	local
+hFil	AuthSocket.cpp	1031;"	local
+handle_accept_error	RealmAcceptor.h	57;"	function	class:RealmAcceptor
+handle_close	RealmSocket.cpp	245;"	function	class:RealmSocket
+handle_close	RealmSocket.h	68;"	prototype	class:RealmSocket
+handle_input	RealmSocket.cpp	260;"	function	class:RealmSocket
+handle_input	RealmSocket.h	65;"	prototype	class:RealmSocket
+handle_output	RealmSocket.cpp	201;"	function	class:RealmSocket
+handle_output	RealmSocket.h	66;"	prototype	class:RealmSocket
+handle_timeout	RealmAcceptor.h	50;"	function	class:RealmAcceptor
+handler	AuthSocket.cpp	139;"	member	struct:AuthHandler	file:
+hash	AuthSocket.cpp	571;"	local
+hdr	AuthSocket.cpp	914;"	local
+id	AuthSocket.cpp	841;"	local
+input_buffer_	RealmSocket.h	75;"	member	class:RealmSocket
+ip	AuthSocket.cpp	77;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+ip_address	AuthSocket.cpp	362;"	local
+l	AuthSocket.cpp	1005;"	local
+len	RealmSocket.cpp	136;"	local
+lock	AuthSocket.cpp	877;"	local
+lock	AuthSocket.cpp	881;"	local
+locked	AuthSocket.cpp	384;"	local
+lp	AuthSocket.cpp	511;"	local
+lp	AuthSocket.cpp	784;"	local
+mDigest	AuthSocket.cpp	268;"	local
+make_svc_handler	RealmAcceptor.h	40;"	function	class:RealmAcceptor
+mb	RealmSocket.cpp	187;"	local
+md5	AuthSocket.cpp	125;"	member	struct:XFER_INIT	file:
+md5	AuthSocket.cpp	162;"	member	struct:PATCH_INFO	file:
+mySocket	AuthSocket.cpp	157;"	member	class:PatcherRunnable	file:
+n	RealmSocket.cpp	174;"	local
+n	RealmSocket.cpp	267;"	local
+noblk_send	RealmSocket.cpp	134;"	function	class:RealmSocket
+noblk_send	RealmSocket.h	73;"	prototype	class:RealmSocket
+number_of_keys	AuthSocket.cpp	116;"	member	struct:AUTH_RECONNECT_PROOF_C	file:
+number_of_keys	AuthSocket.cpp	88;"	member	struct:AUTH_LOGON_PROOF_C	file:
+opcode	AuthSocket.cpp	130;"	member	struct:XFER_DATA	file:
+open	RealmSocket.cpp	57;"	function	class:RealmSocket
+open	RealmSocket.h	61;"	prototype	class:RealmSocket
+os	AuthSocket.cpp	74;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+outDebug	AuthSocket.cpp	1048;"	prototype	file:
+outDebug	AuthSocket.cpp	219;"	prototype	file:
+outDebug	AuthSocket.cpp	433;"	prototype	file:
+outDebug	AuthSocket.cpp	520;"	prototype	file:
+pPatch	AuthSocket.cpp	1047;"	local
+pPatch	AuthSocket.h	53;"	member	class:AuthSocket
+patcherLock	AuthSocket.h	54;"	member	class:AuthSocket
+path	AuthSocket.cpp	1045;"	local
+pkt	AuthSocket.cpp	343;"	local
+pkt	AuthSocket.cpp	769;"	local
+pkt	AuthSocket.cpp	803;"	local
+pkt	AuthSocket.cpp	847;"	local
+platform	AuthSocket.cpp	73;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+proof	AuthSocket.cpp	627;"	local
+proof	AuthSocket.cpp	638;"	local
+rI	AuthSocket.cpp	427;"	local
+rd_ptr	RealmSocket.cpp	131;"	prototype	file:
+rd_ptr	RealmSocket.cpp	231;"	prototype	file:
+reactor	RealmAcceptor.h	45;"	prototype
+read	AuthSocket.cpp	1063;"	local
+recv	RealmSocket.cpp	119;"	function	class:RealmSocket
+recv	RealmSocket.h	52;"	prototype	class:RealmSocket
+recv_len	RealmSocket.cpp	104;"	function	class:RealmSocket
+recv_len	RealmSocket.h	50;"	prototype	class:RealmSocket
+recv_skip	RealmSocket.cpp	129;"	function	class:RealmSocket
+recv_skip	RealmSocket.h	53;"	prototype	class:RealmSocket
+recv_soft	RealmSocket.cpp	109;"	function	class:RealmSocket
+recv_soft	RealmSocket.h	51;"	prototype	class:RealmSocket
+release	RealmSocket.cpp	191;"	prototype	file:
+release	RealmSocket.cpp	221;"	prototype	file:
+release	RealmSocket.cpp	226;"	prototype	file:
+release	RealmSocket.cpp	235;"	prototype	file:
+remaining	AuthSocket.cpp	315;"	local
+remaining	AuthSocket.cpp	721;"	local
+res2	AuthSocket.cpp	378;"	local
+result	AuthSocket.cpp	365;"	local
+result	AuthSocket.cpp	741;"	local
+result	AuthSocket.cpp	832;"	local
+ret	RealmSocket.cpp	121;"	local
+reverse	AuthSocket.cpp	273;"	prototype	class:std	file:
+run	AuthSocket.cpp	154;"	prototype	class:PatcherRunnable	file:
+run	AuthSocket.cpp	985;"	function	class:PatcherRunnable
+s	AuthSocket.h	60;"	member	class:AuthSocket
+sAuthLogonChallenge_C	AuthSocket.cpp	80;"	typedef	file:
+sAuthLogonProof_C	AuthSocket.cpp	90;"	typedef	file:
+sAuthLogonProof_S	AuthSocket.cpp	100;"	typedef	file:
+sAuthLogonProof_S_Old	AuthSocket.cpp	108;"	typedef	file:
+sAuthReconnectProof_C	AuthSocket.cpp	117;"	typedef	file:
+s_BYTE_SIZE	AuthSocket.h	31;"	member	class:AuthSocket
+s_hex	AuthSocket.cpp	284;"	local
+secLevel	AuthSocket.cpp	485;"	local
+secLevel	AuthSocket.cpp	763;"	local
+securityFlags	AuthSocket.cpp	464;"	local
+securityFlags	AuthSocket.cpp	89;"	member	struct:AUTH_LOGON_PROOF_C	file:
+send	RealmSocket.cpp	161;"	function	class:RealmSocket
+send	RealmSocket.h	55;"	prototype	class:RealmSocket
+session_	RealmSocket.h	76;"	member	class:RealmSocket
+set_session	RealmAcceptor.h	46;"	prototype
+set_session	RealmSocket.cpp	286;"	function	class:RealmSocket
+set_session	RealmSocket.h	70;"	prototype	class:RealmSocket
+sha	AuthSocket.cpp	275;"	local
+sha	AuthSocket.cpp	537;"	local
+sha	AuthSocket.cpp	794;"	local
+size	AuthSocket.cpp	67;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+socket	AuthSocket.h	58;"	function	class:AuthSocket
+socket_	AuthSocket.h	57;"	member	class:AuthSocket
+space	RealmSocket.cpp	265;"	local
+start	AuthSocket.cpp	938;"	local
+status	AuthSocket.cpp	138;"	member	struct:AuthHandler	file:
+stmt	AuthSocket.cpp	288;"	local
+stmt	AuthSocket.cpp	363;"	local
+stmt	AuthSocket.cpp	610;"	local
+stmt	AuthSocket.cpp	659;"	local
+stmt	AuthSocket.cpp	739;"	local
+stmt	AuthSocket.cpp	830;"	local
+t	AuthSocket.cpp	544;"	local
+t1	AuthSocket.cpp	545;"	local
+t3	AuthSocket.cpp	584;"	local
+t4	AuthSocket.cpp	590;"	local
+table	AuthSocket.cpp	182;"	variable
+timezone_bias	AuthSocket.cpp	76;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+u	AuthSocket.cpp	540;"	local
+u	AuthSocket.cpp	943;"	prototype	file:
+u	AuthSocket.cpp	975;"	prototype	file:
+uint16	AuthSocket.cpp	910;"	prototype	file:
+uint16	AuthSocket.cpp	916;"	prototype	file:
+uint32	AuthSocket.cpp	912;"	prototype	file:
+uint8	AuthSocket.cpp	454;"	prototype	file:
+uint8	AuthSocket.cpp	465;"	prototype	file:
+uint8	AuthSocket.cpp	770;"	prototype	file:
+uint8	AuthSocket.cpp	804;"	prototype	file:
+uint8	AuthSocket.cpp	915;"	prototype	file:
+unk1	AuthSocket.cpp	97;"	member	struct:AUTH_LOGON_PROOF_S	file:
+unk2	AuthSocket.cpp	107;"	member	struct:AUTH_LOGON_PROOF_S_OLD	file:
+unk2	AuthSocket.cpp	98;"	member	struct:AUTH_LOGON_PROOF_S	file:
+unk3	AuthSocket.cpp	450;"	local
+unk3	AuthSocket.cpp	99;"	member	struct:AUTH_LOGON_PROOF_S	file:
+v	AuthSocket.h	60;"	member	class:AuthSocket
+vK	AuthSocket.cpp	546;"	local
+v_hex	AuthSocket.cpp	284;"	local
+version1	AuthSocket.cpp	69;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+version2	AuthSocket.cpp	70;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+version3	AuthSocket.cpp	71;"	member	struct:AUTH_LOGON_CHALLENGE_C	file:
+wr_ptr	RealmSocket.cpp	169;"	prototype	file:
+x	AuthSocket.cpp	279;"	local
+~AuthSocket	AuthSocket.cpp	209;"	function	class:AuthSocket
+~AuthSocket	AuthSocket.h	34;"	prototype	class:AuthSocket
+~Patcher	AuthSocket.cpp	1095;"	function	class:Patcher
+~Patcher	AuthSocket.cpp	170;"	prototype	class:Patcher	file:
+~RealmAcceptor	RealmAcceptor.h	33;"	function	class:RealmAcceptor
+~RealmSocket	RealmSocket.cpp	43;"	function	class:RealmSocket
+~RealmSocket	RealmSocket.h	48;"	prototype	class:RealmSocket
+~Session	RealmSocket.cpp	33;"	function	class:RealmSocket::Session
+~Session	RealmSocket.h	40;"	prototype	class:RealmSocket::Session
