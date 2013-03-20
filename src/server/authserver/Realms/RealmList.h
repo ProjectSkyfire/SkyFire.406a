@@ -1,21 +1,21 @@
 /*
- * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2013 MaNGOS <http://getmangos.com/>
- *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the
- * Free Software Foundation; either version 3 of the License, or (at your
- * option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
- * more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+  *  Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
+  *  Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+  *  Copyright (C) 2005-2013 MaNGOS <http://getmangos.com/>
+  *
+  *  This program is free software; you can redistribute it and/or modify it
+  *  under the terms of the GNU General Public License as published by the
+  *  Free Software Foundation; either version 3 of the License, or (at your
+  *  option) any later version.
+  *
+  *  This program is distributed in the hope that it will be useful, but WITHOUT
+  *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  *  FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+  *  more details.
+  *
+  *  You should have received a copy of the GNU General Public License along
+  *  with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
 
 #ifndef _REALMLIST_H
 #define _REALMLIST_H
@@ -25,13 +25,26 @@
 #include <ace/Singleton.h>
 #include <ace/Null_Mutex.h>
 
+enum RealmFlags
+{
+   REALM_FLAG_NONE         = 0x00,
+   REALM_FLAG_INVALID      = 0x01,
+   REALM_FLAG_OFFLINE      = 0x02,
+   REALM_FLAG_SPECIFYBUILD = 0x04,                         // client will show realm version in RealmList screen in form "RealmName (major.minor.revision.build)"
+   REALM_FLAG_UNK1         = 0x08,
+   REALM_FLAG_UNK2         = 0x10,
+   REALM_FLAG_RECOMMENDED  = 0x20,                         // client checks pop == 600f
+   REALM_FLAG_NEW          = 0x40,                         // client checks pop == 200f
+   REALM_FLAG_FULL         = 0x80                          // client checks pop == 400f
+};
+
 // Storage object for a realm
 struct Realm
 {
     std::string address;
     std::string name;
     uint8 icon;
-    uint8 color;
+    RealmFlags flag;
     uint8 timezone;
     uint32 m_ID;
     AccountTypes allowedSecurityLevel;
@@ -60,7 +73,7 @@ public:
 
 private:
     void UpdateRealms(bool init = false);
-    void UpdateRealm(uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, uint8 color, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, uint32 build);
+    void UpdateRealm(uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, RealmFlags flag, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, uint32 build);
 
     RealmMap m_realms;                                  ///< Internal map of realms
     uint32   m_UpdateInterval;

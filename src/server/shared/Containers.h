@@ -19,6 +19,11 @@
 #ifndef SKYFIRE_CONTAINERS_H
 #define SKYFIRE_CONTAINERS_H
 
+#include <list>
+
+//! Because circular includes are bad
+extern uint32 urand(uint32 min, uint32 max);
+
 namespace SkyFire
 {
     namespace Containers
@@ -59,9 +64,9 @@ namespace SkyFire
             std::advance(it, urand(0, container.size() - 1));
             return *it;
         }
-    };
+    }
     //! namespace Containers
-};
+}
 //! namespace SkyFire
 
 #endif //! #ifdef SKYFIRE_CONTAINERS_H
