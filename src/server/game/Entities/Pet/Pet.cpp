@@ -123,7 +123,7 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         // any current or other non-stabled pet (for hunter "call pet")
         //                                        0   1      2(?)   3        4      5    6           7     8     9        10         11       12            13      14        15              16
         result = CharacterDatabase.PQuery("SELECT id, entry, owner, modelid, level, exp, Reactstate, slot, name, renamed, curhealth, curmana, curhappiness, abdata, savetime, CreatedBySpell, PetType "
-            "FROM character_pet WHERE owner = '%u' AND ((slot >= '%u' AND slot <= '%u') AND slot = '%u')",
+            "FROM character_pet WHERE owner = '%u' AND ((slot >= '%u' AND slot <= '%u') OR slot > '%u')",
             ownerid, PET_SLOT_HUNTER_FIRST, PET_SLOT_HUNTER_LAST, slotID);
 
     if (!result)
@@ -859,11 +859,11 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
         SetCreateHealth(stats->BaseHealth[cinfo->expansion]);
         SetCreateMana(stats->BaseMana);
 
-        SetCreateStat(STAT_STRENGTH, 22);
-        SetCreateStat(STAT_AGILITY, 22);
-        SetCreateStat(STAT_STAMINA, 25);
-        SetCreateStat(STAT_INTELLECT, 28);
-        SetCreateStat(STAT_SPIRIT, 27);
+        SetCreateStat(STAT_STRENGTH, 331);
+        SetCreateStat(STAT_AGILITY, 113);
+        SetCreateStat(STAT_STAMINA, 361);
+        SetCreateStat(STAT_INTELLECT, 65);
+        SetCreateStat(STAT_SPIRIT, 10);
     }
 
     SetBonusDamage(0);
@@ -905,6 +905,11 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
                     SetBonusDamage(int32(_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_FROST) * 0.33f));
                     break;
                 }
+                case 10467: // Mana Tide Totem
+                {
+                    SetCreateHealth(_owner->GetMaxHealth() * 0.1f);
+                    break;
+                }                
                 case 1964: // force of nature
                 {
                     if (!pInfo)
@@ -1025,6 +1030,26 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
                     SetBonusDamage(int32(_owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.5f));
                     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petLevel - (petLevel / 4)));
                     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petLevel + (petLevel / 4)));
+                    break;
+                }
+                case 30230: // Risen Ally
+                {
+                    if (!pInfo)
+                        SetCreateHealth(_owner->GetMaxHealth());
+                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(400) + (_owner->GetTotalAttackPowerValue(BASE_ATTACK)));
+                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(650) + (_owner->GetTotalAttackPowerValue(BASE_ATTACK)));
+                    break;
+                }                
+                case 50675: // Ebon Imp
+                {
+                    if (!pInfo)
+                    {
+                        SetCreateMana(28 + 10*petLevel);
+                        SetCreateHealth(28 + 30*petLevel);
+                    }
+                    int32 bonus_dmg = (int32(_owner->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_SHADOW)* 0.3f));
+                    SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float((petLevel * 4 - petLevel) + bonus_dmg));
+                    SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float((petLevel * 4 + petLevel) + bonus_dmg));
                     break;
                 }
             }

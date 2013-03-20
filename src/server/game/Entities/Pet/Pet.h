@@ -24,6 +24,12 @@
 #include "Unit.h"
 #include "TemporarySummon.h"
 
+enum PetBarSpells
+{
+    SPELL_CONTROL_PET       = 79682,
+    SPELL_CONTROL_DEMON     = 80388
+};
+
 enum PetType
 {
     SUMMON_PET              = 0,
