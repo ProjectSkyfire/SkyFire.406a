@@ -35,13 +35,13 @@ set(scripts_STAT_SRCS
   Commands/cs_character.cpp
   Commands/cs_list.cpp
   Commands/cs_lookup.cpp
-#  Commands/cs_pdump.cpp
-#  Commands/cs_guild.cpp
+  Commands/cs_pdump.cpp
+  Commands/cs_guild.cpp
   Commands/cs_cast.cpp
   Commands/cs_reset.cpp
   Commands/cs_instance.cpp
-#  Commands/cs_channel.cpp
-#  Commands/cs_pet.cpp
+  Commands/cs_channel.cpp
+  Commands/cs_pet.cpp
   Commands/cs_ticket.cpp
 #  Commands/cs_aura.cpp
 #  Commands/cs_unaura.cpp
