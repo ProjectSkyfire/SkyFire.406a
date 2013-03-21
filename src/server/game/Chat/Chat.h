@@ -154,9 +154,6 @@ class ChatHandler
         bool HandleGuildRankCommand(const char* args);
         bool HandleGuildDeleteCommand(const char* args);
 
-        bool HandlePDumpLoadCommand(const char *args);
-        bool HandlePDumpWriteCommand(const char *args);
-
         bool HandleSendItemsCommand(const char* args);
         bool HandleSendMailCommand(const char* args);
         bool HandleSendMessageCommand(const char * args);
