@@ -17,9 +17,9 @@
 */
 
 /* ScriptData
-Name: character_commandscript
+Name: pdump_commandscript
 %Complete: 100
-Comment: All character related commands
+Comment: All pdump related commands
 Category: commandscripts
 EndScriptData */
 
