@@ -46,18 +46,28 @@ add_definitions(-D_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES)
 message(STATUS "MSVC: Overloaded standard names")
 
 # Ignore warnings about older, less secure functions
-add_definitions( "/W3 /D_CRT_SECURE_NO_WARNINGS /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /wd4619 /wd4820 /wd4986 /wd4514 /wd4710 /wd4668 /wd4365 /wd4005 /wd4640 /wd4242 /wd4711 /wd4738 /wd4625 /wd4626 /wd4061 /wd4100 /wd4265")
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 message(STATUS "MSVC: Disabled NON-SECURE warnings")
 
 #Ignore warnings about POSIX deprecation
 add_definitions(-D_CRT_NONSTDC_NO_WARNINGS)
 message(STATUS "MSVC: Disabled POSIX warnings")
 
-# disable warnings in Visual Studio 9 and above if not wanted
+# disable warnings in Visual Studio 8 and above if not wanted
 if(NOT WITH_WARNINGS)
-    if(MSVC AND NOT CMAKE_GENERATOR MATCHES "Visual Studio 9")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /wd4619 /wd4820 /wd4986 /wd4514 /wd4710 /wd4668 /wd4365 /wd4005 /wd4640 /wd4242 /wd4711 /wd4738 /wd4625 /wd4626 /wd4061 /wd4100 /wd4265")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /wd4619 /wd4820 /wd4986 /wd4514 /wd4710 /wd4668 /wd4365 /wd4005 /wd4640 /wd4242 /wd4711 /wd4738 /wd4625 /wd4626 /wd4061 /wd4100 /wd4265")
-        message(STATUS "MSVC: Disabled generic compiletime warnings")
-    endif()
+  if(MSVC AND NOT CMAKE_GENERATOR MATCHES "Visual Studio 7")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /wd4619")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4996 /wd4355 /wd4244 /wd4985 /wd4267 /wd4619")
+    message(STATUS "MSVC: Disabled generic compiletime warnings")
+  endif()
 endif()
+
+# Specify the maximum PreCompiled Header memory allocation limit
+# Fixes a compiler-problem when using PCH - the /Ym flag is adjusted by the compiler in MSVC2012, hence we need to set an upper limit with /Zm to avoid disrupancies)
+# (And yes, this is a verified , unresolved bug with MSVC... *sigh*)
+string(REPLACE "/Zm1000" "/Zm500" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+
+# Enable and treat as errors the following warnings to easily detect virtual function signature failures:
+# 'function' : member function does not override any base class virtual member function
+# 'virtual_function' : no override available for virtual member function from base 'class'; function is hidden
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /we4263 /we4264")

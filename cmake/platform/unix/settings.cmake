@@ -11,7 +11,10 @@
 
 # Package overloads - Linux
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-  set(JEMALLOC_LIBRARY "jemalloc")
+  if (NOT NOJEM)
+    set(JEMALLOC_LIBRARY "jemalloc")
+    message(STATUS "UNIX: Using jemalloc")
+  endif()
 endif()
 
 # set default configuration directory
@@ -44,4 +47,6 @@ if(CMAKE_C_COMPILER MATCHES "gcc")
   include(${CMAKE_SOURCE_DIR}/cmake/compiler/gcc/settings.cmake)
 elseif(CMAKE_C_COMPILER MATCHES "icc")
   include(${CMAKE_SOURCE_DIR}/cmake/compiler/icc/settings.cmake)
+elseif(CMAKE_C_COMPILER MATCHES "clang")
+  include(${CMAKE_SOURCE_DIR}/cmake/compiler/clang/settings.cmake)
 endif()
