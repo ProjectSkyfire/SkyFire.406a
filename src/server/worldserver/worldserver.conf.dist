@@ -489,7 +489,7 @@ LogFileLevel = 0
 #             2097152 - Anything related to guilds
 #             4194304 - Anything related to transports
 #             8388608 - Battlefield Related
-#             76777216 - Opcode System
+#             16777216 - Opcode System
 #             33554432 - Anything related to Warden anti cheat
 #
 #                       Simply add the values together to create a bitmask.
