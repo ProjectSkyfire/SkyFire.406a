@@ -20882,9 +20882,8 @@ void Player::PetSpellInitialize()
 
     // action bar loop
     if (getLevel() >= sWorld->getIntConfig(CONFIG_START_PETBAR_LEVEL))
-    //if (getLevel() >= 10)
     {
-        if ((getClass() == CLASS_HUNTER && !HasSpell(93321)) || (getClass() == CLASS_WARLOCK && !HasSpell(93375)))
+        if (getClass() == CLASS_HUNTER && !HasSpell (SPELL_CONTROL_PET) || (getClass() == CLASS_WARLOCK && !HasSpell (SPELL_CONTROL_DEMON)))
             charmInfo->BuildActionBar(&data);
             
         size_t spellsCountPos = data.wpos();

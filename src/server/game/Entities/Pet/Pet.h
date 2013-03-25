@@ -26,8 +26,8 @@
 
 enum PetBarSpells
 {
-    SPELL_CONTROL_PET       = 79682,
-    SPELL_CONTROL_DEMON     = 80388
+    SPELL_CONTROL_PET       = 93321,
+    SPELL_CONTROL_DEMON     = 93375
 };
 
 enum PetType
