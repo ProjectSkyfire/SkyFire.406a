@@ -20881,56 +20881,60 @@ void Player::PetSpellInitialize()
     data << uint8(pet->GetReactState()) << uint8(charmInfo->GetCommandState()) << uint16(0);
 
     // action bar loop
-    if ((getClass() == CLASS_HUNTER && !HasSpell(79682)) || (getClass() == CLASS_WARLOCK && !HasSpell(80388)) || getClass() != CLASS_HUNTER || getClass() != CLASS_WARLOCK)
-        charmInfo->BuildActionBar(&data);
-
-    size_t spellsCountPos = data.wpos();
-
-    // spells count
-    uint8 addlist = 0;
-    data << uint8(addlist);                                 // placeholder
-
-    if (pet->IsPermanentPetFor(this))
+    if (getLevel() >= sWorld->getIntConfig(CONFIG_START_PETBAR_LEVEL))
+    //if (getLevel() >= 10)
     {
-        // spells loop
-        for (PetSpellMap::iterator itr = pet->_spells.begin(); itr != pet->_spells.end(); ++itr)
+        if ((getClass() == CLASS_HUNTER && !HasSpell(93321)) || (getClass() == CLASS_WARLOCK && !HasSpell(93375)))
+            charmInfo->BuildActionBar(&data);
+            
+        size_t spellsCountPos = data.wpos();
+
+        // spells count
+        uint8 addlist = 0;
+        data << uint8(addlist);                                 // placeholder
+
+        if (pet->IsPermanentPetFor(this))
         {
-            if (itr->second.state == PETSPELL_REMOVED)
-                continue;
+            // spells loop
+            for (PetSpellMap::iterator itr = pet->_spells.begin(); itr != pet->_spells.end(); ++itr)
+            {
+                if (itr->second.state == PETSPELL_REMOVED)
+                    continue;
 
-            data << uint32(MAKE_UNIT_ACTION_BUTTON(itr->first, itr->second.active));
-            ++addlist;
+                data << uint32(MAKE_UNIT_ACTION_BUTTON(itr->first, itr->second.active));
+                ++addlist;
+            }
         }
+
+        data.put<uint8>(spellsCountPos, addlist);
+
+        uint8 cooldownsCount = pet->_CreatureSpellCooldowns.size() + pet->_CreatureCategoryCooldowns.size();
+        data << uint8(cooldownsCount);
+
+        time_t curTime = time(NULL);
+
+        for (CreatureSpellCooldowns::const_iterator itr = pet->_CreatureSpellCooldowns.begin(); itr != pet->_CreatureSpellCooldowns.end(); ++itr)
+        {
+            time_t cooldown = (itr->second > curTime) ? (itr->second - curTime) * IN_MILLISECONDS : 0;
+
+            data << uint32(itr->first);                         // spellid
+            data << uint16(0);                                  // spell category?
+            data << uint32(cooldown);                           // cooldown
+            data << uint32(0);                                  // category cooldown
+        }
+
+        for (CreatureSpellCooldowns::const_iterator itr = pet->_CreatureCategoryCooldowns.begin(); itr != pet->_CreatureCategoryCooldowns.end(); ++itr)
+        {
+            time_t cooldown = (itr->second > curTime) ? (itr->second - curTime) * IN_MILLISECONDS : 0;
+
+            data << uint32(itr->first);                         // spellid
+            data << uint16(0);                                  // spell category?
+            data << uint32(0);                                  // cooldown
+            data << uint32(cooldown);                           // category cooldown
+        }
+
+        GetSession()->SendPacket(&data);
     }
-
-    data.put<uint8>(spellsCountPos, addlist);
-
-    uint8 cooldownsCount = pet->_CreatureSpellCooldowns.size() + pet->_CreatureCategoryCooldowns.size();
-    data << uint8(cooldownsCount);
-
-    time_t curTime = time(NULL);
-
-    for (CreatureSpellCooldowns::const_iterator itr = pet->_CreatureSpellCooldowns.begin(); itr != pet->_CreatureSpellCooldowns.end(); ++itr)
-    {
-        time_t cooldown = (itr->second > curTime) ? (itr->second - curTime) * IN_MILLISECONDS : 0;
-
-        data << uint32(itr->first);                         // spellid
-        data << uint16(0);                                  // spell category?
-        data << uint32(cooldown);                           // cooldown
-        data << uint32(0);                                  // category cooldown
-    }
-
-    for (CreatureSpellCooldowns::const_iterator itr = pet->_CreatureCategoryCooldowns.begin(); itr != pet->_CreatureCategoryCooldowns.end(); ++itr)
-    {
-        time_t cooldown = (itr->second > curTime) ? (itr->second - curTime) * IN_MILLISECONDS : 0;
-
-        data << uint32(itr->first);                         // spellid
-        data << uint16(0);                                  // spell category?
-        data << uint32(0);                                  // cooldown
-        data << uint32(cooldown);                           // category cooldown
-    }
-
-    GetSession()->SendPacket(&data);
 }
 
 void Player::PossessSpellInitialize()
