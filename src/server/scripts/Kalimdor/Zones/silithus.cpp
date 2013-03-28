@@ -30,15 +30,18 @@ npcs_rutgar_and_frankal
 quest_a_pawn_on_the_eternal_pawn
 EndContentData */
 
-#include "ScriptPCH.h"
+#include "ScriptMgr.h"
+#include "ScriptedCreature.h"
+#include "ScriptedGossip.h"
 #include "Group.h"
+#include "Player.h"
 
-/*###
+/* ###
 ## npc_highlord_demitrian
-###*/
+### */
 
 #define GOSSIP_DEMITRIAN1 "What do you know of it?"
-#define GOSSIP_DEMITRIAN2 "I am listening , Demitrian."
+#define GOSSIP_DEMITRIAN2 "I am listening, Demitrian."
 #define GOSSIP_DEMITRIAN3 "Continue, please."
 #define GOSSIP_DEMITRIAN4 "A battle?"
 #define GOSSIP_DEMITRIAN5 "<Nod>"
@@ -50,7 +53,7 @@ class npc_highlord_demitrian : public CreatureScript
 public:
     npc_highlord_demitrian() : CreatureScript("npc_highlord_demitrian") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (action)
@@ -105,11 +108,11 @@ public:
     }
 };
 
-/*###
+/* ###
 ## npcs_rutgar_and_frankal
-###*/
+### */
 
-//gossip item text best guess
+// gossip item text best guess
 #define GOSSIP_ITEM1 "I seek information about Natalia"
 
 #define GOSSIP_ITEM2 "That sounds dangerous!"
@@ -125,16 +128,18 @@ public:
 #define GOSSIP_ITEM14 "I should ask the monkey about this"
 #define GOSSIP_ITEM15 "Then what..."
 
-//trigger creatures to kill
-#define TRIGGER_RUTGAR 15222
-#define TRIGGER_FRANKAL 15221
+enum RutgarAndFrankal // trigger creatures to kill
+{
+    TRIGGER_FRANKAL     = 15221,
+    TRIGGER_RUTGAR      = 15222
+};
 
 class npcs_rutgar_and_frankal : public CreatureScript
 {
 public:
     npcs_rutgar_and_frankal() : CreatureScript("npcs_rutgar_and_frankal") { }
 
-    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*Sender*/, uint32 action)
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
     {
         player->PlayerTalkClass->ClearMenus();
         switch (action)
@@ -165,7 +170,7 @@ public:
                 break;
             case GOSSIP_ACTION_INFO_DEF + 6:
                 player->SEND_GOSSIP_MENU(7761, creature->GetGUID());
-                                                                //'kill' our trigger to update quest status
+                                                                // 'kill' our trigger to update quest status
                 player->KilledMonsterCredit(TRIGGER_RUTGAR, 0);
                 break;
 
@@ -191,7 +196,7 @@ public:
                 break;
             case GOSSIP_ACTION_INFO_DEF + 14:
                 player->SEND_GOSSIP_MENU(7767, creature->GetGUID());
-                                                                //'kill' our trigger to update quest status
+                                                                // 'kill' our trigger to update quest status
                 player->KilledMonsterCredit(TRIGGER_FRANKAL, 0);
                 break;
         }
@@ -219,65 +224,66 @@ public:
     }
 };
 
-/*####
+/* ####
 # quest_a_pawn_on_the_eternal_board (Defines)
-####*/
-enum eEternalBoard
+#### */
+
+enum EternalBoard
 {
-    QUEST_A_PAWN_ON_THE_ETERNAL_BOARD = 8519,
+    QUEST_A_PAWN_ON_THE_ETERNAL_BOARD   = 8519,
 
-    FACTION_HOSTILE = 14,
-    FACTION_FRIENDLY = 35,
+    FACTION_HOSTILE                     = 14,
+    FACTION_FRIENDLY                    = 35,
 
-    C_ANACHRONOS = 15381,
-    C_FANDRAL_STAGHELM = 15382,
-    C_ARYGOS = 15380,
-    C_MERITHRA = 15378,
-    C_CAELESTRASZ = 15379,
+    C_ANACHRONOS                        = 15381,
+    C_FANDRAL_STAGHELM                  = 15382,
+    C_ARYGOS                            = 15380,
+    C_MERITHRA                          = 15378,
+    C_CAELESTRASZ                       = 15379,
 
-    ANACHRONOS_SAY_1 = -1350000,
-    ANACHRONOS_SAY_2 = -1350001,
-    ANACHRONOS_SAY_3 = -1350002,
-    ANACHRONOS_SAY_4 = -1350003,
-    ANACHRONOS_SAY_5 = -1350004,
-    ANACHRONOS_SAY_6 = -1350005,
-    ANACHRONOS_SAY_7 = -1350006,
-    ANACHRONOS_SAY_8 = -1350007,
-    ANACHRONOS_SAY_9 = -1350008,
-    ANACHRONOS_SAY_10 = -1350009,
-    ANACHRONOS_EMOTE_1 = -1350010,
-    ANACHRONOS_EMOTE_2 = -1350011,
-    ANACHRONOS_EMOTE_3 = -1350012,
+    ANACHRONOS_SAY_1					= -1350000,
+    ANACHRONOS_SAY_2					= -1350001,
+    ANACHRONOS_SAY_3					= -1350002,
+    ANACHRONOS_SAY_4                    = -1350003,
+    ANACHRONOS_SAY_5                    = -1350004,
+    ANACHRONOS_SAY_6                    = -1350005,
+    ANACHRONOS_SAY_7                    = -1350006,
+    ANACHRONOS_SAY_8                    = -1350007,
+    ANACHRONOS_SAY_9                    = -1350008,
+    ANACHRONOS_SAY_10                   = -1350009,
+    ANACHRONOS_EMOTE_1                  = -1350010,
+    ANACHRONOS_EMOTE_2                  = -1350011,
+    ANACHRONOS_EMOTE_3                  = -1350012,
 
-    FANDRAL_SAY_1 = -1350013,
-    FANDRAL_SAY_2 = -1350014,
-    FANDRAL_SAY_3 = -1350015,
-    FANDRAL_SAY_4 = -1350016,
-    FANDRAL_SAY_5 = -1350017,
-    FANDRAL_SAY_6 = -1350018,
-    FANDRAL_EMOTE_1 = -1350019,
-    FANDRAL_EMOTE_2 = -1350020,
+    FANDRAL_SAY_1                       = -1350013,
+    FANDRAL_SAY_2                       = -1350014,
+    FANDRAL_SAY_3                       = -1350015,
+    FANDRAL_SAY_4                       = -1350016,
+    FANDRAL_SAY_5                       = -1350017,
+    FANDRAL_SAY_6                       = -1350018,
+    FANDRAL_EMOTE_1                     = -1350019,
+    FANDRAL_EMOTE_2                     = -1350020,
 
-    CAELESTRASZ_SAY_1 = -1350021,
-    CAELESTRASZ_SAY_2 = -1350022,
-    CAELESTRASZ_YELL_1 = -1350023,
+    CAELESTRASZ_SAY_1                   = -1350021,
+    CAELESTRASZ_SAY_2                   = -1350022,
+    CAELESTRASZ_YELL_1                  = -1350023,
 
-    ARYGOS_SAY_1 = -1350024,
-    ARYGOS_YELL_1 = -1350025,
-    ARYGOS_EMOTE_1 = -1350026,
+    ARYGOS_SAY_1                        = -1350024,
+    ARYGOS_YELL_1                       = -1350025,
+    ARYGOS_EMOTE_1                      = -1350026,
 
-    MERITHRA_SAY_1 = -1350027,
-    MERITHRA_SAY_2 = -1350028,
-    MERITHRA_YELL_1 = -1350029,
-    MERITHRA_EMOTE_1 = -1350030,
+    MERITHRA_SAY_1                      = -1350027,
+    MERITHRA_SAY_2                      = -1350028,
+    MERITHRA_YELL_1                     = -1350029,
+    MERITHRA_EMOTE_1                    = -1350030,
 
-    GO_GATE_OF_AHN_QIRAJ = 176146,
-    GO_GLYPH_OF_AHN_QIRAJ = 176148,
-    GO_ROOTS_OF_AHN_QIRAJ = 176147
+    GO_GATE_OF_AHN_QIRAJ                = 176146,
+    GO_GLYPH_OF_AHN_QIRAJ               = 176148,
+    GO_ROOTS_OF_AHN_QIRAJ               = 176147
 };
-/*#####
+/* #####
 # Quest: A Pawn on the Eternal Board
-#####*/
+##### */
 
 /* ContentData
 A Pawn on the Eternal Board - creatures, gameobjects and defines
@@ -289,9 +295,8 @@ TO DO: get correct spell IDs and timings for spells cast upon dragon transformat
 TO DO: Dragons should use the HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF) after transformation, but for some unknown reason it doesnt work.
 EndContentData */
 
-#define QUEST_A_PAWN_ON_THE_ETERNAL_BOARD 8519
-#define EVENT_AREA_RADIUS 65 //65yds
-#define EVENT_COOLDOWN 500000 //in ms. appear after event completed or failed (should be = Adds despawn time)
+#define EVENT_AREA_RADIUS 65  // 65yds
+#define EVENT_COOLDOWN 500000 // in ms. appear after event completed or failed (should be = Adds despawn time)
 
 struct QuestCinematic
 {
@@ -311,50 +316,50 @@ static QuestCinematic EventAnim[]=
     {MERITHRA_SAY_2, 3, 6000},
     {0, 3, 2000},
     {MERITHRA_YELL_1, 3, 2500},
-    {0, 3, 3000}, //Morph
-    {0, 3, 4000}, //EmoteLiftoff
-    {0, 3, 4000}, // spell
-    {0, 3, 1250}, //fly
-    {0, 3, 250}, //remove flags
+    {0, 3, 3000},                          // Morph
+    {0, 3, 4000},                          // EmoteLiftoff
+    {0, 3, 4000},                          // spell
+    {0, 3, 1250},                          // fly
+    {0, 3, 250},                           // remove flags
     {ARYGOS_SAY_1, 2, 3000},
     {0, 3, 2000},
     {ARYGOS_YELL_1, 2, 3000},
-    {0, 3, 3000}, //Morph
-    {0, 3, 4000}, //EmoteLiftoff
-    {0, 3, 4000}, // spell
-    {0, 3, 1000}, //fly
-    {0, 3, 1000}, //remove flags
+    {0, 3, 3000},                          // Morph
+    {0, 3, 4000},                          // EmoteLiftoff
+    {0, 3, 4000},                          // spell
+    {0, 3, 1000},                          // fly
+    {0, 3, 1000},                          // remove flags
     {CAELESTRASZ_SAY_2, 4, 5000},
     {0, 3, 3000},
     {CAELESTRASZ_YELL_1, 4, 3000},
-    {0, 3, 3000}, //Morph
-    {0, 3, 4000}, //EmoteLiftoff
-    {0, 3, 2500}, // spell
+    {0, 3, 3000},                          // Morph
+    {0, 3, 4000},                          // EmoteLiftoff
+    {0, 3, 2500},                          // spell
     {ANACHRONOS_SAY_2, 0, 2000},
-    {0, 3, 250}, //fly
-    {0, 3, 25}, //remove flags
+    {0, 3, 250},                           // fly
+    {0, 3, 25},                            // remove flags
     {FANDRAL_SAY_2, 1, 3000},
-    {ANACHRONOS_SAY_3, 0, 10000}, //Both run through the armies
-    {0, 3, 2000}, // Sands will stop
-    {0, 3, 8000}, // Summon Gate
+    {ANACHRONOS_SAY_3, 0, 10000},          // Both run through the armies
+    {0, 3, 2000},                          // Sands will stop
+    {0, 3, 8000},                          // Summon Gate
     {ANACHRONOS_SAY_4, 0, 4000},
-    {0, 0, 2000}, //spell 1-> Arcane cosmetic (Mobs freeze)
-    {0, 0, 5000}, //Spell 2-> Arcane long cosmetic (barrier appears) (Barrier -> Glyphs)
-    {0, 0, 7000}, //BarrieR
-    {0, 0, 4000}, //Glyphs
+    {0, 0, 2000},                          // spell 1-> Arcane cosmetic (Mobs freeze)
+    {0, 0, 5000},                          // Spell 2-> Arcane long cosmetic (barrier appears) (Barrier -> Glyphs)
+    {0, 0, 7000},                          // BarrieR
+    {0, 0, 4000},                          // Glyphs
     {ANACHRONOS_SAY_5, 0, 2000},
-    {0, 0, 4000}, // Roots
-    {FANDRAL_SAY_3, 1, 3000}, //Root Text
-    {FANDRAL_EMOTE_1, 1, 3000}, //falls knee
+    {0, 0, 4000},                          // Roots
+    {FANDRAL_SAY_3, 1, 3000},              // Root Text
+    {FANDRAL_EMOTE_1, 1, 3000},            // falls knee
     {ANACHRONOS_SAY_6, 0, 3000},
     {ANACHRONOS_SAY_7, 0, 3000},
     {ANACHRONOS_SAY_8, 0, 8000},
-    {ANACHRONOS_EMOTE_1, 0, 1000}, //Give Scepter
+    {ANACHRONOS_EMOTE_1, 0, 1000},         // Give Scepter
     {FANDRAL_SAY_4, 1, 3000},
-    {FANDRAL_SAY_5, 1, 3000}, //->Equip hammer~Scepter, throw it at door
-    {FANDRAL_EMOTE_2, 1, 3000}, //Throw hammer at door.
+    {FANDRAL_SAY_5, 1, 3000},              // ->Equip hammer~Scepter, throw it at door
+    {FANDRAL_EMOTE_2, 1, 3000},            // Throw hammer at door.
     {ANACHRONOS_SAY_9, 0, 3000},
-    {FANDRAL_SAY_6, 1, 3000}, //fandral goes away
+    {FANDRAL_SAY_6, 1, 3000},              // fandral goes away
     {ANACHRONOS_EMOTE_2, 0, 3000},
     {ANACHRONOS_EMOTE_3, 0, 3000},
     {0, 0, 2000},
@@ -372,79 +377,79 @@ static QuestCinematic EventAnim[]=
     {0, 0, 0}
 };
 
-//Cordinates for Spawns
-static const Position SpawnLocation[]=
+// Coordinates for Spawns
+Position const SpawnLocation[] =
 {
-    {-8085.0f, 1528.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8080.0f, 1526.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8085.0f, 1524.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8080.0f, 1522.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8085.0f, 1520.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
+    {-8085.0f, 1528.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8080.0f, 1526.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8085.0f, 1524.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8080.0f, 1522.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8085.0f, 1520.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
 
-    {-8085.0f, 1524.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8080.0f, 1522.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8085.0f, 1520.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8080.0f, 1518.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8085.0f, 1516.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
+    {-8085.0f, 1524.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8080.0f, 1522.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8085.0f, 1520.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8080.0f, 1518.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8085.0f, 1516.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
 
-    {-8085.0f, 1518.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8080.0f, 1516.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8080.0f, 1520.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8080.0f, 1424.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8085.0f, 1422.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
+    {-8085.0f, 1518.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8080.0f, 1516.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8080.0f, 1520.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8080.0f, 1424.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8085.0f, 1422.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
     // 2 waves of warriors
-    {-8082.0f, 1528.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8078.0f, 1525.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8082.0f, 1524.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8078.0f, 1526.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8082.0f, 1527.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
+    {-8082.0f, 1528.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8078.0f, 1525.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8082.0f, 1524.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8078.0f, 1526.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8082.0f, 1527.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
 
-    {-8082.0f, 1524.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8078.0f, 1522.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8082.0f, 1520.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8078.0f, 1518.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8082.0f, 1516.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
+    {-8082.0f, 1524.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8078.0f, 1522.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8082.0f, 1520.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8078.0f, 1518.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8082.0f, 1516.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
 
-    {-8082.0f, 1523.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8078.0f, 1521.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8082.0f, 1528.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8078.0f, 1519.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8082.0f, 1526.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
+    {-8082.0f, 1523.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8078.0f, 1521.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8082.0f, 1528.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8078.0f, 1519.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8082.0f, 1526.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
 
-    {-8082.0f, 1524.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8078.0f, 1522.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8082.0f, 1520.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8078.0f, 1518.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
-    {-8082.0f, 1516.0f, 2.61f, 3.141592f}, //Kaldorei Infantry
+    {-8082.0f, 1524.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8078.0f, 1522.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8082.0f, 1520.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8078.0f, 1518.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
+    {-8082.0f, 1516.0f, 2.61f, 3.141592f}, // Kaldorei Infantry
 
-    {-8088.0f, 1510.0f, 2.61f, 0.0f}, //Anubisath Conqueror
-    {-8084.0f, 1520.0f, 2.61f, 0.0f}, //Anubisath Conqueror
-    {-8088.0f, 1530.0f, 2.61f, 0.0f}, //Anubisath Conqueror
+    {-8088.0f, 1510.0f, 2.61f, 0.0f},      // Anubisath Conqueror
+    {-8084.0f, 1520.0f, 2.61f, 0.0f},      // Anubisath Conqueror
+    {-8088.0f, 1530.0f, 2.61f, 0.0f},      // Anubisath Conqueror
 
-    {-8080.0f, 1513.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8082.0f, 1523.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8085.0f, 1518.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8082.0f, 1516.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8085.0f, 1520.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8080.0f, 1528.0f, 2.61f, 0.0f}, //Qiraj Wasp
+    {-8080.0f, 1513.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8082.0f, 1523.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8085.0f, 1518.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8082.0f, 1516.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8085.0f, 1520.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8080.0f, 1528.0f, 2.61f, 0.0f},      // Qiraj Wasp
 
-    {-8082.0f, 1513.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8079.0f, 1523.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8080.0f, 1531.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8079.0f, 1516.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8082.0f, 1520.0f, 2.61f, 0.0f}, //Qiraj Wasp
-    {-8080.0f, 1518.0f, 2.61f, 0.0f}, //Qiraj Wasp
+    {-8082.0f, 1513.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8079.0f, 1523.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8080.0f, 1531.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8079.0f, 1516.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8082.0f, 1520.0f, 2.61f, 0.0f},      // Qiraj Wasp
+    {-8080.0f, 1518.0f, 2.61f, 0.0f},      // Qiraj Wasp
 
-    {-8081.0f, 1514.0f, 2.61f, 0.0f}, //Qiraj Tank
-    {-8081.0f, 1520.0f, 2.61f, 0.0f}, //Qiraj Tank
-    {-8081.0f, 1526.0f, 2.61f, 0.0f}, //Qiraj Tank
-    {-8081.0f, 1512.0f, 2.61f, 0.0f}, //Qiraj Tank
-    {-8082.0f, 1520.0f, 2.61f, 0.0f}, //Qiraj Tank
-    {-8081.0f, 1528.0f, 2.61f, 0.0f}, //Qiraj Tank
+    {-8081.0f, 1514.0f, 2.61f, 0.0f},      // Qiraj Tank
+    {-8081.0f, 1520.0f, 2.61f, 0.0f},      // Qiraj Tank
+    {-8081.0f, 1526.0f, 2.61f, 0.0f},      // Qiraj Tank
+    {-8081.0f, 1512.0f, 2.61f, 0.0f},      // Qiraj Tank
+    {-8082.0f, 1520.0f, 2.61f, 0.0f},      // Qiraj Tank
+    {-8081.0f, 1528.0f, 2.61f, 0.0f},      // Qiraj Tank
 
-    {-8082.0f, 1513.0f, 2.61f, 3.141592f}, //Anubisath Conqueror
-    {-8082.0f, 1520.0f, 2.61f, 3.141592f}, //Anubisath Conqueror
-    {-8082.0f, 1527.0f, 2.61f, 3.141592f}, //Anubisath Conqueror
+    {-8082.0f, 1513.0f, 2.61f, 3.141592f}, // Anubisath Conqueror
+    {-8082.0f, 1520.0f, 2.61f, 3.141592f}, // Anubisath Conqueror
+    {-8082.0f, 1527.0f, 2.61f, 3.141592f}, // Anubisath Conqueror
 };
 
 struct WaveData
@@ -454,12 +459,12 @@ struct WaveData
     int32 WaveTextId;
 };
 
-static WaveData WavesInfo[] =
+static WaveData WavesInfo[5] =
 {
-    {30,  0, 15423, 0, 0, 24000, 0},   // Kaldorei Soldier
-    { 3, 35, 15424, 0, 0, 24000, 0},   // Anubisath Conqueror
-    {12, 38, 15414, 0, 0, 24000, 0},   // Qiraji Wasps
-    { 6, 50, 15422, 0, 0, 24000, 0},   // Qiraji Tanks
+    {30,  0, 15423, 0, 0, 24000, 0},    // Kaldorei Soldier
+    { 3, 35, 15424, 0, 0, 24000, 0},    // Anubisath Conqueror
+    {12, 38, 15414, 0, 0, 24000, 0},    // Qiraji Wasps
+    { 6, 50, 15422, 0, 0, 24000, 0},    // Qiraji Tanks
     {15, 15, 15423, 0, 0, 24000, 0}     // Kaldorei Soldier
 };
 
@@ -468,16 +473,18 @@ struct SpawnSpells
     uint32 Timer1, Timer2, SpellId;
 };
 
-static SpawnSpells SpawnCast[]=//
+static SpawnSpells SpawnCast[4] =
 {
-    {100000, 2000, 33652},  // Stop Time
-    {38500, 300000, 28528}, // Poison Cloud
-    {58000, 300000, 35871}, // Frost Debuff (need correct spell)
-    {80950, 300000, 42075}, // Fire Explosion (need correct spell however this one looks cool)
+    {100000, 2000,  33652},   // Stop Time
+    {38500, 300000, 28528},   // Poison Cloud
+    {58000, 300000, 35871},   // Frost Debuff (need correct spell)
+    {80950, 300000, 42075},   // Fire Explosion (need correct spell however this one looks cool)
 };
-/*#####
+
+/* #####
 # npc_anachronos_the_ancient
-######*/
+###### */
+
 class npc_anachronos_the_ancient : public CreatureScript
 {
 public:
@@ -505,15 +512,15 @@ public:
 
         void Reset()
         {
-            AnimationTimer = 1500;
-            AnimationCount = 0;
-            AnachronosQuestTriggerGUID = 0;
-            MerithraGUID = 0;
-            ArygosGUID = 0;
-            CaelestraszGUID = 0;
-            FandralGUID = 0;
-            PlayerGUID = 0;
-            eventEnd = false;
+            AnimationTimer				= 1500;
+            AnimationCount              = 0;
+            AnachronosQuestTriggerGUID  = 0;
+            MerithraGUID                = 0;
+            ArygosGUID                  = 0;
+            CaelestraszGUID             = 0;
+            FandralGUID                 = 0;
+            PlayerGUID                  = 0;
+            eventEnd                    = false;
 
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         }
@@ -524,21 +531,19 @@ public:
             if (!player)
                 return;
 
-            Unit* Fandral = player->FindNearestCreature(C_FANDRAL_STAGHELM, 100.0f, me);
-            Unit* Arygos = player->FindNearestCreature(C_ARYGOS, 100.0f, me);
-            Unit* Caelestrasz = player->FindNearestCreature(C_CAELESTRASZ, 100.0f, me);
-            Unit* Merithra = player->FindNearestCreature(C_MERITHRA, 100.0f, me);
+            Creature* Fandral		= player->FindNearestCreature(C_FANDRAL_STAGHELM, 100.0f, me);
+            Creature* Arygos        = player->FindNearestCreature(C_ARYGOS,			  100.0f, me);
+            Creature* Caelestrasz   = player->FindNearestCreature(C_CAELESTRASZ,      100.0f, me);
+            Creature* Merithra      = player->FindNearestCreature(C_MERITHRA,         100.0f, me);
 
             if (!Fandral || !Arygos || !Caelestrasz || !Merithra)
                 return;
 
-            Unit* mob = NULL;
             AnimationTimer = EventAnim[AnimationCount].Timer;
             if (eventEnd == false)
             {
                 switch (AnimationCount)
                 {
-                    case 0:
                         DoScriptText(ANACHRONOS_SAY_1, me , Fandral);
                         break;
                     case 1:
@@ -651,13 +656,13 @@ public:
                         Caelestrasz->GetMotionMaster()->MoveCharge(-8034.535f, 1535.14f, 2.61f, 42);
                         Fandral->GetMotionMaster()->MoveCharge(-8108, 1529, 2.77f, 8);
                         me->GetMotionMaster()->MoveCharge(-8113, 1525, 2.77f, 8);
-                        break;//both run to the gate
+                        break;// both run to the gate
                     case 33:
                         DoScriptText(ANACHRONOS_SAY_4, me);
                         Caelestrasz->GetMotionMaster()->MoveCharge(-8050, 1473, 65, 15);
-                        break; //Text: sands will stop
+                        break; // Text: sands will stop
                     case 34:
-                        DoCast(player, 23017, true);//Arcane Channeling
+                        DoCast(player, 23017, true);// Arcane Channeling
                         break;
                     case 35:
                         me->CastSpell(-8088, 1520.43f, 2.67f, 25158, true);
@@ -715,6 +720,7 @@ public:
                     case 51:
                     {
                         uint32 entries[4] = { 15423, 15424, 15414, 15422 };
+                        Unit* mob = NULL;
                         for (uint8 i = 0; i < 4; ++i)
                         {
                             mob = player->FindNearestCreature(entries[i], 50, me);
@@ -801,9 +807,9 @@ public:
     };
 };
 
-/*######
-# mob_qiraj_war_spawn
-######*/
+/* ######
+## mob_qiraj_war_spawn
+###### */
 
 class mob_qiraj_war_spawn : public CreatureScript
 {
@@ -827,10 +833,10 @@ public:
 
         void Reset()
         {
-            MobGUID = 0;
-            PlayerGUID = 0;
-            Timers = false;
-            hasTarget = false;
+            MobGUID			= 0;
+            PlayerGUID      = 0;
+            Timers          = false;
+            hasTarget       = false;
         }
 
         void EnterCombat(Unit* /*who*/) {}
@@ -838,12 +844,9 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            Unit* target = NULL;
-            //Player* player = me->GetPlayer(PlayerGUID);
-
             if (!Timers)
             {
-                if (me->GetEntry() == 15424 || me->GetEntry() == 15422 || me->GetEntry() == 15414) //all but Kaldorei Soldiers
+                if (me->GetEntry() == 15424 || me->GetEntry() == 15422 || me->GetEntry() == 15414) // all but Kaldorei Soldiers
                 {
                     SpellTimer1 = SpawnCast[1].Timer1;
                     SpellTimer2 = SpawnCast[2].Timer1;
@@ -884,6 +887,7 @@ public:
             }
             if (!hasTarget)
             {
+                Unit* target = NULL;
                 if (me->GetEntry() == 15424 || me->GetEntry() == 15422 || me->GetEntry() == 15414)
                     target = me->FindNearestCreature(15423, 20, true);
                 if (me->GetEntry() == 15423)
@@ -915,9 +919,9 @@ public:
     };
 };
 
-/*#####
-# npc_anachronos_quest_trigger
-#####*/
+/* #####
+## npc_anachronos_quest_trigger
+##### */
 
 class npc_anachronos_quest_trigger : public CreatureScript
 {
@@ -947,32 +951,31 @@ public:
 
         void Reset()
         {
-            PlayerGUID = 0;
+            PlayerGUID			= 0;
 
-            WaveTimer = 2000;
-            AnnounceTimer = 1000;
-            LiveCount = 0;
-            WaveCount = 0;
+            WaveTimer           = 2000;
+            AnnounceTimer       = 1000;
+            LiveCount           = 0;
+            WaveCount           = 0;
 
-            EventStarted = false;
-            Announced = false;
-            Failed = false;
+            EventStarted        = false;
+            Announced           = false;
+            Failed              = false;
 
             me->SetVisible(false);
         }
 
         void SummonNextWave()
         {
-            //uint8 count = WavesInfo[WaveCount].SpawnCount;
             uint8 locIndex = WavesInfo[WaveCount].UsedSpawnPoint;
-            //uint8 KaldoreiSoldierCount = 0;
-            //uint8 AnubisathConquerorCount = 0;
-            //uint8 QirajiWaspCount = 0;
-            for (uint8 i = 0; i < 67; ++i)
+            uint8 count = locIndex + WavesInfo[WaveCount].SpawnCount;
+
+            for (uint8 i = locIndex; i <= count; ++i)
             {
-                if (Creature* spawn = me->SummonCreature(WavesInfo[WaveCount].CreatureId, SpawnLocation[locIndex + i], TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, WavesInfo[WaveCount].DespTimer))
+                uint32 desptimer = WavesInfo[WaveCount].DespTimer;
+
+                if (Creature* spawn = me->SummonCreature(WavesInfo[WaveCount].CreatureId, SpawnLocation[i], TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, desptimer))
                 {
-                    spawn->LoadCreaturesAddon();
                     if (spawn->GetEntry() == 15423)
                         spawn->SetUInt32Value(UNIT_FIELD_DISPLAYID, 15427+rand()%4);
                     if (i >= 30) WaveCount = 1;
@@ -980,14 +983,17 @@ public:
                     if (i >= 45) WaveCount = 3;
                     if (i >= 51) WaveCount = 4;
 
-                    if (WaveCount < 5) //1-4 Wave
+                    if (WaveCount < 5) // 1-4 Wave
                     {
-                        mob_qiraj_war_spawn::mob_qiraj_war_spawnAI* spawnAI = CAST_AI(mob_qiraj_war_spawn::mob_qiraj_war_spawnAI, spawn->AI());
-                        spawnAI->MobGUID = me->GetGUID();
-                        spawnAI->PlayerGUID = PlayerGUID;
+                        if (mob_qiraj_war_spawn::mob_qiraj_war_spawnAI* spawnAI = CAST_AI(mob_qiraj_war_spawn::mob_qiraj_war_spawnAI, spawn->AI()))
+                        {
+                            spawnAI->MobGUID = me->GetGUID();
+                            spawnAI->PlayerGUID = PlayerGUID;
+                        }
                     }
                 }
             }
+
             WaveTimer = WavesInfo[WaveCount].SpawnTimer;
             AnnounceTimer = WavesInfo[WaveCount].YellTimer;
         }
@@ -1001,32 +1007,32 @@ public:
 
             if (Group* EventGroup = player->GetGroup())
             {
-                Player* GroupMember;
+                Player* groupMember;
 
-                uint8 GroupMemberCount = 0;
-                uint8 DeadMemberCount = 0;
-                uint8 FailedMemberCount = 0;
+                uint8 GroupMemberCount		= 0;
+                uint8 DeadMemberCount       = 0;
+                uint8 FailedMemberCount		= 0;
 
-                const Group::MemberSlotList members = EventGroup->GetMemberSlots();
+                Group::MemberSlotList const members = EventGroup->GetMemberSlots();
 
                 for (Group::member_citerator itr = members.begin(); itr!= members.end(); ++itr)
                 {
-                    GroupMember = (Unit::GetPlayer(*me, itr->guid));
-                    if (!GroupMember)
+                    groupMember = (Unit::GetPlayer(*me, itr->guid));
+                    if (!groupMember)
                         continue;
-                    if (!GroupMember->IsWithinDistInMap(me, EVENT_AREA_RADIUS) && GroupMember->GetQuestStatus(QUEST_A_PAWN_ON_THE_ETERNAL_BOARD) == QUEST_STATUS_INCOMPLETE)
+                    if (!groupMember->IsWithinDistInMap(me, EVENT_AREA_RADIUS) && groupMember->GetQuestStatus(QUEST_A_PAWN_ON_THE_ETERNAL_BOARD) == QUEST_STATUS_INCOMPLETE)
                     {
-                         GroupMember->FailQuest(QUEST_A_PAWN_ON_THE_ETERNAL_BOARD);
+                         groupMember->FailQuest(QUEST_A_PAWN_ON_THE_ETERNAL_BOARD);
                         ++FailedMemberCount;
                     }
                     ++GroupMemberCount;
 
-                    if (GroupMember->isDead())
+                    if (groupMember->isDead())
                         ++DeadMemberCount;
                 }
 
                 if (GroupMemberCount == FailedMemberCount || !player->IsWithinDistInMap(me, EVENT_AREA_RADIUS))
-                    Failed = true; //only so event can restart
+                    Failed = true; // only so event can restart
             }
         }
 
@@ -1064,13 +1070,18 @@ public:
 void mob_qiraj_war_spawn::mob_qiraj_war_spawnAI::JustDied(Unit* /*slayer*/)
 {
     me->RemoveCorpse();
-    if (Creature* Mob = (Unit::GetCreature(*me, MobGUID)))
-        CAST_AI(npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI, Mob->AI())->LiveCounter();
+
+    if (!MobGUID)
+        return;
+
+    if (Creature* mob = Unit::GetCreature(*me, MobGUID))
+        if (npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI* triggerAI = CAST_AI(npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI, mob->AI()))
+            triggerAI->LiveCounter();
 };
 
-/*#####
-# go_crystalline_tear
-######*/
+/* #####
+## go_crystalline_tear
+###### */
 
 class go_crystalline_tear : public GameObjectScript
 {
@@ -1081,13 +1092,13 @@ public:
     {
         if (quest->GetQuestId() == QUEST_A_PAWN_ON_THE_ETERNAL_BOARD)
         {
-            if (Unit* Anachronos_Quest_Trigger = go->FindNearestCreature(15454, 100, player))
+            if (Creature* trigger = go->FindNearestCreature(15454, 100, player))
             {
-                Unit* Merithra = Anachronos_Quest_Trigger->SummonCreature(15378, -8034.535f, 1535.14f, 2.61f, 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
-                Unit* Caelestrasz = Anachronos_Quest_Trigger->SummonCreature(15379, -8032.767f, 1533.148f, 2.61f, 1.5f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
-                Unit* Arygos = Anachronos_Quest_Trigger->SummonCreature(15380, -8034.52f, 1537.843f, 2.61f, 5.7f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
-                /* Unit* Fandral = */ Anachronos_Quest_Trigger->SummonCreature(15382, -8028.462f, 1535.843f, 2.61f, 3.141592f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
-                Creature* Anachronos = Anachronos_Quest_Trigger->SummonCreature(15381, -8028.75f, 1538.795f, 2.61f, 4, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
+                Unit* Merithra = trigger->SummonCreature(15378, -8034.535f, 1535.14f, 2.61f, 0, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
+                Unit* Caelestrasz = trigger->SummonCreature(15379, -8032.767f, 1533.148f, 2.61f, 1.5f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
+                Unit* Arygos = trigger->SummonCreature(15380, -8034.52f, 1537.843f, 2.61f, 5.7f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
+                /* Unit* Fandral = */ trigger->SummonCreature(15382, -8028.462f, 1535.843f, 2.61f, 3.141592f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
+                Creature* Anachronos = trigger->SummonCreature(15381, -8028.75f, 1538.795f, 2.61f, 4, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 220000);
 
                 if (Merithra)
                 {
@@ -1115,11 +1126,16 @@ public:
 
                 if (Anachronos)
                 {
-                    CAST_AI(npc_anachronos_the_ancient::npc_anachronos_the_ancientAI, Anachronos->AI())->PlayerGUID = player->GetGUID();
-                    CAST_AI(npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI, CAST_CRE(Anachronos_Quest_Trigger)->AI())->Failed=false;
-                    CAST_AI(npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI, CAST_CRE(Anachronos_Quest_Trigger)->AI())->PlayerGUID = player->GetGUID();
-                    CAST_AI(npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI, CAST_CRE(Anachronos_Quest_Trigger)->AI())->EventStarted=true;
-                    CAST_AI(npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI, CAST_CRE(Anachronos_Quest_Trigger)->AI())->Announced=true;
+                    if (npc_anachronos_the_ancient::npc_anachronos_the_ancientAI* anachronosAI = CAST_AI(npc_anachronos_the_ancient::npc_anachronos_the_ancientAI, Anachronos->AI()))
+                        anachronosAI->PlayerGUID = player->GetGUID();
+
+                    if (npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI* triggerAI = CAST_AI(npc_anachronos_quest_trigger::npc_anachronos_quest_triggerAI, trigger->AI()))
+                    {
+                        triggerAI->Failed		= false;
+                        triggerAI->PlayerGUID   = player->GetGUID();
+                        triggerAI->EventStarted = true;
+                        triggerAI->Announced    = true;
+                    }
                 }
             }
         }
@@ -1127,98 +1143,98 @@ public:
     }
 };
 
-/*###
+/* #####
 ## go_wind_stone
-###*/
+##### */
 
 enum WSSpells
 {
-    SPELL_PUNISHMENT = 24803,
-    SPELL_SPAWN_IN = 25035,
+    SPELL_PUNISHMENT            = 24803,
+    SPELL_SPAWN_IN              = 25035,
 
-    AURA_TWILIGHT_SET = 24746,
-    AURA_MEDALLION = 24748,
-    AURA_RING = 24782,
+    AURA_TWILIGHT_SET           = 24746,
+    AURA_MEDALLION              = 24748,
+    AURA_RING                   = 24782,
 
-    SPELL_TEMPLAR_RANDOM = 24745,
-    SPELL_TEMPLAR_FIRE = 24747,
-    SPELL_TEMPLAR_AIR = 24757,
-    SPELL_TEMPLAR_EARTH = 24759,
-    SPELL_TEMPLAR_WATER = 24761,
+    SPELL_TEMPLAR_RANDOM        = 24745,
+    SPELL_TEMPLAR_FIRE          = 24747,
+    SPELL_TEMPLAR_AIR           = 24757,
+    SPELL_TEMPLAR_EARTH         = 24759,
+    SPELL_TEMPLAR_WATER         = 24761,
 
-    SPELL_DUKE_RANDOM = 24762,
-    SPELL_DUKE_FIRE = 24766,
-    SPELL_DUKE_AIR = 24769,
-    SPELL_DUKE_EARTH = 24771,
-    SPELL_DUKE_WATER = 24773,
+    SPELL_DUKE_RANDOM           = 24762,
+    SPELL_DUKE_FIRE             = 24766,
+    SPELL_DUKE_AIR              = 24769,
+    SPELL_DUKE_EARTH            = 24771,
+    SPELL_DUKE_WATER            = 24773,
 
-    SPELL_ROYAL_RANDOM = 24785,
-    SPELL_ROYAL_FIRE = 24787,
-    SPELL_ROYAL_AIR = 24791,
-    SPELL_ROYAL_EARTH = 24792,
-    SPELL_ROYAL_WATER = 24793
+    SPELL_ROYAL_RANDOM          = 24785,
+    SPELL_ROYAL_FIRE            = 24787,
+    SPELL_ROYAL_AIR             = 24791,
+    SPELL_ROYAL_EARTH           = 24792,
+    SPELL_ROYAL_WATER           = 24793
 };
 
 enum WSGossip
 {
-    GOSSIPID_LESSER_WS = 6540,
-    GOSSIPID_WS = 6542,
-    GOSSIPID_GREATER_WS = 6543
+    GOSSIPID_LESSER_WS          = 6540,
+    GOSSIPID_WS                 = 6542,
+    GOSSIPID_GREATER_WS         = 6543
 };
 
 enum WSCreatures
 {
-    NPC_TEMPLAR_FIRE = 15209,
-    NPC_TEMPLAR_WATER = 15211,
-    NPC_TEMPLAR_AIR = 15212,
-    NPC_TEMPLAR_EARTH = 15307,
+    NPC_TEMPLAR_FIRE            = 15209,
+    NPC_TEMPLAR_WATER           = 15211,
+    NPC_TEMPLAR_AIR             = 15212,
+    NPC_TEMPLAR_EARTH           = 15307,
 
-    NPC_DUKE_FIRE = 15206,
-    NPC_DUKE_WATER = 15207,
-    NPC_DUKE_EARTH = 15208,
-    NPC_DUKE_AIR = 15220,
+    NPC_DUKE_FIRE               = 15206,
+    NPC_DUKE_WATER              = 15207,
+    NPC_DUKE_EARTH              = 15208,
+    NPC_DUKE_AIR                = 15220,
 
-    NPC_ROYAL_FIRE = 15203,
-    NPC_ROYAL_AIR = 15204,
-    NPC_ROYAL_EARTH = 15205,
-    NPC_ROYAL_WATER = 15305
+    NPC_ROYAL_FIRE              = 15203,
+    NPC_ROYAL_AIR               = 15204,
+    NPC_ROYAL_EARTH             = 15205,
+    NPC_ROYAL_WATER             = 15305
 };
 
 enum WSItems
 {
-    ITEM_TEMPLAR_FIRE = 20416,
-    ITEM_TEMPLAR_EARTH =  20419,
-    ITEM_TEMPLAR_WATER = 20420,
-    ITEM_TEMPLAR_AIR = 20418,
+    ITEM_TEMPLAR_FIRE           = 20416,
+    ITEM_TEMPLAR_EARTH          =  20419,
+    ITEM_TEMPLAR_WATER          = 20420,
+    ITEM_TEMPLAR_AIR            = 20418,
 
-    ITEM_DUKE_FIRE = 20432,
-    ITEM_DUKE_EARTH =  20435,
-    ITEM_DUKE_WATER = 20436,
-    ITEM_DUKE_AIR = 20433,
+    ITEM_DUKE_FIRE              = 20432,
+    ITEM_DUKE_EARTH             =  20435,
+    ITEM_DUKE_WATER             = 20436,
+    ITEM_DUKE_AIR               = 20433,
 
-    ITEM_ROYAL_FIRE = 20447,
-    ITEM_ROYAL_EARTH =  20449,
-    ITEM_ROYAL_WATER = 20450,
-    ITEM_ROYAL_AIR = 20448,
+    ITEM_ROYAL_FIRE             = 20447,
+    ITEM_ROYAL_EARTH            =  20449,
+    ITEM_ROYAL_WATER            = 20450,
+    ITEM_ROYAL_AIR              = 20448,
 };
 
 enum WS
 {
-    TEMPLAR = 0,
-    DUKE = 1,
-    ROYAL = 2,
+    TEMPLAR                     = 0,
+    DUKE                        = 1,
+    ROYAL                       = 2,
 
-    FIRE = 0x1,
-    WATER = 0x2,
-    EARTH = 0x4,
-    AIR = 0x8
+    FIRE                        = 0x1,
+    WATER                       = 0x2,
+    EARTH                       = 0x4,
+    AIR                         = 0x8
 };
 
 enum WSTexts
 {
-    SAY_TEMPLAR_AGGRO = 0,
-    SAY_DUKE_AGGRO = 0,
-    YELL_ROYAL_AGGRO = 0
+    SAY_TEMPLAR_AGGRO			= 0,
+    SAY_DUKE_AGGRO              = 0,
+    YELL_ROYAL_AGGRO            = 0
 };
 
 #define GOSSIP_TEMPLAR_RANDOM "I am no cultist, you monster! Come to me and face your destruction!"

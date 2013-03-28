@@ -170,7 +170,7 @@ public:
 
             if (CheckTimer <= diff)
             {
-                Creature* Shade = Unit::GetCreature((*me), ShadeGUID);
+                Creature* Shade = Unit::GetCreature(*me, ShadeGUID);
                 if (Shade && Shade->isAlive() && me->isAlive())
                 {
                     if (me->IsWithinDist(Shade, 20, false))
@@ -458,7 +458,7 @@ public:
                 {
                     if (AkamaGUID)
                     {
-                        Creature* Akama = Unit::GetCreature((*me), AkamaGUID);
+                        Creature* Akama = Unit::GetCreature(*me, AkamaGUID);
                         if (Akama && Akama->isAlive())
                         {
                             IsBanished = false;
@@ -483,7 +483,7 @@ public:
                 {
                     if (AkamaGUID)
                     {
-                        Creature* Akama = Unit::GetCreature((*me), AkamaGUID);
+                        Creature* Akama = Unit::GetCreature(*me, AkamaGUID);
                         if (Akama && Akama->isAlive())
                         {
                             //10 % less health every few seconds.
@@ -520,7 +520,7 @@ public:
 
 void mob_ashtongue_channeler::mob_ashtongue_channelerAI::JustDied(Unit* /*killer*/)
 {
-    Creature* Shade = (Unit::GetCreature((*me), ShadeGUID));
+    Creature* Shade = (Unit::GetCreature(*me, ShadeGUID));
     if (Shade && Shade->isAlive())
         CAST_AI(boss_shade_of_akama::boss_shade_of_akamaAI, Shade->AI())->IncrementDeathCount();
     else sLog->outError("SD2 ERROR: Channeler dead but unable to increment DeathCount for Shade of Akama.");
@@ -528,7 +528,7 @@ void mob_ashtongue_channeler::mob_ashtongue_channelerAI::JustDied(Unit* /*killer
 
 void mob_ashtongue_sorcerer::mob_ashtongue_sorcererAI::JustDied(Unit* /*killer*/)
 {
-    Creature* Shade = (Unit::GetCreature((*me), ShadeGUID));
+    Creature* Shade = (Unit::GetCreature(*me, ShadeGUID));
     if (Shade && Shade->isAlive())
         CAST_AI(boss_shade_of_akama::boss_shade_of_akamaAI, Shade->AI())->IncrementDeathCount(me->GetGUID());
     else sLog->outError("SD2 ERROR: Sorcerer dead but unable to increment DeathCount for Shade of Akama.");
@@ -648,7 +648,7 @@ public:
             if (!ShadeGUID)
                 return;
 
-            Creature* Shade = (Unit::GetCreature((*me), ShadeGUID));
+            Creature* Shade = (Unit::GetCreature(*me, ShadeGUID));
             if (Shade)
             {
                 instance->SetData(DATA_SHADEOFAKAMAEVENT, IN_PROGRESS);
@@ -701,7 +701,7 @@ public:
             BrokenSummonIndex = 0;
             BrokenList.clear();
             HasYelledOnce = false;
-            Creature* Shade = Unit::GetCreature((*me), ShadeGUID);
+            Creature* Shade = Unit::GetCreature(*me, ShadeGUID);
             if (Shade && Shade->isAlive())
                 CAST_AI(boss_shade_of_akama::boss_shade_of_akamaAI, Shade->AI())->HasKilledAkama = true;
             summons.DespawnAll();
@@ -720,7 +720,7 @@ public:
 
             if (ShadeGUID && !StartCombat)
             {
-                Creature* Shade = (Unit::GetCreature((*me), ShadeGUID));
+                Creature* Shade = (Unit::GetCreature(*me, ShadeGUID));
                 if (Shade && Shade->isAlive())
                 {
                     if (CAST_AI(boss_shade_of_akama::boss_shade_of_akamaAI, Shade->AI())->IsBanished)
@@ -753,7 +753,7 @@ public:
                 {
                     if (ShadeGUID)
                     {
-                        Creature* Shade = Unit::GetCreature((*me), ShadeGUID);
+                        Creature* Shade = Unit::GetCreature(*me, ShadeGUID);
                         if (Shade && !Shade->isAlive())
                         {
                             ShadeHasDied = true;
@@ -847,7 +847,7 @@ public:
                         if (!BrokenList.empty())
                         {
                             for (std::list<uint64>::const_iterator itr = BrokenList.begin(); itr != BrokenList.end(); ++itr)
-                                if (Creature* unit = Unit::GetCreature((*me), *itr))
+                                if (Creature* unit = Unit::GetCreature(*me, *itr))
                                     unit->MonsterYell(SAY_BROKEN_FREE_02, LANGUAGE_UNIVERSAL, 0);
                         }
                         SoulRetrieveTimer = 0;
@@ -861,7 +861,7 @@ public:
 
             if (DestructivePoisonTimer <= diff)
             {
-                Creature* Shade = Unit::GetCreature((*me), ShadeGUID);
+                Creature* Shade = Unit::GetCreature(*me, ShadeGUID);
                 if (Shade && Shade->isAlive())
                     DoCast(Shade, SPELL_DESTRUCTIVE_POISON);
                 DestructivePoisonTimer = 15000;

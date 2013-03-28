@@ -1018,7 +1018,6 @@ CREATE TABLE `guild` (
   `xp` bigint(20) unsigned NOT NULL,
   `level` int(10) unsigned NOT NULL,
   `m_today_xp` bigint(20) NOT NULL,
-  `m_xp_cap` bigint(20) NOT NULL,
   PRIMARY KEY (`guildid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Guild System';
 

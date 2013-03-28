@@ -97,7 +97,7 @@ public:
         }
         void JustDied(Unit* /*victim*/)
         {
-            Unit* unit = Unit::GetUnit((*me), victimGUID);
+            Unit* unit = Unit::GetUnit(*me, victimGUID);
             if (unit && unit->HasAura(SPELL_INSIDIOUS_WHISPER))
                 unit->RemoveAurasDueToSpell(SPELL_INSIDIOUS_WHISPER);
         }
@@ -125,7 +125,7 @@ public:
             if (me->getVictim()->GetGUID() != victimGUID)
             {
                 DoModifyThreatPercent(me->getVictim(), -100);
-                Unit* owner = Unit::GetUnit((*me), victimGUID);
+                Unit* owner = Unit::GetUnit(*me, victimGUID);
                 if (owner && owner->isAlive())
                 {
                     me->AddThreat(owner, 999999);
@@ -334,7 +334,7 @@ public:
                 if (InnderDemon[i])
                 {
                         //delete creature
-                        Creature* creature = Unit::GetCreature((*me), InnderDemon[i]);
+                        Creature* creature = Unit::GetCreature(*me, InnderDemon[i]);
                         if (creature && creature->isAlive())
                         {
                             creature->DespawnOrUnsummon();
@@ -352,7 +352,7 @@ public:
             {
                 if (InnderDemon[i] > 0)
                 {
-                    Creature* unit = Unit::GetCreature((*me), InnderDemon[i]);
+                    Creature* unit = Unit::GetCreature(*me, InnderDemon[i]);
                     if (unit && unit->isAlive())
                     {
                         Unit* unit_target = Unit::GetUnit(*unit, CAST_AI(mob_inner_demon::mob_inner_demonAI, unit->AI())->victimGUID);

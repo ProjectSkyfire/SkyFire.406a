@@ -216,7 +216,7 @@ public:
             std::list<HostileReference*>::const_iterator itr = m_threatlist.begin();
             for (; itr != m_threatlist.end(); ++itr)
             {
-                Unit* unit = Unit::GetUnit((*me), (*itr)->getUnitGuid());
+                Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                 if (unit)
                 {
                     DoModifyThreatPercent(unit, -100);
@@ -360,7 +360,7 @@ public:
 void npc_enslaved_soul::npc_enslaved_soulAI::JustDied(Unit* /*killer*/)
 {
     if (ReliquaryGUID)
-        if (Creature* Reliquary = (Unit::GetCreature((*me), ReliquaryGUID)))
+        if (Creature* Reliquary = (Unit::GetCreature(*me, ReliquaryGUID)))
             ++(CAST_AI(boss_reliquary_of_souls::boss_reliquary_of_soulsAI, Reliquary->AI())->SoulDeathCount);
 
     DoCast(me, SPELL_SOUL_RELEASE, true);
@@ -437,7 +437,7 @@ public:
             std::list<HostileReference*>::const_iterator itr = m_threatlist.begin();
             for (; itr != m_threatlist.end(); ++itr)
             {
-                Unit* unit = Unit::GetUnit((*me), (*itr)->getUnitGuid());
+                Unit* unit = Unit::GetUnit(*me, (*itr)->getUnitGuid());
                 if (unit && unit->isAlive() && (unit->GetTypeId() == TYPEID_PLAYER)) // Only alive players
                     targets.push_back(unit);
             }

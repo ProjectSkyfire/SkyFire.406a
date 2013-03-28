@@ -434,7 +434,7 @@ public:
             phase = PHASE_DECEIVERS;
 
             if (instance)
-                if (Creature* pKalecKJ = Unit::GetCreature((*me), instance->GetData64(DATA_KALECGOS_KJ)))
+                if (Creature* pKalecKJ = Unit::GetCreature(*me, instance->GetData64(DATA_KALECGOS_KJ)))
                     CAST_AI(boss_kalecgos_kj::boss_kalecgos_kjAI, pKalecKJ->AI())->ResetOrbs();
             deceiverDeathCount = 0;
             bSummonedDeceivers = false;

@@ -190,11 +190,11 @@ public:
            if (bBool)
            {
                 if (instance)
-                    if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
+                    if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
                         instance->HandleGameObject(0, false, go);
            }else
                 if (instance)
-                    if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
+                    if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
                         instance->HandleGameObject(0, false, go);
         }
 
@@ -205,10 +205,10 @@ public:
 
             if (bBool)
             {
-                if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
+                if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
                     me->SetFacingToObject(go);
             }else
-                if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
+                if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
                     me->SetFacingToObject(go);
         }
 
@@ -217,10 +217,10 @@ public:
             if (!instance)
                 return;
 
-            if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
+            if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
                 instance->HandleGameObject(0, false, go);
 
-            if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
+            if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
                 instance->HandleGameObject(0, false, go);
 
             if (!GoSummonList.empty())
@@ -446,7 +446,7 @@ public:
                             DoScriptText(SAY_BLASTMASTER_5, me);
                             Summon(1);
                             if (instance)
-                                if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
+                                if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_GO_CAVE_IN_RIGHT)))
                                     instance->HandleGameObject(0, true, go);
                             NextStep(3000, true);
                             break;
@@ -492,7 +492,7 @@ public:
                             DoScriptText(SAY_BLASTMASTER_23, me);
                             SetInFace(false);
                             if (instance)
-                                if (GameObject* go = GameObject::GetGameObject((*me), instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
+                                if (GameObject* go = GameObject::GetGameObject(*me, instance->GetData64(DATA_GO_CAVE_IN_LEFT)))
                                     instance->HandleGameObject(0, true, go);
                             NextStep(2000, true);
                             break;

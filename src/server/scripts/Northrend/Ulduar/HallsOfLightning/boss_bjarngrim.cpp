@@ -148,7 +148,7 @@ public:
 
             for (uint8 i = 0; i < 2; ++i)
             {
-                if (Creature* pStormforgedLieutenant = (Unit::GetCreature((*me), m_auiStormforgedLieutenantGUID[i])))
+                if (Creature* pStormforgedLieutenant = (Unit::GetCreature(*me, m_auiStormforgedLieutenantGUID[i])))
                 {
                     if (!pStormforgedLieutenant->isAlive())
                         pStormforgedLieutenant->Respawn();

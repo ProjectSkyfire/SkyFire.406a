@@ -129,7 +129,6 @@ class ChatHandler
         // cs_character
         void HandleCharacterLevel(Player* player, uint64 playerGuid, uint32 oldLevel, uint32 newLevel);
 
-
     protected:
         explicit ChatHandler() : m_session(NULL) {}      // for CLI subclass
         static bool SetDataForCommandInTable(ChatCommand* table, const char* text, uint32 security, std::string const& help, std::string const& fullcommand);
@@ -141,24 +140,6 @@ class ChatHandler
         bool HandleGMNameAnnounceCommand(const char* args);
         bool HandleGMAnnounceCommand(const char* args);
         bool HandleGMNotifyCommand(const char* args);
-
-        bool HandleBanAccountCommand(const char* args);
-        bool HandleBanAccountByCharCommand(const char* args);
-        bool HandleBanCharacterCommand(const char* args);
-        bool HandleBanIPCommand(const char* args);
-        bool HandleBanInfoAccountCommand(const char* args);
-        bool HandleBanInfoCharacterCommand(const char* args);
-        bool HandleBanInfoIPCommand(const char* args);
-        bool HandleBanListAccountCommand(const char* args);
-        bool HandleBanListCharacterCommand(const char* args);
-        bool HandleBanListIPCommand(const char* args);
-
-        bool HandleCastCommand(const char *args);
-        bool HandleCastBackCommand(const char *args);
-        bool HandleCastDistCommand(const char *args);
-        bool HandleCastSelfCommand(const char *args);
-        bool HandleCastTargetCommand(const char *args);
-        bool HandleCastDestCommand(const char *args);
 
         bool HandleChannelSetOwnership(const char *args);
 
@@ -173,54 +154,10 @@ class ChatHandler
         bool HandleGuildRankCommand(const char* args);
         bool HandleGuildDeleteCommand(const char* args);
 
-        bool HandleInstanceListBindsCommand(const char* args);
-        bool HandleInstanceUnbindCommand(const char* args);
-        bool HandleInstanceStatsCommand(const char* args);
-        bool HandleInstanceSaveDataCommand(const char * args);
-
-        bool HandleListAurasCommand(const char * args);
-        bool HandleListCreatureCommand(const char* args);
-        bool HandleListItemCommand(const char* args);
-        bool HandleListObjectCommand(const char* args);
-
-        bool HandleLookupAreaCommand(const char* args);
-        bool HandleLookupCreatureCommand(const char* args);
-        bool HandleLookupEventCommand(const char* args);
-        bool HandleLookupFactionCommand(const char * args);
-        bool HandleLookupItemCommand(const char * args);
-        bool HandleLookupItemSetCommand(const char * args);
-        bool HandleLookupObjectCommand(const char* args);
-        bool HandleLookupPlayerIpCommand(const char* args);
-        bool HandleLookupPlayerAccountCommand(const char* args);
-        bool HandleLookupPlayerEmailCommand(const char* args);
-        bool HandleLookupQuestCommand(const char* args);
-        bool HandleLookupSkillCommand(const char* args);
-        bool HandleLookupSpellCommand(const char* args);
-        bool HandleLookupTaxiNodeCommand(const char * args);
-        bool HandleLookupTeleCommand(const char * args);
-        bool HandleLookupMapCommand(const char* args);
-        bool HandleLookupTitleCommand(const char * args);
-
-        bool HandlePDumpLoadCommand(const char *args);
-        bool HandlePDumpWriteCommand(const char *args);
-
-        bool HandleResetAchievementsCommand(const char * args);
-        bool HandleResetAllCommand(const char * args);
-        bool HandleResetHonorCommand(const char * args);
-        bool HandleResetLevelCommand(const char * args);
-        bool HandleResetSpellsCommand(const char* args);
-        bool HandleResetStatsCommand(const char * args);
-        bool HandleResetTalentsCommand(const char* args);
-
         bool HandleSendItemsCommand(const char* args);
         bool HandleSendMailCommand(const char* args);
         bool HandleSendMessageCommand(const char * args);
         bool HandleSendMoneyCommand(const char* args);
-
-        bool HandleUnBanAccountCommand(const char* args);
-        bool HandleUnBanAccountByCharCommand(const char* args);
-        bool HandleUnBanCharacterCommand(const char* args);
-        bool HandleUnBanIPCommand(const char* args);
 
         bool HandleHelpCommand(const char* args);
         bool HandleCommandsCommand(const char* args);
@@ -279,26 +216,6 @@ class ChatHandler
         bool HandleChangeWeather(const char* args);
         bool HandleKickPlayerCommand(const char * args);
 
-        // GM ticket command handlers
-        bool HandleGMTicketListCommand(const char* args);
-        bool HandleGMTicketListOnlineCommand(const char* args);
-        bool HandleGMTicketListClosedCommand(const char* args);
-        bool HandleGMTicketListEscalatedCommand(const char* args);
-        bool HandleGMTicketGetByIdCommand(const char* args);
-        bool HandleGMTicketGetByNameCommand(const char* args);
-        bool HandleGMTicketCloseByIdCommand(const char* args);
-        bool HandleGMTicketAssignToCommand(const char* args);
-        bool HandleGMTicketUnAssignCommand(const char* args);
-        bool HandleGMTicketCommentCommand(const char* args);
-        bool HandleGMTicketDeleteByIdCommand(const char* args);
-        bool HandleGMTicketResetCommand(const char* /* args */);
-        bool HandleGMTicketReloadCommand(const char*);
-        bool HandleToggleGMTicketSystem(const char* args);
-        bool HandleGMTicketEscalateCommand(const char* args);
-        bool HandleGMTicketCompleteCommand(const char* args);
-        bool HandleGMTicketResponseAppendCommand(const char* args);
-        bool HandleGMTicketResponseAppendLnCommand(const char* args);
-
         bool HandleMaxSkillCommand(const char* args);
         bool HandleSetSkillCommand(const char* args);
         bool HandleRespawnCommand(const char* args);
@@ -326,7 +243,6 @@ class ChatHandler
         bool HandleSaveAllCommand(const char* args);
 
         // Utility methods for commands
-        bool LookupPlayerSearchCommand(PreparedQueryResult result, int32 limit);
         bool HandleBanListHelper(PreparedQueryResult result);
         bool HandleBanHelper(BanMode mode, char const* args);
         bool HandleBanInfoHelper(uint32 accountid, char const* accountname);
@@ -334,7 +250,6 @@ class ChatHandler
         void HandleLearnSkillRecipesHelper(Player* player, uint32 skill_id);
 
     private:
-        bool _HandleGMTicketResponseAppendCommand(const char* args, bool newLine);
 
         WorldSession* m_session;                           // != NULL for chat command call and NULL for CLI command
 

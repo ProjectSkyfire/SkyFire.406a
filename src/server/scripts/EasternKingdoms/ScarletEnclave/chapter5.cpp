@@ -141,43 +141,50 @@ enum mograine
     SPELL_THE_LIGHT_OF_DAWN_Q         = 53606, // quest credit
 
     // ---- Dark Knight npc --------------------
+
     // Highlord Darion Mograine
     NPC_HIGHLORD_DARION_MOGRAINE      = 29173,
-    SPELL_ANTI_MAGIC_ZONE1            = 52893,
+    SPELL_SCOURGE_AGGRO_AURA          = 53624,
+    SPELL_ANTI_MAGIC_ZONE_DARION      = 52893,
     SPELL_DEATH_STRIKE                = 53639,
     SPELL_DEATH_EMBRACE               = 53635,
-    SPELL_ICY_TOUCH1                  = 49723,
-    SPELL_THE_LIGHT_OF_DAWN           = 53658,
-    SPELL_THE_MIGHT_OF_MOGRAINE       = 53642, // on players when begins
+    SPELL_ICY_TOUCH_DARION            = 49723,
+
+    SPELL_THE_LIGHT_OF_DAWN_DUMMY     = 53658,        // light globe
+    SPELL_THE_MIGHT_OF_MOGRAINE       = 53642,        // on players when begins
     SPELL_UNHOLY_BLIGHT               = 53640,
-    SPELL_ALEXANDROS_MOGRAINE_SPAWN   = 53667,
-    SPELL_MOGRAINE_CHARGE             = 53679,
-    SPELL_ASHBRINGER                  = 53701,
+    SPELL_ALEXANDROS_MOGRAINE_SPAWN   = 53667,        // spawn effect for Alexandros
+    SPELL_MOGRAINE_CHARGE             = 53679,        // charge to the Lich King
+    SPELL_ASHBRINGER                  = 53701,        // throw Ashbringer to Tirion
+//NYI    SPELL_BIRTH                  = 53603,        // earthquake ground shake(visual)
+//NYI    SPELL_PLAGUE_STRIKE_KNIGHTS  = 50688
+//NYI    SPELL_THE_LIGHT_OF_DAWN_DAMAGE_LOSS = 53645, // cast by the scourge units
+//NYI    SPELL_HERO_AGGRO_AURA        = 53627,
 
     // Koltira Deathweaver & Orbaz Bloodbane are using the same abilities
     NPC_KOLTIRA_DEATHWEAVER           = 29199,
-    NPC_ORBAZ_BLOODBANE               = 29204, // this guy fleed
-    NPC_THASSARIAN                    = 29200, // he also does SPELL_THE_LIGHT_OF_DAWN 53658
+    NPC_ORBAZ_BLOODBANE               = 29204,       // this guy fleed
+    NPC_THASSARIAN                    = 29200,       // he also does SPELL_THE_LIGHT_OF_DAWN_DUMMY 53658
     SPELL_BLOOD_STRIKE1               = 52374,
     SPELL_DEATH_GRIP                  = 49576,
-    SPELL_ICY_TOUCH2                  = 52372,
+    SPELL_ICY_TOUCH                   = 52372,
     SPELL_PLAGUE_STRIKE1              = 50668,
-    // all do SPELL_HERO_AGGRO_AURA    53627
 
-    // Lich King
+    // Lich King Spells
     NPC_THE_LICH_KING                 = 29183, // show up at end
-    SPELL_APOCALYPSE                  = 53210,
-    SPELL_TELEPORT_VISUAL             = 52233,
+    SPELL_APOCALYPSE                  = 53210, // knocks back all enemies
+    SPELL_TELEPORT_VISUAL             = 52233, // on leave
     SPELL_SOUL_FEAST_ALEX             = 53677, // on Alexandros
     SPELL_SOUL_FEAST_TIRION           = 53685, // on Tirion
-    SPELL_ICEBOUND_VISAGE             = 53274, // not sure what is it for
-    SPELL_REBUKE                      = 53680,
+    SPELL_ICEBOUND_VISAGE             = 53274, // ice effect
+    SPELL_REBUKE                      = 53680, // knockback
+//NYI    SPELL_APOCALYPSE_STUN        = 53745, // stuns all enemies
+//NYI    SPELL_POST_APOCALYPSE        = 53211, // after apocalypse - not sure where to use it
 
     // others
     NPC_RAMPAGING_ABOMINATION         = 29186,
     SPELL_CLEAVE1                     = 53633,
     SPELL_SCOURGE_HOOK                = 50335,
-    SPELL_SCOURGE_AGGRO_AURA          = 53624,
 
     NPC_FLESH_BEHEMOTH                = 29190, // giant guy
     SPELL_STOMP                       = 53634,
@@ -187,7 +194,7 @@ enum mograine
     NPC_ACHERUS_GHOUL                 = 29219, // just ghoul....
     SPELL_GHOULPLOSION                = 53632,
 
-    NPC_WARRIOR_OF_THE_FROZEN_WASTES  = 29206, // use SPELL_CLEAVE 53631
+    NPC_WARRIOR_OF_THE_FROZEN_WASTES  = 29206, // use SPELL_CLEAVE 53632
 
     NPC_HIGHLORD_ALEXANDROS_MOGRAINE  = 29227, // ghost
     NPC_DARION_MOGRAINE               = 29228, // ghost
@@ -196,9 +203,9 @@ enum mograine
     // Highlord Tirion Fordring
     NPC_HIGHLORD_TIRION_FORDRING      = 29175,
     EQUIP_HIGHLORD_TIRION_FORDRING    = 13262,
-    SPELL_LAY_ON_HANDS                = 53778,
-    SPELL_REBIRTH_OF_THE_ASHBRINGER   = 53702,
-    SPELL_TIRION_CHARGE               = 53705,
+    SPELL_LAY_ON_HANDS                = 53778, // heal effect
+    SPELL_REBIRTH_OF_THE_ASHBRINGER   = 53702, // globe sphere
+    SPELL_TIRION_CHARGE               = 53705, // on the lich king
     SPELL_TIRION_CHARGE_VISUAL        = 53706,
 
     // others
@@ -227,7 +234,22 @@ enum mograine
 
     NPC_RIMBLAT_EARTHSHATTER          = 29182,
     SPELL_CHAIN_HEAL                  = 33642,
-    SPELL_THUNDER                     = 53630
+    SPELL_THUNDER                     = 53630,
+
+    // Others - NYI
+/*  NPC_ANCHOR                      = 29521,
+    FACTION_MONSTER                 = 16,
+
+    SPELL_CHAINED_PEASANT_LH        = 54602, // not used. possible it determine side, where to go get "weapon"
+    SPELL_CHAINED_PEASANT_RH        = 54610,
+    SPELL_CHAINED_PEASANT_CHEST     = 54612,
+    SPELL_CHAINED_PEASANT_BREATH    = 54613,
+    SPELL_INITIATE_VISUAL           = 51519,
+
+    PHASE_INACTIVE_OR_COMBAT        = 0,
+    PHASE_DRESSUP                   = 1,
+    PHASE_ACTIVATE                  = 2
+*/
 };
 
 struct Location
@@ -539,26 +561,26 @@ public:
                     break;
                 case 2:
                     me->SetWalk(true);
-                    DoCast(me, SPELL_THE_LIGHT_OF_DAWN);
+                    DoCast(me, SPELL_THE_LIGHT_OF_DAWN_DUMMY);
                     break;
                 case 3:
                 {
                     //Unit* tirion = Unit::GetCreature(*me, TirionGUID);
 
                     DoScriptText(EMOTE_LIGHT_OF_DAWN05, me);
-                    if (me->HasAura(SPELL_THE_LIGHT_OF_DAWN, 0))
-                        me->RemoveAurasDueToSpell(SPELL_THE_LIGHT_OF_DAWN);
+                    if (me->HasAura(SPELL_THE_LIGHT_OF_DAWN_DUMMY, 0))
+                        me->RemoveAurasDueToSpell(SPELL_THE_LIGHT_OF_DAWN_DUMMY);
                     if (Creature* temp = Unit::GetCreature(*me, KoltiraGUID))
                     {
-                        if (temp->HasAura(SPELL_THE_LIGHT_OF_DAWN, 0))
-                            temp->RemoveAurasDueToSpell(SPELL_THE_LIGHT_OF_DAWN);
+                        if (temp->HasAura(SPELL_THE_LIGHT_OF_DAWN_DUMMY, 0))
+                            temp->RemoveAurasDueToSpell(SPELL_THE_LIGHT_OF_DAWN_DUMMY);
                         temp->SetWalk(true);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[19].x, LightofDawnLoc[19].y, LightofDawnLoc[19].z);
                     }
                     if (Creature* temp = Unit::GetCreature(*me, ThassarianGUID))
                     {
-                        if (temp->HasAura(SPELL_THE_LIGHT_OF_DAWN, 0))
-                            temp->RemoveAurasDueToSpell(SPELL_THE_LIGHT_OF_DAWN);
+                        if (temp->HasAura(SPELL_THE_LIGHT_OF_DAWN_DUMMY, 0))
+                            temp->RemoveAurasDueToSpell(SPELL_THE_LIGHT_OF_DAWN_DUMMY);
                         temp->SetWalk(true);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[21].x, LightofDawnLoc[21].y, LightofDawnLoc[21].z);
                     }
@@ -1351,7 +1373,7 @@ public:
             {
                 if (uiAnti_magic_zone <= diff)
                 {
-                    DoCast(me, SPELL_ANTI_MAGIC_ZONE1);
+                    DoCast(me, SPELL_ANTI_MAGIC_ZONE_DARION);
                     uiAnti_magic_zone = urand(25000, 30000);
                 } else uiAnti_magic_zone -= diff;
 
@@ -1369,7 +1391,7 @@ public:
 
                 if (Icy_touch <= diff)
                 {
-                    DoCast(me->getVictim(), SPELL_ICY_TOUCH1);
+                    DoCast(me->getVictim(), SPELL_ICY_TOUCH_DARION);
                     Icy_touch = urand(5000, 10000);
                 } else Icy_touch -= diff;
 
@@ -1496,7 +1518,7 @@ public:
                         temp->setFaction(me->getFaction());
                         temp->SetWalk(false);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[18].x, LightofDawnLoc[18].y, LightofDawnLoc[18].z);
-                        temp->CastSpell(temp, SPELL_THE_LIGHT_OF_DAWN, false);
+                        temp->CastSpell(temp, SPELL_THE_LIGHT_OF_DAWN_DUMMY, false);
                     }
 
                     if (Creature* temp = Unit::GetCreature(*me, OrbazGUID))
@@ -1511,7 +1533,7 @@ public:
                         temp->setFaction(me->getFaction());
                         temp->SetWalk(false);
                         temp->GetMotionMaster()->MovePoint(0, LightofDawnLoc[20].x, LightofDawnLoc[20].y, LightofDawnLoc[20].z);
-                        temp->CastSpell(temp, SPELL_THE_LIGHT_OF_DAWN, false);
+                        temp->CastSpell(temp, SPELL_THE_LIGHT_OF_DAWN_DUMMY, false);
                     }
 
                     if (Creature* temp = Unit::GetCreature(*me, TirionGUID))

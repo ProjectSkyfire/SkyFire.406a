@@ -102,7 +102,7 @@ void GuildMgr::LoadGuilds()
                                                 //           0          1       2             3              4              5              6
         QueryResult result = CharacterDatabase.Query("SELECT g.guildid, g.name, g.leaderguid, g.EmblemStyle, g.EmblemColor, g.BorderStyle, g.BorderColor, "
                                                 //    7                  8       9       10            11           12         13         14       15
-                                                     "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, COUNT(gbt.guildid), xp, level, m_today_xp, m_xp_cap  "
+                                                     "g.BackgroundColor, g.info, g.motd, g.createdate, g.BankMoney, COUNT(gbt.guildid), xp, level, m_today_xp "
                                                      "FROM guild g LEFT JOIN guild_bank_tab gbt ON g.guildid = gbt.guildid GROUP BY g.guildid ORDER BY g.guildid ASC");
 
         if (!result)
@@ -428,9 +428,6 @@ void GuildMgr::LoadGuilds()
     }
 }
 
-uint32 GetXPForLevel(uint8 level);
-uint32 GetXPForGuildLevel(uint8 level);
-
 void GuildMgr::LoadGuildRewards()
 {
     uint32 oldMSTime = getMSTime();
@@ -461,4 +458,12 @@ void GuildMgr::LoadGuildRewards()
 
     sLog->outString(">> Loaded %u guild reward definitions in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
     sLog->outString();
+}
+
+void GuildMgr::ResetTimes()
+{
+    CharacterDatabase.Execute("UPDATE guild SET m_today_xp = 0");
+    for (GuildContainer::const_iterator itr = GuildStore.begin(); itr != GuildStore.end(); ++itr)
+        if (Guild* guild = itr->second)
+            guild->ResetTodayXP();
 }

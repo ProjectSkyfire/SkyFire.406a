@@ -245,7 +245,7 @@ public:
             Creature* pMember = NULL;
             for (uint8 i = 0; i < 4; ++i)
             {
-                pMember = Unit::GetCreature((*me), Council[i]);
+                pMember = Unit::GetCreature(*me, Council[i]);
                 if (!pMember)
                     continue;
 
@@ -299,7 +299,7 @@ public:
                     Unit* Member = NULL;
                     if (Council[i])
                     {
-                        Member = Unit::GetUnit((*me), Council[i]);
+                        Member = Unit::GetUnit(*me, Council[i]);
                         if (Member && Member->isAlive())
                             CAST_CRE(Member)->AI()->AttackStart(target);
                     }
@@ -349,7 +349,7 @@ public:
                     {
                         if (Council[i])
                         {
-                            if (Creature* Member = (Unit::GetCreature((*me), Council[i])))
+                            if (Creature* Member = (Unit::GetCreature(*me, Council[i])))
                             {
                                 // This is the evade/death check.
                                 if (Member->isAlive() && !Member->getVictim())
@@ -509,7 +509,7 @@ public:
                 member = urand(1, 3);
 
             if (member != 2)                                     // No need to create another pointer to us using Unit::GetUnit
-                unit = Unit::GetUnit((*me), Council[member]);
+                unit = Unit::GetUnit(*me, Council[member]);
             return unit;
         }
 
@@ -523,7 +523,7 @@ public:
             }
             for (uint8 i = 0; i < 4; ++i)
             {
-                Unit* unit = Unit::GetUnit((*me), Council[i]);
+                Unit* unit = Unit::GetUnit(*me, Council[i]);
                 if (unit)
                     unit->CastSpell(unit, spellid, true, 0, 0, me->GetGUID());
             }

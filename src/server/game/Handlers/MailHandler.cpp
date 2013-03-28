@@ -610,7 +610,7 @@ void WorldSession::HandleGetMailList(WorldPacket& recvData)
         }
 
         data << uint64((*itr)->COD);                         // COD
-        data << uint32(0);                                   // probably changed in 3.3.3
+        data << uint32(0);                                   // package (Package.dbc)
         data << uint32((*itr)->stationery);                  // stationery (Stationery.dbc)
         data << uint64((*itr)->money);                       // Gold
         data << uint32((*itr)->checked);                     // flags

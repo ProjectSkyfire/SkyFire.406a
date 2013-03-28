@@ -133,7 +133,7 @@ class boss_thekal : public CreatureScript
                             if (instance->GetData(DATA_LORKHAN) == SPECIAL)
                             {
                                 //Resurrect LorKhan
-                                if (Unit* LorKhan = Unit::GetUnit((*me), instance->GetData64(DATA_LORKHAN)))
+                                if (Unit* LorKhan = Unit::GetUnit(*me, instance->GetData64(DATA_LORKHAN)))
                                 {
                                     LorKhan->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
                                     LorKhan->setFaction(14);
@@ -147,7 +147,7 @@ class boss_thekal : public CreatureScript
                             if (instance->GetData(DATA_ZATH) == SPECIAL)
                             {
                                 //Resurrect Zath
-                                Unit* zath = Unit::GetUnit((*me), instance->GetData64(DATA_ZATH));
+                                Unit* zath = Unit::GetUnit(*me, instance->GetData64(DATA_ZATH));
                                 if (zath)
                                 {
                                     zath->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
@@ -331,8 +331,8 @@ class mob_zealot_lorkhan : public CreatureScript
                 {
                     if (instance)
                     {
-                        Unit* thekal = Unit::GetUnit((*me), instance->GetData64(DATA_THEKAL));
-                        Unit* zath = Unit::GetUnit((*me), instance->GetData64(DATA_ZATH));
+                        Unit* thekal = Unit::GetUnit(*me, instance->GetData64(DATA_THEKAL));
+                        Unit* zath = Unit::GetUnit(*me, instance->GetData64(DATA_ZATH));
 
                         if (!thekal || !zath)
                             return;
@@ -368,7 +368,7 @@ class mob_zealot_lorkhan : public CreatureScript
                         if (instance->GetData(DATA_THEKAL) == SPECIAL)
                         {
                             //Resurrect Thekal
-                            if (Unit* thekal = Unit::GetUnit((*me), instance->GetData64(DATA_THEKAL)))
+                            if (Unit* thekal = Unit::GetUnit(*me, instance->GetData64(DATA_THEKAL)))
                             {
                                 thekal->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
                                 thekal->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -380,7 +380,7 @@ class mob_zealot_lorkhan : public CreatureScript
                         if (instance->GetData(DATA_ZATH) == SPECIAL)
                         {
                             //Resurrect Zath
-                            if (Unit* zath = Unit::GetUnit((*me), instance->GetData64(DATA_ZATH)))
+                            if (Unit* zath = Unit::GetUnit(*me, instance->GetData64(DATA_ZATH)))
                             {
                                 zath->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
                                 zath->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -517,7 +517,7 @@ class mob_zealot_zath : public CreatureScript
                         if (instance->GetData(DATA_LORKHAN) == SPECIAL)
                         {
                             //Resurrect LorKhan
-                            if (Unit* LorKhan = Unit::GetUnit((*me), instance->GetData64(DATA_LORKHAN)))
+                            if (Unit* LorKhan = Unit::GetUnit(*me, instance->GetData64(DATA_LORKHAN)))
                             {
                                 LorKhan->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
                                 LorKhan->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -529,7 +529,7 @@ class mob_zealot_zath : public CreatureScript
                         if (instance->GetData(DATA_THEKAL) == SPECIAL)
                         {
                             //Resurrect Thekal
-                            if (Unit* thekal = Unit::GetUnit((*me), instance->GetData64(DATA_THEKAL)))
+                            if (Unit* thekal = Unit::GetUnit(*me, instance->GetData64(DATA_THEKAL)))
                             {
                                 thekal->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
                                 thekal->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);

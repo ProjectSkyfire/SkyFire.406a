@@ -294,6 +294,7 @@ class boss_sindragosa : public CreatureScript
                         events.ScheduleEvent(EVENT_FROST_BOMB, 8000);
                         break;
                     case POINT_LAND:
+                    {
                         me->SetFlying(false);
                         me->SetLevitate(false);
                         me->SetReactState(REACT_DEFENSIVE);
@@ -302,8 +303,10 @@ class boss_sindragosa : public CreatureScript
                         DoStartMovement(me->getVictim());
                         _isInAirPhase = false;
                         // trigger Asphyxiation
-                        summons.DoAction(NPC_ICE_TOMB, ACTION_TRIGGER_ASPHYXIATION);
+                        EntryCheckPredicate pred(NPC_ICE_TOMB);
+                        summons.DoAction(ACTION_TRIGGER_ASPHYXIATION, pred);
                         break;
+                    }
                     default:
                         break;
                 }
@@ -1030,7 +1033,7 @@ class spell_sindragosa_unchained_magic : public SpellScriptLoader
                 unitList.remove_if (UnchainedMagicTargetSelector());
                 uint32 maxSize = uint32(GetCaster()->GetMap()->GetSpawnMode() & 1 ? 5 : 2);
                 if (unitList.size() > maxSize)
-                    SkyFire::RandomResizeList(unitList, maxSize);
+                    SkyFire::Containers::RandomResizeList(unitList, maxSize);
             }
 
             void Register()

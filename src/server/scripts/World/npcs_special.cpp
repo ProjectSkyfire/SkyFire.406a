@@ -665,7 +665,7 @@ public:
                             std::list<uint64>::const_iterator itr;
                             for (itr = Patients.begin(); itr != Patients.end(); ++itr)
                             {
-                                if (Creature* patient = Unit::GetCreature((*me), *itr))
+                                if (Creature* patient = Unit::GetCreature(*me, *itr))
                                     patient->setDeathState(JUST_DIED);
                             }
                         }
@@ -807,7 +807,7 @@ public:
                 me->SetFlag(UNIT_DYNAMIC_FLAGS, 32);
 
                 if (DoctorGUID)
-                    if (Creature* doctor = Unit::GetCreature((*me), DoctorGUID))
+                    if (Creature* doctor = Unit::GetCreature(*me, DoctorGUID))
                         CAST_AI(npc_doctor::npc_doctorAI, doctor->AI())->PatientDied(Coord);
             }
         }

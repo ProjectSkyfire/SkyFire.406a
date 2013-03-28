@@ -123,7 +123,7 @@ public:
             pos = i;
             if (i == 7 && instance)
             {
-                Unit* target = Unit::GetUnit((*me), instance->GetData64(DATA_JAINAPROUDMOORE));
+                Unit* target = Unit::GetUnit(*me, instance->GetData64(DATA_JAINAPROUDMOORE));
                 if (target && target->isAlive())
                     me->AddThreat(target, 0.0f);
             }
@@ -291,7 +291,7 @@ public:
             {
                 if (AnetheronGUID)
                 {
-                    Creature* boss = Unit::GetCreature((*me), AnetheronGUID);
+                    Creature* boss = Unit::GetCreature(*me, AnetheronGUID);
                     if (!boss || (boss && boss->isDead()))
                     {
                         me->setDeathState(JUST_DIED);

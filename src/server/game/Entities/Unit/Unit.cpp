@@ -9365,6 +9365,21 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             if (!roll_chance_i(20*rank))
                 return false;
             break;
+        }       
+        case 26364: // Lightning shield
+        {
+            if (HasAura(55448)) // Glyph of Lightning shield
+            {
+                if (Aura * lightningShield = GetAura(324))
+                {
+                    uint8 lsCharges = lightningShield->GetCharges();
+                    if (lsCharges <= 3)
+                    {
+                        lightningShield->SetCharges(3); // Dont allow to have less than 3 charges
+                    }
+                }
+            }
+            break;
         }
         case 52179: // Astral Shift
         {
@@ -15424,7 +15439,7 @@ Unit* Unit::SelectNearbyTarget(Unit* exclude, float dist) const
         return NULL;
 
     // select random
-    return SelectRandomContainerElement(targets);
+    return SkyFire::Containers::SelectRandomContainerElement(targets);
 }
 
 void Unit::ApplyAttackTimePercentMod(WeaponAttackType att, float val, bool apply)

@@ -167,7 +167,7 @@ public:
                 {
                     std::list<HostileReference*>& m_threatlist = me->getThreatManager().getThreatList();
                     for (std::list<HostileReference*>::const_iterator i = m_threatlist.begin(); i != m_threatlist.end(); ++i)
-                        if (Unit* target = Unit::GetUnit((*me), (*i)->getUnitGuid()))
+                        if (Unit* target = Unit::GetUnit(*me, (*i)->getUnitGuid()))
                             if (target->isAlive() && !me->IsWithinDist(target, 35, false))
                                 DoCast(target, SPELL_THUNDERING_STORM, true);
                     ThunderingStorm_Timer = 15000;
@@ -190,7 +190,7 @@ public:
             {
                 std::list<HostileReference*>& m_threatlist = me->getThreatManager().getThreatList();
                 for (std::list<HostileReference*>::const_iterator i = m_threatlist.begin(); i != m_threatlist.end(); ++i)
-                    if (Unit* target = Unit::GetUnit((*me), (*i)->getUnitGuid()))
+                    if (Unit* target = Unit::GetUnit(*me, (*i)->getUnitGuid()))
                         if (target->isAlive() && me->IsWithinMeleeRange(target))
                         {
                             me->TauntApply(target);

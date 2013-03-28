@@ -208,7 +208,7 @@ public:
                 Creature* Temp = NULL;
                 if (AddGUID[i])
                 {
-                    Temp = Creature::GetCreature((*me), AddGUID[i]);
+                    Temp = Creature::GetCreature(*me, AddGUID[i]);
                     if (Temp && Temp->isAlive())
                         Temp->DisappearAndDie();
                 }
@@ -222,7 +222,7 @@ public:
                 Creature* Temp = NULL;
                 if (AddGUID[i])
                 {
-                    Temp = Creature::GetCreature((*me), AddGUID[i]);
+                    Temp = Creature::GetCreature(*me, AddGUID[i]);
                     if (Temp && Temp->isAlive())
                     {
                         Temp->AI()->AttackStart(me->getVictim());
@@ -257,7 +257,7 @@ public:
                     Creature* Temp = NULL;
                     if (AddGUID[i])
                     {
-                        Temp = Unit::GetCreature((*me), AddGUID[i]);
+                        Temp = Unit::GetCreature(*me, AddGUID[i]);
                         if (Temp && Temp->isAlive())
                             if (!Temp->getVictim())
                                 Temp->AI()->AttackStart(me->getVictim());
@@ -342,7 +342,7 @@ struct boss_moroes_guestAI : public ScriptedAI
             return;
 
         uint64 MoroesGUID = instance->GetData64(DATA_MOROES);
-        Creature* Moroes = (Unit::GetCreature((*me), MoroesGUID));
+        Creature* Moroes = (Unit::GetCreature(*me, MoroesGUID));
         if (Moroes)
         {
             for (uint8 i = 0; i < 4; ++i)
@@ -359,7 +359,7 @@ struct boss_moroes_guestAI : public ScriptedAI
         uint64 TempGUID = GuestGUID[rand()%4];
         if (TempGUID)
         {
-            Unit* unit = Unit::GetUnit((*me), TempGUID);
+            Unit* unit = Unit::GetUnit(*me, TempGUID);
             if (unit && unit->isAlive())
                 return unit;
         }

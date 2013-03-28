@@ -1065,7 +1065,7 @@ void Spell::SelectImplicitConeTargets(SpellEffIndex effIndex, SpellImplicitTarge
                     if ((*j)->IsAffectedOnSpell(m_spellInfo))
                         maxTargets += (*j)->GetAmount();
 
-                SkyFire::RandomResizeList(targets, maxTargets);
+                SkyFire::Containers::RandomResizeList(targets, maxTargets);
             }
 
             // for compability with older code - add only unit and go targets
@@ -1361,7 +1361,7 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
 
             if (m_spellInfo->Id == 5246) //Intimidating Shout
                 unitTargets.remove(m_targets.GetUnitTarget());
-            SkyFire::RandomResizeList(unitTargets, maxTargets);
+            SkyFire::Containers::RandomResizeList(unitTargets, maxTargets);
         }
 
         for (std::list<Unit*>::iterator itr = unitTargets.begin(); itr != unitTargets.end(); ++itr)
@@ -1377,7 +1377,7 @@ void Spell::SelectImplicitAreaTargets(SpellEffIndex effIndex, SpellImplicitTarge
                 if ((*j)->IsAffectedOnSpell(m_spellInfo))
                     maxTargets += (*j)->GetAmount();
 
-            SkyFire::RandomResizeList(gObjTargets, maxTargets);
+            SkyFire::Containers::RandomResizeList(gObjTargets, maxTargets);
         }
         for (std::list<GameObject*>::iterator itr = gObjTargets.begin(); itr != gObjTargets.end(); ++itr)
             AddGOTarget(*itr, effMask);

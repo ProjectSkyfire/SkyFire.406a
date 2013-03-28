@@ -246,7 +246,7 @@ public:
         {
             if (DorotheeGUID)
             {
-                Creature* Dorothee = (Unit::GetCreature((*me), DorotheeGUID));
+                Creature* Dorothee = (Unit::GetCreature(*me, DorotheeGUID));
                 if (Dorothee && Dorothee->isAlive())
                 {
                     CAST_AI(boss_dorothee::boss_dorotheeAI, Dorothee->AI())->TitoDied = true;
@@ -879,7 +879,7 @@ public:
                 {
                     IsChasing = false;
 
-                    if (Unit* target = Unit::GetUnit((*me), HoodGUID))
+                    if (Unit* target = Unit::GetUnit(*me, HoodGUID))
                     {
                         HoodGUID = 0;
                         if (DoGetThreat(target))
@@ -1174,7 +1174,7 @@ public:
                 IsFakingDeath = true;
                 Phase = PHASE_BOTH;
 
-                if (Creature* Julianne = (Unit::GetCreature((*me), JulianneGUID)))
+                if (Creature* Julianne = (Unit::GetCreature(*me, JulianneGUID)))
                 {
                     CAST_AI(boss_julianne::boss_julianneAI, Julianne->AI())->RomuloDead = true;
                     CAST_AI(boss_julianne::boss_julianneAI, Julianne->AI())->ResurrectSelfTimer = 10000;
@@ -1188,7 +1188,7 @@ public:
             {
                 if (JulianneDead)
                 {
-                    if (Creature* Julianne = (Unit::GetCreature((*me), JulianneGUID)))
+                    if (Creature* Julianne = (Unit::GetCreature(*me, JulianneGUID)))
                     {
                         Julianne->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                         Julianne->GetMotionMaster()->Clear();
@@ -1200,7 +1200,7 @@ public:
                     return;
                 }
 
-                if (Creature* Julianne = (Unit::GetCreature((*me), JulianneGUID)))
+                if (Creature* Julianne = (Unit::GetCreature(*me, JulianneGUID)))
                 {
                     PretendToDie(me);
                     IsFakingDeath = true;
@@ -1219,7 +1219,7 @@ public:
             DoScriptText(SAY_ROMULO_AGGRO, me);
             if (JulianneGUID)
             {
-                Creature* Julianne = (Unit::GetCreature((*me), JulianneGUID));
+                Creature* Julianne = (Unit::GetCreature(*me, JulianneGUID));
                 if (Julianne && Julianne->getVictim())
                 {
                     me->AddThreat(Julianne->getVictim(), 1.0f);
@@ -1265,7 +1265,7 @@ public:
             {
                 if (ResurrectTimer <= diff)
                 {
-                    Creature* Julianne = (Unit::GetCreature((*me), JulianneGUID));
+                    Creature* Julianne = (Unit::GetCreature(*me, JulianneGUID));
                     if (Julianne && CAST_AI(boss_julianne::boss_julianneAI, Julianne->AI())->IsFakingDeath)
                     {
                         DoScriptText(SAY_ROMULO_RESURRECT, me);
@@ -1385,7 +1385,7 @@ void boss_julianne::boss_julianneAI::UpdateAI(const uint32 diff)
     {
         if (ResurrectTimer <= diff)
         {
-            Creature* Romulo = (Unit::GetCreature((*me), RomuloGUID));
+            Creature* Romulo = (Unit::GetCreature(*me, RomuloGUID));
             if (Romulo && CAST_AI(boss_romulo::boss_romuloAI, Romulo->AI())->IsFakingDeath)
             {
                 DoScriptText(SAY_JULIANNE_RESURRECT, me);
@@ -1420,7 +1420,7 @@ void boss_julianne::boss_julianneAI::UpdateAI(const uint32 diff)
     {
         if (urand(0, 1) && SummonedRomulo)
         {
-            Creature* Romulo = (Unit::GetCreature((*me), RomuloGUID));
+            Creature* Romulo = (Unit::GetCreature(*me, RomuloGUID));
             if (Romulo && Romulo->isAlive() && !RomuloDead)
                 DoCast(Romulo, SPELL_ETERNAL_AFFECTION);
         } else DoCast(me, SPELL_ETERNAL_AFFECTION);
@@ -1450,7 +1450,7 @@ void boss_julianne::boss_julianneAI::DamageTaken(Unit* /*done_by*/, uint32 &dama
         DoCast(me, SPELL_DRINK_POISON);
 
         IsFakingDeath = true;
-        //IS THIS USEFULL? Creature* Julianne = (Unit::GetCreature((*me), JulianneGUID));
+        //IS THIS USEFULL? Creature* Julianne = (Unit::GetCreature(*me, JulianneGUID));
         return;
     }
 
@@ -1466,7 +1466,7 @@ void boss_julianne::boss_julianneAI::DamageTaken(Unit* /*done_by*/, uint32 &dama
         //if this is true then we have to kill romulo too
         if (RomuloDead)
         {
-            if (Creature* Romulo = (Unit::GetCreature((*me), RomuloGUID)))
+            if (Creature* Romulo = (Unit::GetCreature(*me, RomuloGUID)))
             {
                 Romulo->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 Romulo->GetMotionMaster()->Clear();
@@ -1480,7 +1480,7 @@ void boss_julianne::boss_julianneAI::DamageTaken(Unit* /*done_by*/, uint32 &dama
         }
 
         //if not already returned, then romulo is alive and we can pretend die
-        if (Creature* Romulo = (Unit::GetCreature((*me), RomuloGUID)))
+        if (Creature* Romulo = (Unit::GetCreature(*me, RomuloGUID)))
         {
             PretendToDie(me);
             IsFakingDeath = true;

@@ -4,6 +4,11 @@ build*/
 .mailmap
 *.orig
 *.rej
+[Bb]in
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
 *~
 .hg/
 *.kdev*

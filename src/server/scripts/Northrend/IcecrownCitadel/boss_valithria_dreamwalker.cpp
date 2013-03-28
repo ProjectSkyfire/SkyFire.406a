@@ -1238,7 +1238,7 @@ class spell_dreamwalker_summon_suppresser : public SpellScriptLoader
                 std::list<Creature*> summoners;
                 GetCreatureListWithEntryInGrid(summoners, caster, NPC_WORLD_TRIGGER, 100.0f);
                 summoners.remove_if (SkyFire::UnitAuraCheck(true, SPELL_RECENTLY_SPAWNED));
-                SkyFire::RandomResizeList(summoners, 2);
+                SkyFire::Containers::RandomResizeList(summoners, 2);
                 if (summoners.empty())
                     return;
 

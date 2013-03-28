@@ -207,7 +207,7 @@ public:
 
             Summons.DespawnAll();
             me->SetSpeed(MOVE_FLIGHT, 3.0f);
-            if ((Unit::GetCreature((*me), m_uiGraufGUID) == NULL) && !me->IsMounted())
+            if ((Unit::GetCreature(*me, m_uiGraufGUID) == NULL) && !me->IsMounted())
                  me->SummonCreature(CREATURE_GRAUF, Location[0].GetPositionX(), Location[0].GetPositionY(), Location[0].GetPositionZ(), 3.0f);
             if (m_pInstance)
             {
@@ -221,7 +221,7 @@ public:
             me->SetFlying(false);
             me->Dismount();
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-            if (Unit::GetCreature((*me), m_uiGraufGUID) == NULL)
+            if (Unit::GetCreature(*me, m_uiGraufGUID) == NULL)
                 me->SummonCreature(CREATURE_GRAUF, Location[0].GetPositionX(), Location[0].GetPositionY(), Location[0].GetPositionZ(), 3.0f);
         }
 

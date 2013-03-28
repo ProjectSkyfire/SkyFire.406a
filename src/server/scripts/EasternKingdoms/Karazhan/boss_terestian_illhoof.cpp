@@ -102,7 +102,7 @@ public:
                 uint64 TerestianGUID = instance->GetData64(DATA_TERESTIAN);
                 if (TerestianGUID)
                 {
-                    Unit* Terestian = Unit::GetUnit((*me), TerestianGUID);
+                    Unit* Terestian = Unit::GetUnit(*me, TerestianGUID);
                     if (Terestian && Terestian->isAlive())
                         DoCast(Terestian, SPELL_BROKEN_PACT, true);
                 }
@@ -157,7 +157,7 @@ public:
         {
             if (SacrificeGUID)
             {
-                Unit* Sacrifice = Unit::GetUnit((*me), SacrificeGUID);
+                Unit* Sacrifice = Unit::GetUnit(*me, SacrificeGUID);
                 if (Sacrifice)
                     Sacrifice->RemoveAurasDueToSpell(SPELL_SACRIFICE);
             }
@@ -347,7 +347,7 @@ public:
             {
                 if (PortalGUID[i])
                 {
-                    if (Creature* portal = Unit::GetCreature((*me), PortalGUID[i]))
+                    if (Creature* portal = Unit::GetCreature(*me, PortalGUID[i]))
                         portal->DespawnOrUnsummon();
 
                     PortalGUID[i] = 0;

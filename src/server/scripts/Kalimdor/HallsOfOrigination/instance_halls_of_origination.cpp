@@ -57,6 +57,7 @@ public:
         uint64 OriginationElevatorGUID;
         uint64 TeamInInstance;
         uint64 AnhuurBridgeGUID;
+        uint32 elementalsDefeated;
 
         void Initialize()
         {
@@ -69,14 +70,15 @@ public:
             Rajh = 0;
             AnhuurBridgeGUID = 0;
             uint64 OriginationElevatorGUID = 0;
+            elementalsDefeated = 0;
 
-            for (uint8 i=0; i<ENCOUNTERS; ++i)
+            for (uint8 i = 0; i < ENCOUNTERS; ++i)
                 Encounter[i] = NOT_STARTED;
         }
 
         bool IsEncounterInProgress() const
         {
-            for (uint8 i=0; i<ENCOUNTERS; ++i)
+            for (uint8 i = 0; i < ENCOUNTERS; ++i)
             {
                 if (Encounter[i] == IN_PROGRESS)
                     return true;
@@ -96,6 +98,10 @@ public:
                     EarthragerPtah = creature->GetGUID();
                     break;
                 case BOSS_ANRAPHET:
+                    if(elementalsDefeated < 4)
+                        creature->SetPhaseMask(2, true);
+                    else
+                        creature->SetPhaseMask(1, true);
                     Anraphet = creature->GetGUID();
                     break;
                 case BOSS_ISISET:
@@ -178,6 +184,14 @@ public:
                 case DATA_RAJH:
                     Encounter[6] = data;
                     break;
+                case DATA_INCREMENT_ELEMENTALS:
+                    elementalsDefeated += data;
+                    if(elementalsDefeated >= 4)
+                    {
+                        if(Creature* anrapet = instance->GetCreature(Anraphet))
+                            anrapet->SetPhaseMask(1, true);
+                    }
+                    break;
             }
 
             if (data == DONE)
@@ -202,6 +216,8 @@ public:
                     return Encounter[5];
                 case DATA_RAJH:
                     return Encounter[6];
+                case DATA_INCREMENT_ELEMENTALS:
+                    return elementalsDefeated;
             }
             return 0;
         }
@@ -212,7 +228,7 @@ public:
 
             std::string str_data;
             std::ostringstream saveStream;
-            saveStream << "H O" << Encounter[0] << " " << Encounter[1]  << " " << Encounter[2]  << " " << Encounter[3] << " " << Encounter[4] << " " << Encounter[5] << " " << Encounter[6];
+            saveStream << "H O" << Encounter[0] << " " << Encounter[1]  << " " << Encounter[2]  << " " << Encounter[3] << " " << Encounter[4] << " " << Encounter[5] << " " << Encounter[6] << " " << elementalsDefeated;
             str_data = saveStream.str();
 
             OUT_SAVE_INST_DATA_COMPLETE;
@@ -231,9 +247,10 @@ public:
 
             char dataHead1, dataHead2;
             uint16 data0, data1, data2, data3, data4, data5, data6;
+            uint32 data7;
 
             std::istringstream loadStream(in);
-            loadStream >> dataHead1 >> dataHead2 >> data0 >> data1 >> data2 >> data3 >> data4 >> data5 >> data6;
+            loadStream >> dataHead1 >> dataHead2 >> data0 >> data1 >> data2 >> data3 >> data4 >> data5 >> data6 >> data7;
 
             if (dataHead1 == 'H' && dataHead2 == 'O')
             {
@@ -244,8 +261,8 @@ public:
                 Encounter[4] = data4;
                 Encounter[5] = data5;
                 Encounter[6] = data6;
-
-                for (uint8 i=0; i<ENCOUNTERS; ++i)
+                elementalsDefeated = data7;
+                for(uint8 i = 0; i < ENCOUNTERS; ++i)
                     if (Encounter[i] == IN_PROGRESS)
                         Encounter[i] = NOT_STARTED;
             }
@@ -256,7 +273,61 @@ public:
     };
 };
 
+#define MAP_HOO 603
+
+enum TeleportTargets
+{
+    UPPER_FLOOR = 0,
+    LOWER_FLOOR = 1,
+    MAX         = 2,
+};
+
+float TeleportPointsHoOGOs[2][3] =
+{
+    {-534.501f, 191.346f, 331.06f},    // Upper Floor
+    {-536.576f, 193.316f, 80.238f},    // Lower Floor
+};
+
+class hoo_teleporter : public GameObjectScript
+{
+public:
+    hoo_teleporter() : GameObjectScript("hoo_teleporter") { }
+
+    bool OnGossipSelect(Player *player, GameObject * /*go*/, uint32 sender, uint32 action)
+    {
+        player->PlayerTalkClass->ClearMenus();
+        
+        if (sender != GOSSIP_SENDER_MAIN)
+            return false;
+        
+        if (!player->getAttackers().empty())
+            return false;
+
+        int pos = action - GOSSIP_ACTION_INFO_DEF;
+        if (pos >= 0 && pos < MAX)
+            player->TeleportTo(MAP_HOO, TeleportPointsHoOGOs[pos][0], TeleportPointsHoOGOs[pos][1], TeleportPointsHoOGOs[pos][2], 0.0f);
+        player->CLOSE_GOSSIP_MENU();
+
+        return true;
+    }
+
+    bool OnGossipHello(Player *player, GameObject *go)
+    {
+        if (InstanceScript* instance = go->GetInstanceScript())
+        {
+            if (instance->GetData(DATA_TEMPLE_GUARDIAN_ANHUUR) == DONE && instance->GetData(DATA_ANRAPHET) == DONE) // Ptah is an optional encounter
+            {
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport to the upper floor", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + UPPER_FLOOR);
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport to the lower floor", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + LOWER_FLOOR);
+            }
+        }
+        player->SEND_GOSSIP_MENU(go->GetGOInfo()->GetGossipMenuId(), go->GetGUID());
+        return true;
+    }
+};
+
 void AddSC_instance_halls_of_origination()
 {
     new instance_halls_of_origination();
+    new hoo_teleporter();
 }
