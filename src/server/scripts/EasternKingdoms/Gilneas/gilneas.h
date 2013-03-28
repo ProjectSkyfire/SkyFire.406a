@@ -78,7 +78,13 @@ enum QuestIds
     QUEST_SAVE_KRENNAN_ARANAS                          = 14293,
     QUEST_SACRIFICES                                   = 14212,
     QUEST_THE_REBEL_LORDS_ARSENAL                      = 14159,
-    QUEST_FROM_THE_SHADOWS                             = 14204
+    QUEST_FROM_THE_SHADOWS                             = 14204,
+    QUEST_YOU_CANT_TAKE_EM_ALONE                       = 14348
+};
+
+enum QuestKC
+{
+    QUEST_14348_KILL_CREDIT                            = 36233
 };
 
 enum SpellIds
@@ -107,7 +113,8 @@ enum SpellIds
     SPELL_DISMISS_GILNEAN_MASTIFF                      = 43511,
     SPELL_ATTACK_LURKER                                = 67805,
     SPELL_SHADOWSTALKER_STEALTH                        = 5916,
-    SPELL_PING_GILNEAN_CROW                            = 93275
+    SPELL_PING_GILNEAN_CROW                            = 93275,
+    SPELL_BARREL_KEG                                   = 69094
 };
 
 enum NpcTextIds
@@ -203,6 +210,16 @@ Waypoint N_WAYPOINT_LOC[1]=
 {
     { -1593.38f, 1408.02f, 72.64f } // Worgen Runt 2 Edge of Roof Waypoint
 };
+
+// Q.14348 These need moved to Db at first chance...
+// Start
+#define SAY_BARREL_1 "I gots bad feeling...."
+#define SAY_BARREL_2 "GAH! I CAN'T SEE IN HERE!"
+#define SAY_BARREL_3 "Get back here! I smashes you!"
+#define SAY_BARREL_4 "Uh-oh... this gonna hurts me..."
+#define SAY_BARREL_5 "Barrel smell like gunpowder..."
+#define SAY_BARREL_6 "This not be good..."
+// End
 
 #define DELAY_EMOTE_PANICKED_CITIZEN                  urand(5000, 15000)   // 5-15 second time
 #define DELAY_SAY_PANICKED_CITIZEN                    urand(30000, 120000) // 30sec - 1.5min
