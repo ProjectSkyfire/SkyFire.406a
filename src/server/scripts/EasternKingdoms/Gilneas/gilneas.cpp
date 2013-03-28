@@ -146,7 +146,7 @@ public:
 ## npc_gilneas_city_guard_phase2
 ######*/
 
-class npc_gilneas_city_guard_phase2 : public CreatureScript
+class npc_gilneas_city_guard_phase2 : public CreatureScript 
 {
 public:
     npc_gilneas_city_guard_phase2() : CreatureScript("npc_gilneas_city_guard_phase2") {}
@@ -533,10 +533,10 @@ public:
             if (tQuestCredit <= ((float)diff/8))
             {
                 opened = 0;
-                
+
                 if(aPlayer)
                     aPlayer->KilledMonsterCredit(35830, 0);
-                
+
                 if (spawnKind == 3)
                 {
                     if (Creature* spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
@@ -1155,7 +1155,7 @@ public:
                     switch (urand(0, 2)) // Perform one of 3 random attacks
                     {
                         case 0: // Do Left Hook
-                            if (me->GetOrientation() > 2.0f && me->GetOrientation() < 3.0f || me->GetOrientation() > 5.0f && me->GetOrientation() < 6.0f) 
+                            if (me->GetOrientation() > 2.0f && me->GetOrientation() < 3.0f || me->GetOrientation() > 5.0f && me->GetOrientation() < 6.0f)
                                 // If Orientation is outside of these ranges, there is a possibility the knockback could knock worgens off the platform
                                 // After which, Crowley would chase
                             {
@@ -2551,50 +2551,139 @@ public:
 
 class spell_keg_placed : public SpellScriptLoader
 {
-    public:
-        spell_keg_placed() : SpellScriptLoader("spell_keg_placed") {}
+public:
+	spell_keg_placed() : SpellScriptLoader("spell_keg_placed") {}
 
-        class spell_keg_placed_AuraScript : public AuraScript
+	class spell_keg_placed_AuraScript : public AuraScript
+	{
+		PrepareAuraScript(spell_keg_placed_AuraScript);
+
+		uint32 tick, tickcount;
+
+		void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+		{
+			tick = urand(1, 4);
+			tickcount = 0;
+		}
+
+		void HandlePeriodic(AuraEffect const* /*aurEff*/)
+		{
+			PreventDefaultAction();
+			if (Unit* caster = GetCaster())
+			{
+				if (tickcount > tick)
+				{
+					if (caster->GetTypeId() != TYPEID_PLAYER)
+						return;
+
+					caster->ToPlayer()->KilledMonsterCredit(36233, 0);
+					if (Unit* target = GetTarget())
+						target->Kill(target);
+				}
+				tickcount++;
+			}
+		}
+
+		void Register()
+		{
+			OnEffectApply += AuraEffectApplyFn(spell_keg_placed_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+			OnEffectPeriodic += AuraEffectPeriodicFn(spell_keg_placed_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_DUMMY);
+		}
+	};
+
+	AuraScript* GetAuraScript() const
+	{
+		return new spell_keg_placed_AuraScript();
+	}
+};
+/* ######
+## You Can't Take 'Em Alone - 14348
+###### */
+
+enum YouCantTakeEmAlone
+{
+    QUEST_14348_KILL_CREDIT            = 36233,
+    QUEST_YOU_CANT_TAKE_EM_ALONE       = 14348,
+    SPELL_BARREL_KEG                   = 69094	
+};
+
+#define SAY_BARREL_1 "I gots bad feeling...."
+#define SAY_BARREL_2 "GAH! I CAN'T SEE IN HERE!"
+#define SAY_BARREL_3 "Get back here! I smashes you!"
+#define SAY_BARREL_4 "Uh-oh... this gonna hurts me..."
+#define SAY_BARREL_5 "Barrel smell like gunpowder..."
+#define SAY_BARREL_6 "This not be good..."
+
+class npc_horrid_abomination : public CreatureScript
+{
+public:
+    npc_horrid_abomination() : CreatureScript("npc_horrid_abomination") { }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_horrid_abominationAI(creature);
+    }
+
+    struct npc_horrid_abominationAI : public ScriptedAI
+    {
+        npc_horrid_abominationAI(Creature *creature) : ScriptedAI(creature) {}
+
+        uint32 DieTimer;
+
+        void Reset ()
         {
-            PrepareAuraScript(spell_keg_placed_AuraScript);
+            me->ClearUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED);
+            DieTimer = 5000;
+        }
 
-            uint32 tick, tickcount;
-
-            void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        void SpellHit(Unit* caster, const SpellInfo* spell)
+        {
+            if (spell->Id == SPELL_BARREL_KEG && caster->GetTypeId() == TYPEID_PLAYER && caster->ToPlayer()->GetQuestStatus(QUEST_YOU_CANT_TAKE_EM_ALONE) == QUEST_STATUS_INCOMPLETE)
             {
-                tick = urand(1, 4);
-                tickcount = 0;
-            }
-
-            void HandlePeriodic(AuraEffect const* /*aurEff*/)
-            {
-                PreventDefaultAction();
-                if (Unit* caster = GetCaster())
+                caster->ToPlayer()->KilledMonsterCredit(QUEST_14348_KILL_CREDIT, 0);
+                me->AddUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED);
+                switch (urand(0, 5))
                 {
-                    if (tickcount > tick)
-                    {
-                        if (caster->GetTypeId() != TYPEID_PLAYER)
-                            return;
-
-                        caster->ToPlayer()->KilledMonsterCredit(36233, 0);
-                        if (Unit* target = GetTarget())
-                            target->Kill(target);
-                    }
-                    tickcount++;
+                    case 0:
+                        me->MonsterYell(SAY_BARREL_1, LANG_UNIVERSAL, 0);
+                        break;
+                    case 1:
+                        me->MonsterYell(SAY_BARREL_2, LANG_UNIVERSAL, 0);
+                        break;
+                    case 2:
+                        me->MonsterYell(SAY_BARREL_3, LANG_UNIVERSAL, 0);
+                        break;
+                    case 3:
+                        me->MonsterYell(SAY_BARREL_4, LANG_UNIVERSAL, 0);
+                        break;
+                    case 4:
+                        me->MonsterYell(SAY_BARREL_5, LANG_UNIVERSAL, 0);
+                        break;
+                    case 5:
+                        me->MonsterYell(SAY_BARREL_6, LANG_UNIVERSAL, 0);
+                        break;
                 }
             }
-
-            void Register()
-            {
-                OnEffectApply += AuraEffectApplyFn(spell_keg_placed_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
-                OnEffectPeriodic += AuraEffectPeriodicFn(spell_keg_placed_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_DUMMY);
-            }
-        };
-
-        AuraScript* GetAuraScript() const
-        {
-            return new spell_keg_placed_AuraScript();
         }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (DieTimer <= diff)
+            {
+                if (me->HasAura(SPELL_BARREL_KEG))
+                    me->DisappearAndDie();
+                else
+                    DieTimer = 1000;
+            }
+            else
+                DieTimer -= diff;
+
+            if (!UpdateVictim())
+                return;
+
+            DoMeleeAttackIfReady();
+        }
+    };
 };
 
 /*######
@@ -2935,7 +3024,8 @@ void AddSC_gilneas()
     new npc_king_genn_greymane_c2();
     new npc_crowley_horse();
     new spell_keg_placed();
-    new npc_greymane_horse();
+    new npc_horrid_abomination();
+	new npc_greymane_horse();
     new npc_krennan_aranas_c2();
     new npc_lord_godfrey_p4_8();
     new npc_commandeered_cannon();
