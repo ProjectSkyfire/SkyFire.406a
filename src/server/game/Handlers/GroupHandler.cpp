@@ -52,7 +52,7 @@ class Aura;
 
 void WorldSession::SendPartyResult(PartyOperation operation, const std::string& member, PartyResult res, uint32 val /* = 0 */)
 {
-    WorldPacket data(SMSG_PARTY_COMMAND_RESULT, 4 + member.size() + 1 + 4 + 4 + 8);
+    WorldPacket data(SMSG_PARTY_COMMAND_RESULT, 4 + member.size() + 1 + 4 + 4);
     data << uint32(operation);
     data << member;
     data << uint32(res);
@@ -557,7 +557,9 @@ void WorldSession::HandleRaidTargetUpdateOpcode(WorldPacket& recvData)
 
     // everything's fine, do it
     if (x == 0xFF)                                           // target icon request
+    {
         group->SendTargetIconList(this);
+    }
     else                                                     // target icon update
     {
         if (!group->IsLeader(GetPlayer()->GetGUID()) && !group->IsAssistant(GetPlayer()->GetGUID()))
@@ -628,7 +630,9 @@ void WorldSession::HandleGroupChangeSubGroupOpcode(WorldPacket& recvData)
     uint64 guid;
 
     if (movedPlayer)
+    {
         guid = movedPlayer->GetGUID();
+    }
     else
     {
         CharacterDatabase.EscapeString(name);
@@ -803,7 +807,6 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player* player, WorldPacke
         // TODO: looks like now client requires all active auras to be in the beginning of the auramask
         //       e.g. if you have holes in the aura mask the values after are ignored.
         *data << uint8(0);
-
         uint64 auramask = player->GetAuraUpdateMaskForRaid();
         *data << uint64(auramask);
         *data << uint32(MAX_AURAS);    // client reads (64) Bits from auramask
@@ -954,7 +957,7 @@ void WorldSession::BuildPartyMemberStatsChangedPacket(Player* player, WorldPacke
 
     if (mask & GROUP_UPDATE_FLAG_PHASE)   // 4.0.6 unk
     {
-        *data << uint32(8); // either 0 or 8, same unk found in SMSG_PHASESHIFT
+        *data << uint32(0); // either 0 or 8, same unk found in SMSG_PHASESHIFT
         *data << uint32(0); // count
         // for (count) *data << uint16(phaseId)
     }
@@ -981,19 +984,14 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket& recvData)
 
     Pet* pet = player->GetPet();
 
-    WorldPacket data(SMSG_PARTY_MEMBER_STATS_FULL, 4+2+2+2+1+2*6+8+1+8); // Needs checked for 406a
-    data << uint8(0);                                       // only for SMSG_PARTY_MEMBER_STATS_FULL, probably arena/bg related
+    WorldPacket data(SMSG_PARTY_MEMBER_STATS_FULL, 4+2+2+2+1+2*6+8+1+8);
+    data << uint8(0);                                      // only for SMSG_PARTY_MEMBER_STATS_FULL, probably arena/bg related
     data.append(player->GetPackGUID());
 
-    /*
-     * uint32 mask1 = 0x00040BFF;                              // common mask, real flags used 0x000040BFF
-     * if (pet)
-     *     mask1 = 0x7FFFFFFF;                                 // for hunters and other classes with pets
-     */
-    uint32 mask1 = GROUP_UPDATE_FULL;
+    uint32 mask1 = GROUP_UPDATE_FULL;                     // common mask, real flags used 0x000040BFF
 
     if (!pet)
-        mask1 &= ~GROUP_UPDATE_PET;
+        mask1 &= ~GROUP_UPDATE_PET;                       // for hunters and other classes with pets, real flags used 0x7FFFFFFF
 
     Powers powerType = player->getPowerType();
     data << uint32(mask1);                                // group update mask
@@ -1009,12 +1007,12 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket& recvData)
     data << uint16(player->GetPositionY());               // GROUP_UPDATE_FLAG_POSITION
     data << uint16(player->GetPositionZ());               // GROUP_UPDATE_FLAG_POSITION
 
-    // GROUP_UPDATE_FLAG_AURAS
-        // if true client clears auras that are not covered by auramask
-        // TODO: looks like now client requires all active auras to be in the beginning of the auramask
-        //       e.g. if you have holes in the aura mask the values after are ignored.
-    data << uint8(1);
     uint64 auramask = 0;
+    // GROUP_UPDATE_FLAG_AURAS
+    // if true client clears auras that are not covered by auramask
+    // TODO: looks like now client requires all active auras to be in the beginning of the auramask
+    //       e.g. if you have holes in the aura mask the values after are ignored.
+    data << uint8(0);
     size_t maskPos = data.wpos();
     data << uint64(auramask);               // placeholder
     data << uint32(MAX_AURAS);              // if true client clears auras that are not covered by auramask
@@ -1053,12 +1051,12 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket& recvData)
         data << uint16(pet->GetPower(petpowertype));        // GROUP_UPDATE_FLAG_PET_CUR_POWER
         data << uint16(pet->GetMaxPower(petpowertype));     // GROUP_UPDATE_FLAG_PET_MAX_POWER
 
+        uint64 petauramask = 0;
         // GROUP_UPDATE_FLAG_PET_AURAS
         // if true client clears auras that are not covered by auramask
         // TODO: looks like now client requires all active auras to be in the beginning of the auramask
         //       e.g. if you have holes in the aura mask the values after are ignored.
-        data << uint8(1);
-        uint64 petauramask = 0;
+        data << uint8(0);
         size_t petMaskPos = data.wpos();
         data << uint64(petauramask);                       // placeholder
         data << uint32(MAX_AURAS);                         // client reads (64) Bits from auramask
@@ -1083,13 +1081,12 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket& recvData)
                 }
             }
         }
-
         data.put<uint64>(petMaskPos, petauramask);           // GROUP_UPDATE_FLAG_PET_AURAS
     }
-    // else not needed, flags do not include any PET_ update
+    // else IS NOT needed, flags do not include any PET_ update
 
     // GROUP_UPDATE_FLAG_PHASE
-    data << uint32(8); // either 0 or 8, same unk found in SMSG_PHASESHIFT
+    data << uint32(0); // either 0 or 8, same unk found in SMSG_PHASESHIFT
     data << uint32(0); // count
     // for (count) *data << uint16(phaseId)
 
@@ -1118,7 +1115,7 @@ void WorldSession::HandleOptOutOfLootOpcode(WorldPacket& recvData)
     // ignore if player not loaded
     if (!GetPlayer())                                        // needed because STATUS_AUTHED
     {
-        if (passOnLoot)
+        if (passOnLoot != 0)
             sLog->outError("CMSG_OPT_OUT_OF_LOOT value<>0 for not-loaded character!");
         return;
     }
