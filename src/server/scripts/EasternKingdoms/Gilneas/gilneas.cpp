@@ -2570,7 +2570,7 @@ public:
 
     struct npc_horrid_abominationAI : public ScriptedAI
     {
-        npc_horrid_abominationAI(Creature *creature) : ScriptedAI(creature) {}
+        npc_horrid_abominationAI(Creature* creature) : ScriptedAI(creature) {}
 
         uint32 DieTimer;
 
