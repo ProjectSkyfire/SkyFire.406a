@@ -74,7 +74,7 @@ class mob_av_marshal_or_warmaster : public CreatureScript
             {
                 ChargeTimer            = urand(2 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
                 CleaveTimer            = urand(1 * IN_MILLISECONDS, 11 * IN_MILLISECONDS);
-                DemoralizingShoutTimer = urand(2 * IN_MILLISECONDS,  2 * IN_MILLISECONDS);
+                DemoralizingShoutTimer = urand(2 * IN_MILLISECONDS,  3 * IN_MILLISECONDS);
                 Whirlwind1Timer        = urand(1 * IN_MILLISECONDS, 12 * IN_MILLISECONDS);
                 Whirlwind2Timer        = urand(5 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
                 EnrageTimer            = urand(5 * IN_MILLISECONDS, 20 * IN_MILLISECONDS);
