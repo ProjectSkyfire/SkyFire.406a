@@ -27,6 +27,14 @@
 #include "DetourAssert.h"
 #include <new>
 
+#ifdef _WIN32
+#include <io.h>
+#define F_OK   0
+#else
+#include <unistd.h>
+#endif
+#include <errno.h>
+
 
 inline bool overlapSlabs(const float* amin, const float* amax, const float* bmin, const float* bmax, const float px, const float py)
 {
@@ -817,11 +825,28 @@ dtStatus dtNavMesh::addTile(unsigned char* data, int dataSize, int flags, dtTile
 
 const dtMeshTile* dtNavMesh::getTileAt(int x, int y) const
 {
+    if ((x < -100000 || x > 100000) || (y < -100000 || y > 100000))
+        return 0;
+
     // Find tile based on hash.
-    int h = computeTileHash(x, y, m_tileLutMask);
+    int h = computeTileHash(x,y,m_tileLutMask);
+    access ((char*)(m_posLookup+h),F_OK);
+    if (errno==14)
+        return 0;   
     dtMeshTile* tile = m_posLookup[h];
+
     while (tile)
     {
+        if (sizeof(*tile)!=sizeof(dtMeshTile))
+            return 0;
+        if (sizeof(*tile->header)!=sizeof(dtMeshHeader))
+            return 0;
+        access ((char*)tile,F_OK);
+        if (errno==14)
+            return 0;
+        access ((char*)tile->header,F_OK);
+        if (errno==14)
+            return 0;
         if (tile->header && tile->header->x == x && tile->header->y == y)
             return tile;
         tile = tile->next;

@@ -215,6 +215,17 @@ template<class T>
 void ChaseMovementGenerator<T>::Finalize(T &owner)
 {
     owner.ClearUnitState(UNIT_STATE_CHASE | UNIT_STATE_CHASE_MOVE);
+
+    if (owner.GetTypeId() == TYPEID_UNIT && !((Creature*)&owner)->isPet() && owner.isAlive())
+       owner.GetMotionMaster()->MoveTargetedHome();
+   {
+       if (!owner.isInCombat() || ( this->i_target.getTarget() && !this->i_target.getTarget()->isInAccessiblePlaceFor(((Creature*)&owner))))
+       {
+           if (owner.isInCombat())
+               owner.CombatStop(true);
+           owner.GetMotionMaster()->MoveTargetedHome();
+       }
+   }
 }
 
 template<class T>
