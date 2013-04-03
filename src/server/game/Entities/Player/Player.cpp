@@ -25085,6 +25085,12 @@ bool Player::LearnTalent(uint32 talentId, uint32 talentRank)
 
     sLog->outDetail("TalentID: %u Rank: %u Spell: %u Spec: %u\n", talentId, talentRank, spellid, GetActiveSpec());
 
+    // Save Talents 
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();   
+    _SaveTalents(trans);   
+    _SaveSpells(trans);    
+    CharacterDatabase.CommitTransaction(trans);    
+
     // set talent tree for player
     if (!GetPrimaryTalentTree(GetActiveSpec()))
     {
