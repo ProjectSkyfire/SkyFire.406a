@@ -164,7 +164,7 @@ public:
 
         void Reset()
         {
-            DarkOffering = urand(290, 10);
+            DarkOffering = urand(200, 1000);
         }
 
         void UpdateAI(uint32 const Diff)

@@ -21,7 +21,7 @@
 #include "ScriptedEscortAI.h"
 #include "Vehicle.h"
 
-//Phase 1
+// Phase 1
 /*######
 ## npc_prince_liam_greymane_phase1
 ######*/
@@ -40,23 +40,23 @@ public:
     {
         npc_prince_liam_greymane_phase1AI(Creature* creature) : ScriptedAI(creature) {}
 
-        uint32 tSay; //Time left for say
-        uint32 cSay; //Current Say
+        uint32 tSay; // Time left for say
+        uint32 cSay; // Current Say
 
-        //Evade or Respawn
+        // Evade or Respawn
         void Reset()
         {
-            tSay = DELAY_SAY_PRINCE_LIAM_GREYMANE; //Reset timer
-            cSay = 1; //Start from 1
+            tSay = DELAY_SAY_PRINCE_LIAM_GREYMANE; // Reset timer
+            cSay = 1; // Start from 1
         }
 
-        //Timed events
+        // Timed events
         void UpdateAI(const uint32 diff)
         {
-            //Out of combat
+            // Out of combat
             if (!me->getVictim())
             {
-                //Timed say
+                // Timed say
                 if (tSay <= diff)
                 {
                     switch (cSay)
@@ -106,31 +106,31 @@ public:
     {
         npc_gilneas_city_guard_phase1AI(Creature* creature) : ScriptedAI(creature) {}
 
-        uint32 tSay; //Time left for say
+        uint32 tSay; // Time left for say
 
-        //Evade or Respawn
+        // Evade or Respawn
         void Reset()
         {
             if (me->GetGUIDLow() == 3486400)
-                tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; //Reset timer
+                tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; // Reset timer
         }
 
         void UpdateAI(const uint32 diff)
         {
-            //Out of combat and
+            // Out of combat and
             if (me->GetGUIDLow() == 3486400)
             {
-                //Timed say
+                // Timed say
                 if (tSay <= diff)
                 {
-                    //Random say
+                    // Random say
                     DoScriptText(RAND(
                         SAY_GILNEAS_CITY_GUARD_GATE_1,
                         SAY_GILNEAS_CITY_GUARD_GATE_2,
                         SAY_GILNEAS_CITY_GUARD_GATE_3),
                     me);
 
-                    tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; //Reset timer
+                    tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; // Reset timer
                 }
                 else
                 {
@@ -141,7 +141,7 @@ public:
     };
 };
 
-//Phase 2
+// Phase 2
 /*######
 ## npc_gilneas_city_guard_phase2
 ######*/
@@ -193,7 +193,7 @@ public:
                 if ((me->isAlive()) && (!me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f)))
                     if (Creature* enemy = me->FindNearestCreature(NPC_RAMPAGING_WORGEN_1, 16.0f, true))
                         me->AI()->AttackStart(enemy);
-                tSeek = urand(1000, 2000); //optimize cpu load, seeking only sometime between 1 and 2 seconds
+                tSeek = urand(1000, 2000); // optimize cpu load, seeking only sometime between 1 and 2 seconds
             }
             else tSeek -= diff;
 
@@ -247,7 +247,7 @@ public:
             tYell     = DELAY_YELL_PRINCE_LIAM_GREYMANE;
         }
 
-        //There is NO phase shift here!!!!
+        // There is NO phase shift here!!!!
         void DamageTaken(Unit* who, uint32& damage)
         {
             if (who->GetTypeId() == TYPEID_PLAYER)
@@ -269,12 +269,12 @@ public:
 
         void UpdateAI(const uint32 diff)
         {
-            //If creature has no target
+            // If creature has no target
             if (!UpdateVictim())
             {
                 if (tSeek <= diff)
                 {
-                    //Find worgen nearby
+                    // Find worgen nearby
                     if (me->isAlive() && !me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f))
                         if (Creature* enemy = me->FindNearestCreature(NPC_RAMPAGING_WORGEN_1, 16.0f, true))
                             me->AI()->AttackStart(enemy);
@@ -282,13 +282,13 @@ public:
                 }
                 else tSeek -= diff;
 
-                //Yell only once after Reset()
+                // Yell only once after Reset()
                 if (doYell)
                 {
-                    //Yell Timer
+                    // Yell Timer
                     if (tYell <= diff)
                     {
-                        //Random yell
+                        // Random yell
                         DoScriptText(RAND(
                             YELL_PRINCE_LIAM_GREYMANE_1,
                             YELL_PRINCE_LIAM_GREYMANE_2,
@@ -305,7 +305,7 @@ public:
             }
             else
             {
-                DoMeleeAttackIfReady();//Stop yell timer on combat
+                DoMeleeAttackIfReady(); // Stop yell timer on combat
                 doYell = false;
             }
         }
@@ -497,7 +497,7 @@ public:
             tQuestCredit     = 2500;
             go->SetGoState(GO_STATE_ACTIVE);
             DoorTimer = DOOR_TIMER;
-            spawnKind = urand(1, 3); //1, 2=citizen, 3=citizen&worgen (66%, 33%)
+            spawnKind = urand(1, 3); // 1, 2=citizen, 3=citizen&worgen (66%, 33%)
             angle = go->GetOrientation();
             x = go->GetPositionX()-cos(angle)*2;
             y = go->GetPositionY()-sin(angle)*2;
@@ -533,10 +533,10 @@ public:
             if (tQuestCredit <= ((float)diff/8))
             {
                 opened = 0;
-                
+
                 if(aPlayer)
                     aPlayer->KilledMonsterCredit(35830, 0);
-                
+
                 if (spawnKind == 3)
                 {
                     if (Creature* spawnedCreature = go->SummonCreature(NPC_RAMPAGING_WORGEN_2, wx, wy, z, angle, TEMPSUMMON_TIMED_DESPAWN, SUMMON1_TTL))
@@ -580,8 +580,8 @@ struct WayPointID
 
 struct Paths
 {
-    uint8 pointsCount[8]; //pathID, pointsCount
-    Point paths[8][10];   //pathID, pointID, Point
+    uint8 pointsCount[8]; // pathID, pointsCount
+    Point paths[8][10];   // pathID, pointID, Point
 };
 
 class npc_frightened_citizen : public CreatureScript
@@ -736,7 +736,7 @@ public:
     };
 };
 
-//Phase 4
+// Phase 4
 /*######
 ## npc_bloodfang_worgen
 ######*/
@@ -863,7 +863,7 @@ public:
                 if ((me->isAlive()) && (!me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f)))
                     if (Creature* enemy = me->FindNearestCreature(NPC_BLOODFANG_WORGEN, 10.0f, true))
                         me->AI()->AttackStart(enemy);
-                tSeek = urand(1000, 2000); //optimize cpu load, seeking only sometime between 1 and 2 seconds
+                tSeek = urand(1000, 2000); // optimize cpu load, seeking only sometime between 1 and 2 seconds
             }
             else tSeek -= diff;
 
@@ -926,7 +926,7 @@ public:
                 if ((me->isAlive()) && (!me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f)))
                     if (Creature* enemy = me->FindNearestCreature(NPC_BLOODFANG_WORGEN, 16.0f, true))
                         me->AI()->AttackStart(enemy);
-                tSeek = urand(1000, 2000); //optimize cpu load, seeking only sometime between 1 and 2 seconds
+                tSeek = urand(1000, 2000); // optimize cpu load, seeking only sometime between 1 and 2 seconds
             }
             else tSeek -= diff;
 
@@ -975,8 +975,8 @@ public:
             {
                 if ((me->isAlive()) && (!me->isInCombat() && (me->GetDistance2d(me->GetHomePosition().GetPositionX(), me->GetHomePosition().GetPositionY()) <= 1.0f)))
                     if (Creature* enemy = me->FindNearestCreature(NPC_BLOODFANG_WORGEN, 5.0f, true))
-                        me->AI()->AttackStart(enemy); //She should really only grab agro when npc Cleese is not there, so we will keep this range small
-                tSeek = urand(1000, 2000); //optimize cpu load, seeking only sometime between 1 and 2 seconds
+                        me->AI()->AttackStart(enemy); // She should really only grab agro when npc Cleese is not there, so we will keep this range small
+                tSeek = urand(1000, 2000); // optimize cpu load, seeking only sometime between 1 and 2 seconds
             }
             else tSeek -= diff;
 
@@ -1155,7 +1155,7 @@ public:
                     switch (urand(0, 2)) // Perform one of 3 random attacks
                     {
                         case 0: // Do Left Hook
-                            if (me->GetOrientation() > 2.0f && me->GetOrientation() < 3.0f || me->GetOrientation() > 5.0f && me->GetOrientation() < 6.0f) 
+                            if (me->GetOrientation() > 2.0f && me->GetOrientation() < 3.0f || me->GetOrientation() > 5.0f && me->GetOrientation() < 6.0f)
                                 // If Orientation is outside of these ranges, there is a possibility the knockback could knock worgens off the platform
                                 // After which, Crowley would chase
                             {
@@ -2212,6 +2212,7 @@ public:
 /*######
 ## npc_lord_darius_crowley_c3
 ######*/
+
 class npc_lord_darius_crowley_c3 : public CreatureScript
 {
 public:
@@ -2249,6 +2250,7 @@ public:
 /*######
 ## npc_king_genn_greymane_c2
 ######*/
+
 class npc_king_genn_greymane_c2 : public CreatureScript
 {
 public:
@@ -2266,6 +2268,7 @@ public:
 /*######
 ## npc_greymane_horse
 ######*/
+
 class npc_greymane_horse : public CreatureScript
 {
 public:
@@ -2375,6 +2378,7 @@ public:
 /*######
 ## npc_krennan_aranas_c2
 ######*/
+
 class npc_krennan_aranas_c2 : public CreatureScript
 {
 public:
@@ -2526,6 +2530,7 @@ public:
 /*######
 ## npc_lord_godfrey_p4_8
 ######*/
+
 class npc_lord_godfrey_p4_8 : public CreatureScript
 {
 public:
@@ -2549,57 +2554,135 @@ public:
     }
 };
 
-class spell_keg_placed : public SpellScriptLoader
+/* ######
+## You Can't Take 'Em Alone - 14348
+###### */
+
+class npc_horrid_abomination : public CreatureScript
 {
-    public:
-        spell_keg_placed() : SpellScriptLoader("spell_keg_placed") {}
+public:
+    npc_horrid_abomination() : CreatureScript("npc_horrid_abomination") { }
 
-        class spell_keg_placed_AuraScript : public AuraScript
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_horrid_abominationAI(creature);
+    }
+
+    struct npc_horrid_abominationAI : public ScriptedAI
+    {
+        npc_horrid_abominationAI(Creature* creature) : ScriptedAI(creature) {}
+
+        uint32 DieTimer;
+
+        void Reset ()
         {
-            PrepareAuraScript(spell_keg_placed_AuraScript);
+            me->ClearUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED);
+            DieTimer = 5000;
+        }
 
-            uint32 tick, tickcount;
-
-            void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        void SpellHit(Unit* caster, const SpellInfo* spell)
+        {
+            if (spell->Id == SPELL_BARREL_KEG && caster->GetTypeId() == TYPEID_PLAYER && caster->ToPlayer()->GetQuestStatus(QUEST_YOU_CANT_TAKE_EM_ALONE) == QUEST_STATUS_INCOMPLETE)
             {
-                tick = urand(1, 4);
-                tickcount = 0;
-            }
+                caster->ToPlayer()->KilledMonsterCredit(QUEST_14348_KILL_CREDIT, 0);
+                me->AddUnitState(UNIT_STATE_ROOT | UNIT_STATE_STUNNED);
 
-            void HandlePeriodic(AuraEffect const* /*aurEff*/)
-            {
-                PreventDefaultAction();
-                if (Unit* caster = GetCaster())
+                switch (urand(0, 5))
                 {
-                    if (tickcount > tick)
-                    {
-                        if (caster->GetTypeId() != TYPEID_PLAYER)
-                            return;
-
-                        caster->ToPlayer()->KilledMonsterCredit(36233, 0);
-                        if (Unit* target = GetTarget())
-                            target->Kill(target);
-                    }
-                    tickcount++;
+                    case 0:
+                        me->MonsterYell(SAY_BARREL_1, LANGUAGE_UNIVERSAL, 0);
+                        break;
+                    case 1:
+                        me->MonsterYell(SAY_BARREL_2, LANGUAGE_UNIVERSAL, 0);
+                        break;
+                    case 2:
+                        me->MonsterYell(SAY_BARREL_3, LANGUAGE_UNIVERSAL, 0);
+                        break;
+                    case 3:
+                        me->MonsterYell(SAY_BARREL_4, LANGUAGE_UNIVERSAL, 0);
+                        break;
+                    case 4:
+                        me->MonsterYell(SAY_BARREL_5, LANGUAGE_UNIVERSAL, 0);
+                        break;
+                    case 5:
+                        me->MonsterYell(SAY_BARREL_6, LANGUAGE_UNIVERSAL, 0);
+                        break;
                 }
             }
-
-            void Register()
-            {
-                OnEffectApply += AuraEffectApplyFn(spell_keg_placed_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
-                OnEffectPeriodic += AuraEffectPeriodicFn(spell_keg_placed_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_DUMMY);
-            }
-        };
-
-        AuraScript* GetAuraScript() const
-        {
-            return new spell_keg_placed_AuraScript();
         }
+
+        void UpdateAI(const uint32 diff)
+        {
+            if (DieTimer <= diff)
+            {
+                if (me->HasAura(SPELL_BARREL_KEG))
+                    me->DisappearAndDie();
+                else
+                    DieTimer = 1000;
+            }
+            else
+                DieTimer -= diff;
+
+            if (!UpdateVictim())
+                return;
+
+            DoMeleeAttackIfReady();
+        }
+    };
+};
+
+class spell_keg_placed : public SpellScriptLoader
+{
+public:
+    spell_keg_placed() : SpellScriptLoader("spell_keg_placed") {}
+
+    class spell_keg_placed_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_keg_placed_AuraScript);
+
+        uint32 tick, tickcount;
+
+        void HandleEffectApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            tick = urand(1, 4);
+            tickcount = 0;
+        }
+
+        void HandlePeriodic(AuraEffect const* /*aurEff*/)
+        {
+            PreventDefaultAction();
+            if (Unit* caster = GetCaster())
+            {
+                if (tickcount > tick)
+                {
+                    if (caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    caster->ToPlayer()->KilledMonsterCredit(36233, 0);
+                    if (Unit* target = GetTarget())
+                        target->Kill(target);
+                }
+                tickcount++;
+            }
+        }
+
+        void Register()
+        {
+            OnEffectApply += AuraEffectApplyFn(spell_keg_placed_AuraScript::HandleEffectApply, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_keg_placed_AuraScript::HandlePeriodic, EFFECT_0, SPELL_AURA_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_keg_placed_AuraScript();
+    }
 };
 
 /*######
 ## npc_crowley_horse
 ######*/
+
 class npc_crowley_horse : public CreatureScript
 {
 public:
@@ -2935,6 +3018,7 @@ void AddSC_gilneas()
     new npc_king_genn_greymane_c2();
     new npc_crowley_horse();
     new spell_keg_placed();
+    new npc_horrid_abomination();
     new npc_greymane_horse();
     new npc_krennan_aranas_c2();
     new npc_lord_godfrey_p4_8();
