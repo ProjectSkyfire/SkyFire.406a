@@ -57,11 +57,11 @@ enum PaladinSpells
     SPELL_RIGHTEOUS_DEFENCE                     = 31789,
     SPELL_RIGHTEOUS_DEFENCE_EFFECT_1            = 31790,
 
-	PALADIN_SPELL_BLESSING_OF_KINGS_1           = 79062,
-	PALADIN_SPELL_BLESSING_OF_KINGS_2           = 79063,
+    PALADIN_SPELL_BLESSING_OF_KINGS_1           = 79062,
+    PALADIN_SPELL_BLESSING_OF_KINGS_2           = 79063,
 
-	PALADIN_SPELL_BLESSING_OF_MIGHT_1           = 79101,
-	PALADIN_SPELL_BLESSING_OF_MIGHT_2           = 79102
+    PALADIN_SPELL_BLESSING_OF_MIGHT_1           = 79101,
+    PALADIN_SPELL_BLESSING_OF_MIGHT_2           = 79102
 };
 
 // 31850 - Ardent Defender
@@ -702,7 +702,7 @@ public:
     class spell_pal_consecration_AuraScript : public AuraScript
     {
         PrepareAuraScript(spell_pal_consecration_AuraScript)
-        
+
         float x, y, z;
 
         bool Load()
@@ -735,7 +735,7 @@ public:
                 return;
 
             consecrationNpc->GetPosition(x,y,z);
-            consecrationNpc->CastSpell(x,y,z,SPELL_PALADIN_CONSECRATION_DAMAGE,true,NULL,NULL,GetCaster()->GetGUID());  
+            consecrationNpc->CastSpell(x,y,z,SPELL_PALADIN_CONSECRATION_DAMAGE,true,NULL,NULL,GetCaster()->GetGUID());
         }
 
         void Register()
@@ -775,7 +775,7 @@ class spell_pal_righteous_defense : public SpellScriptLoader
 
                 return SPELL_CAST_OK;
             }
- 	
+
             void HandleSpellEffectTriggerSpell(SpellEffIndex /*effIndex*/)
             {
                 if (Unit* caster = GetCaster())
