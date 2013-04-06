@@ -154,7 +154,7 @@ enum GILNEAS_BG_Objectives
 // x, y, z, o
 const float GILNEAS_BG_NodePositions[GILNEAS_BG_DYNAMIC_NODES_COUNT][4] =
 {
-    { 1057.7800f, 1278.260010f, 3.192400f, 1.864820f }, // Lighthouse
+    { 1057.856934f, 1278.269165f, 2.91f, 1.903034f },   // Lighthouse
     { 980.1835f, 947.8692f, 13.998f, 5.9015f },         // Waterwork
     { 1251.010f, 958.3939f, 5.680f, 2.7698f }           // mine
 };
@@ -166,8 +166,9 @@ const float GILNEAS_BG_DoorPositions[2][8] =
     { 1396.15f, 977.014f, 7.43169f, 6.27043f, 0.0f, 0.0f, 0.006378f, -0.99998f }
 };
 
-const uint32 GILNEAS_BG_TickIntervals[4] = { 0, 12000, 6000, 1000 };
-const uint32 GILNEAS_BG_TickPoints[4]    = { 0, 10, 10, 30 };
+// Tick intervals and given points: case 0,1,2,3 captured nodes
+const uint32 GILNEAS_BG_TickIntervals[4] = {0, 12000, 6000, 1000};
+const uint32 GILNEAS_BG_TickPoints[4] = {0, 10, 10, 30};
 
 // WorldSafeLocs ids for 3 nodes, and for ally, and horde starting location
 const uint32 GILNEAS_BG_GraveyardIds[GILNEAS_BG_ALL_NODES_COUNT] = { 1736, 1738, 1735, 1740, 1739 };
