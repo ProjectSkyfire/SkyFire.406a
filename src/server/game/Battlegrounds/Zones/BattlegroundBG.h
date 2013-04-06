@@ -41,8 +41,8 @@ enum GILNEAS_BG_WorldStates
     GILNEAS_BG_OP_RESOURCES_WARNING          = 1955
 };
 
-const uint32 GILNEAS_BG_OP_NODESTATES[3] = { 1767, 1772, 1782 };
-const uint32 GILNEAS_BG_OP_NODEICONS[3]  = { 1842, 1845, 1846 };
+const uint32 GILNEAS_BG_OP_NODESTATES[3] = {1767, 1782, 1772};
+const uint32 GILNEAS_BG_OP_NODEICONS[3]  = {1842, 1846, 1845};
 
 enum GILNEAS_BG_NodeObjectId
 {
@@ -88,7 +88,7 @@ enum GILNEAS_BG_ObjectTypes
     GILNEAS_BG_OBJECTID_AURA_H         = 180101,
     GILNEAS_BG_OBJECTID_AURA_C         = 180102,
 
-    GILNEAS_BG_OBJECTID_GATE_A         = 207177,
+    GILNEAS_BG_OBJECTID_GATE_A         = 207177,   
     GILNEAS_BG_OBJECTID_GATE_H         = 207178
 };
 
@@ -228,8 +228,9 @@ class BattlegroundBG : public Battleground
         virtual WorldSafeLocsEntry const* GetClosestGraveYard(Player* player);
 
         /* Score-keeping */
-        void UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor = true);
-        void FillInitialWorldStates(WorldPacket& data);
+        virtual void UpdatePlayerScore(Player *Source, uint32 type, uint32 value, bool doAddHonor = true);
+
+        virtual void FillInitialWorldStates(WorldPacket& data);
 
         /* Nodes occupying */
         virtual void EventPlayerClickedOnFlag(Player* source, GameObject* target_obj);
@@ -241,9 +242,9 @@ class BattlegroundBG : public Battleground
     private:
 
         /* GameObject spawning/removing */
-        void _SendNodeUpdate(uint8 node);
         void _CreateBanner(uint8 node, uint8 type, uint8 teamIndex, bool delay);
         void _DelBanner(uint8 node, uint8 type, uint8 teamIndex);
+        void _SendNodeUpdate(uint8 node);
 
         /* Creature spawning/removing */
         // TODO: need to get the peons spawns scripted

@@ -47,6 +47,8 @@ BattlegroundBG::~BattlegroundBG() {}
 
 void BattlegroundBG::Update(uint32 diff) // PostUpdateImpl...
 {
+    Battleground::Update(diff);
+
     if (GetStatus() == STATUS_IN_PROGRESS)
     {
         int team_points[BG_TEAMS_COUNT] = { 0, 0 };
@@ -191,10 +193,12 @@ void BattlegroundBG::StartingEventCloseDoors()
 
 void BattlegroundBG::StartingEventOpenDoors()
 {
+    // Spawn neutral banners
     for (int banner = GILNEAS_BG_OBJECT_BANNER_NEUTRAL, i = 0; i < 5; banner += 8, ++i)
         SpawnBGObject(banner, RESPAWN_IMMEDIATELY);
     for (int i = 0; i < GILNEAS_BG_DYNAMIC_NODES_COUNT; ++i)
     {
+        // Randomly select buff to spawn
         uint8 buff = urand(0, 2);
         SpawnBGObject(GILNEAS_BG_OBJECT_SPEEDBUFF_LIGHTHOUSE + buff + i * 3, RESPAWN_IMMEDIATELY);
     }
@@ -364,10 +368,10 @@ void BattlegroundBG::_NodeOccupied(uint8 node, Team team)
     if (node >= GILNEAS_BG_DYNAMIC_NODES_COUNT) // only dynamic nodes, no start points
         return;
 
-    Creature* trigger = GetBGCreature(node+5); // 0-6 spirit guides
+    Creature* trigger = GetBGCreature(node+7); // 0-6 spirit guides
 
     if (!trigger)
-       trigger = AddCreature(WORLD_TRIGGER, node+5, team, GILNEAS_BG_NodePositions[node][0], GILNEAS_BG_NodePositions[node][1], GILNEAS_BG_NodePositions[node][2], GILNEAS_BG_NodePositions[node][3]);
+       trigger = AddCreature(WORLD_TRIGGER, node+7, team, GILNEAS_BG_NodePositions[node][0], GILNEAS_BG_NodePositions[node][1], GILNEAS_BG_NodePositions[node][2], GILNEAS_BG_NodePositions[node][3]);
 
     // Add bonus honor aura trigger creature when node is occupied
     // Cast bonus aura (+50% honor in 25yards)
@@ -420,7 +424,7 @@ void BattlegroundBG::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
         return;
 
     uint8 node = GILNEAS_BG_NODE_LIGHTHOUSE;
-    GameObject* object = GetBgMap()->GetGameObject(BgObjects[node*8+3]);
+    GameObject* object = GetBgMap()->GetGameObject(BgObjects[node*8+7]);
     while ((node < GILNEAS_BG_DYNAMIC_NODES_COUNT) && ((!object) || (!source->IsWithinDistInMap(object, 10))))
     {
         ++node;
@@ -615,7 +619,7 @@ void BattlegroundBG::Reset()
         _BannerTimers[i].timer = 0;
     }
 
-    for (uint8 i = 0; i < GILNEAS_BG_ALL_NODES_COUNT + 3; ++i)// +3 for aura triggers
+    for (uint8 i = 0; i < GILNEAS_BG_ALL_NODES_COUNT + 5; ++i)  // +5 for aura triggers
         if (BgCreatures[i])
             DelCreature(i);
 }
@@ -675,7 +679,7 @@ WorldSafeLocsEntry const* BattlegroundBG::GetClosestGraveYard(Player* player)
 
     // If not, place ghost on starting location
     if (!good_entry)
-        good_entry = sWorldSafeLocsStore.LookupEntry(GILNEAS_BG_GraveyardIds[teamIndex+3]);
+        good_entry = sWorldSafeLocsStore.LookupEntry(GILNEAS_BG_GraveyardIds[teamIndex+5]);
 
     return good_entry;
 }
