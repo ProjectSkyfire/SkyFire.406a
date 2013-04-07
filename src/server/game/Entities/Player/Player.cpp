@@ -2488,9 +2488,7 @@ void Player::RegenerateAll()
     if (_regenTimerCount >= 2000)
     {
         // Not in combat or they have regeneration
-        if (!isInCombat() || IsPolymorphed() || _baseHealthRegen ||
-            HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT) ||
-            HasAuraType(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT))
+        if (!isInCombat() || HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT) || HasAuraType(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT) || IsPolymorphed() || _baseHealthRegen)
         {
             RegenerateHealth();
         }
@@ -2690,10 +2688,10 @@ void Player::RegenerateHealth()
             ApplyPctN(addvalue, GetTotalAuraModifier(SPELL_AURA_MOD_REGEN_DURING_COMBAT));
 
         if (!IsStandState())
-            addvalue *= 1.5f; // Regen is faster while sitting
+            addvalue *= 1.33f; // Regen is faster while sitting
 
         if (RACE_TROLL)
-            addvalue *= 1.1f; // Trolls Regen 10% Faster 
+            addvalue *= 1.1f; // Trolls Regen 10% Faster
     }
 
     // always regeneration bonus (including combat)
@@ -9972,7 +9970,7 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
         case 1519:                                          // Stormwind City
         case 1537:                                          // Ironforge
         case 2257:                                          // Deeprun Tram
-        case 3703:                                          // Shattrath City		
+        case 3703:                                          // Shattrath City
             break;
         case 139:                                           // Eastern Plaguelands
             if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_EP)
@@ -25115,11 +25113,11 @@ bool Player::LearnTalent(uint32 talentId, uint32 talentRank)
 
     sLog->outDetail("TalentID: %u Rank: %u Spell: %u Spec: %u\n", talentId, talentRank, spellid, GetActiveSpec());
 
-    // Save Talents 
-    SQLTransaction trans = CharacterDatabase.BeginTransaction();   
-    _SaveTalents(trans);   
-    _SaveSpells(trans);    
-    CharacterDatabase.CommitTransaction(trans);    
+    // Save Talents
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    _SaveTalents(trans);
+    _SaveSpells(trans);
+    CharacterDatabase.CommitTransaction(trans);
 
     // set talent tree for player
     if (!GetPrimaryTalentTree(GetActiveSpec()))
