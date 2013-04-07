@@ -15626,11 +15626,6 @@ float Unit::GetAPMultiplier(WeaponAttackType attType, bool normalized)
     }
 }
 
-bool Unit::IsUnderLastManaUseEffect() const
-{
-    return  getMSTimeDiff(m_lastManaUse, getMSTime()) < 5000;
-}
-
 void Unit::SetContestedPvP(Player* attackedPlayer)
 {
     Player* player = GetCharmerOrOwnerPlayerOrPlayerItself();

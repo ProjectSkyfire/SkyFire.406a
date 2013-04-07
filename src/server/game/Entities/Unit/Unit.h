@@ -2073,9 +2073,6 @@ class Unit : public WorldObject
         uint32 SpellCriticalDamageBonus(SpellInfo const* spellProto, uint32 damage, Unit* victim);
         uint32 SpellCriticalHealingBonus(SpellInfo const* spellProto, uint32 damage, Unit* victim);
 
-        void SetLastManaUse(uint32 spellCastTime) { m_lastManaUse = spellCastTime; }
-        bool IsUnderLastManaUseEffect() const;
-
         void SetContestedPvP(Player* attackedPlayer = NULL);
 
         void MeleeDamageBonus(Unit* victim, uint32 *damage, WeaponAttackType attType, SpellInfo const *spellProto = NULL);

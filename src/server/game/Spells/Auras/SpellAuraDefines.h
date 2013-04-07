@@ -235,7 +235,7 @@ enum AuraType
     SPELL_AURA_MOD_SPEED_NOT_STACK                 = 171,
     SPELL_AURA_MOD_MOUNTED_SPEED_NOT_STACK         = 172,
     SPELL_AURA_173                                 = 173,     // old SPELL_AURA_ALLOW_CHAMPION_SPELLS
-    SPELL_AURA_MOD_SPELL_DAMAGE_OF_STAT_PERCENT    = 174,     // by defeult intelect, dependent from SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT
+    SPELL_AURA_MOD_SPELL_DAMAGE_OF_STAT_PERCENT    = 174,     // by default intellect, dependent from SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT
     SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT   = 175,
     SPELL_AURA_SPIRIT_OF_REDEMPTION                = 176,
     SPELL_AURA_AOE_CHARM                           = 177,
@@ -360,20 +360,20 @@ enum AuraType
     SPELL_AURA_SET_VEHICLE_ID                      = 296,
     SPELL_AURA_BLOCK_SPELL_FAMILY                  = 297,
     SPELL_AURA_STRANGULATE                         = 298,
-    SPELL_AURA_299                                 = 299,
+    SPELL_AURA_299                                 = 299,		// 299 unused (3.2.2a - 5.0.1)
     SPELL_AURA_SHARE_DAMAGE_PCT                    = 300,
     SPELL_AURA_SCHOOL_HEAL_ABSORB                  = 301,
-    SPELL_AURA_302                                 = 302,
+    SPELL_AURA_302                                 = 302,		// 302 unused (3.2.2a - 5.0.1)
     SPELL_AURA_MOD_DAMAGE_DONE_VERSUS_AURASTATE    = 303,
     SPELL_AURA_MOD_FAKE_INEBRIATE                  = 304,
     SPELL_AURA_MOD_MINIMUM_SPEED                   = 305,
-    SPELL_AURA_306                                 = 306,
+    SPELL_AURA_306                                 = 306,		// 306 unused     
     SPELL_AURA_HEAL_ABSORB_TEST                    = 307,
     SPELL_AURA_MOD_CRIT_CHANCE_FOR_CASTER_SPELL    = 308,
-    SPELL_AURA_309                                 = 309,
+    SPELL_AURA_309                                 = 309,		// 309 unused
     SPELL_AURA_MOD_CREATURE_AOE_DAMAGE_AVOIDANCE   = 310,
-    SPELL_AURA_311                                 = 311,
-    SPELL_AURA_312                                 = 312,    // Used by archangel (spell=87151)
+    SPELL_AURA_311                                 = 311,		// some kind of stun effect
+    SPELL_AURA_312                                 = 312,       // some cosmetic auras
     SPELL_AURA_313                                 = 313,
     SPELL_AURA_PREVENT_RESURRECTION                = 314,
     SPELL_AURA_UNDERWATER_WALKING                  = 315,
@@ -383,38 +383,38 @@ enum AuraType
     SPELL_AURA_MOD_MELEE_ATTACK_SPEED              = 319,    // (melee?) attack speed
     SPELL_AURA_MOD_RANGED_ATTACK_SPEED             = 320,    // NYI
     SPELL_AURA_321                                 = 321,
-    SPELL_AURA_INTERFERE_TARGETTING                = 322,    // NYI
+    SPELL_AURA_INTERFERE_TARGETTING                = 322,    // NYI SPELL_AURA_INTERFERE_TARGETING 6 spells
     SPELL_AURA_323                                 = 323,
-    SPELL_AURA_324                                 = 324,    // This aura modifies a specific attributes based on the miscvalue
+    SPELL_AURA_324                                 = 324,    // 2 test spells
     SPELL_AURA_325                                 = 325,
-    SPELL_AURA_326                                 = 326,    // This aura is for phasing based on the miscvalue
+    SPELL_AURA_326                                 = 326,    // 24 spells in phase auras
     SPELL_AURA_327                                 = 327,
-    SPELL_AURA_PROC_ON_POWER_AMOUNT                = 328,    // Something related to eclipse power, only 1 spell: 2 effects: 1: +100, 2: -100
-    SPELL_AURA_MOD_RUNE_REGEN_SPEED                = 329,    // NYI - This aura is for increasing power regeneration percent
-    SPELL_AURA_CAST_WHILE_WALKING                  = 330,    // This aura is for allowing certain spells to be used while walking
-    SPELL_AURA_331                                 = 331,
-    SPELL_AURA_SWAP_SPELLS                         = 332,
-    SPELL_AURA_SWAP_SPELLS_2                       = 333,
+    SPELL_AURA_PROC_ON_POWER_AMOUNT                = 328,    // 3 spells Eclipse Mastery Driver Passive
+    SPELL_AURA_MOD_RUNE_REGEN_SPEED                = 329,    // NYI - 3 spells SPELL_AURA_MOD_RUNIC_POWER_REGEN
+    SPELL_AURA_CAST_WHILE_WALKING                  = 330,    // 16 spells SPELL_AURA_ALLOW_CAST_WHILE_WALKING 
+    SPELL_AURA_331                                 = 331,    // 10 spells SPELL_AURA_MOD_WEATHER
+    SPELL_AURA_SWAP_SPELLS                         = 332,    // 16 spells SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS(this is correct aura name)
+    SPELL_AURA_SWAP_SPELLS_2                       = 333,	 // 10 spells SPELL_AURA_OVERRIDE_ACTIONBAR_SPELLS_2(this is correct aura name)
     SPELL_AURA_334                                 = 334,    // This aura blinds the target, makes all npcs and players invisible but they still can see you
     SPELL_AURA_335                                 = 335,    // Something related to invisibility
-    SPELL_AURA_MOD_FLYING_RESTRICTIONS             = 336,    // NYI  - related to zone
-    SPELL_AURA_REDUCE_BUY_PRICES                   = 337,    // THIS MUST BE HANDLED!! its only 1 spell, a guild perk, this aura reduces the price of the items from all vendors by (GetBasePoints())%
+    SPELL_AURA_MOD_FLYING_RESTRICTIONS             = 336,    // 8 spells SPELL_AURA_FLIGHT_RESTRICTIONS(this is correct aura name)
+    SPELL_AURA_REDUCE_BUY_PRICES                   = 337,    // guild perk, 1 spell SPELL_AURA_MOD_VENDOR_PRICE(this is correct aura name) this aura reduces the price of the items from all vendors by (GetBasePoints())%
     SPELL_AURA_REDUCE_DURABILITY_LOSS              = 338,    // Reduces durability loss on death
-    SPELL_AURA_INCREASE_SKILL_GAIN_CHANCE          = 339,    // guild perk aura, only 1 spell, http://www.wowhead.com/spell=83949, Increases the chance to gain a skill increase on tradeskills by (GetBasePoints())%.
-    SPELL_AURA_340                                 = 340,    // guild perk aura, Increases health gained when resurrected by a guild member by (GetBasePoints())%.  Does not function in combat or while in a Battleground or Arena.
-    SPELL_AURA_341                                 = 341,    // cooldown decrease, (GetMiscValue()) by (Getbasepoints())% milliseconds
+    SPELL_AURA_INCREASE_SKILL_GAIN_CHANCE          = 339,    // guild perk aura, 1 spell SPELL_AURA_MOD_SKILLCHANCE(this is correct aura name)
+    SPELL_AURA_340                                 = 340,    // guild perk aura, 1 spell SPELL_AURA_MOD_RESSURECTED_HEALTH_PCT, Increases health gained when resurrected by a guild member by (GetBasePoints())%.  Does not function in combat or while in a Battleground or Arena.
+    SPELL_AURA_341                                 = 341,    // 2 spells modifies cooldown of hearthstone and cast time of archaeology mining
     SPELL_AURA_MOD_TIME_BETWEEN_ATTACKS            = 342,    // Increases the time between attacks of the target
-    SPELL_AURA_343                                 = 343,    // Increases damage taken, only 1 rogue spell
+    SPELL_AURA_343                                 = 343,    // 2 spells SPELL_AURA_MOD_ALL_DAMAGE_FROM_CASTER
     SPELL_AURA_MOD_AUTOATTACK_DAMAGE               = 344,    // Increases damage done (white damage)
     SPELL_AURA_MOD_ARMOR_EFFECTIVENESS_FOR_CASTER  = 345,    // Allows caster to bypass (GetAmount())% of the targets armor
-    SPELL_AURA_PROGRESS_BAR                        = 346,    // NYI
-    SPELL_AURA_MOD_SPELL_COOLDOWN_BY_HASTE         = 347,    // NYI
-    SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT = 348, // guild perk, Each time you loot money from an enemy, an extra (Getbasepoints())% money is generated and deposited directly into your guild bank.
-    SPELL_AURA_MODIFY_CURRENCY_GAIN                = 349,    // Increases (GetMiscValue()) gained by (Getbasepoints())% miscvalue 392 = honor points, its mostly used for honor points
+    SPELL_AURA_PROGRESS_BAR                        = 346,    // 32 spells shows progressbar- UI like
+    SPELL_AURA_MOD_SPELL_COOLDOWN_BY_HASTE         = 347,    // NYI -  2 spells SPELL_AURA_MOD_CD_FROM_HASTE(this is correct aura name)
+    SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT = 348, // guild perk, 2 spells SPELL_AURA_MOD_MONEY_TO_GUILD_BANK(this is correct aura name), Each time you loot money from an enemy, an extra (Getbasepoints())% money is generated and deposited directly into your guild bank.
+    SPELL_AURA_MODIFY_CURRENCY_GAIN                = 349,    // 16 spells SPELL_AURA_MOD_CURRENCY_GAIN(this is correct aura name), Increases (GetMiscValue()) gained by (Getbasepoints())% miscvalue 392 = honor points, its mostly used for honor points
     SPELL_AURA_MOD_GATHERING_ITEMS_GAINED_PERCENT  = 350,    // Increases the quantity of materials gained from Mining, Skinning, Herbalism, and Disenchanting. 15%
-    SPELL_AURA_351                                 = 351,    // This is something related to archeology - (i think it increases rating of rare items or something like that)
-    SPELL_AURA_352                                 = 352,    // Enables your worgen form
-    SPELL_AURA_MOD_CAMOUFLAGE                      = 353,    // Used by camouflage
+    SPELL_AURA_351                                 = 351,    // 8 spells archaeology-related - (i think it increases rating of rare items or something like that)
+    SPELL_AURA_352                                 = 352,    // 1 spell enables worgen<>human form switches
+    SPELL_AURA_MOD_CAMOUFLAGE                      = 353,    // 3 spells SPELL_AURA_MOD_CAMOUFLAGE
     TOTAL_AURAS                                    = 354
 };
 
