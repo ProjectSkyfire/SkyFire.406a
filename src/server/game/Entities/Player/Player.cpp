@@ -7578,7 +7578,7 @@ void Player::ModifyCurrency(uint32 id, int32 count)
         oldWeekCount = itr->second.weekCount;
     }
 
-    float mod = float(GetMaxPositiveAuraModifierByMiscValue(SPELL_AURA_MODIFY_CURRENCY_GAIN,int32(id)));
+    float mod = float(GetMaxPositiveAuraModifierByMiscValue(SPELL_AURA_MOD_CURRENCY_GAIN,int32(id)));
     if (count > 0)
         count += int32(floor(count * (mod/100)));
 
@@ -21835,7 +21835,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         // reputation discount
         price = uint32(floor(price * GetReputationPriceDiscount(creature)));
         //aura discount
-        float auraMod = float(GetTotalAuraModifier(SPELL_AURA_REDUCE_BUY_PRICES));
+        float auraMod = float(GetTotalAuraModifier(SPELL_AURA_MOD_VENDOR_PRICE));
         price -= uint32(floor(price * (auraMod/100)));
 
         if (!HasEnoughMoney(price))

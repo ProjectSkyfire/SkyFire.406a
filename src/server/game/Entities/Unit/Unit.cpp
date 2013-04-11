@@ -3124,7 +3124,7 @@ bool Unit::CanCastWhileWalking(uint32 spell_id)
     if (!ret)
         return false;
 
-    AuraEffectList const& auras = GetAuraEffectsByType(SPELL_AURA_CAST_WHILE_WALKING);
+    AuraEffectList const& auras = GetAuraEffectsByType(SPELL_AURA_CAST_WHILE_MOVING);
     for (Unit::AuraEffectList::const_iterator itr = auras.begin(); itr != auras.end(); ++itr)
     {
         if ((*itr)->GetSpellInfo()->Effects[(*itr)->GetEffIndex()].SpellClassMask.HasFlag(spell->SpellFamilyFlags))
@@ -18126,14 +18126,14 @@ bool Unit::IsVisionObscured(Unit* victim)
     Unit* victimCaster = NULL;
     Unit* myCaster = NULL;
 
-    AuraEffectList const& vAuras = victim->GetAuraEffectsByType(SPELL_AURA_INTERFERE_TARGETTING);
+    AuraEffectList const& vAuras = victim->GetAuraEffectsByType(SPELL_AURA_INTERFERE_TARGETING);
     for (AuraEffectList::const_iterator i = vAuras.begin(); i != vAuras.end(); ++i)
     {
         victimAura = (*i)->GetBase();
         victimCaster = victimAura->GetCaster();
         break;
     }
-    AuraEffectList const& myAuras = GetAuraEffectsByType(SPELL_AURA_INTERFERE_TARGETTING);
+    AuraEffectList const& myAuras = GetAuraEffectsByType(SPELL_AURA_INTERFERE_TARGETING);
     for (AuraEffectList::const_iterator i = myAuras.begin(); i != myAuras.end(); ++i)
     {
         myAura = (*i)->GetBase();

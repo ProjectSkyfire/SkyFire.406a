@@ -209,7 +209,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recvData*/)
                 data << uint8(playersNear.size() > 1 ? 0 : 1);     // Controls the text displayed in chat. 0 is "Your share is..." and 1 is "You loot..."
                 if (Guild* guild = sGuildMgr->GetGuildById((*i)->GetGuildId()))
                 {
-                    float mod = float((*i)->GetMaxPositiveAuraModifier(SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT));
+                    float mod = float((*i)->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_MONEY_TO_GUILD_BANK));
                     if (mod >= 1)
                     {
                         mod /= 100;
@@ -235,7 +235,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recvData*/)
             data << uint8(1);   // "You loot..."
             if (Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId()))
             {
-                float mod = float(player->GetMaxPositiveAuraModifier(SPELL_AURA_DEPOSIT_BONUS_MONEY_IN_GUILD_BANK_ON_LOOT));
+                float mod = float(player->GetMaxPositiveAuraModifier(SPELL_AURA_MOD_MONEY_TO_GUILD_BANK));
                 if (mod >= 1)
                 {
                     mod /= 100;
