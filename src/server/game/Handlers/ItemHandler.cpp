@@ -770,7 +770,7 @@ void WorldSession::SendListInventory(uint64 vendorGuid)
     data << uint8(count);
 
     float discountMod = _player->GetReputationPriceDiscount(vendor);
-    float auraMod = float(_player->GetTotalAuraModifier(SPELL_AURA_REDUCE_BUY_PRICES));
+    float auraMod = float(_player->GetTotalAuraModifier(SPELL_AURA_MOD_VENDOR_PRICE));
 
     for (uint32 slot = 0; slot < itemCount; ++slot)
     {

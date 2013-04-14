@@ -56,6 +56,12 @@ enum PaladinSpells
 
     SPELL_RIGHTEOUS_DEFENCE                     = 31789,
     SPELL_RIGHTEOUS_DEFENCE_EFFECT_1            = 31790,
+
+    PALADIN_SPELL_BLESSING_OF_KINGS_1           = 79062,
+    PALADIN_SPELL_BLESSING_OF_KINGS_2           = 79063,
+
+    PALADIN_SPELL_BLESSING_OF_MIGHT_1           = 79101,
+    PALADIN_SPELL_BLESSING_OF_MIGHT_2           = 79102
 };
 
 // 31850 - Ardent Defender
@@ -696,7 +702,7 @@ public:
     class spell_pal_consecration_AuraScript : public AuraScript
     {
         PrepareAuraScript(spell_pal_consecration_AuraScript)
-        
+
         float x, y, z;
 
         bool Load()
@@ -729,7 +735,7 @@ public:
                 return;
 
             consecrationNpc->GetPosition(x,y,z);
-            consecrationNpc->CastSpell(x,y,z,SPELL_PALADIN_CONSECRATION_DAMAGE,true,NULL,NULL,GetCaster()->GetGUID());  
+            consecrationNpc->CastSpell(x,y,z,SPELL_PALADIN_CONSECRATION_DAMAGE,true,NULL,NULL,GetCaster()->GetGUID());
         }
 
         void Register()
@@ -769,7 +775,7 @@ class spell_pal_righteous_defense : public SpellScriptLoader
 
                 return SPELL_CAST_OK;
             }
- 	
+
             void HandleSpellEffectTriggerSpell(SpellEffIndex /*effIndex*/)
             {
                 if (Unit* caster = GetCaster())
@@ -790,6 +796,84 @@ class spell_pal_righteous_defense : public SpellScriptLoader
         }
 };
 
+// 19740 Blessing of Might
+class spell_pal_bless_of_might : public SpellScriptLoader
+{
+    public:
+    spell_pal_bless_of_might() : SpellScriptLoader("spell_pal_bless_of_might") {}
+
+    class spell_pal_bless_of_might_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pal_bless_of_might_SpellScript);
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* caster = GetCaster())
+            {
+                if (caster->GetTypeId() != TYPEID_PLAYER)
+                    return;
+
+                std::list<Unit*> PartyMembers;
+                caster->GetPartyMembers(PartyMembers);
+
+                if (PartyMembers.size() > 1)
+                    caster->CastSpell(GetHitUnit(), PALADIN_SPELL_BLESSING_OF_MIGHT_2, true); // Blessing of Might (Raid)
+                else
+                    caster->CastSpell(GetHitUnit(), PALADIN_SPELL_BLESSING_OF_MIGHT_1, true); // Blessing of Might (Caster)
+            }
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_pal_bless_of_might_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pal_bless_of_might_SpellScript;
+    }
+};
+
+// 20217 Blessing of King
+class spell_pal_bless_of_king : public SpellScriptLoader
+{
+    public:
+    spell_pal_bless_of_king() : SpellScriptLoader("spell_pal_bless_of_king") {}
+
+    class spell_pal_bless_of_king_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_pal_bless_of_king_SpellScript);
+
+        void HandleDummy(SpellEffIndex /*effIndex*/)
+        {
+            if (Unit* caster = GetCaster())
+            {
+                if (caster->GetTypeId() != TYPEID_PLAYER)
+                    return;
+
+                std::list<Unit*> PartyMembers;
+                caster->GetPartyMembers(PartyMembers);
+
+                if (PartyMembers.size() > 1)
+                    caster->CastSpell(GetHitUnit(), PALADIN_SPELL_BLESSING_OF_KINGS_2, true); // Blessing of Kings (Raid)
+                else
+                    caster->CastSpell(GetHitUnit(), PALADIN_SPELL_BLESSING_OF_KINGS_1, true); // Blessing of Kings (Caster)
+            }
+        }
+
+        void Register()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_pal_bless_of_king_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_pal_bless_of_king_SpellScript;
+    }
+};
+
 void AddSC_paladin_spell_scripts()
 {
     new spell_pal_ardent_defender();
@@ -803,4 +887,6 @@ void AddSC_paladin_spell_scripts()
     new spell_pal_guardian_ancient_kings();
     new spell_pal_divine_storm();
     new spell_pal_consecration();
+    new spell_pal_bless_of_might();
+    new spell_pal_bless_of_king();
 }

@@ -1714,8 +1714,11 @@ void Player::Update(uint32 p_time)
 
     if (isAlive())
     {
-        _regenTimer += p_time;
-        RegenerateAll();
+        if (!HasAuraType(SPELL_AURA_PREVENT_REGENERATE_POWER))
+            SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_REGENERATE_POWER);
+
+        if (!_regenTimer)
+            RegenerateAll();
     }
 
     if (_deathState == JUST_DIED)
@@ -1798,7 +1801,6 @@ void Player::Update(uint32 p_time)
 
     Pet* pet = GetPet();
     if (pet && !pet->IsWithinDistInMap(this, GetMap()->GetVisibilityRange()) && !pet->isPossessed())
-    //if (pet && !pet->IsWithinDistInMap(this, GetMap()->GetVisibilityDistance()) && (GetCharmGUID() && (pet->GetGUID() != GetCharmGUID())))
         RemovePet(pet, PET_SAVE_AS_CURRENT, true);
 
     //we should execute delayed teleports only for alive(!) players
@@ -2488,9 +2490,7 @@ void Player::RegenerateAll()
     if (_regenTimerCount >= 2000)
     {
         // Not in combat or they have regeneration
-        if (!isInCombat() || IsPolymorphed() || _baseHealthRegen ||
-            HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT) ||
-            HasAuraType(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT))
+        if (!isInCombat() || HasAuraType(SPELL_AURA_MOD_REGEN_DURING_COMBAT) || HasAuraType(SPELL_AURA_MOD_HEALTH_REGEN_IN_COMBAT) || IsPolymorphed() || _baseHealthRegen)
         {
             RegenerateHealth();
         }
@@ -2545,13 +2545,15 @@ void Player::Regenerate(Powers power)
     {
         case POWER_MANA:
         {
-            bool recentCast = IsUnderLastManaUseEffect();
+            if (HasAuraType(SPELL_AURA_PREVENT_REGENERATE_POWER))
+                break;
+            
             float ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA);
 
             if (getLevel() < 15)
                 ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA) * (2.066f - (getLevel() * 0.066f));
 
-            if (recentCast) // SkyFire Updates Mana in intervals of 2s, which is correct
+            if (isInCombat()) // SkyFire Updates Mana in intervals of 2s, which is correct
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_INTERRUPTED_FLAT_MODIFIER) *  ((0.001f * _regenTimer) + CalculatePctF(0.001f, spellHaste)) * ManaIncreaseRate;
             else
                 addvalue += GetFloatValue(UNIT_FIELD_POWER_REGEN_FLAT_MODIFIER) *  ((0.001f * _regenTimer) + CalculatePctF(0.001f, spellHaste)) * ManaIncreaseRate;
@@ -2690,10 +2692,10 @@ void Player::RegenerateHealth()
             ApplyPctN(addvalue, GetTotalAuraModifier(SPELL_AURA_MOD_REGEN_DURING_COMBAT));
 
         if (!IsStandState())
-            addvalue *= 1.5f; // Regen is faster while sitting
+            addvalue *= 1.33f; // Regen is faster while sitting
 
         if (RACE_TROLL)
-            addvalue *= 1.1f; // Trolls Regen 10% Faster 
+            addvalue *= 1.1f; // Trolls Regen 10% Faster
     }
 
     // always regeneration bonus (including combat)
@@ -7576,7 +7578,7 @@ void Player::ModifyCurrency(uint32 id, int32 count)
         oldWeekCount = itr->second.weekCount;
     }
 
-    float mod = float(GetMaxPositiveAuraModifierByMiscValue(SPELL_AURA_MODIFY_CURRENCY_GAIN,int32(id)));
+    float mod = float(GetMaxPositiveAuraModifierByMiscValue(SPELL_AURA_MOD_CURRENCY_GAIN,int32(id)));
     if (count > 0)
         count += int32(floor(count * (mod/100)));
 
@@ -9972,7 +9974,7 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
         case 1519:                                          // Stormwind City
         case 1537:                                          // Ironforge
         case 2257:                                          // Deeprun Tram
-        case 3703:                                          // Shattrath City		
+        case 3703:                                          // Shattrath City
             break;
         case 139:                                           // Eastern Plaguelands
             if (pvp && pvp->GetTypeId() == OUTDOOR_PVP_EP)
@@ -10491,9 +10493,39 @@ void Player::SendInitWorldStates(uint32 zoneid, uint32 areaid)
                 data << uint32(0x923) << uint32(0x1);       // 14 2339 alliance (0 - hide, 1 - flag ok, 2 - flag picked up (flashing), 3 - flag picked up (not flashing)
             }
             break;
-        case 5449:                                         // Battle Gilneas
+        case 5449:                                          // The Battle for Gilneas
             if (bg && bg->GetTypeID(true) == BATTLEGROUND_BG)
                 bg->FillInitialWorldStates(data);
+            else
+            {
+                data << uint32(0x6e7) << uint32(0x0);       // 1  1767 Lighthouse Alliance
+                data << uint32(0x6e8) << uint32(0x0);       // 2  1768 Lighthouse Horde
+                data << uint32(0x6e9) << uint32(0x0);       // 3  1769 Lighthouse In Conflict
+                data << uint32(0x6ea) << uint32(0x0);       // 4  1770 Lighthouse In Conflict 2
+                data << uint32(0x6ec) << uint32(0x0);       // 5  1772 Mines Alliance
+                data << uint32(0x6ed) << uint32(0x0);       // 6  1773 Mines Horde
+                data << uint32(0x6ee) << uint32(0x0);       // 7  1774 Mines In Conflict
+                data << uint32(0x6ef) << uint32(0x0);       // 8  1775 Mines In Conflict 2
+                data << uint32(0x6f0) << uint32(0x0);       // 9  1776 Alliance Resources
+                data << uint32(0x6f1) << uint32(0x0);       // 10 1777 Horde Resources
+                data << uint32(0x6f2) << uint32(0x0);       // 11 1778 Horde Bases
+                data << uint32(0x6f3) << uint32(0x0);       // 12 1779 Alliance Bases
+                data << uint32(0x6f4) << uint32(0x7d0);     // 13 1780 Max Resources (2000)
+                data << uint32(0x6f6) << uint32(0x0);       // 14 1782 Waterworks Alliance
+                data << uint32(0x6f7) << uint32(0x0);       // 15 1783 Waterworks Horde
+                data << uint32(0x6f8) << uint32(0x0);       // 16 1784 Waterworks In Conflict
+                data << uint32(0x6f9) << uint32(0x0);       // 17 1785 Waterworks In Conflict 2
+                data << uint32(0x6fb) << uint32(0x0);       // 18 1787 Stoneward Prison Alliance
+                data << uint32(0x6fc) << uint32(0x0);       // 19 1788 Stoneward Prison Horde
+                data << uint32(0x6fd) << uint32(0x0);       // 20 1789 Stoneward Prison In Conflict
+                data << uint32(0x6fe) << uint32(0x0);       // 21 1790 Stoneward Prison In Conflict 2
+                data << uint32(0x732) << uint32(0x1);       // 22 1842 Lighthouse Uncontrolled
+                data << uint32(0x733) << uint32(0x1);       // 23 1843 Stoneward Prison Uncontrolled
+                data << uint32(0x735) << uint32(0x1);       // 24 1845 Mines Uncontrolled
+                data << uint32(0x736) << uint32(0x1);       // 25 1846 Waterworks Uncontrolled
+                data << uint32(0x745) << uint32(0x2);       // 26 1861 unk
+                data << uint32(0x7a3) << uint32(0x708);     // 27 1955 Warning limit (1800)
+            }
             break;
         default:
             data << uint32(0x914) << uint32(0x0);           // 7
@@ -21806,7 +21838,7 @@ bool Player::BuyItemFromVendorSlot(uint64 vendorguid, uint32 vendorslot, uint32 
         // reputation discount
         price = uint32(floor(price * GetReputationPriceDiscount(creature)));
         //aura discount
-        float auraMod = float(GetTotalAuraModifier(SPELL_AURA_REDUCE_BUY_PRICES));
+        float auraMod = float(GetTotalAuraModifier(SPELL_AURA_MOD_VENDOR_PRICE));
         price -= uint32(floor(price * (auraMod/100)));
 
         if (!HasEnoughMoney(price))
@@ -25087,6 +25119,12 @@ bool Player::LearnTalent(uint32 talentId, uint32 talentRank)
     AddTalent(spellid, GetActiveSpec(), true);
 
     sLog->outDetail("TalentID: %u Rank: %u Spell: %u Spec: %u\n", talentId, talentRank, spellid, GetActiveSpec());
+
+    // Save Talents
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    _SaveTalents(trans);
+    _SaveSpells(trans);
+    CharacterDatabase.CommitTransaction(trans);
 
     // set talent tree for player
     if (!GetPrimaryTalentTree(GetActiveSpec()))
