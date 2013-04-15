@@ -148,11 +148,24 @@ _hitMask(hitMask), m_spell(spell), _damageInfo(damageInfo), _healInfo(healInfo)
 #ifdef _MSC_VER
 #pragma warning(disable:4355)
 #endif
-Unit::Unit(bool isWorldObject): WorldObject(isWorldObject),
-_movedPlayer(NULL), m_lastSanctuaryTime(0), IsAIEnabled(false), NeedChangeAI(false),
-_ControlledByPlayer(false), i_AI(NULL), i_disabledAI(NULL), m_procDeep(0),
-m_removedAurasCount(0), i_motionMaster(this), m_ThreatManager(this), m_vehicle(NULL),
-_vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this), movespline(new Movement::MoveSpline())
+Unit::Unit(bool isWorldObject): WorldObject(isWorldObject)
+    , _movedPlayer(NULL)
+    , m_lastSanctuaryTime(0)
+    , IsAIEnabled(false)
+    , NeedChangeAI(false)
+    , _ControlledByPlayer(false)
+    , i_AI(NULL)
+    , i_disabledAI(NULL)
+    , m_procDeep(0)
+    , m_removedAurasCount(0)
+    , i_motionMaster(this)
+    , m_ThreatManager(this)
+    , m_vehicle(NULL)
+    , _vehicleKit(NULL)
+    , m_unitTypeMask(UNIT_MASK_NONE)
+    , m_HostileRefManager(this)
+    , movespline(new Movement::MoveSpline())
+    , _lastDamagedTime(0)
 {
 #ifdef _MSC_VER
 #pragma warning(default:4355)
@@ -12868,6 +12881,10 @@ int32 Unit::ModifyHealth(int32 dVal)
     if (dVal == 0)
         return 0;
 
+    // Part of Evade mechanics. Only track health lost, not gained.
+    if (dVal < 0 && GetTypeId() != TYPEID_PLAYER && !isPet())
+        SetLastDamagedTime(time(NULL));
+
     int32 curHealth = (int32)GetHealth();
 
     int32 val = dVal + curHealth;
@@ -13501,6 +13518,14 @@ Unit* Creature::SelectVictim()
         SetInFront(target);
         return target;
     }
+
+    // Case where mob is being kited.
+    // Mob may not be in range to attack or may have dropped target. In any case,
+    //  don't evade if damage received within the last 10 seconds
+    // Does not apply to world bosses to prevent kiting to cities
+    if (!isWorldBoss() && !GetInstanceId())
+        if (time(NULL) - GetLastDamagedTime() <= MAX_AGGRO_RESET_TIME)
+            return target;
 
     // last case when creature must not go to evade mode:
     // it in combat but attacker not make any damage and not enter to aggro radius to have record in threat list
