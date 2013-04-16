@@ -38,6 +38,9 @@ void TargetedMovementGeneratorMedium<T, D>::_setTargetLocation(T &owner)
     if (owner.HasUnitState(UNIT_STATE_NOT_MOVE))
         return;
 
+    if (owner.GetTypeId() == TYPEID_UNIT && !i_target->isInAccessiblePlaceFor(owner.ToCreature()))
+        return;
+
     float x, y, z;
 
     if (!i_offset)
@@ -215,17 +218,6 @@ template<class T>
 void ChaseMovementGenerator<T>::Finalize(T &owner)
 {
     owner.ClearUnitState(UNIT_STATE_CHASE | UNIT_STATE_CHASE_MOVE);
-
-    if (owner.GetTypeId() == TYPEID_UNIT && !((Creature*)&owner)->isPet() && owner.isAlive())
-       owner.GetMotionMaster()->MoveTargetedHome();
-   {
-       if (!owner.isInCombat() || ( this->i_target.getTarget() && !this->i_target.getTarget()->isInAccessiblePlaceFor(((Creature*)&owner))))
-       {
-           if (owner.isInCombat())
-               owner.CombatStop(true);
-           owner.GetMotionMaster()->MoveTargetedHome();
-       }
-   }
 }
 
 template<class T>

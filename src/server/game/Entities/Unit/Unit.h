@@ -289,6 +289,7 @@ enum UnitRename
 #define MAX_SPELL_VEHICLE       6
 #define MAX_SPELL_POSSESS       8
 #define MAX_SPELL_CONTROL_BAR   10
+#define MAX_AGGRO_RESET_TIME    10 // in seconds
 
 enum Swing
 {
@@ -2305,6 +2306,10 @@ class Unit : public WorldObject
         // Movement info
         Movement::MoveSpline* movespline;
 
+        // Part of Evade mechanics
+        time_t GetLastDamagedTime() const { return _lastDamagedTime; }
+        void SetLastDamagedTime(time_t val) { _lastDamagedTime = val; }
+
     protected:
         explicit Unit (bool isWorldObject);
 
@@ -2432,6 +2437,8 @@ class Unit : public WorldObject
 
         std::map<uint32, uint32> _spellSwaps;
         float _healAbsorb;
+
+        time_t _lastDamagedTime; // Part of Evade mechanics
 };
 
 namespace SkyFire
