@@ -1714,11 +1714,8 @@ void Player::Update(uint32 p_time)
 
     if (isAlive())
     {
-        if (!HasAuraType(SPELL_AURA_PREVENT_REGENERATE_POWER))
-            SetFlag(UNIT_FIELD_FLAGS_2, UNIT_FLAG2_REGENERATE_POWER);
-
-        if (!_regenTimer)
-            RegenerateAll();
+        _regenTimer += p_time;
+        RegenerateAll();
     }
 
     if (_deathState == JUST_DIED)
