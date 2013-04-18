@@ -142,6 +142,7 @@ Battleground::Battleground()
     _IsArena           = false;
     _Winner            = 2;
     _StartTime         = 0;
+    //_CountdownTimer    = 0;    
     _ResetStatTimer    = 0;
     _ValidStartPositionTimer = 0;
     _Events            = 0;
@@ -295,8 +296,12 @@ void Battleground::Update(uint32 diff)
 
     // Update start time and reset stats timer
     _StartTime += diff;
-    _ResetStatTimer += diff;
     _ValidStartPositionTimer += diff;
+    if (GetStatus() == STATUS_WAIT_JOIN)
+    {
+        _ResetStatTimer += diff;
+        //_CountdownTimer += diff;
+    }
 
     PostUpdateImpl(diff);
 }
@@ -458,13 +463,13 @@ inline void Battleground::_ProcessJoin(uint32 diff)
         // First start warning - 2 or 1 minute
         SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_FIRST], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
-    // After 1 minute or 30 seconds, warning is signalled
+    // After 1 minute or 30 seconds, warning is signaled
     else if (GetStartDelayTime() <= StartDelayTimes[BG_STARTING_EVENT_SECOND] && !(_Events & BG_STARTING_EVENT_2))
     {
         _Events |= BG_STARTING_EVENT_2;
         SendMessageToAll(StartMessageIds[BG_STARTING_EVENT_SECOND], CHAT_MSG_BG_SYSTEM_NEUTRAL);
     }
-    // After 30 or 15 seconds, warning is signalled
+    // After 30 or 15 seconds, warning is signaled
     else if (GetStartDelayTime() <= StartDelayTimes[BG_STARTING_EVENT_THIRD] && !(_Events & BG_STARTING_EVENT_3))
     {
         _Events |= BG_STARTING_EVENT_3;
@@ -755,7 +760,7 @@ void Battleground::EndBattleground(uint32 winner)
 
     SetStatus(STATUS_WAIT_LEAVE);
     //we must set it this way, because end time is sent in packet!
-    _EndTime = TIME_TO_AUTOREMOVE;
+    _EndTime = TIME_AUTOCLOSE_BATTLEGROUND;
 
     // arena rating calculation
     if (isArena() && isRated())
@@ -904,7 +909,7 @@ void Battleground::EndBattleground(uint32 winner)
         player->GetSession()->SendPacket(&data);
 
         BattlegroundQueueTypeId bgQueueTypeId = BattlegroundMgr::BGQueueTypeId(GetTypeID(), GetArenaType());
-        sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, this, player->GetBattlegroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, TIME_TO_AUTOREMOVE, GetStartTime(), GetArenaType());
+        sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, this, player->GetBattlegroundQueueIndex(bgQueueTypeId), STATUS_IN_PROGRESS, TIME_AUTOCLOSE_BATTLEGROUND, GetStartTime(), GetArenaType());
         player->GetSession()->SendPacket(&data);
         player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_BATTLEGROUND, 1);
     }

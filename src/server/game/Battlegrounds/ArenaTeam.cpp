@@ -52,7 +52,7 @@ bool ArenaTeam::Create(uint32 captainGuid, uint8 type, std::string teamName, uin
         return false;
 
     // Check if arena team name is already taken
-    if (sArenaTeamMgr->GetArenaTeamByName(TeamName))
+    if (sArenaTeamMgr->GetArenaTeamByName(teamName))
         return false;
 
     // Generate new arena team id
@@ -183,7 +183,7 @@ bool ArenaTeam::AddMember(const uint64& playerGuid)
             player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_MEMBER, 1);
     }
 
-    sLog->outArena("Player: %s [GUID: %u] joined arena team type: %u [Id: %u].", playerName.c_str(), GUID_LOPART(playerGuid), GetType(), GetId());
+    sLog->outArena("Player: %s [GUID: %u] joined arena team type: %u [Id: %u, Name: %s].", playerName.c_str(), GUID_LOPART(playerGuid), GetType(), GetId(), GetName().c_str());
 
     return true;
 }
@@ -527,6 +527,20 @@ uint8 ArenaTeam::GetSlotByType(uint32 type)
             break;
     }
     sLog->outError("FATAL: Unknown arena team type %u for some arena team", type);
+    return 0xFF;
+}
+
+uint8 ArenaTeam::GetTypeBySlot(uint8 slot)
+{
+    switch (slot)
+    {
+    case 0: return ARENA_TEAM_2v2;
+    case 1: return ARENA_TEAM_3v3;
+    case 2: return ARENA_TEAM_5v5;
+    default:
+        break;
+    }
+    sLog->outError("FATAL: Unknown arena team slot %u for some arena team", slot);
     return 0xFF;
 }
 

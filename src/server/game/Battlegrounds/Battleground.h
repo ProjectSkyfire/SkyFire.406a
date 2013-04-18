@@ -109,11 +109,14 @@ enum BattlegroundTimeIntervals
     //REMIND_INTERVAL                 = 10000,                // ms
     INVITATION_REMIND_TIME          = 20000,                // ms
     INVITE_ACCEPT_WAIT_TIME         = 40000,                // ms
-    TIME_TO_AUTOREMOVE              = 120000,               // ms
+    TIME_AUTOCLOSE_BATTLEGROUND     = 120000,               // ms
     MAX_OFFLINE_TIME                = 300,                  // secs
     RESPAWN_ONE_DAY                 = 86400,                // secs
     RESPAWN_IMMEDIATELY             = 0,                    // secs
     BUFF_RESPAWN_TIME               = 180,                  // secs
+    BATTLEGROUND_COUNTDOWN_MAX      = 120,                  // secs
+    ARENA_COUNTDOWN_MAX             = 60                    // secs
+
 };
 
 enum BattlegroundStartTimeIntervals
@@ -625,6 +628,7 @@ class Battleground
         BattlegroundStatus _Status;
         uint32 _ClientInstanceID;                          // the instance-id which is sent to the client and without any other internal use
         uint32 _StartTime;
+        //uint32 _CountdownTimer;
         uint32 _ResetStatTimer;
         uint32 _ValidStartPositionTimer;
         int32 _EndTime;                                    // it is set to 120000 when bg is ending and it decreases itself
