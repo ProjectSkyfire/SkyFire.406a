@@ -44,12 +44,12 @@ enum Opcodes
     SMSG_PETGODMODE                                  = 0x0F2CC, // 4.0.6a 13623
     SMSG_GODMODE                                     = 0x023EC, // 4.0.6a 13623
     SMSG_DESTRUCTIBLE_BUILDING_DAMAGE                = 0x0A0E0, // 4.0.6a 13623
-    CMSG_CHARACTER_CREATE                                 = 0x07EEC, // 4.0.6a 13623
-    CMSG_CHARACTER_ENUM                                   = 0x06AA4, // 4.0.6a 13623
-    CMSG_CHARACTER_DELETE                                 = 0x03B84, // 4.0.6a 13623
-    SMSG_CHARACTER_CREATE                                 = 0x0F7EC, // 4.0.6a 13623
-    SMSG_CHARACTER_ENUM                                   = 0x0ECCC, // 4.0.6a 13623
-    SMSG_CHARACTER_DELETE                                 = 0x0BC80, // 4.0.6a 13623
+    CMSG_CHARACTER_CREATE                            = 0x07EEC, // 4.0.6a 13623
+    CMSG_CHARACTER_ENUM                              = 0x06AA4, // 4.0.6a 13623
+    CMSG_CHARACTER_DELETE                            = 0x03B84, // 4.0.6a 13623
+    SMSG_CHARACTER_CREATE                            = 0x0F7EC, // 4.0.6a 13623
+    SMSG_CHARACTER_ENUM                              = 0x0ECCC, // 4.0.6a 13623
+    SMSG_CHARACTER_DELETE                            = 0x0BC80, // 4.0.6a 13623
     CMSG_PLAYER_LOGIN                                = 0x08180, // 4.0.6a 13623
     SMSG_NEW_WORLD                                   = 0x0451E, // 4.0.6a 13623
     SMSG_TRANSFER_PENDING                            = 0x07BE0, // 4.0.6a 13623
@@ -886,7 +886,7 @@ enum Opcodes
     CMSG_LFG_SET_NEEDS                               = 0x10145, // Unknown opcode ID
     CMSG_LFG_SET_BOOT_VOTE                           = 0x0D65D, // Unknown opcode ID
     SMSG_LFG_BOOT_PROPOSAL_UPDATE                    = 0x079AC, // 4.0.6a 13623
-    CMSG_LFD_PLAYER_LOCK_INFO_REQUEST                = 0x00C76, // 4.0.6a 13623
+    CMSG_LFD_PLAYER_LOCK_INFO_REQUEST                = 0x0E5E8, // 4.0.6a 13623
     SMSG_LFG_PLAYER_INFO                             = 0x0E088, // 4.0.6a 13623
     CMSG_LFG_TELEPORT                                = 0x0FA88, // 4.0.6a 13623
     CMSG_LFD_PARTY_LOCK_INFO_REQUEST                 = 0x00574, // 4.0.6a 13623
