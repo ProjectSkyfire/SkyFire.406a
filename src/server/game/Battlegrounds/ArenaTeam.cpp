@@ -170,6 +170,7 @@ bool ArenaTeam::AddMember(const uint64& playerGuid)
     stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_ARENA_TEAM_MEMBER);
     stmt->setUInt32(0, TeamId);
     stmt->setUInt32(1, GUID_LOPART(playerGuid));
+    stmt->setUInt16(2, personalRating);
     CharacterDatabase.Execute(stmt);
 
     // Inform player if online
@@ -868,7 +869,8 @@ void ArenaTeam::SaveToDB()
         stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_REPLACE_CHARACTER_ARENA_STATS);
         stmt->setUInt32(0, GUID_LOPART(itr->Guid));
         stmt->setUInt8(1, GetSlot());
-        stmt->setUInt16(2, itr->MatchMakerRating);
+        stmt->setUInt16(2, itr->PersonalRating);
+        stmt->setUInt16(3, itr->MatchMakerRating);
         trans->Append(stmt);
     }
 
