@@ -148,11 +148,24 @@ _hitMask(hitMask), m_spell(spell), _damageInfo(damageInfo), _healInfo(healInfo)
 #ifdef _MSC_VER
 #pragma warning(disable:4355)
 #endif
-Unit::Unit(bool isWorldObject): WorldObject(isWorldObject),
-_movedPlayer(NULL), m_lastSanctuaryTime(0), IsAIEnabled(false), NeedChangeAI(false),
-_ControlledByPlayer(false), i_AI(NULL), i_disabledAI(NULL), m_procDeep(0),
-m_removedAurasCount(0), i_motionMaster(this), m_ThreatManager(this), m_vehicle(NULL),
-_vehicleKit(NULL), m_unitTypeMask(UNIT_MASK_NONE), m_HostileRefManager(this), movespline(new Movement::MoveSpline())
+Unit::Unit(bool isWorldObject): WorldObject(isWorldObject)
+    , _movedPlayer(NULL)
+    , m_lastSanctuaryTime(0)
+    , IsAIEnabled(false)
+    , NeedChangeAI(false)
+    , _ControlledByPlayer(false)
+    , i_AI(NULL)
+    , i_disabledAI(NULL)
+    , m_procDeep(0)
+    , m_removedAurasCount(0)
+    , i_motionMaster(this)
+    , m_ThreatManager(this)
+    , m_vehicle(NULL)
+    , _vehicleKit(NULL)
+    , m_unitTypeMask(UNIT_MASK_NONE)
+    , m_HostileRefManager(this)
+    , movespline(new Movement::MoveSpline())
+    , _lastDamagedTime(0)
 {
 #ifdef _MSC_VER
 #pragma warning(default:4355)
@@ -7026,6 +7039,15 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                 }
                 return false;
             }
+            // Judgments of the Wise
+            if (dummySpell->SpellIconID == 3017)
+            {
+                target = this;
+                triggered_spell_id = 31930;
+                // replenishment
+                CastSpell(this, 57669, true, castItem, triggeredByAura);
+                break;
+            }
             // Sacred Shield
             if (dummySpell->SpellFamilyFlags[1] & 0x80000)
             {
@@ -7074,7 +7096,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
             }
             switch (dummySpell->Id)
             {
-                // Judgements of the Bold
+                // Judgments of the Bold
                 case 89901:
                 {
                     target = this;
@@ -7150,7 +7172,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     }
                     break;
                 }
-                // Judgement of Light
+                // Judgment of Light
                 case 20185:
                 {
                     if (!victim)
@@ -7160,7 +7182,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     victim->CastCustomSpell(victim, 20267, &basepoints0, 0, 0, true, 0, triggeredByAura);
                     return true;
                 }
-                // Judgement of Wisdom
+                // Judgment of Wisdom
                 case 20186:
                 {
                     if (victim && victim->isAlive() && victim->getPowerType() == POWER_MANA)
@@ -7244,7 +7266,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     // At melee attack or Hammer of the Righteous spell damage considered as melee attack
                     bool stacker = !procSpell || procSpell->Id == 53595 || procSpell->Id == 71433 || procSpell->Id == 71434;
 
-                     // spells with SPELL_DAMAGE_CLASS_MELEE excluding Judgements
+                     // spells with SPELL_DAMAGE_CLASS_MELEE excluding Judgments
                     bool damager = procSpell && procSpell->EquippedItemClass != -1;
 
                     if (!stacker && !damager)
@@ -7298,7 +7320,7 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                         triggered_spell_id = 40471;
                         chance = 15.0f;
                     }
-                    // Judgement (any)
+                    // Judgment (any)
                     else if (procSpell->GetSpellSpecific() == SPELL_SPECIFIC_JUDGEMENT)
                     {
                         triggered_spell_id = 40472;
@@ -12868,6 +12890,10 @@ int32 Unit::ModifyHealth(int32 dVal)
     if (dVal == 0)
         return 0;
 
+    // Part of Evade mechanics. Only track health lost, not gained.
+    if (dVal < 0 && GetTypeId() != TYPEID_PLAYER && !isPet())
+        SetLastDamagedTime(time(NULL));
+
     int32 curHealth = (int32)GetHealth();
 
     int32 val = dVal + curHealth;
@@ -13501,6 +13527,14 @@ Unit* Creature::SelectVictim()
         SetInFront(target);
         return target;
     }
+
+    // Case where mob is being kited.
+    // Mob may not be in range to attack or may have dropped target. In any case,
+    //  don't evade if damage received within the last 10 seconds
+    // Does not apply to world bosses to prevent kiting to cities
+    if (!isWorldBoss() && !GetInstanceId())
+        if (time(NULL) - GetLastDamagedTime() <= MAX_AGGRO_RESET_TIME)
+            return target;
 
     // last case when creature must not go to evade mode:
     // it in combat but attacker not make any damage and not enter to aggro radius to have record in threat list

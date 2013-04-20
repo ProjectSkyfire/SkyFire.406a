@@ -52,7 +52,7 @@ bool ArenaTeam::Create(uint32 captainGuid, uint8 type, std::string teamName, uin
         return false;
 
     // Check if arena team name is already taken
-    if (sArenaTeamMgr->GetArenaTeamByName(TeamName))
+    if (sArenaTeamMgr->GetArenaTeamByName(teamName))
         return false;
 
     // Generate new arena team id
@@ -170,6 +170,7 @@ bool ArenaTeam::AddMember(const uint64& playerGuid)
     stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_ARENA_TEAM_MEMBER);
     stmt->setUInt32(0, TeamId);
     stmt->setUInt32(1, GUID_LOPART(playerGuid));
+    stmt->setUInt16(2, personalRating);
     CharacterDatabase.Execute(stmt);
 
     // Inform player if online
@@ -183,7 +184,7 @@ bool ArenaTeam::AddMember(const uint64& playerGuid)
             player->SetArenaTeamInfoField(GetSlot(), ARENA_TEAM_MEMBER, 1);
     }
 
-    sLog->outArena("Player: %s [GUID: %u] joined arena team type: %u [Id: %u].", playerName.c_str(), GUID_LOPART(playerGuid), GetType(), GetId());
+    sLog->outArena("Player: %s [GUID: %u] joined arena team type: %u [Id: %u, Name: %s].", playerName.c_str(), GUID_LOPART(playerGuid), GetType(), GetId(), GetName().c_str());
 
     return true;
 }
@@ -530,6 +531,20 @@ uint8 ArenaTeam::GetSlotByType(uint32 type)
     return 0xFF;
 }
 
+uint8 ArenaTeam::GetTypeBySlot(uint8 slot)
+{
+    switch (slot)
+    {
+    case 0: return ARENA_TEAM_2v2;
+    case 1: return ARENA_TEAM_3v3;
+    case 2: return ARENA_TEAM_5v5;
+    default:
+        break;
+    }
+    sLog->outError("FATAL: Unknown arena team slot %u for some arena team", slot);
+    return 0xFF;
+}
+
 bool ArenaTeam::IsMember(const uint64& guid) const
 {
     for (MemberList::const_iterator itr = Members.begin(); itr != Members.end(); ++itr)
@@ -854,7 +869,8 @@ void ArenaTeam::SaveToDB()
         stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_REPLACE_CHARACTER_ARENA_STATS);
         stmt->setUInt32(0, GUID_LOPART(itr->Guid));
         stmt->setUInt8(1, GetSlot());
-        stmt->setUInt16(2, itr->MatchMakerRating);
+        stmt->setUInt16(2, itr->PersonalRating);
+        stmt->setUInt16(3, itr->MatchMakerRating);
         trans->Append(stmt);
     }
 

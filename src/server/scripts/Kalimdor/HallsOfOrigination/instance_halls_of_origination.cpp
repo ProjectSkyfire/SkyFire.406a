@@ -273,28 +273,20 @@ public:
     };
 };
 
-#define MAP_HOO 603
 
-enum TeleportTargets
-{
-    UPPER_FLOOR = 0,
-    LOWER_FLOOR = 1,
-    MAX         = 2,
-};
+//float GoTeleportPoints[2][3] =
+//{
+//    { -534.501f, 191.346f, 331.06f },    // Upper Floor
+//    { -536.576f, 193.316f, 80.238f },    // Lower Floor
+//};
 
-float TeleportPointsHoOGOs[2][3] =
-{
-    {-534.501f, 191.346f, 331.06f},    // Upper Floor
-    {-536.576f, 193.316f, 80.238f},    // Lower Floor
-};
+//class hoo_teleporter : public GameObjectScript
+//{
+//public:
+//    hoo_teleporter() : GameObjectScript("hoo_teleporter") { }
 
-class hoo_teleporter : public GameObjectScript
-{
-public:
-    hoo_teleporter() : GameObjectScript("hoo_teleporter") { }
-
-    bool OnGossipSelect(Player *player, GameObject * /*go*/, uint32 sender, uint32 action)
-    {
+//    bool OnGossipSelect(Player* player, GameObject* /*go*/, uint32 sender, uint32 action)
+/*    {
         player->PlayerTalkClass->ClearMenus();
         
         if (sender != GOSSIP_SENDER_MAIN)
@@ -305,7 +297,7 @@ public:
 
         int pos = action - GOSSIP_ACTION_INFO_DEF;
         if (pos >= 0 && pos < MAX)
-            player->TeleportTo(MAP_HOO, TeleportPointsHoOGOs[pos][0], TeleportPointsHoOGOs[pos][1], TeleportPointsHoOGOs[pos][2], 0.0f);
+            player->TeleportTo(MAP_HOO, GoTeleportPoints[pos][0], GoTeleportPoints[pos][1], GoTeleportPoints[pos][2], 0.0f);
         player->CLOSE_GOSSIP_MENU();
 
         return true;
@@ -324,10 +316,10 @@ public:
         player->SEND_GOSSIP_MENU(go->GetGOInfo()->GetGossipMenuId(), go->GetGUID());
         return true;
     }
-};
+};*/
 
 void AddSC_instance_halls_of_origination()
 {
     new instance_halls_of_origination();
-    new hoo_teleporter();
+    //new hoo_teleporter();
 }

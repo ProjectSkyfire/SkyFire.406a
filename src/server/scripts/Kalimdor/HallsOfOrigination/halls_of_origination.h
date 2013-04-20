@@ -19,6 +19,8 @@
 #ifndef DEF_HALLS_OF_ORIGINATION_H
 #define DEF_HALLS_OF_ORIGINATION_H
 
+#define MAP_HOO 603  // mapId for next floor? cant confirm
+
 enum Data
 {
     DATA_TEMPLE_GUARDIAN_ANHUUR_EVENT,
@@ -89,5 +91,13 @@ enum CreatureIds
     NPC_SEARING_FLAME           = 40283,
     NPC_LIGHT                   = 40183
 };
+
+/* // teleporters
+enum TeleportTargets
+{
+    UPPER_FLOOR = 0,
+    LOWER_FLOOR = 1,
+    MAX         = 2
+};*/
 
 #endif
