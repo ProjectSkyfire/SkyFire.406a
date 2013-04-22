@@ -704,9 +704,9 @@ namespace Pathfinding
         char tileString[10];
         sprintf(tileString, "[%02i,%02i]: ", tileX, tileY);
 
-        float cellSize      = .5f;       // larger number => less voxels => faster build time, too large, and tight spaces won't be pathable.
+        float cellSize      = 0.5f;       // larger number => less voxels => faster build time, too large, and tight spaces won't be pathable.
         float agentHeight   = 1.5f;
-        float agentRadius   = .1f;
+        float agentRadius   = 0.1f;
         float agentMaxClimb = 1.65f;
         printf("%s Building movemap tiles...                             \r", tileString);
         IntermediateValues iv;
@@ -732,7 +732,7 @@ namespace Pathfinding
 
             // these are WORLD UNIT based metrics
             config.cs = cellSize;
-            config.ch = .3f;
+            config.ch = 0.3f;
             config.walkableSlopeAngle = m_maxWalkableAngle;
             rcVcopy(config.bmin, bmin);
             rcVcopy(config.bmax, bmax);
@@ -748,8 +748,8 @@ namespace Pathfinding
             config.minRegionArea = (int)rcSqr(50);
             config.mergeRegionArea = (int)rcSqr(20);
             config.maxSimplificationError = 1.3f;  // eliminates most jagged edges (tiny polygons)
-            config.detailSampleDist = config.cs * 16.f;
-            config.detailSampleMaxError = config.ch * 1.f;
+            config.detailSampleDist = config.cs * 16.0f;
+            config.detailSampleMaxError = config.ch * 1.0f;
 
             // pad bounds with a border
             config.bmin[0] -= config.borderSize*config.cs;
@@ -1326,10 +1326,10 @@ namespace Pathfinding
         if (m_skipContinents)
             switch(mapID)
             {
-                case 0:
-                case 1:
-                case 530:
-                case 571:
+                case 0:		// Eastern Kingdoms
+                case 1:		// Kalimdor
+                case 530:   // Outlands
+                case 571:	// Northrend
                     return true;
                 default:
                     break;
