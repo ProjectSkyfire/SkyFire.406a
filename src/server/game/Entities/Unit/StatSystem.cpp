@@ -350,49 +350,51 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     {
         switch (getClass())
         {
-		case CLASS_WARRIOR:
-		case CLASS_PALADIN:
-		case CLASS_DEATH_KNIGHT: val2 = level * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f; break;
-		case CLASS_ROGUE:
-		case CLASS_HUNTER:
-		case CLASS_SHAMAN: val2 = level * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) * 2.0f - 20.0f; break;
-		case CLASS_DRUID:
+			case CLASS_WARRIOR:
+			case CLASS_PALADIN:
+			case CLASS_DEATH_KNIGHT: val2 = level * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f; 
+			break;
+			case CLASS_ROGUE:
+			case CLASS_HUNTER:
+			case CLASS_SHAMAN: val2 = level * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) * 2.0f - 20.0f; 
+			break;
+			case CLASS_DRUID:
             {
-				ShapeshiftForm form = GetShapeshiftForm();
-				
-				// Check if Predatory Strikes is skilled
-				float _FeralMult = 0.0f; 
-				short applied = 0;
-				
-				switch (form)
-				{
-					case FORM_CAT:
-					case FORM_BEAR:
-					case FORM_MOONKIN:
-					{
-						Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
-						for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
-						{
-							// Predatory Strikes (effect 0)
-							if ((*itr)->GetEffIndex() == 0 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
-							{
-								level = (*itr)->GetAmount() / 100.0f;
-								if (applied) break;
-							}
-						
-							// Predatory Strikes (effect 1)
-							if ((*itr)->GetEffIndex() == 1 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
-							{
-								_FeralMult = (*itr)->GetAmount() / 100.0f;
-								if (applied) break;
-								applied = 1;
-							}
-							break;
-						}
-					}	
-					default: 
-						break;
-				}
+                ShapeshiftForm form = GetShapeshiftForm();
+
+                // Check if Predatory Strikes is skilled
+                float _FeralMult = 0.0f;
+                short applied = 0;
+
+                switch (form)
+                {
+                    case FORM_CAT:
+                    case FORM_BEAR:
+                    case FORM_MOONKIN:
+                    {
+                        Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
+                        for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
+                        {
+                            // Predatory Strikes (effect 0)
+                            if ((*itr)->GetEffIndex() == 0 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
+                            {
+                                level = (*itr)->GetAmount() / 100.0f;
+                                if (applied) break;
+                            }
+
+                            // Predatory Strikes (effect 1)
+                            if ((*itr)->GetEffIndex() == 1 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
+                            {
+                                _FeralMult = (*itr)->GetAmount() / 100.0f;
+                                if (applied) break;
+                                applied = 1;
+                            }
+                            break;
+                        }
+                    }
+                    default:
+                        break;
+                }
 
                 switch (GetShapeshiftForm())
                 {
@@ -473,8 +475,8 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     SetFloatValue(index_mult, attPowerMultiplier);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
 
     Pet* pet = GetPet();                                //update pet's AP
-    
-	//automatically update weapon damage after attack power modification
+
+    //automatically update weapon damage after attack power modification
     if (ranged)
     {
         UpdateDamagePhysical(RANGED_ATTACK);
@@ -641,8 +643,8 @@ void Player::UpdateCritPercentage(WeaponAttackType attType)
     }
 
     float value = GetTotalPercentageModValue(modGroup) + GetRatingBonusValue(cr);
-    
-	// Modify crit from weapon skill and maximized defense skill of same level victim difference
+
+    // Modify crit from weapon skill and maximized defense skill of same level victim difference
     value += (int32(GetWeaponSkillValue(attType)) - int32(GetMaxSkillValueForLevel())) * 0.04f;
     value = value < 0.0f ? 0.0f : value;
     SetStatFloatValue(index, value);
@@ -764,18 +766,18 @@ void Player::UpdateParryPercentage()
     if (CanParry() && parry_cap[pclass] > 0.0f)
     {
         float nondiminishing  = 5.0f;
-        
-		// Parry from rating
+
+        // Parry from rating
         float diminishing = GetRatingBonusValue(CR_PARRY);
-        
-		// Modify value from defense skill (only bonus from defense rating diminishes)
+
+        // Modify value from defense skill (only bonus from defense rating diminishes)
         nondiminishing += (GetSkillValue(SKILL_DEFENSE) - GetMaxSkillValueForLevel()) * 0.04f;
         diminishing += (int32(GetRatingBonusValue(CR_DEFENSE_SKILL))) * 0.04f;
-        
-		// Parry from SPELL_AURA_MOD_PARRY_PERCENT aura
+
+        // Parry from SPELL_AURA_MOD_PARRY_PERCENT aura
         nondiminishing += GetTotalAuraModifier(SPELL_AURA_MOD_PARRY_PERCENT);
-        
-		// apply diminishing formula to diminishing parry chance
+
+        // apply diminishing formula to diminishing parry chance
         value = nondiminishing + diminishing * parry_cap[pclass] / (diminishing + parry_cap[pclass] * m_diminishing_k[pclass]);
         value = value < 0.0f ? 0.0f : value;
     }
@@ -801,18 +803,18 @@ void Player::UpdateDodgePercentage()
 
     float diminishing = 0.0f, nondiminishing = 0.0f;
     GetDodgeFromAgility(diminishing, nondiminishing);
-    
-	// Modify value from defense skill (only bonus from defense rating diminishes)
+
+    // Modify value from defense skill (only bonus from defense rating diminishes)
     nondiminishing += (GetSkillValue(SKILL_DEFENSE) - GetMaxSkillValueForLevel()) * 0.04f;
     diminishing += (int32(GetRatingBonusValue(CR_DEFENSE_SKILL))) * 0.04f;
-    
-	// Dodge from SPELL_AURA_MOD_DODGE_PERCENT aura
+
+    // Dodge from SPELL_AURA_MOD_DODGE_PERCENT aura
     nondiminishing += GetTotalAuraModifier(SPELL_AURA_MOD_DODGE_PERCENT);
-    
-	// Dodge from rating
+
+    // Dodge from rating
     diminishing += GetRatingBonusValue(CR_DODGE);
-    
-	// apply diminishing formula to diminishing dodge chance
+
+    // apply diminishing formula to diminishing dodge chance
     uint32 pclass = getClass()-1;
     float value = nondiminishing + (diminishing * dodge_cap[pclass] / (diminishing + dodge_cap[pclass] * m_diminishing_k[pclass]));
 
@@ -828,23 +830,23 @@ void Player::UpdateSpellCritChance(uint32 school)
         SetFloatValue(PLAYER_SPELL_CRIT_PERCENTAGE1, 0.0f);
         return;
     }
-    
-	// For others recalculate it from:
+
+    // For others recalculate it from:
     float crit = 0.0f;
-    
-	// Crit from Intellect
+
+    // Crit from Intellect
     crit += GetSpellCritFromIntellect();
-    
-	// Increase crit from SPELL_AURA_MOD_SPELL_CRIT_CHANCE
+
+    // Increase crit from SPELL_AURA_MOD_SPELL_CRIT_CHANCE
     crit += GetTotalAuraModifier(SPELL_AURA_MOD_SPELL_CRIT_CHANCE);
-    
-	// Increase crit from SPELL_AURA_MOD_CRIT_PCT
+
+    // Increase crit from SPELL_AURA_MOD_CRIT_PCT
     crit += GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_PCT);
-    
-	// Increase crit by school from SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL
+
+    // Increase crit by school from SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL
     crit += GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL, 1<<school);
-    
-	// Increase crit from spell crit ratings
+
+    // Increase crit from spell crit ratings
     crit += GetRatingBonusValue(CR_CRIT_SPELL);
 
     // Store crit value
