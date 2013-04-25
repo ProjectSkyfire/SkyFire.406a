@@ -350,15 +350,15 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     {
         switch (getClass())
         {
-			case CLASS_WARRIOR:
-			case CLASS_PALADIN:
-			case CLASS_DEATH_KNIGHT: val2 = level * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f; 
-			break;
-			case CLASS_ROGUE:
-			case CLASS_HUNTER:
-			case CLASS_SHAMAN: val2 = level * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) * 2.0f - 20.0f; 
-			break;
-			case CLASS_DRUID:
+            case CLASS_WARRIOR:
+            case CLASS_PALADIN:
+            case CLASS_DEATH_KNIGHT: val2 = level * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+            break;
+            case CLASS_ROGUE:
+            case CLASS_HUNTER:
+            case CLASS_SHAMAN: val2 = level * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) * 2.0f - 20.0f;
+            break;
+            case CLASS_DRUID:
             {
                 ShapeshiftForm form = GetShapeshiftForm();
 
