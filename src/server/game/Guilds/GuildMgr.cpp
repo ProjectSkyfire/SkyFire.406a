@@ -124,12 +124,7 @@ void GuildMgr::LoadGuilds()
                     delete guild;
                     continue;
                 }
-                QueryResult guildNews = CharacterDatabase.PQuery("SELECT type, date, value1, value2, source_guid, flags FROM guild_news WHERE guildid = %u ORDER BY date DESC", guild->GetId());
-                if (guildNews)
-                {
-                    Field* fields = guildNews->Fetch();
-                    guild->LoadGuildNewsFromDB(fields);
-                }
+
                 AddGuild(guild);
 
                 ++count;
@@ -330,7 +325,42 @@ void GuildMgr::LoadGuilds()
         }
     }
 
-    // 7. Load all guild bank tabs
+    // 7. Load all news logs
+    sLog->outString("Loading guild news...");
+    {
+        uint32 oldMSTime = getMSTime();
+
+        CharacterDatabase.DirectPExecute("DELETE FROM guild_newslog WHERE LogGuid > %u", sWorld->getIntConfig(CONFIG_GUILD_NEWS_LOG_COUNT));
+
+                                                     //      0        1        2          3           4      5      6
+        QueryResult result = CharacterDatabase.Query("SELECT guildid, LogGuid, EventType, PlayerGuid, Flags, Value, Timestamp FROM guild_newslog ORDER BY TimeStamp DESC, LogGuid DESC");
+
+        if (!result)
+        {
+            sLog->outString(">> Loaded 0 guild news logs. DB table `guild_newslog` is empty.");
+            sLog->outString();
+        }
+        else
+        {
+            uint32 count = 0;
+            do
+            {
+                Field* fields = result->Fetch();
+                uint32 guildId = fields[0].GetUInt32();
+
+                if (Guild* guild = GetGuildById(guildId))
+                    guild->LoadGuildNewsLogFromDB(fields);
+
+                ++count;
+            }
+            while (result->NextRow());
+
+            sLog->outString(">> Loaded %u guild news logs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
+            sLog->outString();
+        }
+    }
+
+    // 8. Load all guild bank tabs
     sLog->outString("Loading guild bank tabs...");
     {
         uint32 oldMSTime = getMSTime();
@@ -366,7 +396,7 @@ void GuildMgr::LoadGuilds()
         }
     }
 
-    // 8. Fill all guild bank tabs
+    // 9. Fill all guild bank tabs
     sLog->outString("Filling bank tabs with items...");
     {
         uint32 oldMSTime = getMSTime();
@@ -404,7 +434,7 @@ void GuildMgr::LoadGuilds()
         }
     }
 
-    // 9. Validate loaded guild data
+    // 10. Validate loaded guild data
     sLog->outString("Validating data of loaded guilds...");
     {
         uint32 oldMSTime = getMSTime();

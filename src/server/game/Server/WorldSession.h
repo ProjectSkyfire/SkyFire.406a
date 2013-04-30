@@ -578,6 +578,8 @@ class WorldSession
         void HandleGuildDisbandOpcode(WorldPacket& recvPacket);
         void HandleGuildLeaderOpcode(WorldPacket& recvPacket);
         void HandleGuildMOTDOpcode(WorldPacket& recvPacket);
+        void HandleGuildNewsUpdateSticky(WorldPacket& recvPacket);
+        void HandleGuildQueryNews(WorldPacket& recvPacket);
         void HandleGuildExperienceOpcode(WorldPacket& recvPacket);
         void HandleGuildMaxExperienceOpcode(WorldPacket& recvPacket);
         void HandleGuildRewardsOpcode(WorldPacket& recvPacket);
@@ -890,7 +892,6 @@ class WorldSession
         void HandleGuildBankBuyTab(WorldPacket& recvData);
         void HandleQueryGuildBankTabText(WorldPacket& recvData);
         void HandleSetGuildBankTabText(WorldPacket& recvData);
-        void HandleGuildQueryNews(WorldPacket& recvData);
         void HandleGuildQueryTradeSkill(WorldPacket& recvData);
 
         // Refer-a-Friend

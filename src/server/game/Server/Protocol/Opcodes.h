@@ -147,7 +147,7 @@ enum Opcodes
     CMSG_GUILD_QUERY_TRADESKILL                      = 0x02329, // 4.0.6a 13623
     SMSG_GUILD_TRADESKILL_UPDATE                     = 0x0454E, // 4.0.6a 13623
     CMSG_GUILD_QUERY_NEWS                            = 0x03529, // 4.0.6a 13623
-    CMSG_GUILD_REQUEST_NEWS                          = 0x03129, // 4.0.6a 13623
+    SMSG_GUILD_NEWS_DELETED                          = 0x03129, // 4.0.6a 13623
     SMSG_GUILD_NEWS_UPDATE                           = 0x0485E, // 4.0.6a 13623
     SMSG_GUILD_XP_UPDATE                             = 0x0440E, // 4.0.6a 13623
     SMSG_GUILD_COMMAND_RESULT                        = 0x023C0, // 4.0.6a 13623
@@ -1319,7 +1319,7 @@ enum Opcodes
     CMSG_REQUEST_GUILD_PARTY_STATE                   = 0x02219, // 4.0.6a 13623
     CMSG_GET_GUILD_MEMBER_RECIPES                    = 0x0212D, // 4.0.6a 13623
     CMSG_QUERY_GUILD_MEMBERS_FOR_RECIPE              = 0x0210D, // 4.0.6a 13623
-    CMSG_GUILD_NEWS_SET_STICKY                       = 0x0252D, // 4.0.6a 13623
+    CMSG_GUILD_NEWS_UPDATE_STICKY                    = 0x0252D, // 4.0.6a 13623
     SMSG_GUILD_CRITERIA_DELETED                      = 0x0000C, // 4.0.6a 13623
     SMSG_GUILD_CRITERIA_DATA                         = 0x0400E, // 4.0.6a 13623
     CMSG_RETURN_TO_GRAVEYARD                         = 0x00593, // 4.0.6a 13623

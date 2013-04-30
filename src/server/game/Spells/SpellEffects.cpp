@@ -2592,6 +2592,10 @@ void Spell::DoCreateItem(uint32 /*i*/, uint32 itemtype)
         if (pItem)
             player->SendNewItem(pItem, num_to_add, true, bgType == 0);
 
+        if (proto->Quality > ITEM_QUALITY_EPIC || (proto->Quality == ITEM_QUALITY_EPIC && proto->ItemLevel >= MinNewsItemLevel[sWorld->getIntConfig(CONFIG_EXPANSION)]))
+            if (Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId()))
+                guild->AddGuildNews(GUILD_NEWS_ITEM_CRAFTED, player->GetGUID(), 0, proto->ItemId);
+
         // we succeeded in creating at least one item, so a levelup is possible
         if (bgType == 0)
             player->UpdateCraftSkill(m_spellInfo->Id);
