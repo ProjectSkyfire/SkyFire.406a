@@ -199,6 +199,32 @@ void Guild::BankEventLogEntry::WritePacket(WorldPacket& data) const
     data << uint32(time(NULL) - m_timestamp);
 }
 
+void Guild::NewsLogEntry::SaveToDB(SQLTransaction& trans) const
+{
+    uint8 index = 0;
+    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_GUILD_NEWS);
+    stmt->setUInt32(  index, m_guildId);
+    stmt->setUInt32(++index, GetGUID());
+    stmt->setUInt8 (++index, GetType());
+    stmt->setUInt32(++index, GetPlayerGuid());
+    stmt->setUInt32(++index, GetFlags());
+    stmt->setUInt32(++index, GetValue());
+    stmt->setUInt64(++index, GetTimestamp());
+    CharacterDatabase.ExecuteOrAppend(trans, stmt);
+}
+
+void Guild::NewsLogEntry::WritePacket(WorldPacket& data) const
+{
+    data << uint32(0); //guild achievements?
+    data << uint32(secsToTimeBitFields(GetTimestamp()));
+    data << uint64(GetPlayerGuid());
+    data << uint32(GetValue());
+    data << uint32(0);
+    data << uint32(GetType());
+    data << uint32(GetFlags());
+    data << uint32(GetGUID());
+}
+
 // RankInfo
 void Guild::RankInfo::LoadFromDB(Field* fields)
 {
@@ -1103,7 +1129,7 @@ InventoryResult Guild::BankMoveItemData::CanStore(Item* pItem, bool swap)
 }
 
 // Guild
-Guild::Guild() : m_id(0), m_leaderGuid(0), m_createdDate(0), m_accountsNumber(0), m_bankMoney(0), m_eventLog(NULL), m_lastXPSave(0), _achievementMgr(this)
+Guild::Guild() : m_id(0), m_leaderGuid(0), m_createdDate(0), m_accountsNumber(0), m_bankMoney(0), m_eventLog(NULL), m_newsLog(NULL), m_lastXPSave(0), _achievementMgr(this)
 {
     memset(&m_bankEventLog, 0, (GUILD_BANK_MAX_TABS + 1) * sizeof(LogHolder*));
 }
@@ -1114,6 +1140,8 @@ Guild::~Guild()
     _DeleteBankItems(temp);
 
     // Cleanup
+    delete m_newsLog;
+    m_newsLog = NULL;
     if (m_eventLog)
         delete m_eventLog;
     for (uint8 tabId = 0; tabId <= GUILD_BANK_MAX_TABS; ++tabId)
@@ -1431,35 +1459,6 @@ void Guild::HandleRoster(WorldSession* session /*= NULL*/)
    //SendUpdateRoster(session);
 
    sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Sent (SMSG_GUILD_ROSTER)");
-}
-
-void Guild::SetGuildNews(WorldPacket &data)
-{
-    data << uint32(m_guild_news.size());
-
-    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
-        data << uint32(0);
-
-    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
-        data << uint32(getMSTime() - itr->m_timestamp);
-
-    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
-        data << uint64(MAKE_NEW_GUID(itr->m_source_guid, 0, HIGHGUID_PLAYER));
-
-    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
-    {
-        data << uint32(itr->m_value1);
-        data << uint32(itr->m_value2);
-    }
-
-    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
-        data << uint32(itr->m_type);
-
-    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
-        data << uint32(itr->m_flags);
-
-    for (GuildNewsList::iterator itr = m_guild_news.begin(); itr != m_guild_news.end(); ++itr)
-        data << uint32(0);
 }
 
 void Guild::SendGuildRankInfo(WorldSession* session)
@@ -2177,18 +2176,19 @@ bool Guild::LoadFromDB(Field* fields)
     return true;
 }
 
-void Guild::LoadGuildNewsFromDB(Field* fields)
+void Guild::LoadGuildNewsLogFromDB(Field* fields)
 {
-    GuildNews guildNews;
+    if (!m_newsLog->CanInsert())
+        return;
 
-    guildNews.m_type = fields[0].GetUInt32();
-    guildNews.m_timestamp = fields[1].GetUInt64();
-    guildNews.m_value1 = fields[2].GetUInt32();
-    guildNews.m_value2 = fields[3].GetUInt32();
-    guildNews.m_source_guid = fields[4].GetUInt64();
-    guildNews.m_flags = fields[5].GetUInt32();
-
-    m_guild_news.push_back(guildNews);
+    m_newsLog->LoadEvent(new NewsLogEntry(
+    m_id,                                       // guild id
+    fields[1].GetUInt32(),                      // guid
+    fields[6].GetUInt32(),                      // timestamp //64 bits?
+    GuildNews(fields[2].GetUInt8()),            // type
+    fields[3].GetUInt32(),                      // player guid
+    fields[4].GetUInt32(),                      // Flags
+    fields[5].GetUInt32()));                    // value
 }
 
 void Guild::LoadRankFromDB(Field* fields)
@@ -2602,6 +2602,7 @@ void Guild::SetBankTabText(uint8 tabId, const std::string& text)
 void Guild::_CreateLogHolders()
 {
     m_eventLog = new LogHolder(m_id, sWorld->getIntConfig(CONFIG_GUILD_EVENT_LOG_COUNT));
+    m_newsLog = new LogHolder(m_id, sWorld->getIntConfig(CONFIG_GUILD_NEWS_LOG_COUNT));
     for (uint8 tabId = 0; tabId <= GUILD_BANK_MAX_TABS; ++tabId)
         m_bankEventLog[tabId] = new LogHolder(m_id, sWorld->getIntConfig(CONFIG_GUILD_BANK_EVENT_LOG_COUNT));
 }
@@ -3147,7 +3148,7 @@ void Guild::GainXP(uint32 xp, Player* source)
                     player->learnSpell(perksToLearn[i], true);
             }
         }
-        AddGuildNews(GUILD_NEWS_GUILD_LEVEL_REACHED, 0, m_level, 0);
+        AddGuildNews(GUILD_NEWS_LEVEL_UP, 0, 0, m_level);
         _achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_GUILD_LEVEL, source);
         ++oldLevel;
     }
@@ -3194,42 +3195,81 @@ void Guild::ResetTodayXP()
             SendXPData(player->GetSession());
 }
 
-void Guild::AddGuildNews(uint32 type, uint64 source_guild, int value1, int value2, int flags)
+void Guild::SendNewsUpdate(WorldSession* session)
 {
-    GuildNews guildNews;
+    uint32 size = m_newsLog->GetSize();
+    GuildLog* logs = m_newsLog->GetGuildLog();
 
-    guildNews.m_type = type;
-    guildNews.m_timestamp = getMSTime();
-    guildNews.m_value1 = value1;
-    guildNews.m_value2 = value2;
-    guildNews.m_source_guid = source_guild;
-    guildNews.m_flags = flags;
+    if (!logs)
+        return;
+
+    WorldPacket data(SMSG_GUILD_NEWS_UPDATE, (21 + size * (26 + 8)) / 8 + (8 + 6 * 4) * size);
+    data << uint32(size);
+
+    for (GuildLog::const_iterator itr = logs->begin(); itr != logs->end(); ++itr)
+        data << uint32(0); //achievements?
+
+    for (GuildLog::const_iterator itr = logs->begin(); itr != logs->end(); ++itr)
+        data << uint32(secsToTimeBitFields(((NewsLogEntry*)(*itr))->GetTimestamp()));
+
+    for (GuildLog::const_iterator itr = logs->begin(); itr != logs->end(); ++itr)
+        data << uint64(((NewsLogEntry*)(*itr))->GetPlayerGuid());
+
+    for (GuildLog::const_iterator itr = logs->begin(); itr != logs->end(); ++itr)
+    {
+        data << uint32(((NewsLogEntry*)(*itr))->GetValue());
+        data << uint32(0);
+    }
+
+    for (GuildLog::const_iterator itr = logs->begin(); itr != logs->end(); ++itr)
+        data << uint32(((NewsLogEntry*)(*itr))->GetType());
+
+    for (GuildLog::const_iterator itr = logs->begin(); itr != logs->end(); ++itr)
+        data << uint32(((NewsLogEntry*)(*itr))->GetFlags());
+
+    for (GuildLog::const_iterator itr = logs->begin(); itr != logs->end(); ++itr)
+        data << uint32(((NewsLogEntry*)(*itr))->GetGUID());
+
+    session->SendPacket(&data);
+}
+
+void Guild::AddGuildNews(uint8 type, uint64 guid, uint32 flags, uint32 value)
+{
+    uint32 lowGuid = GUID_LOPART(guid);
+    NewsLogEntry* news = new NewsLogEntry(m_id, m_newsLog->GetNextGUID(), GuildNews(type), lowGuid, flags, value);
 
     SQLTransaction trans = CharacterDatabase.BeginTransaction();
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_INSERT_GUILD_NEWS);
-    stmt->setUInt32(0, GetId());
-    stmt->setUInt32(1, type);
-    stmt->setUInt8 (2, guildNews.m_timestamp);
-    stmt->setUInt32(3, value1);
-    stmt->setUInt32(4, value2);
-    stmt->setUInt64 (5, source_guild);
-    stmt->setUInt8(6, flags);
-    CharacterDatabase.ExecuteOrAppend(trans, stmt);
+    m_newsLog->AddEvent(trans, news);
+    CharacterDatabase.CommitTransaction(trans);
 
-    WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 8*5);
+    WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 7 + 32);
+    data << uint32(1); // size, we are only sending 1 news here
+    news->WritePacket(data);
+
+    BroadcastPacket(&data);
+}
+
+void Guild::HandleNewsSetSticky(WorldSession* session, uint32 newsId, bool sticky)
+{
+    GuildLog* logs = m_newsLog->GetGuildLog();
+    GuildLog::iterator itr = logs->begin();
+    while (itr != logs->end() && (*itr)->GetGUID() != newsId)
+        ++itr;
+
+    if (itr == logs->end())
+    {
+        return;
+    }
+
+    NewsLogEntry* news = (NewsLogEntry*)(*itr);
+    news->SetSticky(sticky);
+
+    WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 7 + 32);
     data << uint32(1);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint64(source_guild);
-    data << uint32(value1);
-    data << uint32(value2);
-    data << uint32(type);
-    data << uint32(0);
-    data << uint32(0);
+    news->WritePacket(data);
+    session->SendPacket(&data);
 
-    for (Members::const_iterator itr = m_members.begin(); itr != m_members.end(); ++itr)
-        if (Player *player = itr->second->FindPlayer())
-            player->GetSession()->SendPacket(&data);
-
-    m_guild_news.push_back(guildNews);
+    SQLTransaction trans = CharacterDatabase.BeginTransaction();
+    news->SaveToDB(trans);
+    CharacterDatabase.CommitTransaction(trans);
 }

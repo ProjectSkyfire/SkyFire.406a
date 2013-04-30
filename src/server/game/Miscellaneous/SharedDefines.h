@@ -2921,8 +2921,13 @@ enum PetTalentType
 };
 
 #define CHAIN_SPELL_JUMP_RADIUS 8
-#define GUILD_BANKLOG_MAX_RECORDS   25
-#define GUILD_EVENT_LOG_MAX_RECORDS  100
+
+enum GuildLogs
+{
+    GUILD_BANKLOG_MAX_RECORDS   = 25,
+    GUILD_EVENT_LOG_MAX_RECORDS = 100,
+    GUILD_NEWSLOG_MAX_RECORDS   = 250
+};
 
 enum AiReaction
 {
