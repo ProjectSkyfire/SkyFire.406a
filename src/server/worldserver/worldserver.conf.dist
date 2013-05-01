@@ -1336,6 +1336,16 @@ Guild.EventLogRecordsCount = 100
 Guild.BankEventLogRecordsCount = 25
 
 #
+#    Guild.NewsLogRecordsCount
+#        Description: Number of log entries for guild news that are stored per guild. Old
+#                     entries will be overwritten if the number of log entries exceed the
+#                     configured value. High numbers prevent this behavior but may have performance
+#                     impacts.
+#        Default:     250
+
+Guild.NewsLogRecordsCount = 250
+
+#
 #    GuildAdvancement.Enabled
 #        Enables the cataclysm guild leveling system. 
 #        It's currently far from being complete. 

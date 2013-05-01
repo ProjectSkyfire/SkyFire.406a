@@ -29,25 +29,18 @@
 
 class Item;
 
-enum sGuildNews
+enum GuildNews
 {
-    GUILD_NEWS_GUILD_ACHIEVENT_EARNED = 1,
-    GUILD_NEWS_MEMBER_ACHIEVEMENT_EARNED,
-    GUILD_NEWS_EPIC_ITEM_LOOTED,
-    GUILD_NEWS_EPIC_ITEM_CRAFTED,
-    GUILD_NEWS_EPIC_ITEM_PURCHASED,
-    GUILD_NEWS_GUILD_LEVEL_REACHED,
+    GUILD_NEWS_GUILD_ACHIEVEMENT        = 0,
+    GUILD_NEWS_PLAYER_ACHIEVEMENT       = 1,
+    GUILD_NEWS_DUNGEON_ENCOUNTER        = 2,
+    GUILD_NEWS_ITEM_LOOTED              = 3,
+    GUILD_NEWS_ITEM_CRAFTED             = 4,
+    GUILD_NEWS_ITEM_PURCHASED           = 5,
+    GUILD_NEWS_LEVEL_UP                 = 6,
 };
 
-struct GuildNews
-{
-    uint32 m_type;
-    uint64 m_timestamp;
-    uint32 m_value1;
-    uint32 m_value2;
-    uint64 m_source_guid;
-    uint32 m_flags;
-};
+uint32 const MinNewsItemLevel[4] = { 61, 90, 200, 353 };
 
 enum GuildMisc
 {
@@ -385,8 +378,6 @@ private:
         uint32 m_achievementPoints;
     };
 
-    typedef UNORDERED_MAP<uint32, GuildNews*> sGuildNews;
-
     // Base class for event entries
     class LogEntry
     {
@@ -396,6 +387,7 @@ private:
         virtual ~LogEntry() { }
 
         uint32 GetGUID() const { return m_guid; }
+        uint64 GetTimestamp() const { return m_timestamp; }
 
         virtual void SaveToDB(SQLTransaction& trans) const = 0;
         virtual void WritePacket(WorldPacket& data) const = 0;
@@ -462,6 +454,42 @@ private:
         uint8  m_destTabId;
     };
 
+    // News log entry
+    class NewsLogEntry : public LogEntry
+    {
+    public:
+        NewsLogEntry(uint32 guildId, uint32 guid, GuildNews type, uint32 playerGuid, uint32 flags, uint32 value) :
+            LogEntry(guildId, guid), m_type(type), m_playerGuid(playerGuid), m_flags(flags), m_value(value) { }
+
+        NewsLogEntry(uint32 guildId, uint32 guid, time_t timestamp, GuildNews type, uint32 playerGuid, uint32 flags, uint32 value) :
+            LogEntry(guildId, guid, timestamp), m_type(type), m_playerGuid(playerGuid), m_flags(flags), m_value(value) { }
+
+        ~NewsLogEntry() { }
+
+        GuildNews GetType() const { return m_type; }
+        uint64 GetPlayerGuid() const { return m_playerGuid ? MAKE_NEW_GUID(m_playerGuid, 0, HIGHGUID_PLAYER) : 0; }
+        uint32 GetValue() const { return m_value; }
+        uint32 GetFlags() const { return m_flags; }
+        void SetSticky(bool sticky)
+        {
+            if (sticky)
+               m_flags |= 1;
+           else
+               m_flags &= ~1;
+        }
+
+        void SaveToDB(SQLTransaction& trans) const;
+        void WritePacket(WorldPacket& data) const;
+
+    private:
+        GuildNews m_type;
+        uint32 m_playerGuid;
+        uint32 m_flags;
+        uint32 m_value;
+    };
+
+    typedef std::list<LogEntry*> GuildLog;
+
     // Class encapsulating work with events collection
     class LogHolder
     {
@@ -479,9 +507,9 @@ private:
         // Writes information about all events to packet
         void WritePacket(WorldPacket& data) const;
         uint32 GetNextGUID();
+        GuildLog* GetGuildLog() { return &m_log; } // Needed for news as WritePacket can't be used
 
     private:
-        typedef std::list<LogEntry*> GuildLog;
         GuildLog m_log;
         uint32 m_guildId;
         uint32 m_maxRecords;
@@ -658,7 +686,6 @@ public:
     typedef UNORDERED_MAP<uint32, Member*> Members;
     typedef std::vector<RankInfo> Ranks;
     typedef std::vector<BankTab*> BankTabs;
-    typedef std::list<GuildNews> GuildNewsList;
 
     static void SendCommandResult(WorldSession* session, GuildCommandType type, GuildCommandError errCode, const std::string& param = "");
     static void SendSaveEmblemResult(WorldSession* session, GuildEmblemError errCode);
@@ -701,7 +728,7 @@ public:
     void HandleMemberLogout(WorldSession* session);
     void HandleDisband(WorldSession* session);
 
-    void SetGuildNews(WorldPacket &data);
+    void HandleNewsSetSticky(WorldSession* session, uint32 newsId, bool sticky);
 
     void UpdateMemberData(Player* player, uint8 dataid, uint32 value);
     void OnPlayerStatusChange(Player* player, uint32 flag, bool state);
@@ -718,10 +745,11 @@ public:
     void SendMoneyInfo(WorldSession* session) const;
     void SendLoginInfo(WorldSession* session);
     void SendGuildRankInfo(WorldSession* session);
+    void SendNewsUpdate(WorldSession* session);
 
     // Load from DB
     bool LoadFromDB(Field* fields);
-    void LoadGuildNewsFromDB(Field* fields);
+    void LoadGuildNewsLogFromDB(Field* fields);
     void LoadRankFromDB(Field* fields);
     bool LoadMemberFromDB(Field* fields);
     bool LoadEventLogFromDB(Field* fields);
@@ -760,6 +788,8 @@ public:
     // Bank tabs
     void SetBankTabText(uint8 tabId, const std::string& text);
 
+    void AddGuildNews(uint8 type, uint64 guid, uint32 flags, uint32 value);
+
     // Guild advancement
     uint8 GetLevel() { return m_level; }
     uint64 GetCurrentXP() { return m_xp; }
@@ -771,7 +801,6 @@ public:
     void LevelUp();
     void ResetTodayXP();
     void SendXPData(WorldSession* session = NULL);
-    void AddGuildNews(uint32 type, uint64 source_guild, int value1, int value2, int flags = 0);
     GuildAchievementMgr& GetAchievementMgr() { return _achievementMgr; }
     GuildAchievementMgr const& GetAchievementMgr() const { return _achievementMgr; }
 
@@ -795,12 +824,11 @@ protected:
     Members m_members;
     BankTabs m_bankTabs;
 
-    GuildNewsList m_guild_news;
-
     uint32 m_lastXPSave;
 
     // These are actually ordered lists. The first element is the oldest entry.
     LogHolder* m_eventLog;
+    LogHolder* m_newsLog;
     LogHolder* m_bankEventLog[GUILD_BANK_MAX_TABS + 1];
     GuildAchievementMgr _achievementMgr;
 

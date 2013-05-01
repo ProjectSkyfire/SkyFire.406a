@@ -705,12 +705,22 @@ void WorldSession::HandleGuildQueryTradeSkill(WorldPacket& recvData)
 void WorldSession::HandleGuildQueryNews(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_GUILD, "WORLD: Received CMSG_GUILD_QUERY_NEWS");
-
-    // Sending guild news
     if (Guild* guild = _GetPlayerGuild(this))
-    {
-        WorldPacket data(SMSG_GUILD_NEWS_UPDATE, 4);
-        guild->SetGuildNews(data);
-        SendPacket(&data);
-    }
+        guild->SendNewsUpdate(this);
+}
+
+void WorldSession::HandleGuildNewsUpdateSticky(WorldPacket& recvData)
+{
+    uint8 flag;
+    uint32 newsId;
+
+    recvData >> flag;
+    recvData >> newsId;
+
+    bool sticky = false;
+    if (flag == 128)
+        sticky = true;
+
+    if (Guild* guild = _GetPlayerGuild(this))
+        guild->HandleNewsSetSticky(this, newsId, sticky);
 }

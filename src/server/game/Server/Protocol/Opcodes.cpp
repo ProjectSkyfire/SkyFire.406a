@@ -142,6 +142,7 @@ void InitOpcodeTable()
     OPCODE( CMSG_GUILD_DISBAND,                           STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildDisbandOpcode        );
     OPCODE( CMSG_GUILD_LEADER,                            STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildLeaderOpcode         );
     OPCODE( CMSG_GUILD_MOTD,                              STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildMOTDOpcode           );
+    OPCODE( CMSG_GUILD_NEWS_UPDATE_STICKY,                STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildNewsUpdateSticky     );
     OPCODE( CMSG_QUERY_GUILD_REWARDS,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildRewardsOpcode        );
     OPCODE( CMSG_QUERY_GUILD_XP,                          STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildExperienceOpcode     );
     OPCODE( CMSG_QUERY_GUILD_MAX_XP,                      STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleGuildMaxExperienceOpcode  );
@@ -1272,6 +1273,8 @@ void InitOpcodeTable()
     OPCODE( CMSG_BATTLEGROUND_PORT_AND_LEAVE,             STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleBattlegroundPortOpcode    );
     OPCODE( CMSG_GUILD_UPDATE_PARTY_STATE,                STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildPartyStateUpdate     );
     OPCODE( CMSG_GUILD_QUERY_NEWS,                        STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleGuildQueryNews            );
+    OPCODE( SMSG_GUILD_NEWS_DELETED,                      STATUS_UNHANDLED,PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
+    OPCODE( SMSG_GUILD_NEWS_UPDATE,                       STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( SMSG_UNKNOWN_1310,                            STATUS_NEVER,    PROCESS_INPLACE,       &WorldSession::Handle_ServerSide               );
     OPCODE( CMSG_RETURN_TO_GRAVEYARD,                     STATUS_LOGGEDIN, PROCESS_THREADUNSAFE,  &WorldSession::HandleMoveToGraveyard           );
     OPCODE( CMSG_REFORGE_ITEM,                            STATUS_LOGGEDIN, PROCESS_INPLACE,       &WorldSession::HandleReforgeItem               );
