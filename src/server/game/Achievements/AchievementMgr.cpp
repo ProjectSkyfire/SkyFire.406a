@@ -395,7 +395,7 @@ void AchievementMgr::CompletedAchievement(AchievementEntry const* achievement)
 
     if (achievement->flags & ACHIEVEMENT_FLAG_SHOW_IN_GUILD_NEWS)
         if (Guild* guild = sGuildMgr->GetGuildById(_player->GetGuildId()))
-            guild->AddGuildNews(GUILD_NEWS_PLAYER_ACHIEVEMENT, _player->GetGUID(), achievement->flags & ACHIEVEMENT_FLAG_SHOW_IN_GUILD_HEADER, achievement->ID);
+            guild->AddGuildNews(GUILD_NEWS_MEMBER_ACHIEVEMENT, _player->GetGUID(), achievement->flags & ACHIEVEMENT_FLAG_SHOW_IN_GUILD_HEADER, achievement->ID);
 
     SendAchievementEarned(achievement);
     CompletedAchievementData& ca =  m_completedAchievements[achievement->ID];
