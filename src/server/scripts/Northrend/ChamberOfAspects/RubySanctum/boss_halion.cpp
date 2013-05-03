@@ -249,7 +249,7 @@ public:
             ScriptedAI::EnterEvadeMode();
         }
 
-        void JustDied(Unit* killer)
+        void JustDied(Unit* /*killer*/)
         {
             if (!instance)
                 return;
@@ -300,7 +300,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit* /*who*/)
         {
             if (!instance)
                 return;
@@ -333,7 +333,7 @@ public:
             MovementStarted = true;
         }
 
-        void DamageTaken(Unit* doneBy, uint32& Damage)
+        void DamageTaken(Unit* /*doneBy*/, uint32& Damage)
         {
             if (!instance)
                 return;
@@ -666,7 +666,7 @@ public:
             }
         }
 
-        void JustDied(Unit* killer)
+        void JustDied(Unit* /*killer*/)
         {
             if (!instance)
                 return;
@@ -694,22 +694,25 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who)
+        void EnterCombat(Unit* /*who*/)
         {
             if (!instance)
                 return;
         }
 
-        void DamageTaken(Unit* doneBy, uint32& Damage)
+        void DamageTaken(Unit* /*doneBy*/, uint32& Damage)
         {
             if (!instance)
                 return;
+
             TwilightDamage += Damage;
             Creature* halion = me->GetMap()->GetCreature(instance->GetData64(NPC_HALION));
             if (!halion)
                 return;
+
             if (halion->GetHealth() <=1 || !halion->isAlive())
                 return;
+
             if (Damage < me->GetHealth())
             {
                 halion->SetHealth(me->GetHealth()-Damage);
@@ -901,7 +904,7 @@ public:
             instance->SetData(DATA_HALION_EVENT, NOT_STARTED);
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             //ignore all attack start commands
             return;
@@ -1103,7 +1106,7 @@ public:
                         _pulsar_S->Respawn();
             }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             //ignore all attackstart commands
             return;
@@ -1244,7 +1247,7 @@ public:
             sLog->outDebug(LOG_FILTER_MAPS, "EventMGR: creature %u assume _flag %u ", me->GetEntry(), _flag);
         }
 
-        void AttackStart(Unit* who)
+        void AttackStart(Unit* /*who*/)
         {
             //ignore all attack start commands
             return;
@@ -1280,7 +1283,7 @@ public:
             me->GetMotionMaster()->MovePoint(id, x, y, me->GetPositionZ());
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!instance)
                   me->ForcedDespawn();
@@ -1331,7 +1334,7 @@ public:
             me->SetSpeed(MOVE_RUN, 10.0f, true);
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             return;
         }
@@ -1350,7 +1353,7 @@ public:
             }
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!instance || instance->GetData(DATA_HALION) != IN_PROGRESS)
                   me->ForcedDespawn();
@@ -1411,7 +1414,7 @@ public:
             grow = false;
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             return;
         }
@@ -1491,7 +1494,7 @@ public:
             grow = false;
         }
 
-        void AttackStart(Unit *who)
+        void AttackStart(Unit* /*who*/)
         {
             return;
         }
@@ -1675,7 +1678,7 @@ public:
             me->SetInCombatWithZone();
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (!me->HasAura(SPELL_METEOR_FLAME))
                 DoCast(SPELL_METEOR_FLAME);
@@ -1736,17 +1739,17 @@ public:
             return true;
         }
 
-        void HandlePeriodicTick(AuraEffect const * /*aurEff*/)
+        void HandlePeriodicTick(AuraEffect const* /*aurEff*/)
         {
             if (Unit* target = GetTarget())
                 target->CastSpell(target, SPELL_MARK_OF_COMBUSTION, true);
         }
 
-        void HandleEffectRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             if (Unit* target = GetTarget())
             {
-                if (Aura *mark = target->GetAura(SPELL_MARK_OF_COMBUSTION))
+                if (Aura* mark = target->GetAura(SPELL_MARK_OF_COMBUSTION))
                 {
                     int32 bp = 2000 * mark->GetStackAmount();
                     target->CastCustomSpell(target, SPELL_COMBUSTION_EXPLODE, &bp, 0, 0, true);
@@ -1790,13 +1793,13 @@ public:
             return true;
         }
 
-        void HandlePeriodicTick(AuraEffect const * /*aurEff*/)
+        void HandlePeriodicTick(AuraEffect const* /*aurEff*/)
         {
             if (Unit* target = GetTarget())
                 target->CastSpell(target, SPELL_MARK_OF_CONSUMPTION, true);
         }
 
-        void HandleEffectRemove(AuraEffect const * /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        void HandleEffectRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
             if (Unit* target = GetTarget())
             {

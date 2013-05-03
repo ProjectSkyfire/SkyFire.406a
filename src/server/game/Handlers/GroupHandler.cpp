@@ -262,7 +262,7 @@ void WorldSession::HandleGroupAcceptOpcode(WorldPacket& recvData)
     group->BroadcastGroupUpdate();
 }
 
-void WorldSession::HandleGroupDeclineOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleGroupDeclineOpcode(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_DECLINE");
 
@@ -401,7 +401,7 @@ void WorldSession::HandleGroupSetLeaderOpcode(WorldPacket& recvData)
     group->SendUpdate();
 }
 
-void WorldSession::HandleGroupDisbandOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleGroupDisbandOpcode(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_GROUP_DISBAND");
 
@@ -452,7 +452,7 @@ void WorldSession::HandleLootMethodOpcode(WorldPacket& recvData)
     group->SendUpdate();
 }
 
-void WorldSession::HandleLootRoll(WorldPacket &recvData)
+void WorldSession::HandleLootRoll(WorldPacket& recvData)
 {
     if (!GetPlayer()->GetGroup())
     {
@@ -743,7 +743,7 @@ void WorldSession::HandleRaidReadyCheckOpcode(WorldPacket& recvData)
     }
 }
 
-void WorldSession::HandleRaidReadyCheckFinishedOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleRaidReadyCheckFinishedOpcode(WorldPacket& /*recvData*/)
 {
     /* Group* group = GetPlayer()->GetGroup();
      * if (!group)
@@ -1105,7 +1105,7 @@ void WorldSession::HandleRequestPartyMemberStatsOpcode(WorldPacket& recvData)
     SendPacket(&data);
 }
 
-void WorldSession::HandleRequestRaidInfoOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleRequestRaidInfoOpcode(WorldPacket& /*recvData*/)
 {
     // every time the player checks the character screen
     _player->SendRaidInfo();
