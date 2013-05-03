@@ -1873,7 +1873,7 @@ public:
             }
         }
 
-        void HandleChargeEffect(SpellEffIndex effIndex)
+        void HandleChargeEffect(SpellEffIndex /*effIndex*/)
         {
             uint32 spellId;
 
@@ -2032,7 +2032,7 @@ public:
             return true;
         }
 
-        void HandleScriptEffect(SpellEffIndex effIndex)
+        void HandleScriptEffect(SpellEffIndex /*effIndex*/)
         {
             if (Unit* rider = GetCaster()->GetCharmer())
             {
