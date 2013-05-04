@@ -15,8 +15,8 @@
 * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DEF_BLACKROCK_CAVERNS_H
-#define DEF_BLACKROCK_CAVERNS_H
+#ifndef BLACKROCK_CAVERNS_H_
+#define BLACKROCK_CAVERNS_H_
 
 enum Data
 {
@@ -40,7 +40,6 @@ enum Data64
 enum CreatureIds
 {
     // Dungeon Bosses
-
     BOSS_ROMOGG_BONECRUSHER      = 39665,
     BOSS_CORLA                   = 39679,
     BOSS_KARSH_STEELBENDER       = 39698,
@@ -48,9 +47,7 @@ enum CreatureIds
     BOSS_ASCENDANT_LORD_OBSIDIUS = 39705,
 
     // Trash mobs
-
     NPC_BUSTER                   = 40013,
-    NPC_CHAINS_OF_WOE            = 40447,
     NPC_CONFLAGRATION            = 39994,
     NPC_CRAZED_MAGE              = 39982,
     NPC_DEFILED_EARTH_RAGER      = 40023,
@@ -65,10 +62,13 @@ enum CreatureIds
     NPC_TWILIGHT_ZEALOT          = 39990,
 
     // Various NPCs
-
     NPC_RAZ_THE_CRAZED           = 39670,
     NPC_FINKLE_EINHORN           = 49476,
     NPC_TWILIGHT_PORTAL          = 51340,
+
+    // Romogg Bonecrusher
+    NPC_ANGERED_EARTH            = 50376,
+    NPC_CHAINS_OF_WOE            = 40447
 };
 
 enum GameObjectIds

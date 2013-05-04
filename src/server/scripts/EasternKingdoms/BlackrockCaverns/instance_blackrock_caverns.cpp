@@ -58,7 +58,7 @@ public:
              uiBeauty = 0;
              uiAscendantLordObsidius = 0;
 
-             for (uint8 i = 0 ; i < ENCOUNTERS; ++i)
+             for (uint8 i = 0; i < ENCOUNTERS; ++i)
                  Encounter[i] = NOT_STARTED;
         }
 
@@ -191,7 +191,7 @@ public:
                 Encounter[3] = data3;
                 Encounter[4] = data4;
 
-                for (uint8 i=0; i < ENCOUNTERS; ++i)
+                for (uint8 i = 0; i < ENCOUNTERS; ++i)
                     if (Encounter[i] == IN_PROGRESS)
                         Encounter[i] = NOT_STARTED;
             }
