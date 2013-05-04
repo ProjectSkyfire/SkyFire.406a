@@ -95,16 +95,15 @@ public:
             {
                 if (chainsOfWoe->isAlive())
                 {
-                    /* Buggy!
-
-                    Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
+ /* Buggy!          Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
 
                     if (!PlayerList.isEmpty())
                     {
                         for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                             if (!i->getSource()->HasAura(SPELL_CHAINS_OF_WOE_AURA))
                                 me->CastSpell(i->getSource(),SPELL_CHAINS_OF_WOE_AURA,true);
-                    }*/
+                    }
+*/
                 }
                 else
                 {
@@ -130,7 +129,8 @@ public:
                             DoCastAOE(SPELL_QUAKE);
 
                             if (me->GetMap()->IsHeroic())
-                            { // Summon Angered Earth
+                            {
+                                // Summon Angered Earth
                                 Position myPos;
                                 me->GetPosition(&myPos);
 
@@ -151,7 +151,7 @@ public:
                     }
                 }
             }
-			DoMeleeAttackIfReady();
+            DoMeleeAttackIfReady();
         }
 
         void JustSummoned(Creature* summon)
