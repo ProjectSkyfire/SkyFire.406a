@@ -203,7 +203,7 @@ Position const Center = {-719.435f, 3.839f, 635.671f};
 class mob_cyclone_shield : public CreatureScript
 {
 public:
-    mob_cyclone_shield() : CreatureScript("mob_cyclone_shield"){}
+    mob_cyclone_shield() : CreatureScript("npc_cyclone_shield"){}
 
     struct mob_cyclone_shieldAI  : public ScriptedAI
     {
