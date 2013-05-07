@@ -53,10 +53,10 @@ void BattlegroundSA::Reset()
 {
     TotalTime = 0;
     Attackers = ((urand(0, 1)) ? TEAM_ALLIANCE : TEAM_HORDE);
-    
+
     for (uint8 i = 0; i <= 5; i++)
         GateStatus[i] = BG_SA_GATE_OK;
-    
+
     ShipsStarted = false;
     gateDestroyed = false;
     _notEvenAScratch[TEAM_ALLIANCE] = true;
@@ -126,7 +126,8 @@ bool BattlegroundSA::ResetObjs()
         return false;
     }
 
-    // MAD props for Kiper for discovering those values - 4 hours of his work.
+    // 335a - credits 2 Kiper for discovering these values,
+    // 406a - these values need fixed, boats constantly reset.
     GetBGObject(BG_SA_BOAT_ONE)->UpdateRotationFields(1.0f, 0.0002f);
     GetBGObject(BG_SA_BOAT_TWO)->UpdateRotationFields(1.0f, 0.00001f);
     SpawnBGObject(BG_SA_BOAT_ONE, RESPAWN_IMMEDIATELY);
@@ -308,7 +309,7 @@ void BattlegroundSA::PostUpdateImpl(uint32 diff)
     if (Status == BG_SA_WARMUP )
     {
         EndRoundTimer = BG_SA_ROUNDLENGTH;
-        
+
         if (TotalTime >= BG_SA_WARMUPLENGTH)
         {
             TotalTime = 0;
@@ -317,7 +318,7 @@ void BattlegroundSA::PostUpdateImpl(uint32 diff)
             Status = BG_SA_ROUND_ONE;
             StartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, (Attackers == TEAM_ALLIANCE) ? 23748 : 21702);
         }
-        
+
         if (TotalTime >= BG_SA_BOAT_START)
             StartShips();
         return;
@@ -343,6 +344,9 @@ void BattlegroundSA::PostUpdateImpl(uint32 diff)
                 if (Player* p = ObjectAccessor::FindPlayer(itr->first))
                     p->RemoveAurasDueToSpell(SPELL_PREPARATION);
         }
+
+        // Hmmmz if boats travel time is 1m23secs(for travel, and prepartion), then why is 2nd round 2m30secs,
+        // team on boats will arrive and start b4 team does on land... these should be same times
         if (TotalTime >= 30000)
         {
             if (!SignaledRoundTwoHalfMin)
@@ -390,7 +394,7 @@ void BattlegroundSA::PostUpdateImpl(uint32 diff)
                 return;
             }
         }
-        
+
         if (Status == BG_SA_ROUND_ONE || Status == BG_SA_ROUND_TWO)
         {
             SendTime();
@@ -457,7 +461,10 @@ void BattlegroundSA::AddPlayer(Player* player)
     {
         if (player->GetTeamId() == Attackers)
         {
-            player->CastSpell(player, 12438, true);//Without this player falls before boat loads...
+            // (335a)HACK: Without spell:slowfall players will pass through boat before it loads...
+            //             unfortunately, this does not work in 406a, players still pass through boat.
+            //             inRetail players are teleported directly to the deck of the boat.
+            player->CastSpell(player, 12438, true);
 
             if (urand(0, 1))
                 player->TeleportTo(607, 2682.936f, -830.368f, 15.0f, 2.895f, 0);
@@ -492,8 +499,8 @@ void BattlegroundSA::HandleAreaTrigger(Player* /*Source*/, uint32 /*Trigger*/)
 void BattlegroundSA::UpdatePlayerScore(Player* Source, uint32 type, uint32 value, bool doAddHonor)
 {
     BattlegroundScoreMap::iterator itr = PlayerScores.find(Source->GetGUID());
-    
-    if (itr == PlayerScores.end())                         // player not found...
+
+    if (itr == PlayerScores.end())   // player not found...
         return;
 
     if (type == SCORE_DESTROYED_DEMOLISHER)
@@ -529,7 +536,10 @@ void BattlegroundSA::TeleportPlayers()
 
             if (player->GetTeamId() == Attackers)
             {
-                player->CastSpell(player, 12438, true);     //Without this player falls before boat loads...
+                // (335a)HACK: Without spell:slowfall players will pass through boat before it loads...
+                //             unfortunately, this does not work in 406a, players still pass through boat.
+                //             inRetail players are teleported directly to the deck of the boat.
+                player->CastSpell(player, 12438, true);
 
                 if (urand(0, 1))
                     player->TeleportTo(607, 2682.936f, -830.368f, 15.0f, 2.895f, 0);
@@ -552,7 +562,7 @@ void BattlegroundSA::EventPlayerDamagedGO(Player* /*player*/, GameObject* go, ui
         uint32 i = getGateIdFromDamagedOrDestroyEventId(eventType);
         GateStatus[i] = BG_SA_GATE_DAMAGED;
         uint32 uws = getWorldStateFromGateId(i);
-        
+
         if (uws)
             UpdateWorldState(uws, GateStatus[i]);
     }
@@ -621,7 +631,7 @@ void BattlegroundSA::DemolisherStartState(bool start)
 void BattlegroundSA::DestroyGate(Player* player, GameObject* go)
 {
     uint32 i = getGateIdFromDamagedOrDestroyEventId(go->GetGOInfo()->building.destroyedEvent);
-    
+
     if (!GateStatus[i])
         return;
 
@@ -631,13 +641,13 @@ void BattlegroundSA::DestroyGate(Player* player, GameObject* go)
         {
             GateStatus[i] = BG_SA_GATE_DESTROYED;
             uint32 uws = getWorldStateFromGateId(i);
-            
+
             if (uws)
                 UpdateWorldState(uws, GateStatus[i]);
-            
+
             bool rewardHonor = true;
             gateDestroyed = true;
-            
+
             switch (i)
             {
                 case BG_SA_GREEN_GATE:
@@ -662,9 +672,9 @@ void BattlegroundSA::DestroyGate(Player* player, GameObject* go)
 
             if (i < 5)
                 DelObject(i + 14);
-            
+
             UpdatePlayerScore(player, SCORE_DESTROYED_WALL, 1);
-            
+
             if (rewardHonor)
                 UpdatePlayerScore(player, SCORE_BONUS_HONOR, GetBonusHonorFromKill(1));
         }
@@ -696,7 +706,7 @@ WorldSafeLocsEntry const* BattlegroundSA::GetClosestGraveYard(Player* player)
 
         ret = sWorldSafeLocsStore.LookupEntry(BG_SA_GYEntries[i]);
         dist = sqrt((ret->x - x)*(ret->x - x) + (ret->y - y)*(ret->y - y) + (ret->z - z)*(ret->z - z));
-        
+
         if (dist < nearest)
         {
             closest = ret;
@@ -707,6 +717,7 @@ WorldSafeLocsEntry const* BattlegroundSA::GetClosestGraveYard(Player* player)
     return closest;
 }
 
+// check timers for blizz accuracy(Cataclysm)
 void BattlegroundSA::SendTime()
 {
     uint32 end_of_round = (EndRoundTimer - TotalTime);
@@ -812,7 +823,7 @@ void BattlegroundSA::CaptureGraveyard(BG_SA_Graveyards i, Player* Source)
 
             UpdateWorldState(BG_SA_RIGHT_GY_ALLIANCE, (GraveyardStatus[i] == TEAM_ALLIANCE ? 1 : 0));
             UpdateWorldState(BG_SA_RIGHT_GY_HORDE, (GraveyardStatus[i] == TEAM_ALLIANCE ? 0 : 1));
-            
+
             if (Source->GetTeamId() == TEAM_ALLIANCE)
                 SendWarningToAll(LANGUAGE_BG_SA_A_GY_EAST);
             else
@@ -852,7 +863,8 @@ void BattlegroundSA::EventPlayerUsedGO(Player* Source, GameObject* object)
             {
                 RoundScores[0].winner = Attackers;
                 RoundScores[0].time = TotalTime;
-                //Achievement Storm the Beach (1310)
+
+                // Achievement Storm the Beach (1310)
                 for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
                 {
                     if (Player* player = ObjectAccessor::FindPlayer(itr->first))
@@ -876,7 +888,7 @@ void BattlegroundSA::EventPlayerUsedGO(Player* Source, GameObject* object)
                 RoundScores[1].winner = Attackers;
                 RoundScores[1].time = TotalTime;
                 ToggleTimer();
-                //Achievement Storm the Beach (1310)
+                // Achievement Storm the Beach (1310)
                 for (BattlegroundPlayerMap::const_iterator itr = GetPlayers().begin(); itr != GetPlayers().end(); ++itr)
                 {
                     if (Player* player = ObjectAccessor::FindPlayer(itr->first))
@@ -948,36 +960,44 @@ void BattlegroundSA::UpdateDemolisherSpawns()
     }
 }
 
+// this part is working boats are being send, with correct rotations...
+// BUT from boat start should be gameEvent "preperation time" lasting 1m23sec.
+// b4 arriving at docks (gameStart)... boats are traveling way to fast.
 void BattlegroundSA::SendTransportInit(Player* player)
 {
     if (BgObjects[BG_SA_BOAT_ONE] ||  BgObjects[BG_SA_BOAT_TWO])
     {
         UpdateData transData(player->GetMapId());
-        
+
         if (BgObjects[BG_SA_BOAT_ONE])
             GetBGObject(BG_SA_BOAT_ONE)->BuildCreateUpdateBlockForPlayer(&transData, player);
-        
+
         if (BgObjects[BG_SA_BOAT_TWO])
             GetBGObject(BG_SA_BOAT_TWO)->BuildCreateUpdateBlockForPlayer(&transData, player);
-        
+
         WorldPacket packet;
         transData.BuildPacket(&packet);
         player->GetSession()->SendPacket(&packet);
     }
 }
 
+// this is not removing the boats,or rooting them...
+// watch after ships port(arrival/rest/stop)at the docks ...
+// the transports will kick players into water then in a very high speeda (a blur really) reverse to Go-spawn loc and reset ...
+// i think we're missing something for these ship transports, like the boats deck is not seen as a ZCoord,
+// players shouldn't be able to move until ships are moving. this includes buffs,mounts,etc.
 void BattlegroundSA::SendTransportsRemove(Player* player)
 {
     if (BgObjects[BG_SA_BOAT_ONE] ||  BgObjects[BG_SA_BOAT_TWO])
     {
         UpdateData transData(player->GetMapId());
-        
+
         if (BgObjects[BG_SA_BOAT_ONE])
             GetBGObject(BG_SA_BOAT_ONE)->BuildOutOfRangeUpdateBlock(&transData);
-        
+
         if (BgObjects[BG_SA_BOAT_TWO])
             GetBGObject(BG_SA_BOAT_TWO)->BuildOutOfRangeUpdateBlock(&transData);
-        
+
         WorldPacket packet;
         transData.BuildPacket(&packet);
         player->GetSession()->SendPacket(&packet);
