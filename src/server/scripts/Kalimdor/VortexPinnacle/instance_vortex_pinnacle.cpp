@@ -1,7 +1,5 @@
 /*
  * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
- * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,9 +29,20 @@ class instance_vortex_pinnacle : public InstanceMapScript
         {
             instance_vortex_pinnacle_InstanceMapScript(InstanceMap* map) : InstanceScript(map)
             {
-                GrandVizierErtan = 0;
+                SetBossNumber(MAX_ENCOUNTER);
+                Initialize();
+            }
 
-                memset(&Encounter, 0, sizeof(Encounter));
+            uint64 GrandVizierErtanGUID;
+            uint64 AltairusGUID;
+            uint64 AsaadGUID;
+
+            void Initialize()
+            {
+                SetBossNumber(MAX_ENCOUNTER);
+                GrandVizierErtanGUID    = 0;
+                AltairusGUID            = 0;
+                AsaadGUID               = 0;
             }
 
             void OnCreatureCreate(Creature* creature)
@@ -41,29 +50,47 @@ class instance_vortex_pinnacle : public InstanceMapScript
                 switch (creature->GetEntry())
                 {
                     case BOSS_GRAND_VIZIER_ERTAN:
-                        GrandVizierErtan = creature->GetGUID();
-                    break;
+                        GrandVizierErtanGUID = creature->GetGUID();
+                        break;
+                    case BOSS_ALTAIRUS:
+                        AltairusGUID = creature->GetGUID();
+                        break;
+                    case BOSS_ASAAD:
+                        AsaadGUID = creature->GetGUID();
+                        break;
                 }
             }
 
-            void OnGameObjectCreate(GameObject* go) {}
-
-            uint64 GetData64(uint32 type)
+            void OnGameObjectCreate(GameObject* go)
             {
+            }
+
+            void OnGameObjectRemove(GameObject* go)
+            {
+            }
+
+            bool SetBossState(uint32 data, EncounterState state)
+            {
+                if (!InstanceScript::SetBossState(data, state))
+                    return false;
+
+                return true;
+            }
+
+            uint64 GetData64(uint32 data)
+            {
+                switch (data)
+                {
+                    case DATA_GRAND_VIZIER_ERTAN:
+                        return GrandVizierErtanGUID;
+                    case DATA_ALTAIRUS:
+                        return AltairusGUID;
+                    case DATA_ASAAD:
+                        return AsaadGUID;
+                    default:
+                        break;
+                }
                 return 0;
-            }
-
-            uint32 GetData(uint32 type)
-            {
-                return Encounter[type];
-            }
-
-            void SetData(uint32 uiType, uint32 uiData)
-            {
-                Encounter[uiType] = uiData;
-
-                if (uiData == DONE)
-                    SaveToDB();
             }
 
             std::string GetSaveData()
@@ -71,7 +98,7 @@ class instance_vortex_pinnacle : public InstanceMapScript
                 OUT_SAVE_INST_DATA;
 
                 std::ostringstream saveStream;
-                saveStream << "H O O " << GetBossSaveData();
+                saveStream << "V P " << GetBossSaveData();
 
                 OUT_SAVE_INST_DATA_COMPLETE;
                 return saveStream.str();
@@ -87,12 +114,12 @@ class instance_vortex_pinnacle : public InstanceMapScript
 
                 OUT_LOAD_INST_DATA(in);
 
-                char dataHead1, dataHead2, dataHead3;
+                char dataHead1, dataHead2;
 
                 std::istringstream loadStream(in);
-                loadStream >> dataHead1 >> dataHead2 >> dataHead3;
+                loadStream >> dataHead1 >> dataHead2;
 
-                /*if (dataHead1 == 'H' && dataHead2 == 'O' && dataHead3 == 'O')
+                if (dataHead1 == 'V' && dataHead2 == 'P')
                 {
                     for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
                     {
@@ -100,18 +127,16 @@ class instance_vortex_pinnacle : public InstanceMapScript
                         loadStream >> tmpState;
                         if (tmpState == IN_PROGRESS || tmpState > SPECIAL)
                             tmpState = NOT_STARTED;
+
                         SetBossState(i, EncounterState(tmpState));
                     }
-                } else OUT_LOAD_INST_DATA_FAIL;*/
+                }
+                else
+                    OUT_LOAD_INST_DATA_FAIL;
 
                 OUT_LOAD_INST_DATA_COMPLETE;
             }
-
-        private:
-            uint32 Encounter[MAX_ENCOUNTER];
-            uint64 GrandVizierErtan;
         };
-
         InstanceScript* GetInstanceScript(InstanceMap* map) const
         {
             return new instance_vortex_pinnacle_InstanceMapScript(map);
