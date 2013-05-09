@@ -100,7 +100,9 @@ public:
             Wall        = 0;
         }
 
-        void JustDied(Unit* killer) { }
+        void JustDied(Unit* /*killer*/)
+        {
+        }
 
         void WaypointReached(uint32 i)
         {
@@ -408,7 +410,7 @@ public:
             Jumped = false;
         }
 
-        void JustDied(Unit* killer)
+        void JustDied(Unit* /*killer*/)
         {
             if (!instance)
                 return;
@@ -510,7 +512,7 @@ public:
             Emerge = false;
         }
 
-        void JustDied(Unit* killer)
+        void JustDied(Unit* /*killer*/)
         {
             if (!instance)
                 return;
@@ -653,7 +655,7 @@ public:
             DoMeleeAttackIfReady();
         }
 
-        void JustDied(Unit* killer)
+        void JustDied(Unit* /*killer*/)
         {
             if (!instance)
                 return;
