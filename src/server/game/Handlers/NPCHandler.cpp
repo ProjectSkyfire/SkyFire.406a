@@ -430,7 +430,7 @@ void WorldSession::HandleBinderActivateOpcode(WorldPacket& recvData)
     SendBindPoint(unit);
 }
 
-void WorldSession::SendBindPoint(Creature *npc)
+void WorldSession::SendBindPoint(Creature* npc)
 {
     // prevent set homebind to instances in any case
     if (GetPlayer()->GetMap()->Instanceable())
