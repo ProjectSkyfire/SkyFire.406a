@@ -371,9 +371,9 @@ struct LootView
 {
     Loot &loot;
     Player *viewer;
-    PermissionTypes permission;
     uint32 objEntry;
     uint8 objType;
+    PermissionTypes permission;
     LootView(Loot &_loot, Player *_viewer, uint32 _entry, uint8 _type, PermissionTypes _permission = ALL_PERMISSION)
         : loot(_loot), viewer(_viewer), objEntry(_entry), objType(_type), permission(_permission) {}
 };
