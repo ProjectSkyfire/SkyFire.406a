@@ -8558,6 +8558,7 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
             break;
         }
         case SPELLFAMILY_ROGUE:
+        {
             switch(dummySpell->Id)
             {
                 // Gouge
@@ -8569,7 +8570,8 @@ bool Unit::HandleAuraProc(Unit* victim, uint32 damage, Aura* triggeredByAura, Sp
                     return true;
                 break;
             }
-            break;
+        }
+        break;
         case SPELLFAMILY_WARRIOR:
         {
             switch (dummySpell->Id)
@@ -9387,7 +9389,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
             if (!roll_chance_i(20*rank))
                 return false;
             break;
-        }       
+        }
         case 26364: // Lightning shield
         {
             if (HasAura(55448)) // Glyph of Lightning shield
