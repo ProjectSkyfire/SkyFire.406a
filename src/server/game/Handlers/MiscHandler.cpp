@@ -366,7 +366,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket& recvData)
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Send SMSG_WHO Message");
 }
 
-void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleLogoutRequestOpcode(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_LOGOUT_REQUEST Message, security - %u", GetSecurity());
 
@@ -423,12 +423,12 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recvData*/)
     LogoutRequest(time(NULL));
 }
 
-void WorldSession::HandlePlayerLogoutOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandlePlayerLogoutOpcode(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_PLAYER_LOGOUT Message");
 }
 
-void WorldSession::HandleLogoutCancelOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleLogoutCancelOpcode(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_LOGOUT_CANCEL Message");
 
@@ -1068,12 +1068,12 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket& recvData)
     }
 }
 
-void WorldSession::HandleCompleteCinematic(WorldPacket & /*recvData*/)
+void WorldSession::HandleCompleteCinematic(WorldPacket& /*recvData*/)
 {
     sLog->outStaticDebug("WORLD: Player is watching cinema");
 }
 
-void WorldSession::HandleNextCinematicCamera(WorldPacket & /*recvData*/)
+void WorldSession::HandleNextCinematicCamera(WorldPacket& /*recvData*/)
 {
     sLog->outStaticDebug("WORLD: Which movie to play");
 }
@@ -1101,7 +1101,7 @@ void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket& recvData)
     */
 }
 
-void WorldSession::HandleFeatherFallAck(WorldPacket &recvData)
+void WorldSession::HandleFeatherFallAck(WorldPacket& recvData)
 {
     sLog->outStaticDebug("WORLD: CMSG_MOVE_FEATHER_FALL_ACK");
 
@@ -1476,7 +1476,7 @@ void WorldSession::HandleTimeSyncResp(WorldPacket& recvData)
     _player->m_timeSyncClient = clientTicks;
 }
 
-void WorldSession::HandleResetInstancesOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleResetInstancesOpcode(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_RESET_INSTANCES");
     if (Group* group = _player->GetGroup())
@@ -1600,7 +1600,7 @@ void WorldSession::HandleSetRaidDifficultyOpcode(WorldPacket& recvData)
     }
 }
 
-void WorldSession::HandleCancelMountAuraOpcode(WorldPacket & /*recvData*/)
+void WorldSession::HandleCancelMountAuraOpcode(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_CANCEL_MOUNT_AURA");
 
@@ -1640,7 +1640,7 @@ void WorldSession::HandleMoveSetCanFlyAckOpcode(WorldPacket& recvData)
     _player->_mover->_movementInfo.flags = movementInfo.GetMovementFlags();
 }
 
-void WorldSession::HandleRequestPetInfoOpcode(WorldPacket & /*recvData */)
+void WorldSession::HandleRequestPetInfoOpcode(WorldPacket& /*recvData */)
 {
     /*
         sLog->outDebug(LOG_FILTER_PACKETIO, "WORLD: CMSG_REQUEST_PET_INFO");
@@ -1668,7 +1668,7 @@ void WorldSession::HandleQueryInspectAchievements(WorldPacket& recvData)
     player->GetAchievementMgr().SendRespondInspectAchievements(_player);
 }
 
-void WorldSession::HandleGuildPartyStateUpdate(WorldPacket & /*recvData*/)
+void WorldSession::HandleGuildPartyStateUpdate(WorldPacket& /*recvData*/)
 {
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_GUILD_UPDATE_PARTY_STATE");
 
