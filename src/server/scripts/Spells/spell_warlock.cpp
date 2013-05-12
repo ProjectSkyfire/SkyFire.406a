@@ -43,6 +43,9 @@ enum WarlockSpells
     WARLOCK_DEMONIC_CIRCLE_TELEPORT         = 48020,
     WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST       = 62388,
     WARLOCK_NETHER_WARD                     = 91713,
+
+    WARLOCK_HAUNT                           = 48181,
+    WARLOCK_HAUNT_HEAL                      = 48210,
 };
 
 class spell_warl_banish : public SpellScriptLoader
@@ -536,7 +539,7 @@ public:
 
         void PreventSwapApplicationOnCaster(WorldObject*& target)
         {
-            // If the warlock doesnt have the Nether Ward talent,
+            // If the warlock doesn't have the Nether Ward talent,
             // do not allow the swap effect to hit the warlock
             if (!GetCaster()->HasAura(WARLOCK_NETHER_WARD))
                 target = NULL;
@@ -554,6 +557,65 @@ public:
     }
 };
 
+class spell_warl_haunt : public SpellScriptLoader
+{
+public:
+    spell_warl_haunt() : SpellScriptLoader("spell_warl_haunt") {}
+
+    class spell_warl_haunt_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_warl_haunt_SpellScript);
+
+        void HandleOnHit()
+        {
+            if (Aura* aura = GetHitAura())
+                if (AuraEffect* aurEff = aura->GetEffect(EFFECT_1))
+                    aurEff->SetAmount(CalculatePctN(aurEff->GetAmount(), GetHitDamage()));
+        }
+
+        void Register()
+        {
+            OnHit += SpellHitFn(spell_warl_haunt_SpellScript::HandleOnHit);
+        }
+    };
+
+    class spell_warl_haunt_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_warl_haunt_AuraScript);
+
+        bool Validate(SpellInfo const* /*spell*/)
+        {
+            if (!sSpellMgr->GetSpellInfo(WARLOCK_HAUNT_HEAL))
+                return false;
+            return true;
+        }
+
+        void HandleRemove(AuraEffect const* aurEff, AuraEffectHandleModes /*mode*/)
+        {
+            if (Unit* caster = GetCaster())
+            {
+                int32 amount = aurEff->GetAmount();
+                GetTarget()->CastCustomSpell(caster, WARLOCK_HAUNT_HEAL, &amount, NULL, NULL, true, NULL, aurEff, GetCasterGUID());
+            }
+        }
+
+        void Register()
+        {
+            OnEffectRemove += AuraEffectApplyFn(spell_warl_haunt_AuraScript::HandleRemove, EFFECT_1, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL_OR_REAPPLY_MASK);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_warl_haunt_SpellScript();
+    }
+
+    AuraScript* GetAuraScript() const
+    {
+        return new spell_warl_haunt_AuraScript();
+    }
+};
+
 void AddSC_warlock_spell_scripts()
 {
     new spell_warl_banish();
@@ -568,4 +630,5 @@ void AddSC_warlock_spell_scripts()
     new spell_warl_demonic_circle_summon();
     new spell_warl_demonic_circle_teleport();
     new spell_warl_nether_ward_swap_supressor();
+    new spell_warl_haunt();
 }

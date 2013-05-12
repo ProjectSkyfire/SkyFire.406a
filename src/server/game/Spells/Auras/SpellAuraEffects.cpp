@@ -5400,14 +5400,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                         }
                     }
                     break;
-                case SPELLFAMILY_WARLOCK:
-                    // Haunt
-                    if (m_spellInfo->SpellFamilyFlags[1] & 0x40000)
-                    {
-                        if (caster)
-                            target->CastCustomSpell(caster, 48210, &m_amount, 0, 0, true, NULL, this, GetCasterGUID());
-                    }
-                    break;
                 case SPELLFAMILY_DRUID:
                     // Lifebloom
                     if (GetSpellInfo()->SpellFamilyFlags[1] & 0x10)
