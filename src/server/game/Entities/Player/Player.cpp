@@ -2544,7 +2544,7 @@ void Player::Regenerate(Powers power)
         {
             if (HasAuraType(SPELL_AURA_PREVENT_REGENERATE_POWER))
                 break;
-            
+
             float ManaIncreaseRate = sWorld->getRate(RATE_POWER_MANA);
 
             if (getLevel() < 15)
@@ -5724,13 +5724,13 @@ void Player::RepopAtGraveyard()
 bool Player::CanJoinConstantChannelInZone(ChatChannelsEntry const* channel, AreaTableEntry const* zone)
 {
     if (channel->flags & CHANNEL_DBC_FLAG_ZONE_DEP && zone->flags & AREA_FLAG_ARENA_INSTANCE)
-       return false;
+        return false;
 
-   if ((channel->flags & CHANNEL_DBC_FLAG_CITY_ONLY) && (!(zone->flags & AREA_FLAG_SLAVE_CAPITAL)))
-       return false;
+    if ((channel->flags & CHANNEL_DBC_FLAG_CITY_ONLY) && (!(zone->flags & AREA_FLAG_SLAVE_CAPITAL)))
+        return false;
 
-   if ((channel->flags & CHANNEL_DBC_FLAG_GUILD_REQ) && GetGuildId())
-       return false;
+    if ((channel->flags & CHANNEL_DBC_FLAG_GUILD_REQ) && GetGuildId())
+        return false;
 
     return true;
 }
