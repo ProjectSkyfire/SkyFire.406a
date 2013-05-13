@@ -377,7 +377,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleModMeleeSpeedPct,                          // 319 -
     &AuraEffect::HandleModMeleeRangedSpeedPct,                    // 320 -
     &AuraEffect::HandleNULL,                                      // 321 -
-    &AuraEffect::HandleNoImmediateEffect,                         // 322 -
+    &AuraEffect::HandleNoImmediateEffect,                         // 322 - SPELL_AURA_INTERFERE_TARGETTING - 6 spells 
     &AuraEffect::HandleNULL,                                      // 323 - 0 spells in 4.0.6a
     &AuraEffect::HandleModSpellCritChanceShool,                   // 324 -
     &AuraEffect::HandleNULL,                                      // 325 - 0 spells in 4.0.6a
@@ -2577,7 +2577,7 @@ void AuraEffect::HandleAuraModDisarm(AuraApplication const* aurApp, uint8 mode, 
         target->RemoveFlag(field, flag);
 
     // Handle damage modification, shapeshifted druids are not affected
-    if (target->GetTypeId() == TYPEID_PLAYER && !target->IsInShapeshiftForm())
+    if (target->GetTypeId() == TYPEID_PLAYER && !target->IsInFeralForm())
     {
         if (Item* pItem = target->ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
         {
@@ -5717,7 +5717,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
 
                     if (apply)
                     {
-                        if (!target->IsInShapeshiftForm())
+                        if (!target->IsInFeralForm())
                             break;
 
                         target->CastSpell(target, 50322, true);
@@ -5727,6 +5727,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     break;
                 }
             }
+            
             // Predatory Strikes
             if (target->GetTypeId() == TYPEID_PLAYER && GetSpellInfo()->SpellIconID == 1563)
             {
@@ -5738,6 +5739,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
         {
             if (!(mode & AURA_EFFECT_HANDLE_REAL))
                 break;
+            
             // Sentry Totem
             if (GetId() == 6495 && caster && caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -5779,6 +5781,9 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
         }
         case SPELLFAMILY_ROGUE:
         {
+            if (!(mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_SEND_FOR_CLIENT_MASK))
+                return;
+
             switch (GetId())
             {
                 // Smoke bomb
@@ -5793,10 +5798,14 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                 aur->SetMaxDuration(GetBase()->GetDuration());
                                 aur->SetDuration(GetBase()->GetDuration());
                             }
+                            
+                            if (!target->HasAuraType(SPELL_AURA_INTERFERE_TARGETTING))
+                                target->RemoveAurasDueToSpell(88611);
                         }
                     }
                     else
                         target->RemoveAura(88611);
+
                     break;
                 }
             }

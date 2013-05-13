@@ -383,7 +383,7 @@ enum AuraType
     SPELL_AURA_MOD_MELEE_ATTACK_SPEED              = 319,    // (melee?) attack speed
     SPELL_AURA_MOD_RANGED_ATTACK_SPEED             = 320,    // NYI
     SPELL_AURA_321                                 = 321,
-    SPELL_AURA_INTERFERE_TARGETING                 = 322,    // NYI SPELL_AURA_INTERFERE_TARGETING 6 spells
+    SPELL_AURA_INTERFERE_TARGETTING                 = 322,    // NYI SPELL_AURA_INTERFERE_TARGETTING 6 spells
     SPELL_AURA_323                                 = 323,
     SPELL_AURA_324                                 = 324,    // 2 test spells
     SPELL_AURA_325                                 = 325,

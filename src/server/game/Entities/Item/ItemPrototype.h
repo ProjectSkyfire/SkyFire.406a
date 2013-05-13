@@ -62,7 +62,7 @@ enum ItemModType
     ITEM_MOD_EXPERTISE_RATING         = 37,
     ITEM_MOD_ATTACK_POWER             = 38,
     ITEM_MOD_RANGED_ATTACK_POWER      = 39,
-    //ITEM_MOD_FERAL_ATTACK_POWER       = 40, not in 3.3
+    //ITEM_MOD_FERAL_ATTACK_POWER       = 40,               // Removed in 4.0.1
     ITEM_MOD_SPELL_HEALING_DONE       = 41,                 // deprecated
     ITEM_MOD_SPELL_DAMAGE_DONE        = 42,                 // deprecated
     ITEM_MOD_MANA_REGENERATION        = 43,
@@ -207,13 +207,13 @@ enum BAG_FAMILY_MASK
     BAG_FAMILY_MASK_NONE                      = 0x00000000,
     BAG_FAMILY_MASK_ARROWS                    = 0x00000001,
     BAG_FAMILY_MASK_BULLETS                   = 0x00000002,
-    BAG_FAMILY_MASK_SOUL_SHARDS               = 0x00000004,
+    BAG_FAMILY_MASK_SOUL_SHARDS               = 0x00000004,      // deprecated
     BAG_FAMILY_MASK_LEATHERWORKING_SUPP       = 0x00000008,
     BAG_FAMILY_MASK_INSCRIPTION_SUPP          = 0x00000010,
     BAG_FAMILY_MASK_HERBS                     = 0x00000020,
     BAG_FAMILY_MASK_ENCHANTING_SUPP           = 0x00000040,
     BAG_FAMILY_MASK_ENGINEERING_SUPP          = 0x00000080,
-    BAG_FAMILY_MASK_KEYS                      = 0x00000100,
+    BAG_FAMILY_MASK_KEYS                      = 0x00000100,      // deprecated
     BAG_FAMILY_MASK_GEMS                      = 0x00000200,
     BAG_FAMILY_MASK_MINING_SUPP               = 0x00000400,
     BAG_FAMILY_MASK_SOULBOUND_EQUIPMENT       = 0x00000800,
@@ -260,7 +260,7 @@ enum InventoryType
     INVTYPE_WEAPONMAINHAND                      = 21,
     INVTYPE_WEAPONOFFHAND                       = 22,
     INVTYPE_HOLDABLE                            = 23,
-    INVTYPE_AMMO                                = 24,
+    INVTYPE_AMMO                                = 24,            // deprecated
     INVTYPE_THROWN                              = 25,
     INVTYPE_RANGEDRIGHT                         = 26,
     INVTYPE_QUIVER                              = 27,
@@ -547,9 +547,9 @@ inline uint8 ItemSubClassToDurabilityMultiplierId(uint32 ItemClass, uint32 ItemS
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push, N), also any gcc version not support it at some platform
 #if defined(__GNUC__)
-#pragma pack(1)
+#	pragma pack(1)
 #else
-#pragma pack(push, 1)
+#	pragma pack(push, 1)
 #endif
 
 struct _ItemStat
@@ -675,6 +675,19 @@ struct ItemTemplate
         return (Stackable == 2147483647 || Stackable <= 0) ? uint32(0x7FFFFFFF-1) : uint32(Stackable);
     }
 
+	int32 getFeralBonus(int32 extraDPS = 0) const
+	{
+		// 0x02A5F3 - is mask for Melee weapon from ItemSubClassMask.dbc
+		if (Class == ITEM_CLASS_WEAPON && (1 << SubClass) & 0x02A5F3)
+		{
+			int32 bonus = int32((extraDPS + DPS) * 14.0f) - 767;
+			if (bonus < 0)
+				return 0;
+			return bonus;
+		}
+		return 0;
+	}
+
     float GetItemLevelIncludingQuality() const
     {
         float itemLevel = (float)ItemLevel;
@@ -730,8 +743,9 @@ struct ItemSetNameLocale
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform
 #if defined(__GNUC__)
-#pragma pack()
+#	pragma pack()
 #else
-#pragma pack(pop)
+#	pragma pack(pop)
 #endif
+
 #endif

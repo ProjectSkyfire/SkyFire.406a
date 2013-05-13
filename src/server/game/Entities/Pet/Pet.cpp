@@ -1150,7 +1150,7 @@ void Pet::_SaveSpellCooldowns(SQLTransaction& trans)
 
     time_t curTime = time(NULL);
 
-    // remove oudated and save active
+    // remove outdated and save active
     for (CreatureSpellCooldowns::iterator itr = _CreatureSpellCooldowns.begin(); itr != _CreatureSpellCooldowns.end();)
     {
         if (itr->second <= curTime)

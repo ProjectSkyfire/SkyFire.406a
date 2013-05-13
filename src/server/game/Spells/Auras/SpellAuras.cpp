@@ -2077,7 +2077,7 @@ bool Aura::IsProcTriggeredOnEvent(AuraApplication* aurApp, ProcEventInfo& eventI
     // - add DoCheckProc() AuraScript hook
     // to allow additional requirements for procs
     // this is needed because this is the last moment in which you can prevent aura charge drop on proc
-    // and possibly a way to prevent default checks (if there're going to be any)
+    // and possibly a way to prevent default checks (if there's going to be any)
 
     // Check if current equipment meets aura requirements
     // do that only for passive spells
@@ -2087,7 +2087,7 @@ bool Aura::IsProcTriggeredOnEvent(AuraApplication* aurApp, ProcEventInfo& eventI
     {
         if (GetSpellInfo()->EquippedItemClass == ITEM_CLASS_WEAPON)
         {
-            if (target->ToPlayer()->IsInShapeshiftForm())
+            if (target->ToPlayer()->IsInFeralForm())
                 return false;
 
             if (eventInfo.GetDamageInfo())

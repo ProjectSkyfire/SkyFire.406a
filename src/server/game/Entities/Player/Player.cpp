@@ -8855,6 +8855,10 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const* proto, ScalingSt
             SetAttackTime(OFF_ATTACK, apply ? proto->Delay: BASE_ATTACK_TIME);
     }
 
+    // No need to modify any physical damage for ferals as it is calculated from stats only
+    if (IsInFeralForm())
+        return;
+
     if (CanModifyStats() && (damage || proto->Delay))
         UpdateDamagePhysical(attType);
 }

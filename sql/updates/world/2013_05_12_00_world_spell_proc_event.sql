@@ -17,3 +17,8 @@ INSERT INTO `spell_proc_event` VALUES
 (31828,0,0,0,0,0,0,0,0,50,8),
 (31829,0,0,0,0,0,0,0,0,100,8);
 
+-- Spell.Warrior.Rude.Interruption
+DELETE FROM `spell_proc_event` WHERE `entry` IN (61221, 61216);
+INSERT INTO `spell_proc_event` VALUES 
+(61221,0,4,0,0,0,4112,0,0,100,120), 
+(61216,0,4,0,0,0,4112,0,0,100,120);

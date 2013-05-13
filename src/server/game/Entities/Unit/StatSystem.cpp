@@ -360,40 +360,39 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
             break;
             case CLASS_DRUID:
             {
-                ShapeshiftForm form = GetShapeshiftForm();
-
                 // Check if Predatory Strikes is skilled
-                float _FeralMult = 0.0f;
-                short applied = 0;
-
-                switch (form)
+                float _LevelMult = 0.0f;
+                float weapon_bonus = 0.0f;
+                
+				if (IsInFeralForm())
                 {
-                    case FORM_CAT:
-                    case FORM_BEAR:
-                    case FORM_MOONKIN:
+                    Unit::AuraEffectList const& _Dummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
+                    for (Unit::AuraEffectList::const_iterator itr = _Dummy.begin(); itr != _Dummy.end(); ++itr)
                     {
-                        Unit::AuraEffectList const& mDummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
-                        for (Unit::AuraEffectList::const_iterator itr = mDummy.begin(); itr != mDummy.end(); ++itr)
+                        AuraEffect* aurEff = *itr;
+                        if (aurEff->GetSpellInfo()->SpellIconID == 1563)
                         {
-                            // Predatory Strikes (effect 0)
-                            if ((*itr)->GetEffIndex() == 0 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
+                            switch (aurEff->GetEffIndex())
                             {
-                                level = (*itr)->GetAmount() / 100.0f;
-                                if (applied) break;
-                            }
+                                case 0: // Predatory Strikes (effect 0)
+                                    _LevelMult = CalculatePctN(1.0f, aurEff->GetAmount());
+                                    break;
+                                case 1: // Predatory Strikes (effect 1)
+                                    if (Item* mainHand = _items[EQUIPMENT_SLOT_MAINHAND])
+                                    {
+                                        // also check any gain %'s from Bonus's on equipped weapon
+                                        ItemTemplate const* proto = mainHand->GetTemplate();
+                                        if (!proto)
+                                            continue;
 
-                            // Predatory Strikes (effect 1)
-                            if ((*itr)->GetEffIndex() == 1 && (*itr)->GetSpellInfo()->SpellIconID == 1563)
-                            {
-                                _FeralMult = (*itr)->GetAmount() / 100.0f;
-                                if (applied) break;
-                                applied = 1;
+                                        weapon_bonus = CalculatePctN(float(proto->getFeralBonus()), aurEff->GetAmount());
+                                    }
+                                    break;
+                                default:
+                                    break;
                             }
-                            break;
                         }
                     }
-                    default:
-                        break;
                 }
 
                 switch (GetShapeshiftForm())
@@ -537,7 +536,7 @@ void Player::CalculateMinMaxDamage(WeaponAttackType attType, bool normalized, bo
     float weapon_mindamage = GetWeaponDamageRange(attType, MINDAMAGE);
     float weapon_maxdamage = GetWeaponDamageRange(attType, MAXDAMAGE);
 
-    if (IsInShapeshiftForm())                                    //check if player is druid and in cat or bear forms
+    if (IsInFeralForm())                                    //check if player is druid and in cat or bear forms
     {
         uint8 lvl = getLevel();
         if (lvl > 60)
@@ -1250,8 +1249,7 @@ bool Guardian::UpdateStats(Stats stat)
             value += ownersBonus;
         }
     }
-                                                            //warlock's and mage's pets gain 30% of owner's intellect
-    else if (stat == STAT_INTELLECT)
+    else if (stat == STAT_INTELLECT)     // warlock's and mage's pets gain 30% of owner's intellect
     {
         if (owner->getClass() == CLASS_WARLOCK || owner->getClass() == CLASS_MAGE)
         {
