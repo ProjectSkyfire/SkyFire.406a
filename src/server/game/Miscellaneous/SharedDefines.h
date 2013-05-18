@@ -1475,7 +1475,6 @@ enum Targets
     TOTAL_SPELL_TARGETS
 };
 
-
 enum SpellMissInfo
 {
     SPELL_MISS_NONE                                    = 0,

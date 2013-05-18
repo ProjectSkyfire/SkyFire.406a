@@ -3716,10 +3716,10 @@ void SpellMgr::LoadSpellCustomAttr()
                 // 322-330 switch - effect changed to dummy, target entry not changed in client:(
                 spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
                 break;
-			case 12051: // Evocation - now we can interrupt this
-				spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
-                break;            
-			case 25771: // Forbearance - wrong mechanic immunity in DBC since 3.0.x
+            case 12051: // Evocation - now we can interrupt this
+                spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
+                break;
+            case 25771: // Forbearance - wrong mechanic immunity in DBC since 3.0.x
                 spellInfo->Effects[0].MiscValue = MECHANIC_IMMUNE_SHIELD;
                 break;
             case 18500: // Wing Buffet
