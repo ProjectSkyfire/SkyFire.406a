@@ -4264,10 +4264,10 @@ void Spell::EffectWeaponDmg(SpellEffIndex effIndex)
             {
                 m_caster->SetPower(POWER_HOLY_POWER, 0); // WoG consumes all holy power.
             }
-            else if (m_spellInfo->Id == 20467)  // Seal of Command Unleashed
+            else if (m_spellInfo->Id == 20424)  // Seal of Command Unleashed
             {
                 spell_bonus += int32(0.08f * m_caster->GetTotalAttackPowerValue(BASE_ATTACK));
-                spell_bonus += int32(0.13f * m_caster->SpellBaseDamageBonus(GetSpellSchoolMask(m_spellInfo)));
+                spell_bonus += int32(0.13f * m_caster->SpellBaseDamageBonus(SPELL_SCHOOL_MASK_HOLY));
             }
             break;
         }
