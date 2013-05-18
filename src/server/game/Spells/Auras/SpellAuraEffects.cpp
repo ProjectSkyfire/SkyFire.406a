@@ -377,7 +377,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleModMeleeSpeedPct,                          // 319 -
     &AuraEffect::HandleModMeleeRangedSpeedPct,                    // 320 -
     &AuraEffect::HandleNULL,                                      // 321 -
-    &AuraEffect::HandleNoImmediateEffect,                         // 322 - SPELL_AURA_INTERFERE_TARGETTING - 6 spells 
+    &AuraEffect::HandleNoImmediateEffect,                         // 322 - SPELL_AURA_INTERFERE_TARGETTING - 6 spells
     &AuraEffect::HandleNULL,                                      // 323 - 0 spells in 4.0.6a
     &AuraEffect::HandleModSpellCritChanceShool,                   // 324 -
     &AuraEffect::HandleNULL,                                      // 325 - 0 spells in 4.0.6a
@@ -5411,13 +5411,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                         // final heal
                         int32 stack = GetBase()->GetStackAmount();
                         target->CastCustomSpell(target, 33778, &m_amount, &stack, NULL, true, NULL, this, GetCasterGUID());
-
-                        // restore mana
-                        if (caster)
-                        {
-                            int32 returnmana = CalculatePctU(caster->GetCreateMana(), GetSpellInfo()->ManaCostPercentage) * stack / 2;
-                            caster->CastCustomSpell(caster, 64372, &returnmana, NULL, NULL, true, NULL, this, GetCasterGUID());
-                        }
                     }
                     break;
                 case SPELLFAMILY_HUNTER:
@@ -5727,7 +5720,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     break;
                 }
             }
-            
+
             // Predatory Strikes
             if (target->GetTypeId() == TYPEID_PLAYER && GetSpellInfo()->SpellIconID == 1563)
             {
@@ -5739,7 +5732,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
         {
             if (!(mode & AURA_EFFECT_HANDLE_REAL))
                 break;
-            
+
             // Sentry Totem
             if (GetId() == 6495 && caster && caster->GetTypeId() == TYPEID_PLAYER)
             {
@@ -5798,7 +5791,7 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                 aur->SetMaxDuration(GetBase()->GetDuration());
                                 aur->SetDuration(GetBase()->GetDuration());
                             }
-                            
+
                             if (!target->HasAuraType(SPELL_AURA_INTERFERE_TARGETTING))
                                 target->RemoveAurasDueToSpell(88611);
                         }

@@ -1357,6 +1357,10 @@ void Player::HandleDrowning(uint32 time_diff)
     // In water
     if (_MirrorTimerFlags & UNDERWATER_INWATER)
     {
+        if (_zoneUpdateId == 5144) return;
+        if (_zoneUpdateId == 5145) return;
+        if (_zoneUpdateId == 4815) return;
+        if (_zoneUpdateId == 4816) return;
         // Breath timer not activated - activate it
         if (_MirrorTimer[BREATH_TIMER] == DISABLED_MIRROR_TIMER)
         {

@@ -909,7 +909,7 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
                 {
                     SetCreateHealth(_owner->GetMaxHealth() * 0.1f);
                     break;
-                }                
+                }
                 case 1964: // force of nature
                 {
                     if (!pInfo)
@@ -944,9 +944,9 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
                     SetCreateHealth(4 * petLevel);
                     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petLevel - 30 -(petLevel / 4)) + _owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.006f);
                     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petLevel - 30 +(petLevel / 4)) + _owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.006f);
-                    break;                
+                    break;
                 }
-                
+
                 case 17252: // Felguard
                 {
                     if (!pInfo)
@@ -1027,7 +1027,33 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
                         SetCreateMana(28 + 10*petLevel);
                         SetCreateHealth(28 + 30*petLevel);
                     }
-                    SetBonusDamage(int32(_owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.5f));
+
+                    // Impurity
+                    float impurityMod = 1.0f;
+                    if (Player* pOwner = _owner->ToPlayer())
+                    {
+                        PlayerSpellMap playerSpells = pOwner->GetSpellMap();
+                        for (PlayerSpellMap::const_iterator itr = playerSpells.begin(); itr != playerSpells.end(); ++itr)
+                        {
+                            if (itr->second->state == PLAYERSPELL_REMOVED || itr->second->disabled)
+                                continue;
+
+                            switch (itr->first)
+                            {
+                                case 49220:
+                                case 49633:
+                                case 49635:
+                                case 49636:
+                                case 49638:
+                                {
+                                    SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(itr->first);
+                                        AddPctN(impurityMod, spellInfo->Effects[EFFECT_0].CalcValue());
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    SetBonusDamage(int32(_owner->GetTotalAttackPowerValue(BASE_ATTACK) * 0.5f * impurityMod));
                     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(petLevel - (petLevel / 4)));
                     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(petLevel + (petLevel / 4)));
                     break;
@@ -1039,7 +1065,7 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
                     SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(400) + (_owner->GetTotalAttackPowerValue(BASE_ATTACK)));
                     SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(650) + (_owner->GetTotalAttackPowerValue(BASE_ATTACK)));
                     break;
-                }                
+                }
                 case 50675: // Ebon Imp
                 {
                     if (!pInfo)

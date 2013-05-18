@@ -3597,6 +3597,52 @@ void SpellMgr::LoadSpellCustomAttr()
                 spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
                 spellInfo->Effects[0].BasePoints = 20*1000;
                 break;
+            case 2643: // Multi-Shot no-target Effect 0 fix.
+                spellInfo->Effects[0].TargetA = TARGET_DEST_TARGET_ENEMY;
+                break;
+            case 82661: // Aspect of the Fox
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_PROC_TRIGGER_SPELL;
+                break;
+            case 88691: // Marked for Death Tracking
+                spellInfo->Effects[0].ApplyAuraName = SPELL_AURA_MOD_STALKED;
+                break;
+            case 3286:  // Bind
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_TARGET_ENEMY;
+                spellInfo->Effects[1].TargetA = TARGET_UNIT_TARGET_ENEMY;
+                break;
+            case 20335: // Heart of the Crusader
+            case 20336:
+            case 20337:
+            case 63320:// Glyph of Life Tap
+                // Entries were not updated after spell effect change, we have to do that manually :/
+                spellInfo->AttributesEx3 |= SPELL_ATTR3_CAN_PROC_WITH_TRIGGERED;
+                break;
+            case 16007: // Draco-Incarcinatrix 900
+                // was 46, but effect is aura effect
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_NEARBY_ENTRY;
+                spellInfo->Effects[0].TargetB = TARGET_DEST_NEARBY_ENTRY;
+                break;
+            case 26029: // dark glare
+            case 37433: // spout
+            case 43140: case 43215: // flame breath
+                spellInfo->AttributesCu |= SPELL_ATTR0_CU_CONE_LINE;
+                break;
+                // ONLY SPELLS WITH SPELLFAMILY_GENERIC and EFFECT_SCHOOL_DAMAGE
+                spellInfo->AttributesCu |= SPELL_ATTR0_CU_SHARE_DAMAGE;
+                break;
+            case 27820:                             // Mana Detonation
+            case 69782: case 69796:                 // Ooze Flood
+            case 69798: case 69801:                 // Ooze Flood
+            case 69538: case 69553: case 69610:     // Ooze Combine
+                spellInfo->AttributesCu |= SPELL_ATTR0_CU_EXCLUDE_SELF;
+                break;
+            case 64844: // Divine Hymn
+            case 49305:
+                spellInfo->Effects[0].TargetB = 1;
+                break;
+            case 53390: // Tidal Wave
+                spellInfo->ProcCharges = 2;
+                break;
             case 30294: // Soul Leech
                 spellInfo->Effects[0].BasePoints = 2;
                 spellInfo->Effects[1].BasePoints = 2;
@@ -3630,10 +3676,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 24135: // Wyvern Sting (rank 3)
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_NEGATIVE_EFF0;
                 break;
-            case 26029: // Dark Glare
-            case 37433: // Spout
-            case 43140: // Flame Breath
-            case 43215: // Flame Breath
             case 70461: // Coldflame Trap
             case 72133: // Pain and Suffering
             case 73788: // Pain and Suffering
@@ -3669,6 +3711,16 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 86674: // Ancient Healer
                 spellInfo->ProcCharges = 5;
+                break;
+            case 31687: // Summon Water Elemental
+                // 322-330 switch - effect changed to dummy, target entry not changed in client:(
+                spellInfo->Effects[0].TargetA = TARGET_UNIT_CASTER;
+                break;
+			case 12051: // Evocation - now we can interrupt this
+				spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
+                break;            
+			case 25771: // Forbearance - wrong mechanic immunity in DBC since 3.0.x
+                spellInfo->Effects[0].MiscValue = MECHANIC_IMMUNE_SHIELD;
                 break;
             case 18500: // Wing Buffet
             case 33086: // Wild Bite
@@ -3709,16 +3761,14 @@ void SpellMgr::LoadSpellCustomAttr()
             case 72446: // Mark of the Fallen Champion (Deathbringer Saurfang)
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_IGNORE_ARMOR;
                 break;
-            case 64422: // Sonic Screech (Auriaya)
-                spellInfo->AttributesCu |= SPELL_ATTR0_CU_SHARE_DAMAGE;
-                spellInfo->AttributesCu |= SPELL_ATTR0_CU_IGNORE_ARMOR;
-                break;
             case 72293: // Mark of the Fallen Champion (Deathbringer Saurfang)
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_NEGATIVE_EFF0;
                 break;
             case 74522: // Skinning (Grandmaster)
                 // 4.06 dbc issue which was fixed in 4.20 (or 4.10?)
                 spellInfo->Effects[1].BasePoints = 7;
+            case 49206: // Summon Gargoyle
+                spellInfo->DurationEntry = sSpellDurationStore.LookupEntry(587);
                 break;
             default:
                 break;

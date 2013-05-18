@@ -34,11 +34,12 @@ uint32 GetTalentSpellCost(uint32 spellId);
 TalentSpellPos const* GetTalentSpellPos(uint32 spellId);
 
 int32 GetAreaFlagByAreaID(uint32 area_id);                  // -1 if not found
-AreaTableEntry const* GetAreaEntryByAreaID(uint32 area_id);
-AreaTableEntry const* GetAreaEntryByAreaFlagAndMap(uint32 area_flag, uint32 map_id);
 uint32 GetAreaFlagByMapId(uint32 mapid);
 
 WMOAreaTableEntry const* GetWMOAreaTableEntryByTripple(int32 rootid, int32 adtid, int32 groupid);
+
+AreaTableEntry const* GetAreaEntryByAreaID(uint32 area_id);
+AreaTableEntry const* GetAreaEntryByAreaFlagAndMap(uint32 area_flag, uint32 map_id);
 
 uint32 GetVirtualMapForMapAndZone(uint32 mapid, uint32 zoneId);
 
@@ -51,6 +52,7 @@ enum ContentLevels
     CONTENT_71_80,
     CONTENT_81_85
 };
+
 ContentLevels GetContentLevelsForMapAndZone(uint32 mapid, uint32 zoneId);
 
 bool IsTotemCategoryCompatiableWith(uint32 itemTotemCategoryId, uint32 requiredTotemCategoryId);
@@ -138,13 +140,13 @@ extern DBCStorage <ItemReforgeEntry>             sItemReforgeStore;
 extern DBCStorage <ItemCurrencyCostEntry>        sItemCurrencyCostStore;
 extern DBCStorage <ItemSetEntry>                 sItemSetStore;
 extern DBCStorage <LFGDungeonEntry>              sLFGDungeonStore;
-//extern DBCStorage <LiquidTypeEntry>              sLiquidTypeStore;
+//extern DBCStorage <LiquidTypeEntry>              sLiquidTypeStore; // handled by Recast.API(MMaps)
 extern DBCStorage <LockEntry>                    sLockStore;
 extern DBCStorage <MailTemplateEntry>            sMailTemplateStore;
 extern DBCStorage <MapEntry>                     sMapStore;
 extern DBCStorage <NameGenEntry>                 sNameGenStore;
 extern DBCStorage <PhaseEntry>                   sPhaseStore;
-//extern DBCStorage <MapDifficultyEntry>           sMapDifficultyStore; -- use GetMapDifficultyData insteed
+//extern DBCStorage <MapDifficultyEntry>           sMapDifficultyStore; -- use GetMapDifficultyData instead
 extern DBCStorage <NumTalentsAtLevelEntry>       sNumTalentsAtLevelStore;
 extern MapDifficultyMap                          sMapDifficultyMap;
 extern DBCStorage <MovieEntry>                   sMovieStore;

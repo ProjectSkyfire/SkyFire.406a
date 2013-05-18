@@ -323,11 +323,11 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
         switch (getClass())
         {
             case CLASS_HUNTER:
-                val2 = level * 2.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f;
+                val2 = getLevel() * 2.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f;
                 break;
             case CLASS_ROGUE:
             case CLASS_WARRIOR:
-                val2 = level + GetStat(STAT_AGILITY) - 10.0f;
+                val2 = getLevel() + GetStat(STAT_AGILITY) - 10.0f;
                 break;
             case CLASS_DRUID:
                 switch (GetShapeshiftForm())
@@ -336,13 +336,11 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                     case FORM_BEAR:
                         val2 = 0.0f;
                         break;
-                    default:
-                        val2 = GetStat(STAT_AGILITY) - 10.0f;
+                    default: val2 = GetStat(STAT_AGILITY) - 10.0f;
                         break;
                 }
                 break;
-            default:
-                val2 = GetStat(STAT_AGILITY) - 10.0f;
+            default: val2 = GetStat(STAT_AGILITY) - 10.0f;
                 break;
         }
     }
@@ -350,21 +348,25 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     {
         switch (getClass())
         {
+            case CLASS_SHAMAN:
+                val2 = getLevel() * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) * 2.0f - 20.0f;
+                break;
             case CLASS_WARRIOR:
             case CLASS_PALADIN:
-            case CLASS_DEATH_KNIGHT: val2 = level * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
-            break;
+            case CLASS_DEATH_KNIGHT:
+                val2 = getLevel() * 3.0f + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                break;
             case CLASS_ROGUE:
             case CLASS_HUNTER:
-            case CLASS_SHAMAN: val2 = level * 2.0f + GetStat(STAT_STRENGTH) + GetStat(STAT_AGILITY) * 2.0f - 20.0f;
-            break;
+                val2 = getLevel() * 2.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f;
+                break;
             case CLASS_DRUID:
             {
                 // Check if Predatory Strikes is skilled
                 float _LevelMult = 0.0f;
                 float weapon_bonus = 0.0f;
-                
-				if (IsInFeralForm())
+
+                if (IsInFeralForm())
                 {
                     Unit::AuraEffectList const& _Dummy = GetAuraEffectsByType(SPELL_AURA_DUMMY);
                     for (Unit::AuraEffectList::const_iterator itr = _Dummy.begin(); itr != _Dummy.end(); ++itr)
@@ -380,7 +382,7 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                                 case 1: // Predatory Strikes (effect 1)
                                     if (Item* mainHand = _items[EQUIPMENT_SLOT_MAINHAND])
                                     {
-                                        // also check any gain %'s from Bonus's on equipped weapon
+                                        // also gains % attack power from equipped weapon
                                         ItemTemplate const* proto = mainHand->GetTemplate();
                                         if (!proto)
                                             continue;
@@ -398,13 +400,13 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
                 switch (GetShapeshiftForm())
                 {
                     case FORM_CAT:
-                        val2 = (level * 2.0f) + GetStat(STAT_STRENGTH) * 2.0f + GetStat(STAT_AGILITY) - 20.0f;
+                        val2 = getLevel() * (_LevelMult + 2.0f) + GetStat(STAT_STRENGTH) * 2.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f + weapon_bonus;
                         break;
                     case FORM_BEAR:
-                        val2 = (level * 3.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                        val2 = getLevel() * (_LevelMult + 3.0f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f + weapon_bonus;
                         break;
                     case FORM_MOONKIN:
-                        val2 = (level * 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
+                        val2 = getLevel() * (_LevelMult + 1.5f) + GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
                         break;
                     default:
                         val2 = GetStat(STAT_STRENGTH) * 2.0f - 20.0f;
