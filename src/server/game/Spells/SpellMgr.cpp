@@ -3719,6 +3719,9 @@ void SpellMgr::LoadSpellCustomAttr()
             case 12051: // Evocation - now we can interrupt this
                 spellInfo->InterruptFlags |= SPELL_INTERRUPT_FLAG_INTERRUPT;
                 break;
+            case 26573: // Consecration
+                spellInfo->Effects[2].TriggerSpell = 82366;
+                break;
             case 25771: // Forbearance - wrong mechanic immunity in DBC since 3.0.x
                 spellInfo->Effects[0].MiscValue = MECHANIC_IMMUNE_SHIELD;
                 break;
