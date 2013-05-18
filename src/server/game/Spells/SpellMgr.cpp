@@ -2997,7 +2997,7 @@ void SpellMgr::LoadSpellCustomAttr()
             // Polymorph spells used to have no proc data (no charges too, duh) back on 3.3.5, thus they never passed the
             // ProcFlag check on AuraEffect::CalculateAmount thus they never received an amount that needed to be calculated on
             // Unit::ProcDamageAndSpellFor, so i decided to simple add a charge to it (making them break on the first damage received)
-            // instead of removing the proc data (wich is needed for improved polymorph and god knows what else spell)
+            // instead of removing the proc data (which is needed for improved polymorph and god knows what else spell)
             case 118:   // Polymorph
             case 61305: // Polymorph (other animal)
             case 28272: // polymorph (other animal)
@@ -3006,7 +3006,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 28271: // Polymorph (other animal)
                 spellInfo->ProcCharges = 1;
                 break;
-            // Need this otherwise we'll be having multiple chance rolls for judgement.
+            // Need this otherwise we'll be having multiple chance rolls for judgments.
             case 85117: // Divine Purpose (Rank 1)
             case 86172: // Divine Purpose (Rank 2)
                 spellInfo->AttributesEx3 = 0;
@@ -3092,14 +3092,14 @@ void SpellMgr::LoadSpellCustomAttr()
             // ENDOF CATACLYSM SPELLS CHANGES
             //
             case 1680: // Whirlwind  (Fury)
-                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
-                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
-                spellInfo->Effects[2].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
+                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
+                spellInfo->Effects[2].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
                 break;
             case 50622: // Whirlwind (triggered by Bladestorm)
-                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
-                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
-                spellInfo->Effects[3].RadiusEntry = sSpellRadiusStore.LookupEntry (14);
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
+                spellInfo->Effects[1].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
+                spellInfo->Effects[3].RadiusEntry = sSpellRadiusStore.LookupEntry(14);
                 break;
             case 42835: // Spout
                 spellInfo->Effects[0].Effect = 0; // remove damage effect, only anim is needed
@@ -3428,10 +3428,17 @@ void SpellMgr::LoadSpellCustomAttr()
             case 61719: // Easter Lay Noblegarden Egg Aura - Interrupt flags copied from aura which this aura is linked with
                 spellInfo->AuraInterruptFlags = AURA_INTERRUPT_FLAG_HITBYSPELL | AURA_INTERRUPT_FLAG_TAKE_DAMAGE;
                 break;
+            case 64844: // Divine Hymn
+                spellInfo->Attributes &= ~SPELL_ATTR0_CU_NEGATIVE;
+                break;
+            case 31818: // Life Tap
+                spellInfo->Effects[0].Effect = SPELL_EFFECT_ENERGIZE_PCT;
+                break;
             // ULDUAR SPELLS
             //
             case 62374: // Pursued (Flame Leviathan)
                 spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(28);    // 50000yd
+                spellInfo->MaxAffectedTargets = 1;
                 break;
             case 63342: // Focused Eyebeam Summon Trigger (Kologarn)
                 spellInfo->MaxAffectedTargets = 1;
@@ -3636,10 +3643,6 @@ void SpellMgr::LoadSpellCustomAttr()
             case 69538: case 69553: case 69610:     // Ooze Combine
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_EXCLUDE_SELF;
                 break;
-            case 64844: // Divine Hymn
-            case 49305:
-                spellInfo->Effects[0].TargetB = 1;
-                break;
             case 53390: // Tidal Wave
                 spellInfo->ProcCharges = 2;
                 break;
@@ -3705,6 +3708,7 @@ void SpellMgr::LoadSpellCustomAttr()
             case 72505: // Ooze Eruption
             case 72624: // Ooze Eruption
             case 72625: // Ooze Eruption
+            case 89348: case 95178: // Demon Repellent Ray
             case 86704: // Ancient Fury
                 // ONLY SPELLS WITH SPELLFAMILY_GENERIC and EFFECT_SCHOOL_DAMAGE
                 spellInfo->AttributesCu |= SPELL_ATTR0_CU_SHARE_DAMAGE;
@@ -3724,6 +3728,17 @@ void SpellMgr::LoadSpellCustomAttr()
                 break;
             case 25771: // Forbearance - wrong mechanic immunity in DBC since 3.0.x
                 spellInfo->Effects[0].MiscValue = MECHANIC_IMMUNE_SHIELD;
+                break;
+            case 88954: // Consuming Darkness
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(12); // (100)
+                spellInfo->MaxAffectedTargets = 3;
+                break;
+            case 95173: // Consuming Darkness (H)
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(12); // (100)
+                spellInfo->MaxAffectedTargets = 8;
+                break;
+            case 89000: case 95177: // Fel Firestorm
+                spellInfo->Effects[0].RadiusEntry = sSpellRadiusStore.LookupEntry(15); // (3)
                 break;
             case 18500: // Wing Buffet
             case 33086: // Wild Bite
