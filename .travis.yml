@@ -31,15 +31,12 @@ compiler:
   - gcc
 
 before_install:
- - sudo apt-get update -qq
- - sudo apt-get install -qq [build-essential autoconf libtool gcc g++ make cmake subversion git patch wget links zip unzip openssl 
-libssl-dev mysql-server mysql-client libmysqlclient15-dev libmysql++-dev libreadline5-dev zlib1g-dev libbz2-dev git-core libace-dev]
-  
+  - sudo apt-get install libace-dev
+
 script:
-  - test -d _build || mkdir _build
-  - test -d _install || mkdir _install
-  - cd _build
-  - cmake -DCMAKE_INSTALL_PREFIX=../_install ..
+  - mkdir build
+  - cd build
+  - cmake ..
   - make -j4
 
 notifications:
