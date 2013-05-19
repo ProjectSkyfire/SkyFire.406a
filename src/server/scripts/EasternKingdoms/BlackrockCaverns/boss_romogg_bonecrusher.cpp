@@ -133,7 +133,7 @@ public:
 
                 if (castSkullCracker)
                 {
-                    me->MonsterYell("Stand still! Rom'ogg crack your skulls!", LANGUAGE_UNIVERSAL, NULL); 
+                    me->MonsterYell("Stand still! Rom'ogg crack your skulls!", LANGUAGE_UNIVERSAL, 0); 
 
                     castSkullCracker = false;
                     DoCastAOE(SPELL_THE_SKULLCRACKER);
@@ -192,7 +192,7 @@ public:
         void JustDied(Unit * /*victim*/)
         {
             DespawnCreatures(NPC_ANGERED_EARTH);
-            me->MonsterYell("Boss Cho'gall not gonna be happy 'bout dis!", LANGUAGE_UNIVERSAL, NULL); 
+            me->MonsterYell("Boss Cho'gall not gonna be happy 'bout dis!", LANGUAGE_UNIVERSAL, 0); 
 
             if (chainsOfWoe != 0)
                 chainsOfWoe->DespawnOrUnsummon();
