@@ -31,7 +31,8 @@ compiler:
   - gcc
 
 before_install:
- - sudo apt-get install [build-essential autoconf libtool gcc g++ make cmake subversion git patch wget links zip unzip openssl 
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq [build-essential autoconf libtool gcc g++ make cmake subversion git patch wget links zip unzip openssl 
 libssl-dev mysql-server mysql-client libmysqlclient15-dev libmysql++-dev libreadline5-dev zlib1g-dev libbz2-dev git-core libace-dev]
   
 script:
