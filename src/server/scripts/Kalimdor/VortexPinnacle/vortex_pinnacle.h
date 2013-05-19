@@ -15,10 +15,10 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEF_VORTEX_PINNACLE_H
-#define DEF_VORTEX_PINNACLE_H
+#ifndef VORTEX_PINNACLE_H_
+#define VORTEX_PINNACLE_H_
 
-enum Datas
+enum Data
 {
     DATA_GRAND_VIZIER_ERTAN,
     DATA_ALTAIRUS,

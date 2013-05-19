@@ -29,11 +29,13 @@ enum Spells
 {
     SPELL_CALL_FOR_HELP             = 82137,
     SPELL_QUAKE                     = 75272,
+    SPELL_THE_SKULLCRACKER          = 75543,
+    SPELL_WOUNDING_STRIKE           = 69651,
+
     SPELL_CHAINS_OF_WOE             = 75539,
     SPELL_CHAINS_OF_WOE_VISUAL      = 75441,
     SPELL_CHAINS_OF_WOE_AURA        = 82192,
-    SPELL_THE_SKULLCRACKER          = 75543,
-    SPELL_WOUNDING_STRIKE           = 69651
+
 };
 
 enum Events
@@ -55,65 +57,83 @@ public:
 
     struct boss_romogg_bonecrusherAI : public ScriptedAI
     {
-        boss_romogg_bonecrusherAI(Creature* creature) : ScriptedAI(creature), castSkullCracker(false), chainsOfWoe(NULL)
+        boss_romogg_bonecrusherAI(Creature* creature) : ScriptedAI(creature), castSkullCracker(false), chainsOfWoe(0)
         {
             instance = creature->GetInstanceScript();
+            me->setActive(true);
         }
 
         InstanceScript* instance;
+        uint32 chainsOfWoe_Timer;
+        uint32 Phase;
         EventMap events;
         bool castSkullCracker;
         Creature* chainsOfWoe;
 
         void Reset()
         {
-            me->GetMotionMaster()->MoveTargetedHome();
+            if (instance)
+                instance->SetData(DATA_ROMOGG_BONECRUSHER, NOT_STARTED);
+
+            Phase = 0;
+            chainsOfWoe = 0;
+            chainsOfWoe_Timer = 2000;
             castSkullCracker = false;
+            events.Reset();
 
-            if(chainsOfWoe != NULL)
+            me->GetMotionMaster()->MoveTargetedHome();
+
+            if (chainsOfWoe != 0)
                 chainsOfWoe->DespawnOrUnsummon();
-
-            chainsOfWoe = NULL;
-
             DespawnCreatures(NPC_ANGERED_EARTH);
         }
 
         void EnterCombat(Unit* /*who*/)
         {
-            DoCast(me, SPELL_CALL_FOR_HELP);
+            if (instance)
+                instance->SetData(DATA_ROMOGG_BONECRUSHER, IN_PROGRESS);
+
+            DoZoneInCombat();
+
+            //me->MonsterYell(YELL_AGGRO, LANGUAGE_UNIVERSAL, 0);
+            //DoPlaySoundToSet(me, SOUND_YELL_AGGRO);
+
+            DoCast(me, SPELL_CALL_FOR_HELP, false);
             events.ScheduleEvent(EVENT_QUAKE, urand(40000, 60000), 0, 0);
             events.ScheduleEvent(EVENT_WOUNDING_STRIKE, urand(2000, 4000), 0, 0);
-            DoCastAOE(SPELL_CALL_FOR_HELP);
+            DoCastAOE(SPELL_CALL_FOR_HELP, true);
         }
 
         void UpdateAI(const uint32 diff)
         {
-            if (!UpdateVictim() || me->HasUnitState(UNIT_STATE_CASTING))
+            if (!UpdateVictim())
                 return;
 
-            if (chainsOfWoe != NULL)
+            if (me->HasUnitState(UNIT_STATE_CASTING))
+                return;
+
+            if (chainsOfWoe != 0)
             {
                 if (chainsOfWoe->isAlive())
-                {
- /* Buggy!          Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
+                { // Buggy
+                    Map::PlayerList const &PlayerList = me->GetMap()->GetPlayers();
 
                     if (!PlayerList.isEmpty())
                     {
                         for (Map::PlayerList::const_iterator i = PlayerList.begin(); i != PlayerList.end(); ++i)
                             if (!i->getSource()->HasAura(SPELL_CHAINS_OF_WOE_AURA))
-                                me->CastSpell(i->getSource(),SPELL_CHAINS_OF_WOE_AURA,true);
+                                me->CastSpell(i->getSource(), SPELL_CHAINS_OF_WOE_AURA, true);
                     }
-*/
                 }
                 else
                 {
                     chainsOfWoe->DespawnOrUnsummon();
-                    chainsOfWoe = NULL;
+                    chainsOfWoe = 0;
                 }
 
                 if (castSkullCracker)
                 {
-                    me->MonsterYell("Stand still! Rom'ogg crack your skulls!", LANGUAGE_UNIVERSAL, NULL);
+                    me->MonsterYell("Stand still! Rom'ogg crack your skulls!", LANGUAGE_UNIVERSAL, NULL); 
 
                     castSkullCracker = false;
                     DoCastAOE(SPELL_THE_SKULLCRACKER);
@@ -127,14 +147,13 @@ public:
                     {
                         case EVENT_QUAKE:
                             DoCastAOE(SPELL_QUAKE);
-
                             if (me->GetMap()->IsHeroic())
                             {
                                 // Summon Angered Earth
                                 Position myPos;
                                 me->GetPosition(&myPos);
 
-                                for(uint8 i = 1; i <= 5; i++)
+                                for (uint8 i = 1; i <= 5; i++)
                                     me->SummonCreature(NPC_ANGERED_EARTH, myPos, TEMPSUMMON_CORPSE_DESPAWN);
                             }
                             events.ScheduleEvent(EVENT_QUAKE, 25000);
@@ -150,8 +169,8 @@ public:
                             break;
                     }
                 }
+                DoMeleeAttackIfReady();
             }
-            DoMeleeAttackIfReady();
         }
 
         void JustSummoned(Creature* summon)
@@ -164,8 +183,7 @@ public:
                 summon->SetReactState(REACT_PASSIVE);
                 chainsOfWoe = summon;
             }
-            else
-            if (summon->GetEntry() == NPC_ANGERED_EARTH)
+            else if (summon->GetEntry() == NPC_ANGERED_EARTH)
             {
                 summon->GetMotionMaster()->MoveChase(me->getVictim());
             }
@@ -174,12 +192,12 @@ public:
         void JustDied(Unit * /*victim*/)
         {
             DespawnCreatures(NPC_ANGERED_EARTH);
-            me->MonsterYell("Boss Cho'gall not gonna be happy 'bout dis!", LANGUAGE_UNIVERSAL, NULL);
+            me->MonsterYell("Boss Cho'gall not gonna be happy 'bout dis!", LANGUAGE_UNIVERSAL, NULL); 
 
-            if (chainsOfWoe != NULL)
+            if (chainsOfWoe != 0)
                 chainsOfWoe->DespawnOrUnsummon();
 
-            chainsOfWoe = NULL;
+            chainsOfWoe = 0;
         }
 
     private:
