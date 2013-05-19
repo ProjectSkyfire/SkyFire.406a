@@ -1,11 +1,22 @@
-= SkyFireEMU 4.0.6a Mmaps Version-- General information =
+# SkyFireEMU 4.0.6a Mmaps Version
+# General information
 
-Please see this documentation for extracting the new maps and dbc's
-http://wiki.projectskyfire.org/index.php?title=Installation_Extract_Mmaps
+Official Website
+http://www.projectskyfire.org/
 
-Official Public Database is located on forums.
+Official Public Database 
+http://www.projectskyfire.org/index.php?/files/
 
-Copyright (C) SkyFireEMU  (http://www.projectskyfire.org)
+Install Intructions.
+http://wiki.projectskyfire.org/
+
+Our Bug Tracker is located here.
+http://www.projectskyfire.org/bugtracker/
+
+Build status.
+https://travis-ci.org/ProjectSkyfire/SkyFireEMU/builds
+
+## Copyright (C) SkyFireEMU  (http://www.projectskyfire.org)
 
   SkyFireEMU is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -39,17 +50,6 @@ and functionality. If you wish to contribute ideas or code please visit
 our site linked below or make pull requests to our github repo at 
 https://github.com/ProjectSkyfire/SkyFireEMU/
 
-For further information on the Project SkyFireEMU, please visit our
-project website at http://www.projectskyfire.org/
-
 SQL files to create the database can be found in the database directory. Files
 to update your database from an older revision/version can be found in the
 database/updates directory.
-
-See http://wiki.projectskyfire.org/ for installation instructions on Linux.
-
-Our Bug Tracker is located here.
-http://www.projectskyfire.org/bugtracker/
-
-Build status.
-https://travis-ci.org/ProjectSkyfire/SkyFireEMU/builds
