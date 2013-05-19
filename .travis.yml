@@ -29,7 +29,11 @@ branches:
 
 compiler:
   - gcc
- 
+
+before_install:
+ - sudo apt-get update -qq
+ - sudo apt-get install -qq [libace-dev]
+  
 script:
   - test -d _build || mkdir _build
   - test -d _install || mkdir _install
