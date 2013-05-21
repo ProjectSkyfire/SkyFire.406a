@@ -4830,6 +4830,7 @@ TrainerSpellState Player::GetTrainerSpellState(TrainerSpell const* trainer_spell
             break;
         }
     }
+
     // known spell
     if (hasSpell)
         return TRAINER_SPELL_GRAY;
@@ -4868,14 +4869,15 @@ TrainerSpellState Player::GetTrainerSpellState(TrainerSpell const* trainer_spell
     }
 
     // check primary prof. limit
-    // first rank of primary profession spell when there are no proffesions avalible is disabled
+    // first rank of primary profession spell, when there are no proffesions available, is disabled.
     for (uint8 i = 0; i < MAX_SPELL_EFFECTS; ++i)
     {
         if (!trainer_spell->learnedSpell[i])
             continue;
+
         SpellInfo const* learnedSpellInfo = sSpellMgr->GetSpellInfo(trainer_spell->learnedSpell[i]);
         if (learnedSpellInfo && learnedSpellInfo->IsPrimaryProfessionFirstRank() && (GetFreePrimaryProfessionPoints() == 0))
-            return TRAINER_SPELL_RED;
+            return TRAINER_SPELL_GREEN_DISABLED;
     }
 
     return TRAINER_SPELL_GREEN;
