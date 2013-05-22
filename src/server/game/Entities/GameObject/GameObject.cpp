@@ -779,15 +779,10 @@ void GameObject::DeleteFromDB()
     sObjectMgr->DeleteGOData(_DBTableGuid);
 
     PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GAMEOBJECT);
-
     stmt->setUInt32(0, _DBTableGuid);
-
     WorldDatabase.Execute(stmt);
-
     stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_EVENT_GAMEOBJECT);
-
     stmt->setUInt32(0, _DBTableGuid);
-
     WorldDatabase.Execute(stmt);
 }
 
@@ -1405,10 +1400,9 @@ void GameObject::Use(Unit* user)
             if (GetUniqueUseCount() == info->summoningRitual.reqParticipants)
             {
                 spellCaster = m_ritualOwner ? m_ritualOwner : spellCaster;
-
                 spellId = info->summoningRitual.spellId;
-
-                if (spellId == 62330)                       // GO store nonexistent spell, replace by expected
+                // GO store nonexistent spell, replace by expected
+                if (spellId == 62330)
                 {
                     // spell have reagent and mana cost but it not expected use its
                     // it triggered spell in fact casted at currently channeled GO
@@ -1446,7 +1440,7 @@ void GameObject::Use(Unit* user)
             // go to end function to spell casting
             break;
         }
-        case GAMEOBJECT_TYPE_SPELLCASTER:                   //22
+        case GAMEOBJECT_TYPE_SPELLCASTER:      // 22
         {
             GameObjectTemplate const* info = GetGOInfo();
             if (!info)
@@ -1468,7 +1462,7 @@ void GameObject::Use(Unit* user)
             AddUse();
             break;
         }
-        case GAMEOBJECT_TYPE_MEETINGSTONE:                  //23
+        case GAMEOBJECT_TYPE_MEETINGSTONE:    // 23
         {
             GameObjectTemplate const* info = GetGOInfo();
 
@@ -1522,7 +1516,7 @@ void GameObject::Use(Unit* user)
                 // 15004
                 // 15005
                 bg->EventPlayerClickedOnFlag(player, this);
-                return;                                     //we don;t need to delete flag ... it is despawned!
+                return;          //we don't need to delete flag ... it is despawned!
             }
             break;
         }
@@ -1914,33 +1908,30 @@ void GameObject::SetLootState(LootState state, Unit* unit)
     m_lootState = state;
     AI()->OnStateChanged(state, unit);
     sScriptMgr->OnGameObjectLootStateChanged(this, state, unit);
-    if (m_model)
-    {
-        bool collision = false;
-        // Use the current go state
-        if ((GetGoState() != GO_STATE_READY && (state == GO_ACTIVATED || state == GO_JUST_DEACTIVATED)) || state == GO_READY)
-            collision = !collision;
 
-        EnableCollision(collision);
-    }
+    bool collision = false;
+    // Use the current go state
+    if ((GetGoState() != GO_STATE_READY && (state == GO_ACTIVATED || state == GO_JUST_DEACTIVATED)) || state == GO_READY)
+        collision = !collision;
+
+    EnableCollision(collision);
+
 }
 
 void GameObject::SetGoState(GOState state)
 {
     SetByteValue(GAMEOBJECT_BYTES_1, 0, state);
     sScriptMgr->OnGameObjectStateChanged(this, state);
-    if (m_model)
-    {
-        if (!IsInWorld())
-            return;
 
-        // startOpen determines whether we are going to add or remove the LoS on activation
-        bool collision = false;
-        if (state == GO_STATE_READY)
-            collision = !collision;
+    if (!IsInWorld())
+        return;
 
-        EnableCollision(collision);
-    }
+    // startOpen determines whether we are going to add or remove the LoS on activation
+    bool collision = false;
+    if (state == GO_STATE_READY)
+        collision = !collision;
+
+    EnableCollision(collision);
 }
 
 void GameObject::SetDisplayId(uint32 displayid)
@@ -1951,33 +1942,20 @@ void GameObject::SetDisplayId(uint32 displayid)
 
 void GameObject::SetPhaseMask(uint32 newPhaseMask, bool update)
 {
-    WorldObject::SetPhaseMask(newPhaseMask, update);
+    // Need to start implementing dyna_maps(vmap4), AND correct terrian swap phasing.
+    /*WorldObject::SetPhaseMask(newPhaseMask, update);
     if (m_model && m_model->isEnabled())
-        EnableCollision(true);
+        EnableCollision(true);*/
 }
 
 void GameObject::UpdateModel()
 {
-    if (!IsInWorld())
-        return;
-    if (m_model)
-        if (GetMap()->ContainsGameObjectModel(*m_model))
-            GetMap()->RemoveGameObjectModel(*m_model);
-    delete m_model;
-    m_model = GameObjectModel::Create(*this);
-    if (m_model)
-        GetMap()->InsertGameObjectModel(*m_model);
+    // Need to start implementing dyna_maps(vmap4), AND correct terrian swap phasing.
 }
 
 void GameObject::EnableCollision(bool enable)
 {
-    if (!m_model)
-        return;
-
-    /*if (enable && !GetMap()->ContainsGameObjectModel(*m_model))
-        GetMap()->InsertGameObjectModel(*m_model);*/
-
-    m_model->enable(enable ? GetPhaseMask() : 0);
+    // Need to start implementing dyna_maps(vmap4), AND correct terrian swap phasing.
 }
 
 Player* GameObject::GetLootRecipient() const
