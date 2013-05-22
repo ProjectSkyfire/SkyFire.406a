@@ -4911,7 +4911,7 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
     {
         if (!nameData)
         {
-            sLog->outError(LOG_FILTER_PLAYER, "Cannot find CharacterNameData entry for player %u from account %u. Could not delete character.", guid, accountId);
+            sLog->outError("Cannot find CharacterNameData entry for player %u from account %u. Could not delete character.", guid, accountId);
             return;
         }
 

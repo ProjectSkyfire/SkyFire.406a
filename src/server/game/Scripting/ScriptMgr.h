@@ -474,6 +474,9 @@ class GameObjectScript : public ScriptObject, public UpdatableScript<GameObject>
         // Called when the game object is damaged (destructible buildings only).
         virtual void OnDamaged(GameObject* /*go*/, Player* /*player*/) { }
 
+        // Called when the game object state is changed.
+        virtual void OnGameObjectStateChanged(GameObject* /*go*/, uint32 /*state*/) { }
+
         // Called when a CreatureAI object is needed for the creature.
         virtual GameObjectAI* GetAI(GameObject* /*gameobject*/) const { return NULL; }
 };
@@ -812,10 +815,9 @@ class GroupScript : public ScriptObject
 #define sScriptMgr ACE_Singleton<ScriptMgr, ACE_Null_Mutex>::instance()
 
 // Manages registration, loading, and execution of scripts.
-class ScriptMgr
+class ScriptObject
 {
-    friend class ACE_Singleton<ScriptMgr, ACE_Null_Mutex>;
-    friend class ScriptObject;
+    friend class ScriptMgr;
 
     private:
 
@@ -920,8 +922,10 @@ class ScriptMgr
         uint32 GetDialogStatus(Player* player, GameObject* go);
         void OnGameObjectDestroyed(GameObject* go, Player* player);
         void OnGameObjectDamaged(GameObject* go, Player* player);
-        GameObjectAI* GetGameObjectAI(GameObject* gameobject);
+        void OnGameObjectLootStateChanged(GameObject* go, uint32 state, Unit* unit);
+        void OnGameObjectStateChanged(GameObject* go, uint32 state);
         void OnGameObjectUpdate(GameObject* go, uint32 diff);
+        GameObjectAI* GetGameObjectAI(GameObject* go);
 
     public: /* AreaTriggerScript */
 
