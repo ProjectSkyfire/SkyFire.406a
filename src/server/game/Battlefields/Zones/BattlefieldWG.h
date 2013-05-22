@@ -45,14 +45,14 @@ typedef std::set<BfWGWorkShopData *> WorkShop;
 //typedef std::set<BfCapturePointWG *> CapturePointSet; unused ?
 typedef std::set<Group *> GroupSet;
 
-enum eWGItem
+enum WGItem
 {
 // *INDENT-OFF*
     WG_MARK_OF_HONOR                            = 43589,
 // *INDENT-ON*
 };
 
-enum eWGSpell
+enum WGSpell
 {
 // *INDENT-OFF*
     // AWartime auras
@@ -98,7 +98,7 @@ enum eWGSpell
 // *INDENT-ON*
 };
 
-enum eWGData32
+enum WGData32
 {
     BATTLEFIELD_WG_DATA_DAMAGED_TOWER_DEF,
     BATTLEFIELD_WG_DATA_BROKEN_TOWER_DEF,
@@ -133,7 +133,7 @@ enum WB_ACHIEVEMENTS
 // *INDENT-ON*
 };
 
-enum eWGWorldStates
+enum WGWorldStates
 {
     BATTLEFIELD_WG_WORLD_STATE_VEHICLE_H         = 3490,
     BATTLEFIELD_WG_WORLD_STATE_MAX_VEHICLE_H     = 3491,
@@ -158,7 +158,7 @@ class BfGraveYardWG : public BfGraveYard
     uint32 m_GossipTextId;
 };
 
-enum eWGGraveyardId
+enum WGGraveyardId
 {
     BATTLEFIELD_WG_GY_WORKSHOP_NE,
     BATTLEFIELD_WG_GY_WORKSHOP_NW,
@@ -170,20 +170,20 @@ enum eWGGraveyardId
     BATTLEFIELD_WG_GY_MAX,
 };
 
-enum eWGGossipText
+enum WGGossipText
 {
 // *INDENT-OFF*
-    BATTLEFIELD_WG_GOSSIPTEXT_GY_NE              = -1850501,
-    BATTLEFIELD_WG_GOSSIPTEXT_GY_NW              = -1850502,
-    BATTLEFIELD_WG_GOSSIPTEXT_GY_SE              = -1850504,
-    BATTLEFIELD_WG_GOSSIPTEXT_GY_SW              = -1850503,
-    BATTLEFIELD_WG_GOSSIPTEXT_GY_KEEP            = -1850500,
-    BATTLEFIELD_WG_GOSSIPTEXT_GY_HORDE           = -1850505,
-    BATTLEFIELD_WG_GOSSIPTEXT_GY_ALLIANCE        = -1850506,
+    BATTLEFIELD_WG_GOSSIPTEXT_GY_NE              = 20071,
+    BATTLEFIELD_WG_GOSSIPTEXT_GY_NW              = 20072,
+    BATTLEFIELD_WG_GOSSIPTEXT_GY_SE              = 20074,
+    BATTLEFIELD_WG_GOSSIPTEXT_GY_SW              = 20073,
+    BATTLEFIELD_WG_GOSSIPTEXT_GY_KEEP            = 20070,
+    BATTLEFIELD_WG_GOSSIPTEXT_GY_HORDE           = 20075,
+    BATTLEFIELD_WG_GOSSIPTEXT_GY_ALLIANCE        = 20076
 // *INDENT-ON*
 };
 
-enum eWGNpc
+enum WGNpc
 {
 // *INDENT-OFF*
     BATTLEFIELD_WG_NPC_GUARD_H                      = 30739,
@@ -433,7 +433,7 @@ class BattlefieldWG : public Battlefield
 
 #define NORTHREND_WINTERGRASP 4197
 
-enum eWGGameObjectBuildingType
+enum WGGameObjectBuildingType
 {
     BATTLEFIELD_WG_OBJECTTYPE_DOOR,
     BATTLEFIELD_WG_OBJECTTYPE_TITANRELIC,
@@ -443,7 +443,7 @@ enum eWGGameObjectBuildingType
     BATTLEFIELD_WG_OBJECTTYPE_TOWER,
 };
 
-enum eWGGameObjectState
+enum WGGameObjectState
 {
     BATTLEFIELD_WG_OBJECTSTATE_NONE,
     BATTLEFIELD_WG_OBJECTSTATE_NEUTRAL_INTACT,
@@ -457,7 +457,7 @@ enum eWGGameObjectState
     BATTLEFIELD_WG_OBJECTSTATE_ALLIANCE_DESTROY,
 };
 
-enum eWGWorkShopType
+enum WGWorkShopType
 {
     BATTLEFIELD_WG_WORKSHOP_NE,
     BATTLEFIELD_WG_WORKSHOP_NW,
@@ -467,7 +467,7 @@ enum eWGWorkShopType
     BATTLEFIELD_WG_WORKSHOP_KEEP_EAST,
 };
 
-enum eWGTeamControl
+enum WGTeamControl
 {
     BATTLEFIELD_WG_TEAM_ALLIANCE,
     BATTLEFIELD_WG_TEAM_HORDE,
@@ -475,7 +475,7 @@ enum eWGTeamControl
 };
 
 // TODO: Handle this with creature_text ?
-enum eWGText
+enum WGText
 {
 // *INDENT-OFF*
     BATTLEFIELD_WG_TEXT_WORKSHOP_NAME_NE         = 12055,
@@ -504,7 +504,7 @@ enum eWGText
 // *INDENT-ON*
 };
 
-enum eWGObject
+enum WGObject
 {
 // *INDENT-OFF*
     BATTLEFIELD_WG_GAMEOBJECT_FACTORY_BANNER_NE  = 190475,

@@ -19,12 +19,13 @@
 
 #include "Common.h"
 #include "Log.h"
-#include "Configuration/Config.h"
+#include "Config.h"
 #include "Util.h"
 
 #include "Implementation/LoginDatabase.h" // For logging
 extern LoginDatabaseWorkerPool LoginDatabase;
 
+#include <ace/Stack_Trace.h>
 #include <stdarg.h>
 #include <stdio.h>
 

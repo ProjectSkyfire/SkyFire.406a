@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2013 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,10 +20,10 @@
 #ifndef _SQLOPERATION_H
 #define _SQLOPERATION_H
 
+#include "QueryResult.h"
+
 #include <ace/Method_Request.h>
 #include <ace/Activation_Queue.h>
-
-#include "QueryResult.h"
 
 //- Forward declare (don't include header to prevent circular includes)
 class PreparedStatement;
@@ -60,7 +61,7 @@ class MySQLConnection;
 class SQLOperation : public ACE_Method_Request
 {
     public:
-        SQLOperation(): m_conn(NULL) {};
+        SQLOperation(): m_conn(NULL) {}
         virtual int call()
         {
             Execute();

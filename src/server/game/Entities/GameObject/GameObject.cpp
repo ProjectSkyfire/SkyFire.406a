@@ -31,6 +31,8 @@
 #include "CreatureAISelector.h"
 #include "Group.h"
 
+#include <G3D/g3dmath.h>
+
 GameObject::GameObject() : WorldObject(false), m_goValue(new GameObjectValue), m_AI(NULL)
 {
     _objectType |= TYPEMASK_GAMEOBJECT;
@@ -1684,12 +1686,17 @@ bool GameObject::IsInRange(float x, float y, float z, float radius) const
     if (!info)
         return IsWithinDist3d(x, y, z, radius);
 
-    float sinA = sin(GetOrientation());
-    float cosA = cos(GetOrientation());
+    float sinA = std::sin(GetOrientation());
+    float cosA = std::cos(GetOrientation());
     float dx = x - GetPositionX();
     float dy = y - GetPositionY();
     float dz = z - GetPositionZ();
     float dist = sqrt(dx*dx + dy*dy);
+    //! Check if the distance between the 2 objects is 0, can happen if both objects are on the same position.
+    //! The code below this check wont crash if dist is 0 because 0/0 in float operations is valid, and returns infinite
+    if (G3D::fuzzyEq(dist, 0.0f))
+        return true;
+
     float sinB = dx / dist;
     float cosB = dy / dist;
     dx = dist * (cosA * cosB + sinA * sinB);
@@ -1701,7 +1708,13 @@ bool GameObject::IsInRange(float x, float y, float z, float radius) const
 
 void GameObject::EventInform(uint32 eventId)
 {
-    if (eventId && _zoneScript)
+    if (!eventId)
+        return;
+
+    if (AI())
+        AI()->EventInform(eventId);
+
+    if (_zoneScript)
         _zoneScript->ProcessEvent(this, eventId);
 }
 
@@ -1723,17 +1736,17 @@ void GameObject::UpdateRotationFields(float rotation2 /*=0.0f*/, float rotation3
 {
     static double const atan_pow = atan(pow(2.0f, -20.0f));
 
-    double f_rot1 = sin(GetOrientation() / 2.0f);
-    double f_rot2 = cos(GetOrientation() / 2.0f);
+    double f_rot1 = std::sin(GetOrientation() / 2.0f);
+    double f_rot2 = std::cos(GetOrientation() / 2.0f);
 
     int64 i_rot1 = int64(f_rot1 / atan_pow *(f_rot2 >= 0 ? 1.0f : -1.0f));
     int64 rotation = (i_rot1 << 43 >> 43) & 0x00000000001FFFFF;
 
-    //float f_rot2 = sin(0.0f / 2.0f);
+    //float f_rot2 = std::sin(0.0f / 2.0f);
     //int64 i_rot2 = f_rot2 / atan(pow(2.0f, -20.0f));
     //rotation |= (((i_rot2 << 22) >> 32) >> 11) & 0x000003FFFFE00000;
 
-    //float f_rot3 = sin(0.0f / 2.0f);
+    //float f_rot3 = std::sin(0.0f / 2.0f);
     //int64 i_rot3 = f_rot3 / atan(pow(2.0f, -21.0f));
     //rotation |= (i_rot3 >> 42) & 0x7FFFFC0000000000;
 
@@ -1751,27 +1764,27 @@ void GameObject::UpdateRotationFields(float rotation2 /*=0.0f*/, float rotation3
 
 void GameObject::ModifyHealth(int32 change, Unit* attackerOrHealer /*= NULL*/, uint32 spellId /*= 0*/)
 {
-    if (!GetGOValue()->Building.MaxHealth || !change)
+    if (!m_goValue->Building.MaxHealth || !change)
         return;
 
     // prevent double destructions of the same object
-    if (change < 0 && !GetGOValue()->Building.Health)
+    if (change < 0 && !m_goValue->Building.Health)
         return;
 
-    if (int32(GetGOValue()->Building.Health) + change <= 0)
-        GetGOValue()->Building.Health = 0;
-    else if (int32(GetGOValue()->Building.Health) + change >= int32(GetGOValue()->Building.MaxHealth))
-        GetGOValue()->Building.Health = GetGOValue()->Building.MaxHealth;
+    if (int32(m_goValue->Building.Health) + change <= 0)
+        m_goValue->Building.Health = 0;
+    else if (int32(m_goValue->Building.Health) + change >= int32(m_goValue->Building.MaxHealth))
+        m_goValue->Building.Health = m_goValue->Building.MaxHealth;
     else
-        GetGOValue()->Building.Health += change;
+        m_goValue->Building.Health += change;
 
     // Set the health bar, value = 255 * healthPct;
-    SetGoAnimProgress(GetGOValue()->Building.Health * 255 / GetGOValue()->Building.MaxHealth);
+    SetGoAnimProgress(m_goValue->Building.Health * 255 / m_goValue->Building.MaxHealth);
 
     Player* player = attackerOrHealer->GetCharmerOrOwnerPlayerOrPlayerItself();
 
     // dealing damage, send packet
-    // TODO: is there any packet for healing?
+    /// @todo is there any packet for healing?
     if (change < 0 && player)
     {
         WorldPacket data(SMSG_DESTRUCTIBLE_BUILDING_DAMAGE, 8 + 8 + 8 + 4 + 4);
@@ -1785,11 +1798,11 @@ void GameObject::ModifyHealth(int32 change, Unit* attackerOrHealer /*= NULL*/, u
 
     GameObjectDestructibleState newState = GetDestructibleState();
 
-    if (!GetGOValue()->Building.Health)
+    if (!m_goValue->Building.Health)
         newState = GO_DESTRUCTIBLE_DESTROYED;
-    else if (GetGOValue()->Building.Health <= GetGOInfo()->building.damagedNumHits)
+    else if (m_goValue->Building.Health <= GetGOInfo()->building.damagedNumHits)
         newState = GO_DESTRUCTIBLE_DAMAGED;
-    else if (GetGOValue()->Building.Health == GetGOValue()->Building.MaxHealth)
+    else if (m_goValue->Building.Health == m_goValue->Building.MaxHealth)
         newState = GO_DESTRUCTIBLE_INTACT;
 
     if (newState == GetDestructibleState())
@@ -1807,22 +1820,21 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
     {
         case GO_DESTRUCTIBLE_INTACT:
             RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED | GO_FLAG_DESTROYED);
-            SetUInt32Value(GAMEOBJECT_DISPLAYID, m_goInfo->displayId);
+            SetDisplayId(m_goInfo->displayId);
             if (setHealth)
             {
                 m_goValue->Building.Health = m_goValue->Building.MaxHealth;
                 SetGoAnimProgress(255);
             }
+            EnableCollision(true);
             break;
         case GO_DESTRUCTIBLE_DAMAGED:
         {
             EventInform(m_goInfo->building.damagedEvent);
+            sScriptMgr->OnGameObjectDamaged(this, eventInvoker);
             if (eventInvoker)
-            {
-                sScriptMgr->OnGameObjectDamaged(this, eventInvoker);
                 if (Battleground* bg = eventInvoker->GetBattleground())
                     bg->EventPlayerDamagedGO(eventInvoker, this, m_goInfo->building.damagedEvent);
-            }
 
             RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_DESTROYED);
             SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_DAMAGED);
@@ -1831,7 +1843,7 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
             if (DestructibleModelDataEntry const* modelData = sDestructibleModelDataStore.LookupEntry(m_goInfo->building.destructibleData))
                 if (modelData->DamagedDisplayId)
                     modelId = modelData->DamagedDisplayId;
-            SetUInt32Value(GAMEOBJECT_DISPLAYID, modelId);
+            SetDisplayId(modelId);
 
             if (setHealth)
             {
@@ -1846,10 +1858,10 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
         }
         case GO_DESTRUCTIBLE_DESTROYED:
         {
+            sScriptMgr->OnGameObjectDestroyed(this, eventInvoker);
             EventInform(m_goInfo->building.destroyedEvent);
             if (eventInvoker)
             {
-                sScriptMgr->OnGameObjectDestroyed(this, eventInvoker);
                 if (Battleground* bg = eventInvoker->GetBattleground())
                 {
                     bg->EventPlayerDamagedGO(eventInvoker, this, m_goInfo->building.destroyedEvent);
@@ -1864,13 +1876,14 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
             if (DestructibleModelDataEntry const* modelData = sDestructibleModelDataStore.LookupEntry(m_goInfo->building.destructibleData))
                 if (modelData->DestroyedDisplayId)
                     modelId = modelData->DestroyedDisplayId;
-            SetUInt32Value(GAMEOBJECT_DISPLAYID, modelId);
+            SetDisplayId(modelId);
 
             if (setHealth)
             {
                 m_goValue->Building.Health = 0;
                 SetGoAnimProgress(0);
             }
+            EnableCollision(false);
             break;
         }
         case GO_DESTRUCTIBLE_REBUILDING:
@@ -1882,7 +1895,7 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
             if (DestructibleModelDataEntry const* modelData = sDestructibleModelDataStore.LookupEntry(m_goInfo->building.destructibleData))
                 if (modelData->RebuildingDisplayId)
                     modelId = modelData->RebuildingDisplayId;
-            SetUInt32Value(GAMEOBJECT_DISPLAYID, modelId);
+            SetDisplayId(modelId);
 
             // restores to full health
             if (setHealth)
@@ -1890,14 +1903,134 @@ void GameObject::SetDestructibleState(GameObjectDestructibleState state, Player*
                 m_goValue->Building.Health = m_goValue->Building.MaxHealth;
                 SetGoAnimProgress(255);
             }
+            EnableCollision(true);
             break;
         }
     }
 }
 
-void GameObject::SetLootState(LootState s, Unit* unit)
+void GameObject::SetLootState(LootState state, Unit* unit)
 {
-    m_lootState = s;
-    AI()->OnStateChanged(s, unit);
+    m_lootState = state;
+    AI()->OnStateChanged(state, unit);
+    sScriptMgr->OnGameObjectLootStateChanged(this, state, unit);
+    if (m_model)
+    {
+        bool collision = false;
+        // Use the current go state
+        if ((GetGoState() != GO_STATE_READY && (state == GO_ACTIVATED || state == GO_JUST_DEACTIVATED)) || state == GO_READY)
+            collision = !collision;
+
+        EnableCollision(collision);
+    }
 }
 
+void GameObject::SetGoState(GOState state)
+{
+    SetByteValue(GAMEOBJECT_BYTES_1, 0, state);
+    sScriptMgr->OnGameObjectStateChanged(this, state);
+    if (m_model)
+    {
+        if (!IsInWorld())
+            return;
+
+        // startOpen determines whether we are going to add or remove the LoS on activation
+        bool collision = false;
+        if (state == GO_STATE_READY)
+            collision = !collision;
+
+        EnableCollision(collision);
+    }
+}
+
+void GameObject::SetDisplayId(uint32 displayid)
+{
+    SetUInt32Value(GAMEOBJECT_DISPLAYID, displayid);
+    UpdateModel();
+}
+
+void GameObject::SetPhaseMask(uint32 newPhaseMask, bool update)
+{
+    WorldObject::SetPhaseMask(newPhaseMask, update);
+    if (m_model && m_model->isEnabled())
+        EnableCollision(true);
+}
+
+void GameObject::UpdateModel()
+{
+    if (!IsInWorld())
+        return;
+    if (m_model)
+        if (GetMap()->ContainsGameObjectModel(*m_model))
+            GetMap()->RemoveGameObjectModel(*m_model);
+    delete m_model;
+    m_model = GameObjectModel::Create(*this);
+    if (m_model)
+        GetMap()->InsertGameObjectModel(*m_model);
+}
+
+void GameObject::EnableCollision(bool enable)
+{
+    if (!m_model)
+        return;
+
+    /*if (enable && !GetMap()->ContainsGameObjectModel(*m_model))
+        GetMap()->InsertGameObjectModel(*m_model);*/
+
+    m_model->enable(enable ? GetPhaseMask() : 0);
+}
+
+Player* GameObject::GetLootRecipient() const
+{
+    if (!m_lootRecipient)
+        return NULL;
+    return ObjectAccessor::FindPlayer(m_lootRecipient);
+}
+
+Group* GameObject::GetLootRecipientGroup() const
+{
+    if (!m_lootRecipientGroup)
+        return NULL;
+    return sGroupMgr->GetGroupByGUID(m_lootRecipientGroup);
+}
+
+void GameObject::SetLootRecipient(Unit* unit)
+{
+    // set the player whose group should receive the right
+    // to loot the creature after it dies
+    // should be set to NULL after the loot disappears
+
+    if (!unit)
+    {
+        m_lootRecipient = 0;
+        m_lootRecipientGroup = 0;
+        return;
+    }
+
+    if (unit->GetTypeId() != TYPEID_PLAYER && !unit->IsVehicle())
+        return;
+
+    Player* player = unit->GetCharmerOrOwnerPlayerOrPlayerItself();
+    // normal creature, no player involved
+    if (!player)
+        return;
+
+    m_lootRecipient = player->GetGUID();
+    if (Group* group = player->GetGroup())
+        m_lootRecipientGroup = group->GetLowGUID();
+}
+
+bool GameObject::IsLootAllowedFor(Player const* player) const
+{
+    if (!m_lootRecipient && !m_lootRecipientGroup)
+        return true;
+
+    if (player->GetGUID() == m_lootRecipient)
+        return true;
+
+    Group const* playerGroup = player->GetGroup();
+    if (!playerGroup || playerGroup != GetLootRecipientGroup()) // if we dont have a group we arent the recipient
+        return false;                                           // if go doesnt have group bound it means it was solo killed by someone else
+
+    return true;
+}

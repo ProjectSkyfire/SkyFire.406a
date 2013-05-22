@@ -611,6 +611,7 @@ enum LootState
 };
 
 class Unit;
+class GameObjectModel;
 
 // 5 sec for bobber catch
 #define FISHING_BOBBER_READY_TIME 5
@@ -630,7 +631,7 @@ class GameObject : public WorldObject, public GridObject<GameObject>
         static GameObject* GetGameObject(WorldObject& object, uint64 guid);
         GameObjectTemplate const* GetGOInfo() const { return m_goInfo; }
         GameObjectData const* GetGOData() const { return m_goData; }
-        GameObjectValue * GetGOValue() const { return m_goValue; }
+        GameObjectValue const* GetGOValue() const { return m_goValue; }
 
         bool IsTransport() const;
         bool IsDynTransport() const;
@@ -713,7 +714,11 @@ class GameObject : public WorldObject, public GridObject<GameObject>
         void SetGoAnimProgress(uint8 animprogress) { SetByteValue(GAMEOBJECT_BYTES_1, 3, animprogress); }
         static void SetGoArtKit(uint8 artkit, GameObject* go, uint32 lowguid = 0);
 
+        void SetPhaseMask(uint32 newPhaseMask, bool update);
+        void EnableCollision(bool enable);
+
         void Use(Unit* user);
+
 
         LootState getLootState() const { return m_lootState; }
         // Note: unit is only used when s = GO_ACTIVATED
@@ -745,6 +750,11 @@ class GameObject : public WorldObject, public GridObject<GameObject>
 
         Loot        loot;
 
+        Player* GetLootRecipient() const;
+        Group* GetLootRecipientGroup() const;
+        void SetLootRecipient(Unit* unit);
+        bool IsLootAllowedFor(Player const* player) const;
+        bool HasLootRecipient() const { return m_lootRecipient || m_lootRecipientGroup; }
         uint32 _groupLootTimer;                            // (msecs)timer used for group loot
         uint32 lootingGroupLowGUID;                         // used to find group which is looting
 
@@ -793,6 +803,10 @@ class GameObject : public WorldObject, public GridObject<GameObject>
         GameObjectAI* AI() const { return m_AI; }
 
         std::string GetAIName() const;
+        void SetDisplayId(uint32 displayid);
+        uint32 GetDisplayId() const { return GetUInt32Value(GAMEOBJECT_DISPLAYID); }
+
+        GameObjectModel* m_model;
     protected:
         bool AIM_Initialize();
         uint32      m_spellId;
@@ -818,10 +832,13 @@ class GameObject : public WorldObject, public GridObject<GameObject>
 
         uint64 m_rotation;
 
-        uint16 m_LootMode;                                  // bitmask, default LOOT_MODE_DEFAULT, determines what loot will be lootable
+        uint64 m_lootRecipient;
+        uint32 m_lootRecipientGroup;
+        uint16 m_LootMode;             // bitmask, default LOOT_MODE_DEFAULT, determines what loot will be lootable
     private:
         void RemoveFromOwner();
         void SwitchDoorOrButton(bool activate, bool alternative = false);
+        void UpdateModel();                                 // updates model in case displayId were changed
 
         //! Object distance/size - overridden from Object::_IsWithinDist. Needs to take in account proper GO size.
         bool _IsWithinDist(WorldObject const* obj, float dist2compare, bool /*is3D*/) const
@@ -831,4 +848,5 @@ class GameObject : public WorldObject, public GridObject<GameObject>
         }
         GameObjectAI* m_AI;
 };
+
 #endif

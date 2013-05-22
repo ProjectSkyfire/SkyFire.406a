@@ -19826,7 +19826,7 @@ void Player::SaveToDB(bool create /*=false*/)
             ss << GetPrimaryTalentTree(i) << " ";
         stmt->setString(index++, ss.str());
 
-        stmt->setUInt8(index++, IsInWorld() ? 1 : 0);
+        stmt->setUInt8(index++, IsInWorld() && !GetSession()->PlayerLogout() ? 1 : 0);
         // Index
         stmt->setUInt32(index++, GetGUIDLow());
     }

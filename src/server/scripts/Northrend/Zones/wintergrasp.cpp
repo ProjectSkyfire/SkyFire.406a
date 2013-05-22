@@ -38,7 +38,7 @@ enum eWGqueuenpctext
     WG_NPCQUEUE_TEXT_A_NOWAR            = 14782,
     WG_NPCQUEUE_TEXT_A_QUEUE            = 14791,
     WG_NPCQUEUE_TEXT_A_WAR              = 14781,
-    WG_NPCQUEUE_TEXTOPTION_JOIN         = -1850507,
+    WG_NPCQUEUE_TEXTOPTION_JOIN         = 20077,
 };
 
 enum eWGdata
