@@ -4909,12 +4909,6 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
         charDelete_method = CHAR_DELETE_REMOVE;
     else if (CharacterNameData const* nameData = sWorld->GetCharacterNameData(guid))    // To avoid a query, we select loaded data. If it doesn't exist, return.
     {
-        if (!nameData)
-        {
-            sLog->outError("Cannot find CharacterNameData entry for player %u from account %u. Could not delete character.", guid, accountId);
-            return;
-        }
-
         // Define the required variables
         uint32 charDelete_minLvl = sWorld->getIntConfig(nameData->m_class != CLASS_DEATH_KNIGHT ? CONFIG_CHARDELETE_MIN_LEVEL : CONFIG_CHARDELETE_HEROIC_MIN_LEVEL);
 
@@ -5113,9 +5107,9 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
             break;
         }
         // The character gets unlinked from the account, the name gets freed up and appears as deleted ingame
-        case CHARACTER_DELETE_UNLINK:
+        case CHAR_DELETE_UNLINK:
         {
-            PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHARACTER_UPDATE_DELETE_INFO);
+            stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_DELETE_INFO);
 
             stmt->setUInt32(0, guid);
 
@@ -5124,10 +5118,13 @@ void Player::DeleteFromDB(uint64 playerguid, uint32 accountId, bool updateRealmC
         }
         default:
             sLog->outError("Player::DeleteFromDB: Unsupported delete method: %u.", charDelete_method);
+            return;
     }
 
     if (updateRealmChars)
         sWorld->UpdateRealmCharCount(accountId);
+
+    sWorld->DeleteCharacterNameData(guid);
 }
 
 /**

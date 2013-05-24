@@ -798,7 +798,6 @@ void WorldSession::HandleCharDeleteOpcode(WorldPacket& recvData)
     sLog->outDetail("Account: %d (IP: %s) Delete Character:[%s] (GUID: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), GUID_LOPART(guid));
     sLog->outChar("Account: %d (IP: %s) Delete Character:[%s] (GUID: %u)", GetAccountId(), IP_str.c_str(), name.c_str(), GUID_LOPART(guid));
     sScriptMgr->OnPlayerDelete(guid);
-    sWorld->DeleteCharaceterNameData(GUID_LOPART(guid));
 
     if (sLog->IsOutCharDump())                                // optimize GetPlayerDump call
     {

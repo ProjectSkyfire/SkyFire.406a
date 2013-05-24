@@ -1187,6 +1187,7 @@ void World::LoadConfigSettings(bool reload)
     ///- Load the CharDelete related config options
     m_int_configs[CONFIG_CHARDELETE_METHOD] = ConfigMgr::GetIntDefault("CharDelete.Method", 0);
     m_int_configs[CONFIG_CHARDELETE_MIN_LEVEL] = ConfigMgr::GetIntDefault("CharDelete.MinLevel", 0);
+    m_int_configs[CONFIG_CHARDELETE_HEROIC_MIN_LEVEL] = ConfigMgr::GetIntDefault("CharDelete.Heroic.MinLevel", 0);
     m_int_configs[CONFIG_CHARDELETE_KEEP_DAYS] = ConfigMgr::GetIntDefault("CharDelete.KeepDays", 30);
 
     m_int_configs[CONFIG_IGNORING_MAPS_VERSION] = ConfigMgr::GetIntDefault("IgnoringMapsVersion", 0);
@@ -3112,6 +3113,27 @@ void World::ProcessQueryCallbacks()
         }
     }
 }
+
+/**
+* @brief Loads several pieces of information on server startup with the low GUID
+* There is no further database query necessary.
+* These are a number of methods that work into the calling function.
+*
+* @param guid Requires a lowGUID to call
+* @return Name, Gender, Race, Class and Level of player character
+* Example Usage:
+* @code
+*    CharacterNameData const* nameData = sWorld->GetCharacterNameData(lowGUID);
+*    if (!nameData)
+*        return;
+*
+* std::string playerName = nameData->m_name;
+* uint8 playerGender = nameData->m_gender;
+* uint8 playerRace = nameData->m_race;
+* uint8 playerClass = nameData->m_class;
+* uint8 playerLevel = nameData->m_level;
+* @endcode
+**/
 
 void World::LoadCharacterNameData()
 {
