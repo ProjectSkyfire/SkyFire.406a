@@ -699,6 +699,7 @@ void AddScripts()
     AddOutlandScripts();
     AddNorthrendScripts();
     AddMaelstromScripts();
+	AddEventScripts();
     AddBattlegroundScripts();
     AddOutdoorPvPScripts();
     AddCustomScripts();
