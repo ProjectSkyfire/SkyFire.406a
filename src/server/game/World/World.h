@@ -317,7 +317,7 @@ enum WorldIntConfigs
     CONFIG_CHARDELETE_KEEP_DAYS,
     CONFIG_CHARDELETE_METHOD,
     CONFIG_CHARDELETE_MIN_LEVEL,
-	CONFIG_CHARDELETE_HEROIC_MIN_LEVEL,	
+    CONFIG_CHARDELETE_HEROIC_MIN_LEVEL,	
     CONFIG_AUTOBROADCAST_CENTER,
     CONFIG_AUTOBROADCAST_INTERVAL,
     CONFIG_MAX_RESULTS_LOOKUP_COMMANDS,
@@ -559,6 +559,7 @@ typedef UNORDERED_MAP<uint32, WorldSession*> SessionMap;
 struct CharacterNameData
 {
     std::string m_name;
+    uint8  m_level;
     uint8 m_class;
     uint8 m_race;
     uint8 m_gender;

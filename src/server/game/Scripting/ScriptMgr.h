@@ -474,6 +474,9 @@ class GameObjectScript : public ScriptObject, public UpdatableScript<GameObject>
         // Called when the game object is damaged (destructible buildings only).
         virtual void OnDamaged(GameObject* /*go*/, Player* /*player*/) { }
 
+		// Called when the game object loot state is changed.
+		virtual void OnLootStateChanged(GameObject* /*go*/, uint32 /*state*/, Unit* /*unit*/) { }
+
         // Called when the game object state is changed.
         virtual void OnGameObjectStateChanged(GameObject* /*go*/, uint32 /*state*/) { }
 
@@ -817,13 +820,13 @@ class GroupScript : public ScriptObject
 // Manages registration, loading, and execution of scripts.
 class ScriptMgr
 {
-	friend class ACE_Singleton<ScriptMgr, ACE_Null_Mutex>;
-	friend class ScriptObject;
+    friend class ACE_Singleton<ScriptMgr, ACE_Null_Mutex>;
+    friend class ScriptObject;
 
 private:
 
-	ScriptMgr();
-	virtual ~ScriptMgr();
+    ScriptMgr();
+    virtual ~ScriptMgr();
 
 public: /* Initialization */
 
