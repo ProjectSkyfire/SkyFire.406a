@@ -5774,8 +5774,8 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
         }
         case SPELLFAMILY_ROGUE:
         {
-            if (!(mode & AURA_EFFECT_HANDLE_CHANGE_AMOUNT_SEND_FOR_CLIENT_MASK))
-                return;
+            if (!(mode & AURA_EFFECT_HANDLE_REAL))
+               break;
 
             switch (GetId())
             {
@@ -5791,9 +5791,6 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                                 aur->SetMaxDuration(GetBase()->GetDuration());
                                 aur->SetDuration(GetBase()->GetDuration());
                             }
-
-                            if (!target->HasAuraType(SPELL_AURA_INTERFERE_TARGETTING))
-                                target->RemoveAurasDueToSpell(88611);
                         }
                     }
                     else

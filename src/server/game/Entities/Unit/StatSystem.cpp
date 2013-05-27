@@ -475,24 +475,33 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
     SetInt32Value(index_mod_neg, (uint32)attPowerMod_neg);  //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_NEG field
     SetFloatValue(index_mult, attPowerMultiplier);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
 
-    Pet* pet = GetPet();                                //update pet's AP
+    // Update pet's AP
+    Pet* pet = GetPet();
 
-    //automatically update weapon damage after attack power modification
+    // Automatically update weapon damage after attack power modification
     if (ranged)
     {
         UpdateDamagePhysical(RANGED_ATTACK);
-        if (pet && pet->isHunterPet()) // At ranged attack change for hunter pet
+
+        // At ranged attack change for hunter pet
+        if (pet && pet->isHunterPet())
             pet->UpdateAttackPowerAndDamage();
     }
     else
     {
-        UpdateDamagePhysical(BASE_ATTACK);
-        if (CanDualWield() && haveOffhandWeapon())           //allow update offhand damage only if player knows DualWield Spec and has equipped offhand weapon
+         UpdateDamagePhysical(BASE_ATTACK);
+
+        // Allow update offhand damage only if player knows DualWield Spec and has equipped offhand weapon
+        if (CanDualWield() && haveOffhandWeapon())
             UpdateDamagePhysical(OFF_ATTACK);
-        if (getClass() == CLASS_SHAMAN || getClass() == CLASS_PALADIN)                      // mental quickness
+
+        // Mental quickness
+        if (getClass() == CLASS_SHAMAN || getClass() == CLASS_PALADIN)
             UpdateSpellDamageAndHealingBonus();
 
-        if (pet && pet->IsPetGhoul()) // At ranged attack change for hunter pet
+
+        // At ranged attack change for hunter pet
+        if (pet && pet->IsPetGhoul())
             pet->UpdateAttackPowerAndDamage();
     }
 }
@@ -734,7 +743,9 @@ float Player::GetMissPercentageFromDefence() const
         16.00f      // Druid   //?
     };
 
-    float diminishing = 0.0f, nondiminishing = 0.0f;
+    float diminishing       = 0.0f;
+    float nondiminishing    = 0.0f;
+
     // Modify value from defense skill (only bonus from defense rating diminishes)
     nondiminishing += (GetSkillValue(SKILL_DEFENSE) - GetMaxSkillValueForLevel()) * 0.04f;
     diminishing += (int32(GetRatingBonusValue(CR_DEFENSE_SKILL))) * 0.04f;
@@ -845,7 +856,7 @@ void Player::UpdateSpellCritChance(uint32 school)
     crit += GetTotalAuraModifier(SPELL_AURA_MOD_CRIT_PCT);
 
     // Increase crit by school from SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL
-    crit += GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL, 1<<school);
+    crit += GetTotalAuraModifierByMiscMask(SPELL_AURA_MOD_SPELL_CRIT_CHANCE_SCHOOL, 1 << school);
 
     // Increase crit from spell crit ratings
     crit += GetRatingBonusValue(CR_CRIT_SPELL);
@@ -899,6 +910,7 @@ void Player::UpdateExpertise(WeaponAttackType attack)
         // item neutral spell
         if ((*itr)->GetSpellInfo()->EquippedItemClass == -1)
             expertise += (*itr)->GetAmount();
+
         // item dependent spell
         else if (weapon && weapon->IsFitToSpellRequirements((*itr)->GetSpellInfo()))
             expertise += (*itr)->GetAmount();
@@ -909,9 +921,14 @@ void Player::UpdateExpertise(WeaponAttackType attack)
 
     switch (attack)
     {
-        case BASE_ATTACK: SetUInt32Value(PLAYER_EXPERTISE, expertise);         break;
-        case OFF_ATTACK:  SetUInt32Value(PLAYER_OFFHAND_EXPERTISE, expertise); break;
-        default: break;
+        case BASE_ATTACK:
+            SetUInt32Value(PLAYER_EXPERTISE, expertise);
+            break;
+        case OFF_ATTACK:
+            SetUInt32Value(PLAYER_OFFHAND_EXPERTISE, expertise);
+            break;
+        default:
+            break;
     }
 }
 
@@ -936,7 +953,7 @@ void Player::UpdateManaRegen()
     // Apply PCT bonus from SPELL_AURA_MOD_POWER_REGEN_PERCENT aura on spirit base regeneration
     spirit_regen *= GetTotalAuraMultiplierByMiscValue(SPELL_AURA_MOD_POWER_REGEN_PERCENT, POWER_MANA);
 
-    // The base regeneration value is 5% of your base mana pool per 5 seconds (wowpedia)
+    // CombatRegen regeneration value is 5% of your base mana pool per 5 seconds (wowpedia)
     float baseCombatRegen = GetCreateMana() * 0.01f + GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_POWER_REGEN, POWER_MANA) / 5.0f;
 
     // Set regeneration rate in cast state apply only on spirit based regeneration
@@ -1062,36 +1079,38 @@ void Creature::UpdateAttackPowerAndDamage(bool ranged)
     UnitMods unitMod_pos = ranged ? UNIT_MOD_ATTACK_POWER_RANGED_POS : UNIT_MOD_ATTACK_POWER_POS;
     UnitMods unitMod_neg = ranged ? UNIT_MOD_ATTACK_POWER_RANGED_NEG : UNIT_MOD_ATTACK_POWER_NEG;
 
-    uint16 index = UNIT_FIELD_ATTACK_POWER;
-    uint16 index_mod_pos = UNIT_FIELD_ATTACK_POWER_MOD_POS;
-    uint16 index_mod_neg = UNIT_FIELD_ATTACK_POWER_MOD_NEG;
-    uint16 index_mult = UNIT_FIELD_ATTACK_POWER_MULTIPLIER;
+    uint16 index			= UNIT_FIELD_ATTACK_POWER;
+    uint16 index_mod_pos	= UNIT_FIELD_ATTACK_POWER_MOD_POS;
+    uint16 index_mod_neg	= UNIT_FIELD_ATTACK_POWER_MOD_NEG;
+    uint16 index_mult		= UNIT_FIELD_ATTACK_POWER_MULTIPLIER;
 
     if (ranged)
     {
-        index = UNIT_FIELD_RANGED_ATTACK_POWER;
-        index_mod_pos = UNIT_FIELD_RANGED_ATTACK_POWER_MOD_POS;
-        index_mod_neg = UNIT_FIELD_RANGED_ATTACK_POWER_MOD_NEG;
-        index_mult = UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER;
+        index			= UNIT_FIELD_RANGED_ATTACK_POWER;
+        index_mod_pos	= UNIT_FIELD_RANGED_ATTACK_POWER_MOD_POS;
+        index_mod_neg	= UNIT_FIELD_RANGED_ATTACK_POWER_MOD_NEG;
+        index_mult		= UNIT_FIELD_RANGED_ATTACK_POWER_MULTIPLIER;
     }
 
-    float base_attPower  = (GetModifierValue(unitMod_pos, BASE_VALUE) - GetModifierValue(unitMod_neg, BASE_VALUE)) * (GetModifierValue(unitMod_pos, BASE_PCT) + (1 - GetModifierValue(unitMod_neg, BASE_PCT)));
-    float attPowerMod_pos = GetModifierValue(unitMod_pos, TOTAL_VALUE);
-    float attPowerMod_neg = GetModifierValue(unitMod_neg, TOTAL_VALUE);
+    float base_attPower		= (GetModifierValue(unitMod_pos, BASE_VALUE) - GetModifierValue(unitMod_neg, BASE_VALUE)) * (GetModifierValue(unitMod_pos, BASE_PCT) + (1 - GetModifierValue(unitMod_neg, BASE_PCT)));
+    float attPowerMod_pos	= GetModifierValue(unitMod_pos, TOTAL_VALUE);
+    float attPowerMod_neg	= GetModifierValue(unitMod_neg, TOTAL_VALUE);
     float attPowerMultiplier = (GetModifierValue(unitMod_pos, TOTAL_PCT) + (1 - GetModifierValue(unitMod_neg, TOTAL_PCT)))- 1.0f;
 
-    SetInt32Value(index, (uint32)base_attPower);            //UNIT_FIELD_(RANGED)_ATTACK_POWER field
-    SetInt32Value(index_mod_pos, (uint32)attPowerMod_pos);  //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_POS field
-    SetInt32Value(index_mod_neg, (uint32)attPowerMod_neg);  //UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_NEG field
-    SetFloatValue(index_mult, attPowerMultiplier);          //UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
+    SetInt32Value(index, (uint32)base_attPower);            // UNIT_FIELD_(RANGED)_ATTACK_POWER field
+    SetInt32Value(index_mod_pos, (uint32)attPowerMod_pos);  // UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_POS field
+    SetInt32Value(index_mod_neg, (uint32)attPowerMod_neg);  // UNIT_FIELD_(RANGED)_ATTACK_POWER_MOD_NEG field
+    SetFloatValue(index_mult, attPowerMultiplier);          // UNIT_FIELD_(RANGED)_ATTACK_POWER_MULTIPLIER field
 
-    //automatically update weapon damage after attack power modification
+    // Automatically update weapon damage after attack power modification
     if (ranged)
+	{
         UpdateDamagePhysical(RANGED_ATTACK);
+	}
     else
     {
         UpdateDamagePhysical(BASE_ATTACK);
-        UpdateDamagePhysical(OFF_ATTACK);
+            UpdateDamagePhysical(OFF_ATTACK);
     }
 }
 
@@ -1111,8 +1130,6 @@ void Creature::UpdateDamagePhysical(WeaponAttackType attType)
             unitMod = UNIT_MOD_DAMAGE_RANGED;
             break;
     }
-
-    //float att_speed = float(GetAttackTime(attType))/1000.0f;
 
     float weapon_mindamage = GetWeaponDamageRange(attType, MINDAMAGE);
     float weapon_maxdamage = GetWeaponDamageRange(attType, MAXDAMAGE);
@@ -1158,44 +1175,38 @@ void Creature::UpdateDamagePhysical(WeaponAttackType attType)
 ########                         ########
 #######################################*/
 
-enum ClassPets
-{
-    ENTRY_INFERNAL         = 89,
-    ENTRY_IMP              = 416,
-    ENTRY_VOIDWALKER       = 1860,
-    ENTRY_SUCCUBUS         = 1863,
-    ENTRY_FELHUNTER        = 417,
-    ENTRY_FELGUARD         = 17252,
-    ENTRY_WATER_ELEMENTAL  = 510,
-    ENTRY_TREANT           = 1964,
-    ENTRY_FIRE_ELEMENTAL   = 15438,
-    ENTRY_GHOUL            = 26125,
-    ENTRY_BLOODWORM        = 28017,
-};
-
 bool Guardian::UpdateStats(Stats stat)
 {
     if (stat >= MAX_STATS)
         return false;
 
     // value = ((base_value * base_pct) + total_value) * total_pct
-    float value  = GetTotalStatValue(stat);
+    float value         = GetTotalStatValue(stat);
+    float ownersBonus   = 0.0f;
+    float mod           = 0.75f;
+
     ApplyStatBuffMod(stat, m_statFromOwner[stat], false);
-    float ownersBonus = 0.0f;
 
     Unit *owner = GetOwner();
+
     // Handle Death Knight Glyphs and Talents
-    float mod = 0.75f;
     if (IsPetGhoul() && (stat == STAT_STAMINA || stat == STAT_STRENGTH))
     {
         switch (stat)
         {
-            case STAT_STAMINA:  mod = 0.3f; break;                // Default Owner's Stamina scale
-            case STAT_STRENGTH: mod = 0.7f; break;                // Default Owner's Strength scale
-            default: break;
+            case STAT_STAMINA:          // Default Owner's Stamina scale
+                mod = 0.3f;
+                break;
+            case STAT_STRENGTH:         // Default Owner's Strength scale
+                mod = 0.7f;
+                break;
+            default:
+                break;
         }
+
         // Ravenous Dead
         AuraEffect const *aurEff = NULL;
+
         // Check just if owner has Ravenous Dead since it's effect is not an aura
         aurEff = owner->GetAuraEffect(SPELL_AURA_MOD_TOTAL_STAT_PERCENTAGE, SPELLFAMILY_DEATHKNIGHT, 3010, 0);
         if (aurEff)
@@ -1266,10 +1277,18 @@ bool Guardian::UpdateStats(Stats stat)
 
     switch (stat)
     {
-        case STAT_STRENGTH:         UpdateAttackPowerAndDamage();        break;
-        case STAT_AGILITY:          UpdateArmor();                       break;
-        case STAT_STAMINA:          UpdateMaxHealth();                   break;
-        case STAT_INTELLECT:        UpdateMaxPower(POWER_MANA);          break;
+        case STAT_STRENGTH:
+            UpdateAttackPowerAndDamage();
+            break;
+        case STAT_AGILITY:
+            UpdateArmor();
+            break;
+        case STAT_STAMINA:
+            UpdateMaxHealth();
+            break;
+        case STAT_INTELLECT:
+            UpdateMaxPower(POWER_MANA);
+            break;
         case STAT_SPIRIT:
         default:
             break;
@@ -1351,14 +1370,30 @@ void Guardian::UpdateMaxHealth()
     float multiplicator;
     switch (GetEntry())
     {
-        case ENTRY_IMP:         multiplicator = 8.4f;   break;
-        case ENTRY_VOIDWALKER:  multiplicator = 11.0f;  break;
-        case ENTRY_SUCCUBUS:    multiplicator = 9.1f;   break;
-        case ENTRY_FELHUNTER:   multiplicator = 9.5f;   break;
-        case ENTRY_FELGUARD:    multiplicator = 11.0f;  break;
-        case ENTRY_BLOODWORM:   multiplicator = 1.0f;   break;
-        case ENTRY_GHOUL:       multiplicator = 5.7f;   break;
-        default:                multiplicator = 10.0f;  break;
+        case ENTRY_IMP:
+            multiplicator = 8.4f;
+            break;
+        case ENTRY_VOIDWALKER:
+            multiplicator = 11.0f;
+            break;
+        case ENTRY_SUCCUBUS:
+            multiplicator = 9.1f;
+            break;
+        case ENTRY_FELHUNTER:
+            multiplicator = 9.5f;
+            break;
+        case ENTRY_FELGUARD:
+            multiplicator = 11.0f;
+            break;
+        case ENTRY_BLOODWORM:
+            multiplicator = 1.0f;
+            break;
+        case ENTRY_GHOUL:
+            multiplicator = 5.7f;
+            break;
+        default:
+            multiplicator = 10.0f;
+            break;
     }
 
     float value = GetModifierValue(unitMod, BASE_VALUE) + GetCreateHealth();
@@ -1378,12 +1413,18 @@ void Guardian::UpdateMaxPower(Powers power)
 
     switch (GetEntry())
     {
-        case ENTRY_IMP:         multiplicator = 4.95f;  break;
+        case ENTRY_IMP:
+            multiplicator = 4.95f;
+            break;
         case ENTRY_VOIDWALKER:
         case ENTRY_SUCCUBUS:
         case ENTRY_FELHUNTER:
-        case ENTRY_FELGUARD:    multiplicator = 11.5f;  break;
-        default:                multiplicator = 15.0f;  break;
+        case ENTRY_FELGUARD:
+            multiplicator = 11.5f;
+            break;
+        default:
+            multiplicator = 15.0f;
+            break;
     }
 
     float value  = GetModifierValue(unitMod, BASE_VALUE) + GetCreatePowers(power);
