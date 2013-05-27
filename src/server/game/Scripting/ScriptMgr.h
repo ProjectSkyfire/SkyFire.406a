@@ -815,16 +815,17 @@ class GroupScript : public ScriptObject
 #define sScriptMgr ACE_Singleton<ScriptMgr, ACE_Null_Mutex>::instance()
 
 // Manages registration, loading, and execution of scripts.
-class ScriptObject
+class ScriptMgr
 {
-    friend class ScriptMgr;
+	friend class ACE_Singleton<ScriptMgr, ACE_Null_Mutex>;
+	friend class ScriptObject;
 
-    private:
+private:
 
-        ScriptMgr();
-        virtual ~ScriptMgr();
+	ScriptMgr();
+	virtual ~ScriptMgr();
 
-    public: /* Initialization */
+public: /* Initialization */
 
         void Initialize();
         void LoadDatabase();

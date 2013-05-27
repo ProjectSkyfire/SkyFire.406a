@@ -20,12 +20,12 @@
 #ifndef SKYFIRE_DEFINE_H
 #define SKYFIRE_DEFINE_H
 
-#include <sys/types.h>
+#include "CompilerDefs.h"
 
 #include <ace/Basic_Types.h>
 #include <ace/ACE_export.h>
-
-#include "CompilerDefs.h"
+#include <cstddef>
+#include <sys/types.h>
 
 #define SKYFIRE_LITTLEENDIAN 0
 #define SKYFIRE_BIGENDIAN    1

@@ -25,7 +25,7 @@
 #include <ace/SOCK_Stream.h>
 #include <ace/Message_Block.h>
 #include <ace/Basic_Types.h>
-#include "Define.h"
+#include "Common.h"
 
 class RealmSocket : public ACE_Svc_Handler<ACE_SOCK_STREAM, ACE_NULL_SYNCH>
 {

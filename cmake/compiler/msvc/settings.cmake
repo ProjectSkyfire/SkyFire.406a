@@ -67,8 +67,3 @@ endif()
 # (And yes, this is a verified , unresolved bug with MSVC... *sigh*)
 string(REGEX REPLACE "/Zm[0-9]+ *" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm500" CACHE STRING "" FORCE)
-
-# Enable and treat as errors the following warnings to easily detect virtual function signature failures:
-# 'function' : member function does not override any base class virtual member function
-# 'virtual_function' : no override available for virtual member function from base 'class'; function is hidden
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /we4263 /we4264")
