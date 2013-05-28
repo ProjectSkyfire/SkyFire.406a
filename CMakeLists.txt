@@ -30,20 +30,20 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH 1)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/macros")
 
 # build in Release-mode by default if not explicitly set
-if( NOT CMAKE_BUILD_TYPE )
-  set(CMAKE_BUILD_TYPE "Release")
+if ( NOT CMAKE_BUILD_TYPE )
+    set(CMAKE_BUILD_TYPE "Release")
 endif()
 
 include(CheckCXXSourceRuns)
 include(CheckIncludeFiles)
 
-# set default buildoptions and print them
+# set default build-options and print them
 include(cmake/options.cmake)
 
 # turn off PCH totally if enabled (hidden setting, mainly for devs)
-if( NOPCH )
-  set(USE_COREPCH 0)
-  set(USE_SCRIPTPCH 0)
+if ( NOPCH )
+    set(USE_COREPCH 0)
+	set(USE_SCRIPTPCH 0)
 endif()
 
 include(CheckPlatform)
@@ -52,14 +52,20 @@ include(CheckPlatform)
 find_package(PCHSupport)
 find_package(ACE REQUIRED)
 find_package(OpenSSL REQUIRED)
-if( NOT USE_MYSQL_SOURCES )
-  find_package(MySQL REQUIRED)
+find_package(Threads REQUIRED)
+
+if ( NOT USE_MYSQL_SOURCES )
+	find_package(MySQL REQUIRED)
 endif()
 
-if( UNIX )
-  find_package(Readline)
-  find_package(ZLIB)
-  find_package(BZip2)
+if ( UNIX )
+	find_package(Readline)
+	find_package(ZLIB)
+	find_package(BZip2)
+endif()
+
+if ( NOT WITHOUT_GIT )
+	find_package(Git)
 endif()
 
 # Find revision ID and hash of the sourcetree

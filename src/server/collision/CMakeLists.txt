@@ -86,6 +86,10 @@ include_directories(
 
 add_library(collision STATIC ${collision_STAT_SRCS})
 
+target_link_libraries(collision
+  shared
+)
+
 # Generate precompiled header
 if( USE_COREPCH )
   if(CMAKE_COMPILER_IS_GNUCXX)
