@@ -27,7 +27,7 @@ before_install:
 script:
   - mkdir build
   - cd build
-  - cmake .. -DTOOLS=1 
+  - cmake ..
   - make -j16
 
 notifications:
