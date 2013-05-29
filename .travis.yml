@@ -12,11 +12,12 @@
 language: cpp
 
 git:
-  depth: 1
+  depth: 2
 
 branches:
   only:
     - master
+	- testing
 
 compiler:
   - gcc
