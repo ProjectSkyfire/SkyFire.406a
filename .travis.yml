@@ -16,7 +16,7 @@ git:
 
 branches:
   only:
-	- master
+  - master
 
 compiler:
   - gcc
