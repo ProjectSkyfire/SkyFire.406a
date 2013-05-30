@@ -16,7 +16,7 @@ git:
 
 branches:
   only:
-  - testing_trinity
+   - testing_trinity
 
 compiler:
   - gcc
