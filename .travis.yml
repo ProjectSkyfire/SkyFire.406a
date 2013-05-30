@@ -16,7 +16,7 @@ git:
 
 branches:
   only:
-  - master
+  - testing_trinity
 
 compiler:
   - gcc
@@ -30,7 +30,7 @@ before_install:
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DTOOLS=1
   - make -j16
 
 notifications:
