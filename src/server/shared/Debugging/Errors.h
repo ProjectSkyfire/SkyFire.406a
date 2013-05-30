@@ -21,16 +21,18 @@
 #define SKYFIRE_ERRORS_H
 
 #include "Define.h"
+#include "Common.h"
+#include "Log.h"
+
+#include <ace/Stack_Trace.h>
+#include <ace/OS_NS_unistd.h>
 
 namespace SkyFire
 {
-
     DECLSPEC_NORETURN void Assert(char const *file, int line, char const *function, char const *message) ATTR_NORETURN;
-
     DECLSPEC_NORETURN void Fatal(char const *file, int line, char const *function, char const *message) ATTR_NORETURN;
-
     DECLSPEC_NORETURN void Error(char const *file, int line, char const *function, char const *message) ATTR_NORETURN;
-
+	
     void Warning(char const *file, int line, char const *function, char const *message);
 
 } // namespace SkyFire
