@@ -48,7 +48,7 @@ endif()
 
 include(CheckPlatform)
 
-# basic packagesearching and setup (further support will be needed, this is a preliminary release!)
+# basic package searching and setup (further support will be needed, this is a preliminary release!)
 find_package(PCHSupport)
 find_package(ACE REQUIRED)
 find_package(OpenSSL REQUIRED)
