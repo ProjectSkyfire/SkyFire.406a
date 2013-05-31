@@ -23,7 +23,10 @@ compiler:
 
 before_install:
   - sudo apt-get install libace-dev
-
+  - sudo apt-get install libncurses5-dev
+  - sudo apt-get install build-essential autoconf libtool gcc g++ make cmake git-core patch wget links zip unzip unrar
+  - sudo apt-get install openssl libssl-dev mysql-server mysql-client libmysqlclient15-dev libmysql++-dev libreadline6-dev zlib1g-dev libbz2-dev
+  
 script:
   - mkdir build
   - cd build

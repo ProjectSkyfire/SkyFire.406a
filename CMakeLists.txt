@@ -41,10 +41,7 @@ include(CheckIncludeFiles)
 include(cmake/options.cmake)
 
 # turn off PCH totally if enabled (hidden setting, mainly for devs)
-if ( NOPCH )
-	set(USE_COREPCH 0)
-	set(USE_SCRIPTPCH 0)
-endif()
+  set(USE_SCRIPTPCH 0)endif()
 
 include(CheckPlatform)
 
@@ -53,9 +50,8 @@ find_package(PCHSupport)
 find_package(ACE REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Threads REQUIRED)
-
 if ( NOT USE_MYSQL_SOURCES )
-	find_package(MySQL REQUIRED)
+    find_package(MySQL REQUIRED)
 endif()
 
 if ( UNIX )
