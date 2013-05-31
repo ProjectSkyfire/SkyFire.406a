@@ -20911,7 +20911,7 @@ void Player::PetSpellInitialize()
     data << uint32(0);
     data << uint8(pet->GetReactState()) << uint8(charmInfo->GetCommandState()) << uint16(0);
 
-    // action bar loop
+    // Action bar loop
     if (getLevel() >= sWorld->getIntConfig(CONFIG_START_PETBAR_LEVEL))
     {
         if (getClass() == CLASS_HUNTER && !HasSpell (SPELL_CONTROL_PET) || (getClass() == CLASS_WARLOCK && !HasSpell (SPELL_CONTROL_DEMON)))
@@ -20919,13 +20919,13 @@ void Player::PetSpellInitialize()
 
         size_t spellsCountPos = data.wpos();
 
-        // spells count
+        // Spells count
         uint8 addlist = 0;
-        data << uint8(addlist);                                 // placeholder
+        data << uint8(addlist);                // Placeholder
 
         if (pet->IsPermanentPetFor(this))
         {
-            // spells loop
+            // Spells loop
             for (PetSpellMap::iterator itr = pet->_spells.begin(); itr != pet->_spells.end(); ++itr)
             {
                 if (itr->second.state == PETSPELL_REMOVED)
@@ -20947,20 +20947,20 @@ void Player::PetSpellInitialize()
         {
             time_t cooldown = (itr->second > curTime) ? (itr->second - curTime) * IN_MILLISECONDS : 0;
 
-            data << uint32(itr->first);                         // spellid
-            data << uint16(0);                                  // spell category?
-            data << uint32(cooldown);                           // cooldown
-            data << uint32(0);                                  // category cooldown
+            data << uint32(itr->first);                         // Spellid
+            data << uint16(0);                                  // Spell category?
+            data << uint32(cooldown);                           // Cooldown
+            data << uint32(0);                                  // Category cooldown
         }
 
         for (CreatureSpellCooldowns::const_iterator itr = pet->_CreatureCategoryCooldowns.begin(); itr != pet->_CreatureCategoryCooldowns.end(); ++itr)
         {
             time_t cooldown = (itr->second > curTime) ? (itr->second - curTime) * IN_MILLISECONDS : 0;
 
-            data << uint32(itr->first);                         // spellid
-            data << uint16(0);                                  // spell category?
-            data << uint32(0);                                  // cooldown
-            data << uint32(cooldown);                           // category cooldown
+            data << uint32(itr->first);                         // Spellid
+            data << uint16(0);                                  // Spell category?
+            data << uint32(0);                                  // Cooldown
+            data << uint32(cooldown);                           // Category cooldown
         }
 
         GetSession()->SendPacket(&data);
