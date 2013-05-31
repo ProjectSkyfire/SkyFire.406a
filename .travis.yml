@@ -16,11 +16,10 @@ git:
 
 branches:
   only:
-    - test
+    - master
 
 compiler:
-#  - gcc
-  - clang
+  - gcc
 
 before_install:
   - sudo apt-get install libace-dev
