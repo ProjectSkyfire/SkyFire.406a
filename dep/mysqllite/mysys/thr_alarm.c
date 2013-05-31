@@ -432,7 +432,7 @@ void end_thr_alarm(my_bool free_structures)
   if (alarm_aborted != 1)			/* If memory not freed */
   {
     mysql_mutex_lock(&LOCK_alarm);
-    DBUG_PRINT("info",("Resheduling %d waiting alarms",alarm_queue.elements));
+    DBUG_PRINT("info",("Rescheduling %d waiting alarms",alarm_queue.elements));
     alarm_aborted= -1;				/* mark aborted */
     if (alarm_queue.elements || (alarm_thread_running && free_structures))
     {
@@ -623,18 +623,18 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm)
 
 my_bool thr_got_alarm(thr_alarm_t *alrm_ptr)
 {
-  thr_alarm_t alrm= *alrm_ptr;
-  MSG msg;
-  if (alrm->crono)
-  {
-    PeekMessage(&msg,NULL,WM_TIMER,WM_TIMER,PM_REMOVE) ;
-    if (msg.message == WM_TIMER || alarm_aborted)
-    {
-      KillTimer(NULL, alrm->crono);
-      alrm->crono = 0;
-    }
-  }
-  return !alrm->crono || alarm_aborted;
+	thr_alarm_t alrm= *alrm_ptr;
+	MSG msg;
+	if (alrm->crono)
+	{
+		PeekMessage(&msg,NULL,WM_TIMER,WM_TIMER,PM_REMOVE) ;
+		if (msg.message == WM_TIMER || alarm_aborted)
+		{
+			KillTimer(NULL, alrm->crono);
+			alrm->crono = 0;
+		}
+	}
+	return !alrm->crono || alarm_aborted;
 }
 
 void thr_end_alarm(thr_alarm_t *alrm_ptr)

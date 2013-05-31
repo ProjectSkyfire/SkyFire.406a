@@ -967,8 +967,8 @@ void World::LoadConfigSettings(bool reload)
     }
     if (reload)
     {
-        m_timers[WUPDATE_UPTIME].SetInterval(m_int_configs[CONFIG_UPTIME_UPDATE]*MINUTE*IN_MILLISECONDS);
-        m_timers[WUPDATE_UPTIME].Reset();
+        _timers[WUPDATE_UPTIME].SetInterval(m_int_configs[CONFIG_UPTIME_UPDATE]*MINUTE*IN_MILLISECONDS);
+        _timers[WUPDATE_UPTIME].Reset();
     }
 
     // log db cleanup interval
@@ -980,8 +980,8 @@ void World::LoadConfigSettings(bool reload)
     }
     if (reload)
     {
-        m_timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL] * MINUTE * IN_MILLISECONDS);
-        m_timers[WUPDATE_CLEANDB].Reset();
+        _timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL] * MINUTE * IN_MILLISECONDS);
+        _timers[WUPDATE_CLEANDB].Reset();
     }
     m_int_configs[CONFIG_LOGDB_CLEARTIME] = ConfigMgr::GetIntDefault("LogDB.Opt.ClearTime", 1209600); // 14 days default
     sLog->outString("Will clear `logs` table of entries older than %i seconds every %u minutes.",
@@ -1795,26 +1795,26 @@ void World::SetInitialWorldSettings()
     LoginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, startstring, uptime, revision) VALUES('%u', " UI64FMTD ", '%s', 0, '%s')",
         realmID, uint64(m_startTime), isoDate, _FULLVERSION);       // One-time query
 
-    m_timers[WUPDATE_WEATHERS].SetInterval(1*IN_MILLISECONDS);
-    m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE*IN_MILLISECONDS);
-    m_timers[WUPDATE_UPTIME].SetInterval(m_int_configs[CONFIG_UPTIME_UPDATE]*MINUTE*IN_MILLISECONDS);
+    _timers[WUPDATE_WEATHERS].SetInterval(1*IN_MILLISECONDS);
+    _timers[WUPDATE_AUCTIONS].SetInterval(MINUTE*IN_MILLISECONDS);
+    _timers[WUPDATE_UPTIME].SetInterval(m_int_configs[CONFIG_UPTIME_UPDATE]*MINUTE*IN_MILLISECONDS);
                                                             //Update "uptime" table based on configuration entry in minutes.
-    m_timers[WUPDATE_CORPSES].SetInterval(20 * MINUTE * IN_MILLISECONDS);
+    _timers[WUPDATE_CORPSES].SetInterval(20 * MINUTE * IN_MILLISECONDS);
                                                             //erase corpses every 20 minutes
-    m_timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]*MINUTE*IN_MILLISECONDS);
+    _timers[WUPDATE_CLEANDB].SetInterval(m_int_configs[CONFIG_LOGDB_CLEARINTERVAL]*MINUTE*IN_MILLISECONDS);
                                                             // clean logs table every 14 days by default
-    m_timers[WUPDATE_AUTOBROADCAST].SetInterval(getIntConfig(CONFIG_AUTOBROADCAST_INTERVAL));
-    m_timers[WUPDATE_DELETECHARS].SetInterval(DAY*IN_MILLISECONDS); // check for chars to delete every day
+    _timers[WUPDATE_AUTOBROADCAST].SetInterval(getIntConfig(CONFIG_AUTOBROADCAST_INTERVAL));
+    _timers[WUPDATE_DELETECHARS].SetInterval(DAY*IN_MILLISECONDS); // check for chars to delete every day
 
-    m_timers[WUPDATE_PINGDB].SetInterval(getIntConfig(CONFIG_DB_PING_INTERVAL)*MINUTE*IN_MILLISECONDS);    // Mysql ping time in minutes
+    _timers[WUPDATE_PINGDB].SetInterval(getIntConfig(CONFIG_DB_PING_INTERVAL)*MINUTE*IN_MILLISECONDS);    // Mysql ping time in minutes
 
     //to set mailtimer to return mails every day between 4 and 5 am
     //mailtimer is increased when updating auctions
     //one second is 1000 -(tested on win system)
     //TODO: Get rid of magic numbers
-    mail_timer = ((((localtime(&m_gameTime)->tm_hour + 20) % 24)* HOUR * IN_MILLISECONDS) / m_timers[WUPDATE_AUCTIONS].GetInterval());
+    mail_timer = ((((localtime(&m_gameTime)->tm_hour + 20) % 24)* HOUR * IN_MILLISECONDS) / _timers[WUPDATE_AUCTIONS].GetInterval());
                                                             //1440
-    mail_timer_expires = ((DAY * IN_MILLISECONDS) / (m_timers[WUPDATE_AUCTIONS].GetInterval()));
+    mail_timer_expires = ((DAY * IN_MILLISECONDS) / (_timers[WUPDATE_AUCTIONS].GetInterval()));
     sLog->outDetail("Mail timer set to: " UI64FMTD ", mail return is called every " UI64FMTD " minutes", uint64(mail_timer), uint64(mail_timer_expires));
 
     ///- Initialize static helper structures
@@ -1827,7 +1827,7 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Starting Game Event system...");
     uint32 nextGameEvent = sGameEventMgr->StartSystem();
-    m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);    //depend on next event
+    _timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);    //depend on next event
 
     // Delete all characters which have been deleted X days before
     Player::DeleteOldCharacters();
@@ -2028,10 +2028,10 @@ void World::Update(uint32 diff)
     ///- Update the different timers
     for (int i = 0; i < WUPDATE_COUNT; ++i)
     {
-        if (m_timers[i].GetCurrent() >= 0)
-            m_timers[i].Update(diff);
+        if (_timers[i].GetCurrent() >= 0)
+            _timers[i].Update(diff);
         else
-            m_timers[i].SetCurrent(0);
+            _timers[i].SetCurrent(0);
     }
 
     ///- Update the game time and check for shutdown time
@@ -2054,9 +2054,9 @@ void World::Update(uint32 diff)
         ResetGuildCap();
 
     /// <ul><li> Handle auctions when the timer has passed
-    if (m_timers[WUPDATE_AUCTIONS].Passed())
+    if (_timers[WUPDATE_AUCTIONS].Passed())
     {
-        m_timers[WUPDATE_AUCTIONS].Reset();
+        _timers[WUPDATE_AUCTIONS].Reset();
 
         ///- Update mails (return old mails with item, or delete them)
         //(tested... works on win)
@@ -2076,19 +2076,19 @@ void World::Update(uint32 diff)
     RecordTimeDiff("UpdateSessions");
 
     /// <li> Handle weather updates when the timer has passed
-    if (m_timers[WUPDATE_WEATHERS].Passed())
+    if (_timers[WUPDATE_WEATHERS].Passed())
     {
-        m_timers[WUPDATE_WEATHERS].Reset();
-        WeatherMgr::Update(uint32(m_timers[WUPDATE_WEATHERS].GetInterval()));
+        _timers[WUPDATE_WEATHERS].Reset();
+        WeatherMgr::Update(uint32(_timers[WUPDATE_WEATHERS].GetInterval()));
     }
 
     /// <li> Update uptime table
-    if (m_timers[WUPDATE_UPTIME].Passed())
+    if (_timers[WUPDATE_UPTIME].Passed())
     {
         uint32 tmpDiff = uint32(m_gameTime - m_startTime);
         uint32 maxOnlinePlayers = GetMaxPlayerCount();
 
-        m_timers[WUPDATE_UPTIME].Reset();
+        _timers[WUPDATE_UPTIME].Reset();
 
         PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPDATE_UPTIME_PLAYERS);
 
@@ -2103,9 +2103,9 @@ void World::Update(uint32 diff)
     /// <li> Clean logs table
     if (sWorld->getIntConfig(CONFIG_LOGDB_CLEARTIME) > 0) // if not enabled, ignore the timer
     {
-        if (m_timers[WUPDATE_CLEANDB].Passed())
+        if (_timers[WUPDATE_CLEANDB].Passed())
         {
-            m_timers[WUPDATE_CLEANDB].Reset();
+            _timers[WUPDATE_CLEANDB].Reset();
 
             PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_LOGS);
 
@@ -2124,9 +2124,9 @@ void World::Update(uint32 diff)
 
     if (sWorld->getBoolConfig(CONFIG_AUTOBROADCAST))
     {
-        if (m_timers[WUPDATE_AUTOBROADCAST].Passed())
+        if (_timers[WUPDATE_AUTOBROADCAST].Passed())
         {
-            m_timers[WUPDATE_AUTOBROADCAST].Reset();
+            _timers[WUPDATE_AUTOBROADCAST].Reset();
             SendAutoBroadcast();
         }
     }
@@ -2141,9 +2141,9 @@ void World::Update(uint32 diff)
     RecordTimeDiff("BattlefieldMgr");
 
     ///- Delete all characters which have been deleted X days before
-    if (m_timers[WUPDATE_DELETECHARS].Passed())
+    if (_timers[WUPDATE_DELETECHARS].Passed())
     {
-        m_timers[WUPDATE_DELETECHARS].Reset();
+        _timers[WUPDATE_DELETECHARS].Reset();
         Player::DeleteOldCharacters();
     }
 
@@ -2155,25 +2155,25 @@ void World::Update(uint32 diff)
     RecordTimeDiff("ProcessQueryCallbacks");
 
     ///- Erase corpses once every 20 minutes
-    if (m_timers[WUPDATE_CORPSES].Passed())
+    if (_timers[WUPDATE_CORPSES].Passed())
     {
-        m_timers[WUPDATE_CORPSES].Reset();
+        _timers[WUPDATE_CORPSES].Reset();
         sObjectAccessor->RemoveOldCorpses();
     }
 
     ///- Process Game events when necessary
-    if (m_timers[WUPDATE_EVENTS].Passed())
+    if (_timers[WUPDATE_EVENTS].Passed())
     {
-        m_timers[WUPDATE_EVENTS].Reset();                   // to give time for Update() to be processed
+        _timers[WUPDATE_EVENTS].Reset();                   // to give time for Update() to be processed
         uint32 nextGameEvent = sGameEventMgr->Update();
-        m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);
-        m_timers[WUPDATE_EVENTS].Reset();
+        _timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);
+        _timers[WUPDATE_EVENTS].Reset();
     }
 
     ///- Ping to keep MySQL connections alive
-    if (m_timers[WUPDATE_PINGDB].Passed())
+    if (_timers[WUPDATE_PINGDB].Passed())
     {
-        m_timers[WUPDATE_PINGDB].Reset();
+        _timers[WUPDATE_PINGDB].Reset();
         sLog->outDetail("Ping MySQL to keep connection alive");
         CharacterDatabase.KeepAlive();
         LoginDatabase.KeepAlive();
@@ -2191,10 +2191,10 @@ void World::Update(uint32 diff)
 
 void World::ForceGameEventUpdate()
 {
-    m_timers[WUPDATE_EVENTS].Reset();                   // to give time for Update() to be processed
+    _timers[WUPDATE_EVENTS].Reset();                   // to give time for Update() to be processed
     uint32 nextGameEvent = sGameEventMgr->Update();
-    m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);
-    m_timers[WUPDATE_EVENTS].Reset();
+    _timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);
+    _timers[WUPDATE_EVENTS].Reset();
 }
 
 /// Send a packet to all players (except self if mentioned)

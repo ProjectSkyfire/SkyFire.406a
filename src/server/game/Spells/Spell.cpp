@@ -3558,8 +3558,8 @@ void Spell::update(uint32 difftime)
                     return;
                 }
 
-                if (difftime >= (uint32)m_timer)
-                    m_timer = 0;
+                if (difftime >= (uint32)_timer)
+                    _timer = 0;
                 else
                     _timer -= difftime;
             }
