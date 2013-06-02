@@ -21,9 +21,6 @@ include_directories(
   ${ACE_INCLUDE_DIR}
   ${MYSQL_INCLUDE_DIR}
   ${CMAKE_SOURCE_DIR}/dep/libmpq
-  ${CMAKE_SOURCE_DIR}/dep/zlib
-  ${CMAKE_SOURCE_DIR}/dep/bzip2
-  ${CMAKE_SOURCE_DIR}/dep/acelite
   ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
