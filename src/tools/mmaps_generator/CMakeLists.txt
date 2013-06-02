@@ -17,11 +17,13 @@ add_definitions(-DDEBUG)
 add_definitions(-DNO_vsnprintf)
 
 include_directories(
+  ${CMAKE_BINARY_DIR}
+  ${ACE_INCLUDE_DIR}
+  ${MYSQL_INCLUDE_DIR}
   ${CMAKE_SOURCE_DIR}/dep/libmpq
   ${CMAKE_SOURCE_DIR}/dep/zlib
   ${CMAKE_SOURCE_DIR}/dep/bzip2
-  ${CMAKE_SOURCE_DIR}/dep/acelite/ace
-  ${CMAKE_SOURCE_DIR}/dep/acelite/ace/os_include
+  ${CMAKE_SOURCE_DIR}/dep/acelite
   ${CMAKE_SOURCE_DIR}/dep/g3dlite/include
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Recast
   ${CMAKE_SOURCE_DIR}/dep/recastlite/Detour
@@ -44,9 +46,6 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/src/server/collision/Management
   ${CMAKE_SOURCE_DIR}/src/server/collision/Maps
   ${CMAKE_SOURCE_DIR}/src/server/collision/Models
-  ${CMAKE_BINARY_DIR}
-  ${ACE_INCLUDE_DIR}
-  ${MYSQL_INCLUDE_DIR}  
 )
 
 add_executable(mmaps_generator ${sources})

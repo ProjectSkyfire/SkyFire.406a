@@ -52,8 +52,6 @@ endif()
 
 include_directories(
 	${CMAKE_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}/dep/acelite/ace
-    ${CMAKE_SOURCE_DIR}/dep/acelite/ace/os_include   
 	${CMAKE_SOURCE_DIR}/dep/g3dlite/include  
 	${CMAKE_SOURCE_DIR}/dep/gsoap
 	${CMAKE_SOURCE_DIR}/dep/sockets/include

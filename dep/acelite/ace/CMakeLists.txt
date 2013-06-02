@@ -327,12 +327,9 @@ set(ace_STAT_SRCS
 
 include_directories(
   ${CMAKE_SOURCE_DIR}/dep/acelite
-  ${CMAKE_CURRENT_SOURCE_DIR}/dep/acelite/ace/os_include 
   ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders
   ${CMAKE_SOURCE_DIR}/dep/zlib
 )
-
-#aux_source_directory(/dep/acelite/ace /dep/acelite/ace_templates)
 
 # Needed for PCH support
 set_source_files_properties(Atomic_Op_Sparc.c Rtems_init.c PROPERTIES LANGUAGE CXX)
