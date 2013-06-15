@@ -268,14 +268,14 @@ int WorldSocket::open (void *a)
 
     m_Address = remote_addr.get_host_addr();
 
-    // Send startup packet.
-    WorldPacket packet (SMSG_AUTH_CHALLENGE, 37);
+    // Send start-up packet.
+    WorldPacket packet (SMSG_AUTH_CHALLENGE, 37);		    // 0x24 bytes?
 
     BigNumber seed1;
     seed1.SetRand(16 * 8);
     packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
 
-    packet << uint8(1);
+    packet << uint8(1);                                     // 1...31
     packet << uint32(m_Seed);
 
     BigNumber seed2;
@@ -749,7 +749,7 @@ int WorldSocket::ProcessIncoming (WorldPacket* new_pct)
     }
     catch (ByteBufferException &)
     {
-        sLog->outError("WorldSocket::ProcessIncoming ByteBufferException occured while parsing an instant handled packet (opcode: %u) from client %s, accountid=%i. Disconnected client.",
+        sLog->outError("WorldSocket::ProcessIncoming ByteBufferException occurred while parsing an instant handled packet (opcode: %u) from client %s, accountid=%i. Disconnected client.",
                 opcode, GetRemoteAddress().c_str(), m_Session?m_Session->GetAccountId():-1);
         if (sLog->IsOutDebug())
         {
@@ -779,22 +779,35 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     BigNumber v, s, g, N, k;
     WorldPacket packet;
 
-    recvPacket.read(digest, 7);
+    recvPacket >> digest[14];
+    recvPacket >> digest[7];
+    recvPacket >> digest[16];
+    recvPacket >> digest[9];
+    recvPacket >> digest[4];
+    recvPacket >> digest[5];
+    recvPacket >> digest[15];
     recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 1);
+    recvPacket >> digest[18];
     recvPacket.read_skip<uint64>();
     recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 1);
+    recvPacket >> digest[13];
     recvPacket.read_skip<uint8>();
-    recvPacket.read(digest, 2);
+    recvPacket >> digest[10];
+    recvPacket >> digest[6];
     recvPacket >> clientSeed;
     recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 6);
+    recvPacket >> digest[19];
+    recvPacket >> digest[11];
+    recvPacket >> digest[17];
+    recvPacket >> digest[8];
+    recvPacket >> digest[12];
+    recvPacket >> digest[0];
     recvPacket >> clientBuild;
-    recvPacket.read(digest, 1);
+    recvPacket >> digest[3];
     recvPacket.read_skip<uint8>();
     recvPacket.read_skip<uint32>();
-    recvPacket.read(digest, 2);
+    recvPacket >> digest[1];
+    recvPacket >> digest[2];
 
     recvPacket >> m_addonSize;
     uint8 * tableauAddon = new uint8[m_addonSize];
