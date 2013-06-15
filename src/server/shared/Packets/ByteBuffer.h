@@ -27,10 +27,8 @@
 class ByteBufferException
 {
     public:
-        ByteBufferException(size_t pos, size_t size, size_t valueSize)
-            : Pos(pos), Size(size), ValueSize(valueSize)
-        {
-        }
+        ByteBufferException(size_t pos, size_t size, size_t valueSize) : Pos(pos), Size(size), ValueSize(valueSize)
+        { }
 
     protected:
         size_t Pos;
@@ -41,8 +39,7 @@ class ByteBufferException
 class ByteBufferPositionException : public ByteBufferException
 {
     public:
-        ByteBufferPositionException(bool add, size_t pos, size_t size, size_t valueSize)
-        : ByteBufferException(pos, size, valueSize), _add(add)
+        ByteBufferPositionException(bool add, size_t pos, size_t size, size_t valueSize) : ByteBufferException(pos, size, valueSize), _add(add)
         {
             PrintError();
         }
@@ -61,8 +58,7 @@ class ByteBufferPositionException : public ByteBufferException
 class ByteBufferSourceException : public ByteBufferException
 {
     public:
-        ByteBufferSourceException(size_t pos, size_t size, size_t valueSize)
-        : ByteBufferException(pos, size, valueSize)
+        ByteBufferSourceException(size_t pos, size_t size, size_t valueSize) : ByteBufferException(pos, size, valueSize)
         {
             PrintError();
         }
@@ -70,8 +66,7 @@ class ByteBufferSourceException : public ByteBufferException
     protected:
         void PrintError() const
         {
-            sLog->outError("Attempted to put a %s in ByteBuffer (pos: "SIZEFMTD" size: "SIZEFMTD")",
-                (ValueSize > 0 ? "NULL-pointer" : "zero-sized value"), Pos, Size);
+            sLog->outError("Attempted to put a %s in ByteBuffer (pos: "SIZEFMTD" size: "SIZEFMTD")", (ValueSize > 0 ? "NULL-pointer" : "zero-sized value"), Pos, Size);
         }
 };
 
@@ -81,19 +76,19 @@ class ByteBuffer
         const static size_t DEFAULT_SIZE = 0x1000;
 
         // constructor
-        ByteBuffer(): _rpos(0), _wpos(0)
+        ByteBuffer(): _rpos(0), _wpos(0), _bitpos(8), _curbitval(0)
         {
             _storage.reserve(DEFAULT_SIZE);
         }
 
         // constructor
-        ByteBuffer(size_t res): _rpos(0), _wpos(0)
+        ByteBuffer(size_t res): _rpos(0), _wpos(0), _bitpos(8), _curbitval(0)
         {
             _storage.reserve(res);
         }
 
         // copy constructor
-        ByteBuffer(const ByteBuffer &buf): _rpos(buf._rpos), _wpos(buf._wpos), _storage(buf._storage) { }
+        ByteBuffer(const ByteBuffer &buf): _rpos(buf._rpos), _wpos(buf._wpos), _bitpos(buf._bitpos), _curbitval(buf._curbitval), _storage(buf._storage) { }
 
         void clear()
         {
@@ -105,6 +100,60 @@ class ByteBuffer
         {
             EndianConvert(value);
             append((uint8 *)&value, sizeof(value));
+        }
+
+        void FlushBits()
+        {
+            if (_bitpos == 8)
+                return;
+
+            append((uint8 *)&_curbitval, sizeof(uint8));
+            _curbitval = 0;
+            _bitpos = 8;
+        }
+
+        bool WriteBit(uint32 bit)
+        {
+            --_bitpos;
+            if (bit)
+                _curbitval |= (1 << (_bitpos));
+
+            if (_bitpos == 0)
+            {
+                _bitpos = 8;
+                append((uint8 *)&_curbitval, sizeof(_curbitval));
+                _curbitval = 0;
+            }
+
+            return (bit != 0);
+        }
+
+        bool ReadBit()
+        {
+            ++_bitpos;
+            if (_bitpos > 7)
+            {
+                _bitpos = 0;
+                _curbitval = read<uint8>();
+            }
+
+            return ((_curbitval >> (7-_bitpos)) & 1) != 0;
+        }
+
+        template <typename T> void WriteBits(T value, size_t bits)
+        {
+            for (int32 i = bits-1; i >= 0; --i)
+                WriteBit((value >> i) & 1);
+        }
+
+        uint32 ReadBits(size_t bits)
+        {
+            uint32 value = 0;
+            for (int32 i = bits-1; i >= 0; --i)
+                if (ReadBit())
+                    value |= (1 << (i));
+
+            return value;
         }
 
         template <typename T> void put(size_t pos, T value)
@@ -137,7 +186,7 @@ class ByteBuffer
             return *this;
         }
 
-        // signed as in 2e complement
+        // Signed as in 2e complement
         ByteBuffer &operator<<(int8 value)
         {
             append<int8>(value);
@@ -261,7 +310,7 @@ class ByteBuffer
         ByteBuffer &operator>>(std::string& value)
         {
             value.clear();
-            while (rpos() < size())                         // prevent crash at wrong string format in packet
+            while (rpos() < size())                         // Prevent crash at wrong string format in packet
             {
                 char c = read<char>();
                 if (c == 0)
@@ -523,7 +572,8 @@ class ByteBuffer
         }
 
     protected:
-        size_t _rpos, _wpos;
+        size_t _rpos, _wpos, _bitpos;
+        uint8 _curbitval;
         std::vector<uint8> _storage;
 };
 
