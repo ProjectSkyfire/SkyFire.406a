@@ -169,8 +169,18 @@ void PathFinderMovementGenerator::BuildPolyPath(const Vector3 &startPos, const V
     {
         sLog->outDebug(LOG_FILTER_MAPS, "++ BuildPolyPath :: (startPoly == 0 || endPoly == 0)\n");
         BuildShortcut();
-        m_type = (m_sourceUnit->GetTypeId() == TYPEID_UNIT && ((Creature*)m_sourceUnit)->canFly())
-            ? PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH) : PATHFIND_NOPATH;
+
+        // Check for swimming or flying shortcut
+        if (m_sourceUnit->GetTypeId() == TYPEID_UNIT)
+        {
+            if ((startPoly == INVALID_POLYREF && m_sourceUnit->GetBaseMap()->IsUnderWater(startPos.x, startPos.y, startPos.z)) || (endPoly == INVALID_POLYREF && m_sourceUnit->GetBaseMap()->IsUnderWater(endPos.x, endPos.y, endPos.z)))
+                m_type = ((Creature*)m_sourceUnit)->canSwim() ? PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH) : PATHFIND_NOPATH;
+            else
+                m_type = ((Creature*)m_sourceUnit)->canFly() ? PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH) : PATHFIND_NOPATH;
+        }
+        else
+            m_type = PATHFIND_NOPATH;
+
         return;
     }
 
@@ -537,7 +547,7 @@ bool PathFinderMovementGenerator::HaveTile(const Vector3 &p) const
     m_navMesh->calcTileLoc(point, &tx, &ty);
 
     // This is a hacky workaround to prevent crashes from trying to get
-    // tiles at overflowed position coordinates, the magic has to be done on the 
+    // tiles at overflowed position coordinates, the magic has to be done on the
     // calcTileLoc up there
     if (tx == -HUGE_VAL || ty == -HUGE_VAL)
         return false;

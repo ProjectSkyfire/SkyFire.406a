@@ -469,7 +469,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
         bool isGuard() const { return GetCreatureTemplate()->flags_extra & CREATURE_FLAG_EXTRA_GUARD; }
         bool canWalk() const { return GetCreatureTemplate()->InhabitType & INHABIT_GROUND; }
         bool canSwim() const { return GetCreatureTemplate()->InhabitType & INHABIT_WATER; }
-        //bool canFly()  const { return GetCreatureTemplate()->InhabitType & INHABIT_AIR; }
+        bool canFly()  const { return GetCreatureTemplate()->InhabitType & INHABIT_AIR; }
 
         void SetReactState(ReactStates st) { _reactState = st; }
         ReactStates GetReactState() { return _reactState; }
