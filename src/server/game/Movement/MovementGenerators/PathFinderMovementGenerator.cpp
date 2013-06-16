@@ -177,7 +177,7 @@ void PathFinderMovementGenerator::BuildPolyPath(const Vector3 &startPos, const V
                 m_type = ((Creature*)m_sourceUnit)->canSwim() ? PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH) : PATHFIND_NOPATH;
             else
                 m_type = ((Creature*)m_sourceUnit)->canFly() ? PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH) : PATHFIND_NOPATH;
-		}
+        }
         else
             m_type = PATHFIND_NOPATH;
 
