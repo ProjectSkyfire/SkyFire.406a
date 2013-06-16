@@ -125,14 +125,9 @@ class PathFinderMovementGenerator
         void updateFilter();
 
         // smooth path aux functions
-        uint32 fixupCorridor(dtPolyRef* path, uint32 npath, uint32 maxPath,
-                             const dtPolyRef* visited, uint32 nvisited);
-        bool getSteerTarget(const float* startPos, const float* endPos, float minTargetDist,
-                            const dtPolyRef* path, uint32 pathSize, float* steerPos,
-                            unsigned char& steerPosFlag, dtPolyRef& steerPosRef);
-        dtStatus findSmoothPath(const float* startPos, const float* endPos,
-                              const dtPolyRef* polyPath, uint32 polyPathSize,
-                              float* smoothPath, int* smoothPathSize, uint32 smoothPathMaxSize);
+        uint32 fixupCorridor(dtPolyRef* path, uint32 npath, uint32 maxPath, const dtPolyRef* visited, uint32 nvisited);
+        bool getSteerTarget(const float* startPos, const float* endPos, float minTargetDist, const dtPolyRef* path, uint32 pathSize, float* steerPos, unsigned char& steerPosFlag, dtPolyRef& steerPosRef);
+        dtStatus findSmoothPath(const float* startPos, const float* endPos, const dtPolyRef* polyPath, uint32 polyPathSize, float* smoothPath, int* smoothPathSize, uint32 smoothPathMaxSize);
 };
 
 #endif

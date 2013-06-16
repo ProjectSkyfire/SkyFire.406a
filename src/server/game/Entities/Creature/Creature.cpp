@@ -335,7 +335,7 @@ bool Creature::InitEntry(uint32 Entry, uint32 /*team*/, const CreatureData* data
     SetSpeed(MOVE_FLIGHT, 1.0f);    // using 1.0 rate
 
     SetFloatValue(OBJECT_FIELD_SCALE_X, cinfo->scale);
-    SetLevitate(canFly());
+    SetLevitate(cinfo->InhabitType & INHABIT_AIR);
 
     // checked at loading
     _defaultMovementType = MovementGeneratorType(cinfo->MovementType);
