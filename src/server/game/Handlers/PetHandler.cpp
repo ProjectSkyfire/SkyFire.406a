@@ -61,9 +61,14 @@ void WorldSession::HandlePetAction(WorldPacket& recvData)
     uint64 guid1;
     uint32 data;
     uint64 guid2;
+    float x, y, z;
     recvData >> guid1;                                     //pet guid
     recvData >> data;
     recvData >> guid2;                                     //tag guid
+    // Position
+    recvData >> x;
+    recvData >> y;
+    recvData >> z;
 
     uint32 spellid = UNIT_ACTION_BUTTON_ACTION(data);
     uint8 flag = UNIT_ACTION_BUTTON_TYPE(data);             //delete = 0x07 CastSpell = C1
@@ -109,7 +114,7 @@ void WorldSession::HandlePetAction(WorldPacket& recvData)
         return;
 
     if (GetPlayer()->m_Controlled.size() == 1)
-        HandlePetActionHelper(pet, guid1, spellid, flag, guid2);
+        HandlePetActionHelper(pet, guid1, spellid, flag, guid2, x, y, z);
     else
     {
         //If a pet is dismissed, m_Controlled will change
@@ -118,7 +123,7 @@ void WorldSession::HandlePetAction(WorldPacket& recvData)
             if ((*itr)->GetEntry() == pet->GetEntry() && (*itr)->isAlive())
                 controlled.push_back(*itr);
         for (std::vector<Unit*>::iterator itr = controlled.begin(); itr != controlled.end(); ++itr)
-            HandlePetActionHelper(*itr, guid1, spellid, flag, guid2);
+            HandlePetActionHelper(*itr, guid1, spellid, flag, guid2, x, y, z);
     }
 
     if (pet->GetTypeId() != TYPEID_PLAYER && flag == ACT_COMMAND && spellid == COMMAND_MOVE)
@@ -152,7 +157,7 @@ void WorldSession::HandlePetStopAttack(WorldPacket &recvData)
     pet->AttackStop();
 }
 
-void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid, uint16 flag, uint64 guid2)
+void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid, uint16 flag, uint64 guid2, float x, float y, float z)
 {
     CharmInfo* charmInfo = pet->GetCharmInfo();
     if (!charmInfo)
@@ -280,13 +285,12 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
                     }
                     break;
                 case COMMAND_MOVE:
-                    pet->AttackStop();
-                    pet->InterruptNonMeleeSpells(false);
+                    pet->StopMoving();
                     pet->GetMotionMaster()->Clear(false);
-                    pet->GetMotionMaster()->MoveIdle();
+                    pet->GetMotionMaster()->MovePoint(0, x, y, z);
                     charmInfo->SetCommandState(COMMAND_MOVE);
 
-                    charmInfo->SetIsCommandAttack(true);
+                    charmInfo->SetIsCommandAttack(false);
                     charmInfo->SetIsAtStay(true);
                     charmInfo->SetIsFollowing(false);
                     charmInfo->SetIsReturning(false);
