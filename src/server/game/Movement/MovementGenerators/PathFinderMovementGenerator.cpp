@@ -53,7 +53,8 @@ PathFinderMovementGenerator::~PathFinderMovementGenerator()
 
 bool PathFinderMovementGenerator::calculate(float destX, float destY, float destZ, bool forceDest)
 {
-    if (!SkyFire::IsValidMapCoord(destX, destY, destZ) || !SkyFire::IsValidMapCoord(m_sourceUnit->GetPositionX(), m_sourceUnit->GetPositionY(), m_sourceUnit->GetPositionZ()))
+    if (!SkyFire::IsValidMapCoord(destX, destY, destZ) ||
+        !SkyFire::IsValidMapCoord(m_sourceUnit->GetPositionX(), m_sourceUnit->GetPositionY(), m_sourceUnit->GetPositionZ()))
         return false;
 
     Vector3 oldDest = getEndPosition();
