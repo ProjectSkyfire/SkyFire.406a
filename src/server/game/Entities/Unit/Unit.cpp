@@ -3108,7 +3108,7 @@ bool Unit::CanCastWhileWalking(uint32 spell_id)
 {
     SpellInfo const* spell = sSpellMgr->GetSpellInfo(spell_id);
 
-    if (!spell)
+    if (!spell || spell->ID == 75)
         return false;
 
     bool ret = false;
