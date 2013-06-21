@@ -1983,13 +1983,15 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
             case FORM_FLIGHT:
             case FORM_MOONKIN:
             {
-                // remove movement affects without root
-                target->RemoveAurasWithMechanic((1 << MECHANIC_SNARE));
+                if (form == FORM_CAT)
+                    target->RemoveAurasDueToSpell(76691);            
+                    // remove movement affects without root
+                    target->RemoveAurasWithMechanic((1 << MECHANIC_SNARE));
 
-                // and polymorphic affects
-                if (target->IsPolymorphed())
-                    target->RemoveAurasDueToSpell(target->getTransForm());
-                break;
+                    // and polymorphic affects
+                    if (target->IsPolymorphed())
+                        target->RemoveAurasDueToSpell(target->getTransForm());
+                    break;
             }
             default:
                break;
