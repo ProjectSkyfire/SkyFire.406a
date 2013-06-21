@@ -8732,7 +8732,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                             return false;
                     case 93098: // Vengeance
                     {
-                        if(damage > 0)
+                        if (damage > 0)
                         {
                             int bp = damage * 0.05f; //5% from damage
                             CastCustomSpell(this, 76691, &bp, &bp, &bp, true, 0, 0, GetGUID());
@@ -8819,7 +8819,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     }
                     case 84840: // Vengeance
                     {
-                        if(damage > 0 && GetShapeshiftForm() == FORM_BEAR)
+                        if (damage > 0 && GetShapeshiftForm() == FORM_BEAR)
                         {
                             int bp = damage * 0.05f; //5% from damage
                             CastCustomSpell(this, 76691, &bp, &bp, &bp, true, 0, 0, GetGUID());
@@ -8935,7 +8935,7 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                     }
                     case 84839: // Vengeance
                     {
-                        if(damage > 0)
+                        if (damage > 0)
                         {
                             int bp = damage * 0.05f; //5% from damage
                             CastCustomSpell(this, 76691, &bp, &bp, &bp, true, 0, 0, GetGUID());
@@ -10180,7 +10180,7 @@ bool Unit::HasAuraState(AuraStateType flag, SpellInfo const* spellProto, Unit co
         }
         // Check per caster aura state
         // If aura with aurastate by caster not found return false
-        if ((1<<(flag-1)) & PER_CASTER_AURA_STATE_MASK)
+        if ((1 << (flag-1)) & PER_CASTER_AURA_STATE_MASK)
         {
             for (AuraStateAurasMap::const_iterator itr = m_auraStateAuras.lower_bound(flag); itr != m_auraStateAuras.upper_bound(flag); ++itr)
                 if (itr->second->GetBase()->GetCasterGUID() == Caster->GetGUID())
