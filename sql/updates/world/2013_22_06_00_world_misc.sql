@@ -1,4 +1,4 @@
--- Credits to Kiper and Bastek from Alantiss Core
+-- Credits to Kiper and Bastek.
 -- Some fix for Gart Mistrunner and quest Rejuvenating Touch 
 UPDATE quest_template SET ReqCreatureOrGOCount1 = 2, ReqSpellCast1 = 774 WHERE entry = 27067;
 UPDATE npc_trainer SET spell = 774, reqlevel = 8 WHERE entry = 3060 AND spell = 5185;
