@@ -4,7 +4,7 @@ UPDATE quest_template SET ReqCreatureOrGOCount1 = 2, ReqSpellCast1 = 774 WHERE e
 UPDATE npc_trainer SET spell = 774, reqlevel = 8 WHERE entry = 3060 AND spell = 5185;
 
 -- Centaur Bracers quest items drop fix
-DELETE FROM creature_loot_template WHERE entry IN (9523,9524,3275,44170,3396,3397) AND item = 5030;
+DELETE FROM creature_loot_template WHERE entry IN (9523,3275,44170,3396,3397) AND item = 5030;
 INSERT INTO creature_loot_template VALUES
 (9523, 5030, -100, 1, 0, 1, 1),
 (3275, 5030, -80, 1, 0, 1, 1),
