@@ -4,14 +4,23 @@ UPDATE quest_template SET ReqCreatureOrGOCount1 = 2, ReqSpellCast1 = 774 WHERE e
 UPDATE npc_trainer SET spell = 774, reqlevel = 8 WHERE entry = 3060 AND spell = 5185;
 
 -- Centaur Bracers quest items drop fix
-DELETE FROM creature_loot_template WHERE entry IN (9523,3275,44170,3396,3397) AND item = 5030;
-INSERT INTO creature_loot_template VALUES
-(9523, 5030, -100, 1, 0, 1, 1),
-(3275, 5030, -80, 1, 0, 1, 1),
-(3396, 5030, -22, 1, 0, 1, 1),
-(3397, 5030, -11, 1, 0, 1, 1)
-(44170, 5030, -39, 1, 0, 1, 1);
-
+DELETE FROM `creature_loot_template` WHERE item=5030; 
+INSERT  INTO `creature_loot_template` VALUES 
+(3272,5030,-4,1,0,1,1),
+(3273,5030,-4,1,0,1,1),
+(3274,5030,-1,1,0,1,1),
+(3275,5030,-80,1,0,1,1),
+(3394,5030,-3,1,0,1,1),
+(3395,5030,-3,1,0,1,1),
+(3396,5030,-21,1,0,1,1),
+(3397,5030,-20,1,0,1,1),
+(44170,5030,-36,1,0,1,1),
+(5837,5030,-7,1,0,1,1),
+(5838,5030,-4,1,0,1,1),
+(5841,5030,-6,1,0,1,1),
+(9456,5030,-4,1,0,1,1),
+(9523,5030,-99,1,0,1,1),
+(9524,5030,-90,1,0,1,1);
 
 -- Poison Water quest items drop fix
 DELETE FROM creature_loot_template WHERE entry IN (2958, 2956, 2957) AND item IN (4758, 4759);
