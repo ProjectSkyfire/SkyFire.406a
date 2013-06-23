@@ -69,9 +69,6 @@ INSERT INTO npc_vendor VALUES
 (49737, 0, 65433, 0, 0, 3023),
 (49737, 0, 65513, 0, 0, 3024);
 
--- Update Rejuvenation training cost by Gart Mistrunner
-UPDATE npc_trainer SET spellcost=60 WHERE spell=774 AND entry=3060;
-
 -- Fix "Eitrigg" and templates and add their spawn locations
 UPDATE creature_template SET minlevel=85, maxlevel=85, faction_A=76, faction_H=76 WHERE entry=48568;
 UPDATE creature_template SET faction_A=189, faction_H=189, minlevel=85, maxlevel=85 WHERE entry=48109;
@@ -81,10 +78,6 @@ orientation, spawntimesecs, spawndist, currentwaypoint, curhealth, curmana, Deat
 npcflag, unit_flags, dynamicflags) VALUES
 (48568, 0, 1, 1, 0, 0, -7917.25, -1868.87, 132.498, 3.98464, 300, 0, 0, 840, 0, 0, 0, 0, 0, 0),
 (48109, 0, 1, 65534, 0, 0, -7947.22, -1927.15, 132.241, 0.45032, 300, 0, 0, 84, 0, 0, 0, 0, 0, 0);
-
--- Update Dual Talent Cost: 1000g -> 10g + fixed a little typo
-UPDATE gossip_menu_option SET option_text="Purchase a Dual Talent Specialization" WHERE option_text="Purchase a Dual Talent Specialization.";
-UPDATE gossip_menu_option SET box_money=100000 WHERE option_text="Purchase a Dual Talent Specialization" AND box_money=10000000;
 
 -- Correct Frenzy Proc
 DELETE FROM `spell_proc_event` WHERE `entry` = 20784;
@@ -110,44 +103,6 @@ INSERT INTO `gameobject` (`id`,`map`,`spawnMask`,`phaseMask`,`position_x`,`posit
 (201603, 648, 1, 1, -8363.38, 1502.63, 46.2952, 0.469642, 0, 0, 0.232669, 0.972556, 300, 0, 1),
 (201603, 648, 1, 1, -8330.75, 1500.44, 46.4421, 5.52368, 0, 0, 0.37069, -0.928756, 300, 0, 1);
 
--- spell_proc_event improved steady shot, master marksman, arcane concentration(clearcasting),rude interruption, Bloodsurge, invocation
-DELETE FROM `spell_proc_event` WHERE `entry` IN ('34485','34486','34487','46913','46914','46915','53221','53222','53224','61216','61221','84722','84723');
-INSERT INTO `spell_proc_event` VALUES (34485, 0, 9, 0, 1, 0, 0, 0, 0, 20, 0);
-INSERT INTO `spell_proc_event` VALUES (34486, 0, 9, 0, 1, 0, 0, 0, 0, 40, 0);
-INSERT INTO `spell_proc_event` VALUES (34487, 0, 9, 0, 1, 0, 0, 0, 0, 60, 0);
-INSERT INTO `spell_proc_event` VALUES (46913, 0, 4, 0, 1024, 0, 0, 0, 0, 10, 0);
-INSERT INTO `spell_proc_event` VALUES (46914, 0, 4, 0, 1024, 0, 0, 0, 0, 20, 0);
-INSERT INTO `spell_proc_event` VALUES (46915, 0, 4, 0, 1024, 0, 0, 0, 0, 30, 0);
-INSERT INTO `spell_proc_event` VALUES (53221, 0, 9, 0, 1, 0, 0, 0, 0, 50, 0);
-INSERT INTO `spell_proc_event` VALUES (53222, 0, 9, 0, 1, 0, 0, 0, 0, 50, 0);
-INSERT INTO `spell_proc_event` VALUES (53224, 0, 9, 0, 1, 0, 0, 0, 0, 50, 0);
-INSERT INTO `spell_proc_event` VALUES (61216, 0, 4, 2056, 0, 0, 4112, 0, 0, 100, 0);
-INSERT INTO `spell_proc_event` VALUES (61221, 0, 4, 2056, 0, 0, 4112, 0, 0, 100, 0);
-INSERT INTO `spell_proc_event` VALUES (84722, 0, 3, 16384, 0, 0, 0, 0, 0, 100, 0);
-INSERT INTO `spell_proc_event` VALUES (84723, 0, 3, 16384, 0, 0, 0, 0, 0, 100, 0);
-
--- Plate Specialization
-DELETE FROM `spell_learn_spell` WHERE `entry` IN('87509','87510','87511');
-INSERT INTO `spell_learn_spell` VALUES (87509, 86526, 1);
-INSERT INTO `spell_learn_spell` VALUES (87510, 86524, 1);
-INSERT INTO `spell_learn_spell` VALUES (87511, 86525, 1);
-
--- Mail Specialization
-DELETE FROM `spell_learn_spell` WHERE `entry` IN('87506','87507');
-INSERT INTO `spell_learn_spell` VALUES (87506, 86528, 1);
-INSERT INTO `spell_learn_spell` VALUES (87507, 86529, 1);
-
--- Leather Specializations
-DELETE FROM `spell_learn_spell` WHERE `entry` IN('87504','87505');
-INSERT INTO `spell_learn_spell` VALUES (87504, 86531, 1);
-INSERT INTO `spell_learn_spell` VALUES (87505, 86530, 1);
-
--- Blackrock Caverns Mobs
-update creature_template set health_mod=15, minlevel=85, maxlevel=85, faction_A=16, faction_H=16, mindmg=530, maxdmg=713, attackpower=827, baseattacktime=2000 where entry in (39708,39980,39982,39985,39978,39985,40004,40019,40017,40021,50284);
-update creature_template SET `Health_mod`=22.8152 WHERE entry in (39665, 39698);
-update creature_template set health_mod=45.05232558139535, minlevel=85, maxlevel=85, faction_A=16, faction_H=16, mindmg=545, maxdmg=723, attackpower=839, dmg_multiplier=7.5, baseattacktime=2000 where entry in (39987,39994,40023);
-update creature_template set health_mod=3, minlevel=85, maxlevel=85, faction_A=16, faction_H=16, mindmg=470, maxdmg=650, attackpower=750, baseattacktime=2000 where entry in (40084);
-update creature set spawnMask = '3' where map = '645';
 
 -- -------------- --
 --    RAIDS SAI   --
