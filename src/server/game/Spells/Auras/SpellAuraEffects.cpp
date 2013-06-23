@@ -698,6 +698,12 @@ int32 AuraEffect::CalculateAmount(Unit* caster)
             // Vampiric Blood
             if (GetId() == 55233)
                 amount = GetBase()->GetUnitOwner()->CountPctFromMaxHealth(amount);
+             // Last Stand Warrior
+            if (GetId() == 12976)
+                amount = GetBase()->GetUnitOwner()->CountPctFromMaxHealth(30);
+            // Last Stand Hunter
+            if (GetId() == 53478)
+                amount = GetBase()->GetUnitOwner()->CountPctFromMaxHealth(30);
             break;
         case SPELL_AURA_MOD_INCREASE_ENERGY:
             // Hymn of Hope
@@ -1984,7 +1990,7 @@ void AuraEffect::HandleAuraModShapeshift(AuraApplication const* aurApp, uint8 mo
             case FORM_MOONKIN:
             {
                 if (form == FORM_CAT)
-                    target->RemoveAurasDueToSpell(76691);            
+                    target->RemoveAurasDueToSpell(76691);
                     // remove movement affects without root
                     target->RemoveAurasWithMechanic((1 << MECHANIC_SNARE));
 
