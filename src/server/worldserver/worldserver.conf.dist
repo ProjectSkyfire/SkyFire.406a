@@ -1035,7 +1035,7 @@ CharactersPerRealm = 10
 #
 #    HeroicCharactersPerRealm
 #        Description: Limit number of heroic class characters per account on this realm.
-#        Range:       1-10
+#        Range:       1-12
 #        Default:     1
 
 HeroicCharactersPerRealm = 1

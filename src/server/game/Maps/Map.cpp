@@ -122,8 +122,7 @@ bool Map::ExistVMap(uint32 mapid, int gx, int gy)
 
 void Map::LoadMMap(int gx, int gy)
 {
-    // DONT CHANGE "gy" and "gx" - Its necessary !
-    int mmapLoadResult = MMAP::MMapFactory::createOrGetMMapManager()->loadMap(GetId(), gy, gx);
+    int mmapLoadResult = MMAP::MMapFactory::createOrGetMMapManager()->loadMap(GetId(), gx, gy);
     switch (mmapLoadResult)
     {
         case MMAP::MMAP_LOAD_RESULT_OK:
@@ -2443,7 +2442,7 @@ void InstanceMap::CreateInstanceData(bool load)
         stmt->setUInt16(0, uint16(GetId()));
         stmt->setUInt32(1, i_InstanceId);
         PreparedQueryResult result = CharacterDatabase.Query(stmt);
-        
+
         if (result)
         {
             Field* fields = result->Fetch();

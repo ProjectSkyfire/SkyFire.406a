@@ -2911,7 +2911,7 @@ void Unit::_UpdateSpells(uint32 time)
 
 void Unit::_UpdateAutoRepeatSpell()
 {
-    bool isAutoShot = m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo->Id == 75; 
+    bool isAutoShot = m_currentSpells[CURRENT_AUTOREPEAT_SPELL]->m_spellInfo->Id == 75;
     // check "realtime" interrupts
     if (IsNonMeleeSpellCasted(false, false, true, isAutoShot))
     {
@@ -2923,7 +2923,7 @@ void Unit::_UpdateAutoRepeatSpell()
     }
 
     // apply delay (Auto Shot (spellID 75) not affected)
-    if (m_AutoRepeatFirstCast && getAttackTimer(RANGED_ATTACK) < 500 && !isAutoShot) 
+    if (m_AutoRepeatFirstCast && getAttackTimer(RANGED_ATTACK) < 500 && !isAutoShot)
         setAttackTimer(RANGED_ATTACK, 500);
     m_AutoRepeatFirstCast = false;
 
@@ -3108,7 +3108,7 @@ bool Unit::CanCastWhileWalking(uint32 spell_id)
 {
     SpellInfo const* spell = sSpellMgr->GetSpellInfo(spell_id);
 
-    if (!spell)
+    if (!spell || spell->Id == 75)
         return false;
 
     bool ret = false;
@@ -8717,20 +8717,38 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                 }
                 break;
             case SPELLFAMILY_WARRIOR:
-                if (auraSpellInfo->Id == 50421)             // Scent of Blood
+            {
+                switch (auraSpellInfo->Id)
                 {
-                    CastSpell(this, 50422, true);
-                    RemoveAuraFromStack(auraSpellInfo->Id);
-                    return false;
-                }
-                // Vigilance
-                if (auraSpellInfo->Id == 50720)
-                {
-                    target = triggeredByAura->GetCaster();
-                    if (!target)
+                    case 50421: // Scent of Blood
+                    {
+                        CastSpell(this, 50422, true);
+                        RemoveAuraFromStack(auraSpellInfo->Id);
                         return false;
+                    }
+                    case 80128: // Impending Victory Rank 1
+                    case 80129: // Impending Victory Rank 2
+                        if (!victim->HealthBelowPct(20))
+                            return false;
+                    case 93098: // Vengeance
+                    {
+                        if (damage > 0)
+                        {
+                            int bp = damage * 0.05f; //5% from damage
+                            CastCustomSpell(this, 76691, &bp, &bp, &bp, true, 0, 0, GetGUID());
+                        }
+                        break;
+                    }
+                    case 50720: // Vigilance
+                    {
+                        target = triggeredByAura->GetCaster();
+                        if (!target)
+                            return false;
+                    }
+                    break;
                 }
                 break;
+            }
             case SPELLFAMILY_WARLOCK:
             {
                 // Siphon Life
@@ -8796,6 +8814,15 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
                             case FORM_BEAR:     trigger_spell_id = 67354; break;
                             default:
                                 return false;
+                        }
+                        break;
+                    }
+                    case 84840: // Vengeance
+                    {
+                        if (damage > 0 && GetShapeshiftForm() == FORM_BEAR)
+                        {
+                            int bp = damage * 0.05f; //5% from damage
+                            CastCustomSpell(this, 76691, &bp, &bp, &bp, true, 0, 0, GetGUID());
                         }
                         break;
                     }
@@ -8904,6 +8931,15 @@ bool Unit::HandleProcTriggerSpell(Unit* victim, uint32 damage, AuraEffect* trigg
 
                         RemoveAurasDueToSpell(stack_spell_id);
                         target = victim;
+                        break;
+                    }
+                    case 84839: // Vengeance
+                    {
+                        if (damage > 0)
+                        {
+                            int bp = damage * 0.05f; //5% from damage
+                            CastCustomSpell(this, 76691, &bp, &bp, &bp, true, 0, 0, GetGUID());
+                        }
                         break;
                     }
                 }
@@ -10144,7 +10180,7 @@ bool Unit::HasAuraState(AuraStateType flag, SpellInfo const* spellProto, Unit co
         }
         // Check per caster aura state
         // If aura with aurastate by caster not found return false
-        if ((1<<(flag-1)) & PER_CASTER_AURA_STATE_MASK)
+        if ((1 << (flag-1)) & PER_CASTER_AURA_STATE_MASK)
         {
             for (AuraStateAurasMap::const_iterator itr = m_auraStateAuras.lower_bound(flag); itr != m_auraStateAuras.upper_bound(flag); ++itr)
                 if (itr->second->GetBase()->GetCasterGUID() == Caster->GetGUID())
@@ -13353,14 +13389,14 @@ bool Unit::CanHaveThreatList() const
         if (IS_PLAYER_GUID(((Minion*)this)->GetOwnerGUID()))
             return false;
     }
-    
+
     if (HasUnitTypeMask(UNIT_MASK_GUARDIAN | UNIT_MASK_CONTROLABLE_GUARDIAN))
     {
         ASSERT (dynamic_cast <Guardian*> (const_cast <Unit*> (this)));
         if (IS_PLAYER_GUID(((Guardian*)this)->GetOwnerGUID()))
             return false;
     }
-    
+
     if (this->ToCreature()->isPet())
     {
         ASSERT (dynamic_cast <Pet*> (const_cast <Unit*> (this)));

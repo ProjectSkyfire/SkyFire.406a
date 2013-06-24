@@ -97,15 +97,14 @@ namespace MMAP
         uint32 packedGridPos = packTileID(x, y);
         if (mmap->mmapLoadedTiles.find(packedGridPos) != mmap->mmapLoadedTiles.end())
         {
-            sLog->outDebug(LOG_FILTER_MAPS, "MMAP:loadMap: Asked to load already loaded navmesh tile. %03u%02i%02i.mmtile", mapId, y, x);
+            sLog->outDebug(LOG_FILTER_MAPS, "MMAP:loadMap: Asked to load already loaded navmesh tile. %03u%02i%02i.mmtile", mapId, x, y);
             return false;
         }
 
         // load this tile :: mmaps/MMMXXYY.mmtile
         uint32 pathLen = sWorld->GetDataPath().length() + strlen("mmaps/%03i%02i%02i.mmtile")+1;
         char *fileName = new char[pathLen];
-        // this change of y and x is needed because of mapbuilder.cpp (x and y are swapped there) so change it here so we dont need to re-extract. All swappes are done in other files. DONT CHANGE THIS!
-        snprintf(fileName, pathLen, (sWorld->GetDataPath()+"mmaps/%03i%02i%02i.mmtile").c_str(), mapId, y, x);
+        snprintf(fileName, pathLen, (sWorld->GetDataPath()+"mmaps/%03i%02i%02i.mmtile").c_str(), mapId, x, y);
 
         FILE *file = fopen(fileName, "rb");
         if (!file)
@@ -123,7 +122,7 @@ namespace MMAP
         // sLog->outString("[%h]", fileHeader.mmapMagic);
         if (fileHeader.mmapMagic != MMAP_MAGIC)
         {
-            sLog->outError("MMAP:loadMap: Bad header in mmap %03u%02i%02i.mmtile", mapId, y, x);
+            sLog->outError("MMAP:loadMap: Bad header in mmap %03u%02i%02i.mmtile", mapId, x, y);
             return false;
         }
 
@@ -141,7 +140,7 @@ namespace MMAP
         if(!result)
         {
             sLog->outString("Size [%u]", result);
-            sLog->outError("MMAP:loadMap: Bad header or data in mmap %03u%02i%02i.mmtile", mapId, y, x);
+            sLog->outError("MMAP:loadMap: Bad header or data in mmap %03u%02i%02i.mmtile", mapId, x, y);
             fclose(file);
             return false;
         }
@@ -160,12 +159,12 @@ namespace MMAP
         {
             mmap->mmapLoadedTiles.insert(std::pair<uint32, dtTileRef>(packedGridPos, tileRef));
             ++loadedTiles;
-            sLog->outDetail("MMAP:loadMap: Loaded mmtile %03u[%02i,%02i] into %03i[%02i,%02i]", mapId, y, x, mapId, header->x, header->y);
+            sLog->outDetail("MMAP:loadMap: Loaded mmtile %03u[%02i,%02i] into %03i[%02i,%02i]", mapId, x, y, mapId, header->x, header->y);
             return true;
         }
         else
         {
-            sLog->outError("MMAP:loadMap: Could not load %03u%02i%02i.mmtile into navmesh", mapId, y, x);
+            sLog->outError("MMAP:loadMap: Could not load %03u%02i%02i.mmtile into navmesh", mapId, x, y);
             dtFree(data);
             return false;
         }

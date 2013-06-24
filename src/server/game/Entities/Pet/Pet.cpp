@@ -819,17 +819,13 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
 
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 
-    //scale
+    // Scale
     CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->family);
     if (cFamily && cFamily->minScale > 0.0f && petType == HUNTER_PET)
     {
         float scale;
-        if (getLevel() >= cFamily->maxScaleLevel)
-            scale = cFamily->maxScale;
-        else if (getLevel() <= cFamily->minScaleLevel)
-            scale = cFamily->minScale;
-        else
-            scale = cFamily->minScale + float(getLevel() - cFamily->minScaleLevel) / cFamily->maxScaleLevel * (cFamily->maxScale - cFamily->minScale);
+        // min scale = 0.8 // max scale = 1.8 <-Changed to 1.0 //
+        scale = 0.8 + (getLevel()  * ((1.0 - 0.8) / 85));
 
         SetFloatValue(OBJECT_FIELD_SCALE_X, scale);
     }
@@ -859,11 +855,11 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
         SetCreateHealth(stats->BaseHealth[cinfo->expansion]);
         SetCreateMana(stats->BaseMana);
 
-        SetCreateStat(STAT_STRENGTH, 331);
-        SetCreateStat(STAT_AGILITY, 113);
-        SetCreateStat(STAT_STAMINA, 361);
-        SetCreateStat(STAT_INTELLECT, 65);
-        SetCreateStat(STAT_SPIRIT, 10);
+        SetCreateStat(STAT_STRENGTH,    22);
+        SetCreateStat(STAT_AGILITY,     22);
+        SetCreateStat(STAT_STAMINA,     25);
+        SetCreateStat(STAT_INTELLECT,   28);
+        SetCreateStat(STAT_SPIRIT,      27);
     }
 
     SetBonusDamage(0);
