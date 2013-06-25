@@ -700,6 +700,19 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
             }
             case SPELLFAMILY_DEATHKNIGHT:
             {
+                // Ebon Plaguebringer
+                if (m_caster->HasAura(51099)) // Rank 1
+                {
+                    if (m_spellInfo->Id == 45462 || m_spellInfo->Id == 45477 || m_spellInfo->Id == 45524)
+                    m_caster->CastSpell(unitTarget, 65142, true);
+                }
+                else
+                if (m_caster->HasAura(51160)) // Rank 2
+                {
+                    if (m_spellInfo->Id == 45462 || m_spellInfo->Id == 45477 || m_spellInfo->Id == 45524)
+                    m_caster->CastSpell(unitTarget, 65142, true);
+                }
+
                 // Blood Boil - bonus for diseased targets
                 if (m_spellInfo->SpellFamilyFlags[0] & 0x00040000)
                 {
@@ -1254,18 +1267,49 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             }
             break;
         }
+        case SPELLFAMILY_HUNTER:
+        {
+            // steady shot focus effect (it has its own skill for this)
+            if (m_spellInfo->SpellFamilyFlags[1] & 0x1)
+                m_caster->CastSpell(m_caster, 77443, true);
+
+            if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
+                m_caster->CastSpell(m_caster, 51755, true);
+            break;
+        }
         case SPELLFAMILY_PRIEST:
+        {
+            switch (m_spellInfo->Id)
             {
-                switch (m_spellInfo->Id)
+                case 73325: // Leap of faith
                 {
-                    case 73325: // Leap of faith
-                    {
-                        unitTarget->CastSpell(m_caster, 92832, false);
-                        break;
-                    }
+                    unitTarget->CastSpell(m_caster, 92832, false);
+                    break;
                 }
-                break;
+                case 21562: // Power Word : Fortitude
+                {
+                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    {
+                        std::list<Unit*> PartyMembers;
+                        m_caster->GetPartyMembers(PartyMembers);
+                        bool Continue = false;
+                        uint32 player = 0;
+                        for(std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
+                        {
+                            ++player;
+                            if (Continue == false && player > 1)
+                                Continue = true;
+                        }
+                        if (Continue == true)
+                            m_caster->CastSpell(unitTarget, 79105, true); // Power Word : Fortitude (Raid)
+                        else
+                            m_caster->CastSpell(unitTarget, 79104, true); // Power Word : Fortitude (Caster)
+                    }
+                    break;
+                }
             }
+            break;
+        }
         case SPELLFAMILY_MAGE:
             {
                 // Cone of Cold
