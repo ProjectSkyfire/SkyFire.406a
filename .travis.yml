@@ -32,6 +32,7 @@ script:
   - cd build
   - cmake ..
   - make -j16
+  - make install
 
 notifications:
   irc:
