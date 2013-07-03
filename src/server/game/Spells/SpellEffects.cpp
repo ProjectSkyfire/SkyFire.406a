@@ -232,16 +232,16 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectActivateSpec,                             // 162 SPELL_EFFECT_TALENT_SPEC_SELECT       activate primary/secondary spec
     &Spell::EffectNULL,                                     // 163 unused
     &Spell::EffectRemoveAura,                               // 164 SPELL_EFFECT_REMOVE_AURA
-    &Spell::EffectNULL,                                     // 165
-    &Spell::EffectNULL,                                     // 166
-    &Spell::EffectNULL,                                     // 167
-    &Spell::EffectNULL,                                     // 168
-    &Spell::EffectNULL,                                     // 169
-    &Spell::EffectNULL,                                     // 170
-    &Spell::EffectNULL,                                     // 171
-    &Spell::EffectNULL,                                     // 172
-    &Spell::EffectNULL,                                     // 173
-    &Spell::EffectNULL,                                     // 174
+    &Spell::EffectNULL,                                     // 165 SPELL_EFFECT_DAMAGE_PCT_SELF
+    &Spell::EffectNULL,                                     // 166 SPELL_EFFECT_MODIFY_CURRENCY
+    &Spell::EffectNULL,                                     // 167 - for phasing.
+    &Spell::EffectNULL,                                     // 168 - pet casting bar.
+    &Spell::EffectNULL,                                     // 169 Remove item.
+    &Spell::EffectNULL,                                     // 170 - phasing related
+    &Spell::EffectNULL,                                     // 171 - summon object.
+    &Spell::EffectNULL,                                     // 172 SPELL_EFFECT_MASS_RESSURECT
+    &Spell::EffectNULL,                                     // 173 SPELL_EFFECT_BUY_GUILD_TAB
+    &Spell::EffectNULL,                                     // 174 SPELL_EFFECT_APPLY_AURA_2
 };
 
 void Spell::EffectNULL(SpellEffIndex /*effIndex*/)
