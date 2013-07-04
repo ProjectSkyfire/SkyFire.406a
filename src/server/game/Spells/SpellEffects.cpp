@@ -232,14 +232,14 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectActivateSpec,                             // 162 SPELL_EFFECT_TALENT_SPEC_SELECT       activate primary/secondary spec
     &Spell::EffectNULL,                                     // 163 unused
     &Spell::EffectRemoveAura,                               // 164 SPELL_EFFECT_REMOVE_AURA
-    &Spell::EffectNULL,                                     // 165 SPELL_EFFECT_DAMAGE_PCT_SELF
+    &Spell::EffectDamageSelfPct,                            // 165 SPELL_EFFECT_DAMAGE_PCT_SELF
     &Spell::EffectNULL,                                     // 166 SPELL_EFFECT_MODIFY_CURRENCY
     &Spell::EffectNULL,                                     // 167 - for phasing.
     &Spell::EffectNULL,                                     // 168 - pet casting bar.
     &Spell::EffectNULL,                                     // 169 Remove item.
     &Spell::EffectNULL,                                     // 170 - phasing related
     &Spell::EffectNULL,                                     // 171 - summon object.
-    &Spell::EffectNULL,                                     // 172 SPELL_EFFECT_MASS_RESSURECT
+    &Spell::EffectResurrect,                                // 172 SPELL_EFFECT_MASS_RESSURECT
     &Spell::EffectNULL,                                     // 173 SPELL_EFFECT_BUY_GUILD_TAB
     &Spell::EffectNULL,                                     // 174 SPELL_EFFECT_APPLY_AURA_2
 };
@@ -7718,6 +7718,16 @@ void Spell::EffectBind(SpellEffIndex effIndex)
     player->SendDirectMessage(&data);
 }
 
+void Spell::EffectDamageSelfPct(SpellEffIndex effIndex)
+{
+    if (!unitTarget || !unitTarget->isAlive() || damage < 0) return;
+
+    // Skip if m_originalCaster is not available
+    if (!m_originalCaster) return;
+
+    m_damage += m_originalCaster->SpellDamageBonus(unitTarget, m_spellInfo, unitTarget->CountPctFromMaxHealth(damage), SELF_DAMAGE);
+}
+
 void Spell::EffectSummonRaFFriend(SpellEffIndex effIndex)
 {
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
@@ -7728,4 +7738,3 @@ void Spell::EffectSummonRaFFriend(SpellEffIndex effIndex)
 
     m_caster->CastSpell(unitTarget, m_spellInfo->Effects[effIndex].TriggerSpell, true);
 }
-
