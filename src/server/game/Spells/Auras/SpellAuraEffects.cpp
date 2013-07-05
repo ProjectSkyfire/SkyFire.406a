@@ -7062,6 +7062,38 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
 
         damage = caster->SpellHealingBonus(target, GetSpellInfo(), damage, DOT, GetBase()->GetStackAmount());
     }
+    switch (m_spellInfo->Id)
+    {
+        case 774:
+        {
+            float bonus = 1.0f;
+            if (caster->HasAura(78784)) // Blessing of the Grove rank 1
+                bonus += 0.02f;
+            if (caster->HasAura(78785)) // Blessing of the Grove rank 2
+                bonus += 0.04f;
+            if (caster->HasAura(17111)) // Improved Rejuvenation rank 1
+                bonus += 0.05f;
+            if (caster->HasAura(17112)) // Improved Rejuvenation rank 2
+                bonus += 0.1f;
+            if (caster->HasAura(17113)) // Improved Rejuvenation rank 3
+                bonus += 0.15f;
+            damage = int32(damage * bonus);
+            break;
+        }
+        case 29841: // Second Wind r1
+            damage = int32(caster->GetMaxHealth() * 0.002f);
+            break;
+        case 29842: // Second Wind r2
+        case 42771: // Second Wind r2
+            damage = int32(caster->GetMaxHealth() * 0.01f);
+            break;
+        case 8936: // Regrowth
+            if (caster->HasAura(54743) && target->HealthBelowPct(50))
+                this->GetBase()->RefreshDuration();
+            break;
+        default:
+            break;
+    }
 
     bool crit = IsPeriodicTickCrit(target, caster);
     if (crit)
