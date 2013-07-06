@@ -232,16 +232,16 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectActivateSpec,                             // 162 SPELL_EFFECT_TALENT_SPEC_SELECT       activate primary/secondary spec
     &Spell::EffectNULL,                                     // 163 unused
     &Spell::EffectRemoveAura,                               // 164 SPELL_EFFECT_REMOVE_AURA
-    &Spell::EffectNULL,                                     // 165
-    &Spell::EffectNULL,                                     // 166
-    &Spell::EffectNULL,                                     // 167
-    &Spell::EffectNULL,                                     // 168
-    &Spell::EffectNULL,                                     // 169
-    &Spell::EffectNULL,                                     // 170
-    &Spell::EffectNULL,                                     // 171
-    &Spell::EffectNULL,                                     // 172
-    &Spell::EffectNULL,                                     // 173
-    &Spell::EffectNULL,                                     // 174
+    &Spell::EffectDamageSelfPct,                            // 165 SPELL_EFFECT_DAMAGE_PCT_SELF
+    &Spell::EffectNULL,                                     // 166 SPELL_EFFECT_MODIFY_CURRENCY
+    &Spell::EffectNULL,                                     // 167 - for phasing.
+    &Spell::EffectNULL,                                     // 168 - pet casting bar.
+    &Spell::EffectNULL,                                     // 169 Remove item.
+    &Spell::EffectNULL,                                     // 170 - phasing related
+    &Spell::EffectNULL,                                     // 171 - summon object.
+    &Spell::EffectResurrect,                                // 172 SPELL_EFFECT_MASS_RESSURECT
+    &Spell::EffectNULL,                                     // 173 SPELL_EFFECT_BUY_GUILD_TAB
+    &Spell::EffectNULL,                                     // 174 SPELL_EFFECT_APPLY_AURA_2
 };
 
 void Spell::EffectNULL(SpellEffIndex /*effIndex*/)
@@ -700,6 +700,19 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
             }
             case SPELLFAMILY_DEATHKNIGHT:
             {
+                // Ebon Plaguebringer
+                if (m_caster->HasAura(51099)) // Rank 1
+                {
+                    if (m_spellInfo->Id == 45462 || m_spellInfo->Id == 45477 || m_spellInfo->Id == 45524)
+                    m_caster->CastSpell(unitTarget, 65142, true);
+                }
+                else
+                if (m_caster->HasAura(51160)) // Rank 2
+                {
+                    if (m_spellInfo->Id == 45462 || m_spellInfo->Id == 45477 || m_spellInfo->Id == 45524)
+                    m_caster->CastSpell(unitTarget, 65142, true);
+                }
+
                 // Blood Boil - bonus for diseased targets
                 if (m_spellInfo->SpellFamilyFlags[0] & 0x00040000)
                 {
@@ -1254,18 +1267,49 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
             }
             break;
         }
+        case SPELLFAMILY_HUNTER:
+        {
+            // steady shot focus effect (it has its own skill for this)
+            if (m_spellInfo->SpellFamilyFlags[1] & 0x1)
+                m_caster->CastSpell(m_caster, 77443, true);
+
+            if (m_spellInfo->SpellFamilyFlags[2] & 0x20)
+                m_caster->CastSpell(m_caster, 51755, true);
+            break;
+        }
         case SPELLFAMILY_PRIEST:
+        {
+            switch (m_spellInfo->Id)
             {
-                switch (m_spellInfo->Id)
+                case 73325: // Leap of faith
                 {
-                    case 73325: // Leap of faith
-                    {
-                        unitTarget->CastSpell(m_caster, 92832, false);
-                        break;
-                    }
+                    unitTarget->CastSpell(m_caster, 92832, false);
+                    break;
                 }
-                break;
+                case 21562: // Power Word : Fortitude
+                {
+                    if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                    {
+                        std::list<Unit*> PartyMembers;
+                        m_caster->GetPartyMembers(PartyMembers);
+                        bool Continue = false;
+                        uint32 player = 0;
+                        for(std::list<Unit*>::iterator itr = PartyMembers.begin(); itr != PartyMembers.end(); ++itr) // If caster is in party with a player
+                        {
+                            ++player;
+                            if (Continue == false && player > 1)
+                                Continue = true;
+                        }
+                        if (Continue == true)
+                            m_caster->CastSpell(unitTarget, 79105, true); // Power Word : Fortitude (Raid)
+                        else
+                            m_caster->CastSpell(unitTarget, 79104, true); // Power Word : Fortitude (Caster)
+                    }
+                    break;
+                }
             }
+            break;
+        }
         case SPELLFAMILY_MAGE:
             {
                 // Cone of Cold
@@ -7674,6 +7718,16 @@ void Spell::EffectBind(SpellEffIndex effIndex)
     player->SendDirectMessage(&data);
 }
 
+void Spell::EffectDamageSelfPct(SpellEffIndex effIndex)
+{
+    if (!unitTarget || !unitTarget->isAlive() || damage < 0) return;
+
+    // Skip if m_originalCaster is not available
+    if (!m_originalCaster) return;
+
+    m_damage += m_originalCaster->SpellDamageBonus(unitTarget, m_spellInfo, unitTarget->CountPctFromMaxHealth(damage), SELF_DAMAGE);
+}
+
 void Spell::EffectSummonRaFFriend(SpellEffIndex effIndex)
 {
     if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
@@ -7684,4 +7738,3 @@ void Spell::EffectSummonRaFFriend(SpellEffIndex effIndex)
 
     m_caster->CastSpell(unitTarget, m_spellInfo->Effects[effIndex].TriggerSpell, true);
 }
-
