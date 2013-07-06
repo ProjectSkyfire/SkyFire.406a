@@ -7088,7 +7088,7 @@ void AuraEffect::HandlePeriodicHealAurasTick(Unit* target, Unit* caster) const
             damage = int32(caster->GetMaxHealth() * 0.005f);
             break;
         case 8936: // Regrowth
-            if (caster->HasAura(54743) && target->HealthBelowPct(50))
+            if (caster->HasAura(54743) && target->HealthBelowPct(25))
                 this->GetBase()->RefreshDuration();
             break;
         default:
