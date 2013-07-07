@@ -38,7 +38,9 @@ enum WarlockSpells
     WARLOCK_HEALTHSTONE_HEAL                = 6262,
 
     WARLOCK_DRAIN_SOUL                      = 79264,
-
+    
+    WARLOCK_DARK_INTENT_EFFECT              = 85767,
+    
     WARLOCK_DEMONIC_CIRCLE_SUMMON           = 48018,
     WARLOCK_DEMONIC_CIRCLE_TELEPORT         = 48020,
     WARLOCK_DEMONIC_CIRCLE_ALLOW_CAST       = 62388,
@@ -328,6 +330,44 @@ public:
     SpellScript* GetSpellScript() const
     {
         return new spell_warl_life_tap_SpellScript();
+    }
+};
+
+// Dark Intent
+// Spell Id: 80398
+class spell_warl_dark_intent: public SpellScriptLoader
+{
+public:
+    spell_warl_dark_intent() : SpellScriptLoader("spell_warl_dark_intent") {}
+
+    class spell_warl_dark_intent_SpellScript: public SpellScript
+    {
+        PrepareSpellScript(spell_warl_dark_intent_SpellScript)
+
+        void HandleScriptEffect (SpellEffIndex effIndex)
+        {
+            Unit* caster = GetCaster();
+            Unit* target = GetHitUnit();
+
+            if (!caster && !target)
+                return;
+            
+            if (!caster->HasAura(WARLOCK_DARK_INTENT_EFFECT))
+                         caster->CastSpell(target, WARLOCK_DARK_INTENT_EFFECT, true);
+            
+            if (!target->HasAura(WARLOCK_DARK_INTENT_EFFECT))
+                         target->CastSpell(caster, WARLOCK_DARK_INTENT_EFFECT, true);
+        }
+
+        void Register ()
+        {
+            OnEffectHitTarget += SpellEffectFn(spell_warl_dark_intent_SpellScript::HandleScriptEffect, EFFECT_0, SPELL_EFFECT_TRIGGER_SPELL);
+        }
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_warl_dark_intent_SpellScript();
     }
 };
 
@@ -631,4 +671,5 @@ void AddSC_warlock_spell_scripts()
     new spell_warl_demonic_circle_teleport();
     new spell_warl_nether_ward_swap_supressor();
     new spell_warl_haunt();
+    new spell_warl_dark_intent();   
 }
