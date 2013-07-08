@@ -19,7 +19,7 @@
 SFName: gilneas2
 SFAuthor:
 SF%Complete: 0
-SFComment: this is to start second part of scripting for Gilneas City (map 625).
+SFComment: this is to start 2nd part of scripting for outside of Gilneas City (map 654).
 SFCategory: Zone script
 Script Data End */
 
