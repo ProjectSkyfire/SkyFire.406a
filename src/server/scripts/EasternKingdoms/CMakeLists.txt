@@ -60,6 +60,7 @@ set(scripts_STAT_SRCS
   EasternKingdoms/GrimBatol/instance_grim_batol.cpp
 
   EasternKingdoms/Gilneas/gilneas.cpp
+# EasternKingdoms/Gilneas/gilneas2.cpp 
   EasternKingdoms/Gilneas/gilneas.h
 
   EasternKingdoms/BlackrockDepths/boss_high_interrogator_gerstahn.cpp
