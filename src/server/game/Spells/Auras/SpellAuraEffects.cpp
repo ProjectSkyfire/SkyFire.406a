@@ -1894,11 +1894,6 @@ void AuraEffect::HandlePhase(AuraApplication const * aurApp, uint8 mode, bool ap
         if (!newPhase)
             newPhase = PHASEMASK_NORMAL;
 
-        // drop flag at invisible in bg
-        if (player->InBattleground())
-            if (Battleground *bg = player->GetBattleground())
-                bg->EventPlayerDroppedFlag(player);
-
         // GM-mode have mask 0xFFFFFFFF
         if (player->isGameMaster())
             newPhase = 0xFFFFFFFF;
@@ -1921,7 +1916,15 @@ void AuraEffect::HandlePhase(AuraApplication const * aurApp, uint8 mode, bool ap
 
         target->SetPhaseMask(newPhase, false);
     }
-
+    
+    // call functions which may have additional effects after changing state of unit
+    // phase auras normally not expected at BG but anyway better check
+    if (apply && (mode & AURA_EFFECT_HANDLE_REAL))
+    {
+        // drop flag at invisibility in bg
+        target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
+    } 
+    
     // need triggering visibility update base at phase update of not GM invisible (other GMs anyway see in any phases)
     if (target->IsVisible())
         target->UpdateObjectVisibility();
