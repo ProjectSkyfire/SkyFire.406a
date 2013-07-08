@@ -1861,31 +1861,53 @@ void AuraEffect::HandleAuraGhost(AuraApplication const* aurApp, uint8 mode, bool
     }
 }
 
-void AuraEffect::HandlePhase(AuraApplication const* aurApp, uint8 mode, bool apply) const
+void AuraEffect::HandlePhase(AuraApplication const * aurApp, uint8 mode, bool apply) const
 {
+    // MiscValue is PhaseMask
+    // MiscValueB is PhaseID (from Phase.dbc)
     if (!(mode & AURA_EFFECT_HANDLE_REAL))
         return;
 
-    Unit* target = aurApp->GetTarget();
+    Unit * target = aurApp->GetTarget();
 
     // no-phase is also phase state so same code for apply and remove
     uint32 newPhase = 0;
+    uint32 newTerrainPhase = 0;
+
     Unit::AuraEffectList const& phases = target->GetAuraEffectsByType(SPELL_AURA_PHASE);
     if (!phases.empty())
         for (Unit::AuraEffectList::const_iterator itr = phases.begin(); itr != phases.end(); ++itr)
-            newPhase |= (*itr)->GetMiscValue();
+        {
+            newTerrainPhase |= (*itr)->GetMiscValue();
+            newPhase |= (*itr)->GetMiscValueB();
+        }
 
+    if (apply)
+    {
+        newPhase |= GetMiscValueB();
+        newTerrainPhase |= GetMiscValue();
+    }
+
+    // phase auras normally not expected at BG but anyway better check
     if (Player* player = target->ToPlayer())
     {
         if (!newPhase)
             newPhase = PHASEMASK_NORMAL;
+
+        // drop flag at invisible in bg
+        if (player->InBattleground())
+            if (Battleground *bg = player->GetBattleground())
+                bg->EventPlayerDroppedFlag(player);
 
         // GM-mode have mask 0xFFFFFFFF
         if (player->isGameMaster())
             newPhase = 0xFFFFFFFF;
 
         player->SetPhaseMask(newPhase, false);
-        player->GetSession()->SendSetPhaseShift(newPhase);
+
+        //if (player->GetMapId() == 638)
+            player->GetSession()->SendTerrainPhase(41811968);
+        player->GetSession()->SendSetPhaseShift(newPhase, player->GetMapId());
     }
     else
     {
@@ -1898,14 +1920,6 @@ void AuraEffect::HandlePhase(AuraApplication const* aurApp, uint8 mode, bool app
         }
 
         target->SetPhaseMask(newPhase, false);
-    }
-
-    // call functions which may have additional effects after changing state of unit
-    // phase auras normally not expected at BG but anyway better check
-    if (apply && (mode & AURA_EFFECT_HANDLE_REAL))
-    {
-        // drop flag at invisibility in bg
-        target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
     }
 
     // need triggering visibility update base at phase update of not GM invisible (other GMs anyway see in any phases)

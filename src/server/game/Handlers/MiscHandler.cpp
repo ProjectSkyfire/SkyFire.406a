@@ -1696,30 +1696,40 @@ void WorldSession::HandleReadyForAccountDataTimes(WorldPacket& /*recvData*/)
     SendAccountDataTimes(GLOBAL_CACHE_MASK);
 }
 
-void WorldSession::SendSetPhaseShift(uint32 PhaseShift, uint32 MapID)
+void WorldSession::SendTerrainPhase(uint32 TerrainSwap)
 {
-    if (!_player)
+    if(!_player)
         return;
 
-    WorldPacket data(SMSG_SET_PHASE_SHIFT, 4);
+    WorldPacket data(SMSG_SET_PHASE_SHIFT, 30);
+    data << uint64(_player->GetGUID());
+    data << uint32(0);    // unk
+    data << uint32(0);    // Phase
+    data << uint32(0);    // PhaseShift
+    data << uint32(2);    // Terrain Phase
+
+    data << uint16(638);  // map (test map - 638 Gilneas)
+    data << uint32(8);    // unk
+    SendPacket(&data);
+}
+
+void WorldSession::SendSetPhaseShift(uint32 PhaseShift, uint32 MapID)
+{
+    if(!_player)
+        return;
+
+    WorldPacket data(SMSG_SET_PHASE_SHIFT, 32);
     data << uint64(_player->GetGUID());
     data << uint32(0); // Count of bytes - Array1 - Unused
     data << uint32(0); // Count of bytes - Array2 - TerrainSwap, unused.
-
     data << uint32(2); // Count of bytes - Array3 - Phases
     data << uint16(PhaseShift);
+    // Note that multiple phases are supported.
 
-    if (MapID)
-    {
-        data << uint32(2); // Count of bytes - Array4 - TerrainSwap
-        data << uint16(MapID);
-    }
-    else data << uint32(0);
+    data << uint32(2); // Count of bytes - Array4 - TerrainSwap
+    data << uint16(MapID);
 
-    if (!PhaseShift)
-        data << uint32(0x08);
-    else
-        data << uint32(0); // Flags (seem to be from Phase.dbc, not really sure)
+    data << uint32(0); // Flags (seem to be from Phase.dbc, not really sure)
     SendPacket(&data);
 }
 

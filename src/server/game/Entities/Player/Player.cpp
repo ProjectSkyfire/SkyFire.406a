@@ -22885,7 +22885,9 @@ void Player::SendInitialPacketsAfterAddToMap()
     uint32 newzone, newarea;
     GetZoneAndAreaId(newzone, newarea);
     UpdateZone(newzone, newarea);                            // also call SendInitWorldStates();
-
+   
+    GetSession()->SendTerrainPhase(41811968);
+    
     ResetTimeSync();
     SendTimeSync();
 
