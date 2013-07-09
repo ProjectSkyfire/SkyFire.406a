@@ -16,7 +16,7 @@ git:
 
 branches:
   only:
-    - terrain_phase_testing
+    - master
 
 compiler:
   - gcc
