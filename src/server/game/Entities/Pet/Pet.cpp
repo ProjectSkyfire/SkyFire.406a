@@ -819,16 +819,21 @@ bool Guardian::InitStatsForLevel(uint8 petLevel)
 
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
 
-    // Scale
+    // Pet Scaling
     CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->family);
     if (cFamily && cFamily->minScale > 0.0f && petType == HUNTER_PET)
     {
         float scale;
-        // min scale = 0.8 // max scale = 1.8 <-Changed to 1.0 //
-        scale = 0.8 + (getLevel()  * ((1.0 - 0.8) / 85));
+        if (getLevel() >= cFamily->maxScaleLevel)
+            scale = cFamily->maxScale;
+        else if (getLevel() <= cFamily->minScaleLevel)
+            scale = cFamily->minScale;
+        else
+            scale = cFamily->minScale + float(getLevel() - cFamily->minScaleLevel) / cFamily->maxScaleLevel * (cFamily->maxScale - cFamily->minScale);
 
         SetFloatValue(OBJECT_FIELD_SCALE_X, scale);
     }
+
 
     // Resistance
     for (uint8 i = SPELL_SCHOOL_HOLY; i < MAX_SPELL_SCHOOL; ++i)
