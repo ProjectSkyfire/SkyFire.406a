@@ -15,6 +15,14 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+ /* Script Data Start
+SFName: gilneas
+SFAuthor:
+SF%Complete: 80
+SFComment: this is for scripting Gilneas City (map 638).
+SFCategory: Zone script
+Script Data End */
+
 #include "ScriptPCH.h"
 #include "Unit.h"
 #include "gilneas.h"
@@ -613,7 +621,7 @@ public:
             else
             {
                 sLog->outError("waypoint_data for frightened citizen missing");
-                return paths;  //- this needs correctly fixed! -truncation from double to float (warnings, that can be fixed)
+                return paths;
             }
             if (result[1]) paths.pointsCount[1] = result[1]->GetRowCount();
             else

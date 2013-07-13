@@ -11,8 +11,8 @@
 
 # output generic information about the core and buildtype chosen
 message("")
-message("* SkyFireEMU rev. hash  : ${rev_hash}")
-message("* SkyFireEMU rev. date  : ${rev_date}")
+message("* SkyFireEMU revision: ${rev_hash} ${rev_date} (${rev_branch} branch)")
+
 if( UNIX )
   message("* SkyFireEMU buildtype  : ${CMAKE_BUILD_TYPE}")
 endif()
@@ -88,5 +88,29 @@ if( WIN32 )
     message("* Use MySQL sourcetree   : No")
   endif()
 endif( WIN32 )
+
+
+if ( WITHOUT_GIT )
+  message("* Use GIT revision hash  : No")
+  message("")
+  message(" *** WITHOUT_GIT - WARNING!")
+  message(" *** By choosing the WITHOUT_GIT option you have waived all rights for support,")
+  message(" *** and accept that or all requests for support or assistance sent to the core")
+  message(" *** developers will be rejected. This due to that we will be unable to detect")
+  message(" *** what revision of the codebase you are using in a proper way.")
+  message(" *** We remind you that you need to use the repository codebase and a supported")
+  message(" *** version of git for the revision-hash to work, and be allowede to ask for")
+  message(" *** support if needed.")
+else()
+  message("* Use GIT revision hash  : Yes")
+endif()
+
+if ( NOJEM )
+  message("")
+  message(" *** NOJEM - WARNING!")
+  message(" *** jemalloc linking has been disabled!")
+  message(" *** Please note that this is for DEBUGGING WITH VALGRIND only!")
+  message(" *** DO NOT DISABLE IT UNLESS YOU KNOW WHAT YOU'RE DOING!")
+endif()
 
 message("")

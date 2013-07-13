@@ -941,13 +941,13 @@ public:
         return true;
     }
 
-    static bool HandleDebugSendSetPhaseShiftCommand(ChatHandler* handler, char const* args)
+    static bool HandleDebugSendSetPhaseShiftCommand(ChatHandler* handler, const char* args)
     {
         if (!*args)
             return false;
 
         uint32 PhaseShift = atoi(args);
-        handler->GetSession()->SendSetPhaseShift(PhaseShift);
+        handler->GetSession()->SendSetPhaseShift(PhaseShift, handler->GetSession()->GetPlayer()->GetMapId());
         return true;
     }
 
