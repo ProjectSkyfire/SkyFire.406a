@@ -46,7 +46,7 @@ enum PaladinSpells
     SPELL_PALADIN_GUARDIAN_ANCIENT_KINGS         = 86150,
     SPELL_PALADIN_RETRI_GUARDIAN                 = 86698,
     SPELL_PALADIN_HOLY_GUARDIAN                  = 86669,
-    SPELL_PALADIN_PROT_GUARDIAN                  = 86659
+    SPELL_PALADIN_PROT_GUARDIAN                  = 86659,
 
     SPELL_DIVINE_STORM                           = 53385,
     SPELL_DIVINE_STORM_DUMMY                     = 54171,
