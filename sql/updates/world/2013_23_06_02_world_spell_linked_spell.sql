@@ -1,3 +1,5 @@
--- Spell Fix: Paladin - guardian_ancient_kings
-DELETE FROM `spell_script_names` WHERE `ScriptName`="spell_pal_guardian_ancient_kings";
-INSERT INTO `spell_script_names` (spell_id, ScriptName) VALUES(-86150, "spell_pal_guardian_ancient_kings"); 
+-- Last Stand spell fix
+DELETE FROM `spell_linked_spell` WHERE `spell_trigger` IN(12975,53478);
+INSERT INTO `spell_linked_spell` (`spell_trigger`, `spell_effect`, `comment`) VALUES 
+(12975,12976,'Warrior Last Stand'),
+(53478,53479,'Hunter Last Stand'); 
