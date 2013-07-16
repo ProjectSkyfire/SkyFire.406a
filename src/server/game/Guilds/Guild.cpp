@@ -1664,21 +1664,31 @@ void Guild::HandleSetRankInfo(WorldSession* session, uint8 rankId, const std::st
 
 void Guild::HandleBuyBankTab(WorldSession* session, uint8 tabId)
 {
+    Player* player = session->GetPlayer();
+    if (!player)
+        return;
+        
+    if (_GetPurchasedTabsSize() >= GUILD_BANK_MAX_TABS)
+        return;
+
     if (tabId != _GetPurchasedTabsSize())
         return;
 
-    uint64 tabCost = _GetGuildBankTabPrice(tabId) * GOLD;
-    if (!tabCost)
-        return;
+    // Do not get money for bank tabs that the GM bought, we had to buy them already.
+    // This is just a speedup check, GetGuildBankTabPrice will return 0.
+    if (tabId < GUILD_BANK_MAX_TABS - 2) // 7th tab is actually the 6th
+    {
+        uint32 tabCost = _GetGuildBankTabPrice(tabId) * GOLD;
+        if (!tabCost)
+            return;
 
-    Player* player = session->GetPlayer();
-    if (!player->HasEnoughMoney(tabCost))                   // Should not happen, this is checked by client
-        return;
+        if (!player->HasEnoughMoney(uint64(tabCost)))                   // Should not happen, this is checked by client
+            return;
 
-    if (!_CreateNewBankTab())
-        return;
+        player->ModifyMoney(-int64(tabCost));
+    }
 
-    player->ModifyMoney(-int32(tabCost));
+    _CreateNewBankTab();
     _SetRankBankMoneyPerDay(player->GetRank(), uint32(GUILD_WITHDRAW_MONEY_UNLIMITED));
     _SetRankBankTabRightsAndSlots(player->GetRank(), tabId, GuildBankRightsAndSlots(GUILD_BANK_RIGHT_FULL, uint32(GUILD_WITHDRAW_SLOT_UNLIMITED)));
     HandleRoster();                                         // Broadcast for tab rights update
