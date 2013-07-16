@@ -5008,7 +5008,7 @@ SpellCastResult Spell::CheckCast(bool strict)
 
                 break;
             }
-            case SPELL_EFFECT_UNLOCK_GUILD_VAULT_TAB:
+            case SPELL_EFFECT_BUY_GUILD_TAB: // Perk: Guild Bank 7th Slot
             {
                 if (m_caster->GetTypeId() != TYPEID_PLAYER)
                     return SPELL_FAILED_BAD_TARGETS;
