@@ -25162,6 +25162,12 @@ bool Player::LearnTalent(uint32 talentId, uint32 talentRank)
     return true;
 }
 
+Guild* Player::GetGuild()
+{
+    uint32 guildId = GetGuildId();
+    return guildId ? sGuildMgr->GetGuildById(guildId) : NULL;
+}
+
 void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)
 {
     Pet* pet = GetPet();

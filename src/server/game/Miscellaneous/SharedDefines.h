@@ -871,7 +871,7 @@ enum SpellEffects
     SPELL_EFFECT_170                                    = 170,
     SPELL_EFFECT_171                                    = 171,  // Summons gameobject
     SPELL_EFFECT_172                                    = 172,  // Aoe resurrection
-    SPELL_EFFECT_BUY_GUILD_TAB                          = 173,  // Guild tab unlocked (guild perk)
+    SPELL_EFFECT_UNLOCK_GUILD_VAULT_TAB                 = 173,  // Guild tab unlocked (guild perk)
     SPELL_EFFECT_APPLY_AURA_2                           = 174,
     TOTAL_SPELL_EFFECTS                                 = 175
 };

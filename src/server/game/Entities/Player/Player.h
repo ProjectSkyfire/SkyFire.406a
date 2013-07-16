@@ -1922,6 +1922,7 @@ class Player : public Unit, public GridObject<Player>
         void SetGuildIdInvited(uint32 GuildId) { _GuildIdInvited = GuildId; }
         uint32 GetGuildId() { return guild;  }
         static uint32 GetGuildIdFromGUID(uint64 guid);
+        Guild* GetGuild();        
         static uint8 GetRankFromDB(uint64 guid);
         int GetGuildIdInvited() { return _GuildIdInvited; }
         static void RemovePetitionsAndSigns(uint64 guid, uint32 type);
