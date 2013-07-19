@@ -369,7 +369,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      // 311 - 0 spells in 3.3.5
     &AuraEffect::HandleModStealth,                                // 312 - Stealth Aura
     &AuraEffect::HandleNULL,                                      // 313 - 0 spells in 3.3.5
-    &AuraEffect::HandlePreventResurrection,                       // 314 - SPELL_AURA_PREVENT_RESURRECTION todo
+    &AuraEffect::HandlePreventResurrection,                       // 314 - SPELL_AURA_PREVENT_RESURRECTION
     &AuraEffect::HandleNoImmediateEffect,                         // 315 - SPELL_AURA_UNDERWATER_WALKING todo
     &AuraEffect::HandleNoImmediateEffect,                         // 316 - SPELL_AURA_PERIODIC_HASTE implemented in AuraEffect::CalculatePeriodic
     &AuraEffect::HandleAuraModSpellPowerPercent,                  // 317 - SPELL_AURA_MOD_SPELL_POWER_PCT
