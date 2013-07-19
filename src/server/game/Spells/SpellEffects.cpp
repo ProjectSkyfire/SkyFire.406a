@@ -239,7 +239,7 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectNULL,                                     // 169 SPELL_EFFECT_REMOVE_ITEM
     &Spell::EffectNULL,                                     // 170 - phasing related
     &Spell::EffectNULL,                                     // 171 - summon object.
-    &Spell::EffectResurrect,                                // 172 SPELL_EFFECT_MASS_RESSURECT           aoe resurrection - guild perk
+    &Spell::EffectResurrect,                                // 172 SPELL_EFFECT_MASS_RESURRECT           aoe resurrection - guild perk
     &Spell::EffectUnlockGuildVaultTab,                      // 173 SPELL_EFFECT_UNLOCK_GUILD_VAULT_TAB   unlocks 7/8 guild vault tabs - guild perk
     &Spell::EffectNULL,                                     // 174 SPELL_EFFECT_APPLY_AURA_2
 };
@@ -2210,7 +2210,29 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
 
     if (!m_spellAura || !unitTarget)
         return;
+    //For some funky reason, some spells have to be cast as a spell on the enemy even if they're supposed to apply an aura.
 
+    // post effects for TARGET_DST_DB
+    switch (m_spellInfo->Id)
+    {
+        case 68992: // Darkflight, worgen's sprint spell.
+        case 87840: // Running Wild
+        {
+            if(m_caster->GetTypeId() == TYPEID_PLAYER)
+                m_caster->ToPlayer()->setInWorgenForm(UNIT_FLAG2_WORGEN_TRANSFORM2);
+            break;
+        }
+        case 89485: // Inner Focus
+        {
+            if (m_caster->HasAura(89488)) // Strength of Soul Rank 1
+                m_caster->CastSpell(m_caster, 96266, true);
+            
+            if (m_caster->HasAura(89489)) // Strength of Soul Rank 2
+                m_caster->CastSpell(m_caster, 96267, true);
+            
+            break;
+        }
+    }
     ASSERT(unitTarget == m_spellAura->GetOwner());
     m_spellAura->_ApplyEffectForTargets(effIndex);
 }
