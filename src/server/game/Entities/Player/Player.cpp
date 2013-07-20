@@ -656,10 +656,10 @@ UpdateMask Player::updateVisualBits;
 #ifdef _MSC_VER
 #pragma warning(disable:4355)
 #endif
-Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reputationMgr(this)
+Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reputationMgr(this), phaseMgr(this)
 {
 #ifdef _MSC_VER
-#pragma warning(default:4355)
+#	pragma warning(default:4355)
 #endif
 
     _speakTime = 0;
@@ -15835,6 +15835,11 @@ void Player::AddQuest(Quest const *quest, Object *questGiver)
                     CastSpell(this, itr->second->spellId, true);
     }
 
+    PhaseUpdateData phaseUdateData;
+    phaseUdateData.AddQuestUpdate(quest_id);
+
+    phaseMgr.NotifyConditionChanged(phaseUdateData);
+
     UpdateForQuestWorldObjects();
 }
 
@@ -16025,6 +16030,11 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
     RemoveActiveQuest(quest_id);
     _RewardedQuests.insert(quest_id);
     _RewardedQuestsSave[quest_id] = true;
+
+    PhaseUpdateData phaseUdateData;
+    phaseUdateData.AddQuestUpdate(quest_id);
+
+    phaseMgr.NotifyConditionChanged(phaseUdateData);
 
     // StoreNewItem, mail reward, etc. save data directly to the database
     // to prevent exploitable data desynchronisation we save the quest status to the database too
@@ -16623,6 +16633,11 @@ void Player::SetQuestStatus(uint32 quest_id, QuestStatus status)
         _QuestStatus[quest_id].Status = status;
         _QuestStatusSave[quest_id] = true;
     }
+
+    PhaseUpdateData phaseUdateData;
+    phaseUdateData.AddQuestUpdate(quest_id);
+
+    phaseMgr.NotifyConditionChanged(phaseUdateData);
 
     UpdateForQuestWorldObjects();
 }
@@ -22885,9 +22900,7 @@ void Player::SendInitialPacketsAfterAddToMap()
     uint32 newzone, newarea;
     GetZoneAndAreaId(newzone, newarea);
     UpdateZone(newzone, newarea);                            // also call SendInitWorldStates();
-   
-    GetSession()->SendTerrainPhase(41811968);
-    
+
     ResetTimeSync();
     SendTimeSync();
 
@@ -24872,25 +24885,6 @@ void Player::_LoadSkills(PreparedQueryResult result)
         if (GetPureSkillValue(SKILL_UNARMED) < base_skill)
             SetSkill(SKILL_UNARMED, 0, base_skill, base_skill);
     }
-}
-
-uint32 Player::GetPhaseMaskForSpawn() const
-{
-    uint32 phase = PHASEMASK_NORMAL;
-    if (!isGameMaster())
-        phase = GetPhaseMask();
-    else
-    {
-        AuraEffectList const& phases = GetAuraEffectsByType(SPELL_AURA_PHASE);
-        if (!phases.empty())
-            phase = phases.front()->GetMiscValue();
-    }
-
-    // some aura phases include 1 normal map in addition to phase itself
-    if (uint32 n_phase = phase & ~PHASEMASK_NORMAL)
-        return n_phase;
-
-    return PHASEMASK_NORMAL;
 }
 
 InventoryResult Player::CanEquipUniqueItem(Item* pItem, uint8 eslot, uint32 limit_count) const
