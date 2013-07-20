@@ -242,8 +242,7 @@ class WorldSession
         void SendPetNameInvalid(uint32 error, const std::string& name, DeclinedName *declinedName);
         void SendPartyResult(PartyOperation operation, const std::string& member, PartyResult res, uint32 val = 0);
         void SendAreaTriggerMessage(const char* Text, ...) ATTR_PRINTF(2, 3);
-        void SendSetPhaseShift(uint32 phaseShift, uint32 MapID);
-        void SendTerrainPhase(uint32 TerrainSwap);        
+        void SendSetPhaseShift(std::set<uint32> const& phaseIds, std::set<uint32> const& terrainswaps);
         void SendQueryTimeResponse();
 
         void SendAuthResponse(uint8 code, bool shortForm, uint32 queuePos = 0);
@@ -537,7 +536,7 @@ class WorldSession
         void HandleGroupInviteOpcode(WorldPacket& recvPacket);
         //void HandleGroupCancelOpcode(WorldPacket& recvPacket);
         void HandleGroupAcceptOpcode(WorldPacket& recvPacket);
-		void HandleGroupDeclineOpcode(WorldPacket& recvPacket);
+        void HandleGroupDeclineOpcode(WorldPacket& recvPacket);
         void HandleGroupUninviteOpcode(WorldPacket& recvPacket);
         void HandleGroupUninviteGuidOpcode(WorldPacket& recvPacket);
         void HandleGroupSetLeaderOpcode(WorldPacket& recvPacket);

@@ -38,6 +38,7 @@
 #include "Util.h"                                           // for Tokens typedef
 #include "WorldSession.h"
 #include "Group.h"
+#include "PhaseMgr.h"
 
 // for template
 #include "SpellMgr.h"
@@ -1279,7 +1280,8 @@ class Player : public Unit, public GridObject<Player>
         Pet* GetPet() const;
         Pet* SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 despwtime, PetSlot slotID = PET_SLOT_UNK_SLOT);
         void RemovePet(Pet* pet, PetSlot mode, bool returnreagent = false);
-        uint32 GetPhaseMaskForSpawn() const;                // used for proper set phase for DB at GM-mode creature/GO spawn
+ 
+        PhaseMgr& GetPhaseMgr() { return phaseMgr; }
 
         void Say(const std::string& text, const uint32 language);
         void Yell(const std::string& text, const uint32 language);
@@ -2975,10 +2977,13 @@ class Player : public Unit, public GridObject<Player>
         InstanceTimeMap _instanceResetTimes;
         uint32 _pendingBindId;
         uint32 _pendingBindTimer;
+        
         uint32 talentPoints;
         uint32 profPoints;
         uint32 guild;
+        
         bool _canUseMastery;
+        PhaseMgr phaseMgr;
 };
 
 void AddItemsSetItem(Player*player, Item *item);
