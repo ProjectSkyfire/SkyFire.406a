@@ -15,3 +15,4 @@ INSERT INTO `script_texts` (`npc_entry`, `entry`, `content_default`, `content_lo
 (41379,-2000002, "Lightning conductor works much better in a crowd, yes?", NULL, 0, 14, 0, 0, NULL),
 (41379,-2000003, "Were you planning on using Toxitron's chemical to damage the other constructs? Clever plan, let me ruin that for you.", NULL, 0, 14, 0, 0, NULL),
 (41379,-2000004, "You would like to move away from that, wouldn't you? Too bad.", NULL, 0, 14, 0, 0, NULL);
+
