@@ -701,7 +701,7 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
 
     _nextSave = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
 
-    clearResurrectRequestData();
+    _resurrectionData = NULL;
 
     memset(_items, 0, sizeof(Item*)*PLAYER_SLOTS_COUNT);
 
@@ -905,6 +905,8 @@ Player::~Player ()
 
     delete _declinedname;
     delete _runes;
+
+    ClearResurrectRequestData();
 
     sWorld->DecreasePlayerCount();
 }
@@ -1829,7 +1831,7 @@ void Player::setDeathState(DeathState s)
         // lost combo points at any target (targeted combo points clear in Unit::setDeathState)
         ClearComboPoints();
 
-        clearResurrectRequestData();
+        ClearResurrectRequestData();
 
         //FIXME: is pet dismissed at dying or releasing spirit? if second, add setDeathState(DEAD) to HandleRepopRequestOpcode and define pet unsummon here with (s == DEAD)
         RemovePet(NULL, PET_SAVE_AS_CURRENT, true);
@@ -2362,6 +2364,9 @@ void Player::ProcessDelayedOperations()
         SetPower(POWER_RAGE, 0);
         SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
         SetPower(POWER_ECLIPSE, 0);
+
+        if (uint32 aura = _resurrectionData->Aura)
+            CastSpell(this, aura, true, NULL, NULL, _resurrectionData->GUID);
 
         SpawnCorpseBones();
     }
@@ -23877,7 +23882,9 @@ uint32 Player::GetBaseWeaponSkillValue (WeaponAttackType attType) const
 void Player::ResurectUsingRequestData()
 {
     /// Teleport before resurrecting by player, otherwise the player might get attacked from creatures near his corpse
-    TeleportTo(m_resurrectMap, m_resurrectX, m_resurrectY, m_resurrectZ, GetOrientation());
+    float x, y, z, o;
+    _resurrectionData->Location.GetPosition(x, y, z, o);
+    TeleportTo(_resurrectionData->Location.GetMapId(), x, y, z, o);
 
     //we cannot resurrect player when we triggered far teleport
     //player will be resurrected upon teleportation

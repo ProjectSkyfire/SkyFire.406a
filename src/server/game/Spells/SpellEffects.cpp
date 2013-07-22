@@ -239,7 +239,7 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectNULL,                                     // 169 SPELL_EFFECT_REMOVE_ITEM
     &Spell::EffectNULL,                                     // 170 - phasing related
     &Spell::EffectNULL,                                     // 171 - summon object.
-    &Spell::EffectResurrect,                                // 172 SPELL_EFFECT_MASS_RESURRECT           aoe resurrection - guild perk
+    &Spell::EffectResurrectWithAura,                        // 172 SPELL_EFFECT_RESURRECT_WITH_AURA      aoe resurrection - guild perk
     &Spell::EffectUnlockGuildVaultTab,                      // 173 SPELL_EFFECT_UNLOCK_GUILD_VAULT_TAB   unlocks 7/8 guild vault tabs - guild perk
     &Spell::EffectNULL,                                     // 174 SPELL_EFFECT_APPLY_AURA_2
 };
@@ -270,13 +270,13 @@ void Spell::EffectResurrectNew(SpellEffIndex effIndex)
 
     Player* target = unitTarget->ToPlayer();
 
-    if (target->isRessurectRequested())       // already have one active request
+    if (target->IsResurrectRequested())       // already have one active request
         return;
 
     uint32 health = damage;
     uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
     ExecuteLogEffectResurrect(effIndex, target);
-    target->setResurrectRequestData(m_caster->GetGUID(), m_caster->GetMapId(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), health, mana);
+    target->SetResurrectRequestData(m_caster->GetGUID(), m_caster->GetMapId(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), health, mana);
     SendResurrectRequest(target);
 }
 
@@ -6357,7 +6357,7 @@ void Spell::EffectResurrect(SpellEffIndex effIndex)
 
     Player* target = unitTarget->ToPlayer();
 
-    if (target->isRessurectRequested())       // already have one active request
+    if (target->IsResurrectRequested())       // already have one active request
         return;
 
     uint32 health = target->CountPctFromMaxHealth(damage);
@@ -6365,7 +6365,7 @@ void Spell::EffectResurrect(SpellEffIndex effIndex)
 
     ExecuteLogEffectResurrect(effIndex, target);
 
-    target->setResurrectRequestData(m_caster->GetGUID(), m_caster->GetMapId(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), health, mana);
+    target->SetResurrectRequestData(m_caster, health, mana, 0);
     SendResurrectRequest(target);
 }
 
@@ -7740,7 +7740,7 @@ void Spell::EffectBind(SpellEffIndex effIndex)
     player->SendDirectMessage(&data);
 }
 
-void Spell::EffectDamageSelfPct(SpellEffIndex effIndex)
+void Spell::EffectDamageSelfPct(SpellEffIndex /*effIndex*/)
 {
     if (!unitTarget || !unitTarget->isAlive() || damage < 0) return;
 
@@ -7771,3 +7771,36 @@ void Spell::EffectUnlockGuildVaultTab(SpellEffIndex effIndex)
     if (Guild* guild = caster->GetGuild())
         guild->HandleBuyBankTab(caster->GetSession(), m_spellInfo->Effects[effIndex].BasePoints - 1); // Bank tabs start at zero internally
 }
+
+void Spell::EffectResurrectWithAura(SpellEffIndex effIndex)
+{
+    if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
+        return;
+
+    if (!unitTarget || !unitTarget->IsInWorld())
+        return;
+
+    Player* target = unitTarget->ToPlayer();
+    if (!target)
+        return;
+
+    if (unitTarget->isAlive())
+        return;
+
+    if (target->IsResurrectRequested())       // already have one active request
+        return;
+
+    uint32 health = target->CountPctFromMaxHealth(damage);
+    uint32 mana   = CalculatePct(target->GetMaxPower(POWER_MANA), damage);
+    uint32 resurrectAura = 0;
+    
+    if (sSpellMgr->GetSpellInfo(GetSpellInfo()->Effects[effIndex].TriggerSpell))
+        resurrectAura = GetSpellInfo()->Effects[effIndex].TriggerSpell;
+
+    if (resurrectAura && target->HasAura(resurrectAura))
+        return;
+
+    ExecuteLogEffectResurrect(effIndex, target);
+    target->SetResurrectRequestData(m_caster, health, mana, resurrectAura);
+    SendResurrectRequest(target);
+}

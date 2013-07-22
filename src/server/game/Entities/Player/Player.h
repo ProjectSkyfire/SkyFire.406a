@@ -1073,6 +1073,15 @@ class TradeData
         uint64     _items[TRADE_SLOT_COUNT];               // traded itmes from _player side including non-traded slot
 };
 
+struct ResurrectionData
+{
+    uint64 GUID;
+    WorldLocation Location;
+    uint32 Health;
+    uint32 Mana;
+    uint32 Aura;
+};
+
 class KillRewarder
 {
 public:
@@ -1846,19 +1855,32 @@ class Player : public Unit, public GridObject<Player>
         void SetLastPotionId(uint32 item_id) { _lastPotionId = item_id; }
         void UpdatePotionCooldown(Spell* spell = NULL);
 
-        void setResurrectRequestData(uint64 guid, uint32 mapId, float X, float Y, float Z, uint32 health, uint32 mana)
+        void SetResurrectRequestData(Unit* caster, uint32 health, uint32 mana, uint32 appliedAura)
         {
-            m_resurrectGUID = guid;
-            m_resurrectMap = mapId;
-            m_resurrectX = X;
-            m_resurrectY = Y;
-            m_resurrectZ = Z;
-            _resurrectHealth = health;
-            _resurrectMana = mana;
+            ASSERT(!IsResurrectRequested());
+            _resurrectionData = new ResurrectionData();
+            _resurrectionData->GUID = caster->GetGUID();
+            _resurrectionData->Location.WorldRelocate(*caster);
+            _resurrectionData->Health = health;
+            _resurrectionData->Mana = mana;
+            _resurrectionData->Aura = appliedAura;
         }
-        void clearResurrectRequestData() { setResurrectRequestData(0, 0, 0.0f, 0.0f, 0.0f, 0, 0); }
-        bool isRessurectRequestedBy(uint64 guid) const { return m_resurrectGUID == guid; }
-        bool isRessurectRequested() const { return m_resurrectGUID != 0; }
+
+        void ClearResurrectRequestData()
+        {
+            delete _resurrectionData;
+            _resurrectionData = NULL;
+        }
+
+        bool IsResurrectRequestedBy(uint64 guid) const
+        {
+            if (!IsResurrectRequested())
+                return false;
+
+            return _resurrectionData->GUID == guid;
+        }
+
+        bool IsResurrectRequested() const { return _resurrectionData != NULL; }
         void ResurectUsingRequestData();
 
         uint8 getCinematic()
@@ -2828,12 +2850,9 @@ class Player : public Unit, public GridObject<Player>
         void ResetTimeSync();
         void SendTimeSync();
 
-        uint64 m_resurrectGUID;
-        uint32 m_resurrectMap;
-        float m_resurrectX, m_resurrectY, m_resurrectZ;
-        uint32 _resurrectHealth;
-        int32 _resurrectMana;
-
+        ResurrectionData* _resurrectionData;
+        uint32 _resurrectHealth, _resurrectMana;
+		
         WorldSession *m_session;
 
         typedef std::list<Channel*> JoinedChannelsList;

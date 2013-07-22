@@ -354,6 +354,7 @@ class Spell
         void EffectCastButtons(SpellEffIndex effIndex);
         void EffectRechargeManaGem(SpellEffIndex effIndex);
         void EffectDamageSelfPct(SpellEffIndex effIndex);
+        void EffectResurrectWithAura(SpellEffIndex effIndex);
         
         typedef std::set<Aura*> UsedSpellMods;
 
