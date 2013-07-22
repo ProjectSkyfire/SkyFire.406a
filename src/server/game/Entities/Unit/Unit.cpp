@@ -15951,6 +15951,11 @@ bool Unit::HandleAuraRaidProcFromChargeWithValue(AuraEffect* triggeredByAura)
     }
 
     // heal
+    if (Unit* caster = triggeredByAura->GetCaster())
+        // Glyph of Prayer Of Mending, apply heal bonus on first jump  
+        if (caster->HasAura(55685) && jumps == 4)
+            heal += heal * 0.6f;  // 60% increased heal  
+            
     CastCustomSpell(this, 33110, &heal, NULL, NULL, true, NULL, NULL, caster_guid);
     return true;
 }

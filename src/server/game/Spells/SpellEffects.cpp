@@ -2210,7 +2210,7 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
 
     if (!m_spellAura || !unitTarget)
         return;
-    //For some funky reason, some spells have to be cast as a spell on the enemy even if they're supposed to apply an aura.
+    // For some funky reason, some spells have to be cast as a spell on the enemy even if they're suppose to apply an aura.
 
     // post effects for TARGET_DST_DB
     switch (m_spellInfo->Id)
@@ -2218,7 +2218,7 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
         case 68992: // Darkflight, worgen's sprint spell.
         case 87840: // Running Wild
         {
-            if(m_caster->GetTypeId() == TYPEID_PLAYER)
+            if (m_caster->GetTypeId() == TYPEID_PLAYER)
                 m_caster->ToPlayer()->setInWorgenForm(UNIT_FLAG2_WORGEN_TRANSFORM2);
             break;
         }
