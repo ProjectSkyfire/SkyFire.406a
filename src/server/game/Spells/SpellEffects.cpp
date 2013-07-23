@@ -276,7 +276,7 @@ void Spell::EffectResurrectNew(SpellEffIndex effIndex)
 	uint32 health = damage;
 	uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
 	ExecuteLogEffectResurrect(effIndex, target);
-    target->SetResurrectRequestData(m_caster, health, mana, 0);
+	target->SetResurrectRequestData(m_caster, health, mana, 0);
 	SendResurrectRequest(target);
 }
 
