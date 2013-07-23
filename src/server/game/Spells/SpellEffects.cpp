@@ -273,11 +273,11 @@ void Spell::EffectResurrectNew(SpellEffIndex effIndex)
     if (target->IsResurrectRequested())       // already have one active request
         return;
 
-    uint32 health = damage;
-    uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
-    ExecuteLogEffectResurrect(effIndex, target);
+	uint32 health = damage;
+	uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
+	ExecuteLogEffectResurrect(effIndex, target);
     target->SetResurrectRequestData(m_caster, health, mana, 0);
-    SendResurrectRequest(target);
+	SendResurrectRequest(target);
 }
 
 void Spell::EffectInstaKill(SpellEffIndex /*effIndex*/)
