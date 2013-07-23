@@ -273,11 +273,11 @@ void Spell::EffectResurrectNew(SpellEffIndex effIndex)
     if (target->IsResurrectRequested())       // already have one active request
         return;
 
-    uint32 health = damage;
-    uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
-    ExecuteLogEffectResurrect(effIndex, target);
-    target->SetResurrectRequestData(m_caster->GetGUID(), m_caster->GetMapId(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), health, mana);
-    SendResurrectRequest(target);
+	uint32 health = damage;
+	uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
+	ExecuteLogEffectResurrect(effIndex, target);
+	target->SetResurrectRequestData(m_caster, health, mana, 0);
+	SendResurrectRequest(target);
 }
 
 void Spell::EffectInstaKill(SpellEffIndex /*effIndex*/)
@@ -7791,7 +7791,7 @@ void Spell::EffectResurrectWithAura(SpellEffIndex effIndex)
         return;
 
     uint32 health = target->CountPctFromMaxHealth(damage);
-    uint32 mana   = CalculatePct(target->GetMaxPower(POWER_MANA), damage);
+    uint32 mana   = CalculatePctU(target->GetMaxPower(POWER_MANA), damage);
     uint32 resurrectAura = 0;
     
     if (sSpellMgr->GetSpellInfo(GetSpellInfo()->Effects[effIndex].TriggerSpell))
@@ -7803,4 +7803,4 @@ void Spell::EffectResurrectWithAura(SpellEffIndex effIndex)
     ExecuteLogEffectResurrect(effIndex, target);
     target->SetResurrectRequestData(m_caster, health, mana, resurrectAura);
     SendResurrectRequest(target);
-}
+}
