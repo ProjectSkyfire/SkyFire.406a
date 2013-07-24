@@ -5095,10 +5095,17 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     if (caster)
                         target->GetMotionMaster()->MoveFall();
                     break;
-                case 49028:
+                case 49028:                                     // Dancing Rune Weapon
                     if (caster)
+                    {
+                        caster->CastSpell(caster, 81256, true);
                         if (AuraEffect* aurEff = caster->GetAuraEffect(63330, 0)) // glyph of Dancing Rune Weapon
+                        {
                             GetBase()->SetDuration(GetBase()->GetDuration() + aurEff->GetAmount());
+                            if (Aura* aura = caster->GetAura(81256))
+                                aura->SetDuration(aura->GetDuration() + aurEff->GetAmount());
+                        }
+                    }
                     break;
                 case 52916: // Honor Among Thieves
                     if (target->GetTypeId() == TYPEID_PLAYER)

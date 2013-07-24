@@ -2851,8 +2851,9 @@ class Player : public Unit, public GridObject<Player>
         void SendTimeSync();
 
         ResurrectionData* _resurrectionData;
-        uint32 _resurrectHealth, _resurrectMana;
-		
+        uint32 _resurrectHealth; 
+		int32 _resurrectMana;
+        
         WorldSession *m_session;
 
         typedef std::list<Channel*> JoinedChannelsList;
