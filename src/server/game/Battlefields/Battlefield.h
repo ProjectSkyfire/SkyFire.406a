@@ -83,6 +83,9 @@ public:
 
     virtual void FillInitialWorldStates(WorldPacket & /*data*/) {}
 
+    // Active players in the area of the objective, 0 - alliance, 1 - horde
+    GuidSet m_activePlayers[2];
+    
     // send world state update to all players present
     void SendUpdateWorldState(uint32 field, uint32 value);
 
@@ -108,9 +111,6 @@ public:
     TeamId GetTeamId() { return _team; }
 protected:
     bool DelCapturePoint();
-
-    // active players in the area of the objective, 0 - alliance, 1 - horde
-    GuidSet m_activePlayers[2];
 
     // total shift needed to capture the objective
     float m_maxValue;

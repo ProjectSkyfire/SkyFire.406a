@@ -44,7 +44,7 @@ Battlefield::Battlefield()
     m_TypeId                   = 0;
     m_BattleId                 = 0;
     m_ZoneId                   = 0;
-    _MapId                    = 0;
+    _MapId                     = 0;
     m_MaxPlayer                = 0;
     m_MinPlayer                = 0;
     m_BattleTime               = 0;
@@ -64,9 +64,9 @@ Battlefield::~Battlefield() {}
 
 void Battlefield::HandlePlayerEnterZone(Player* player, uint32 /*zone*/)
 {
-    //If battle is start,
-    //  if it not fully > invite player to join the war
-    //  if it fully > announce to player that BF is full and kick after few second if he dont leave
+    // If battle is start,
+    //   if it not fully > invite player to join the war
+    //   if it fully > announce to player that BF is full and kick after few second if he dont leave
     if (IsWarTime())
     {
         if (m_PlayersInWar[player->GetTeamId()].size() + m_InvitedPlayers[player->GetTeamId()].size() < m_MaxPlayer)  //Not fully
@@ -111,32 +111,35 @@ void Battlefield::HandlePlayerLeaveZone(Player* player, uint32 /*zone*/)
                     delete group;
                 }
             }
-            OnPlayerLeaveWar(player);                          //For scripting
+            OnPlayerLeaveWar(player);                          // For scripting
         }
     }
 
     for (BfCapturePointMap::iterator itr = m_capturePoints.begin(); itr != m_capturePoints.end(); ++itr)
-        itr->second->HandlePlayerLeave(player);
+    {
+        if (itr->second->m_activePlayers[player->GetTeamId()].find(player->GetGUID()) != itr->second->m_activePlayers[player->GetTeamId()].end()) // If the player is in the capture point
+            itr->second->HandlePlayerLeave(player); // Remove him
+    }
 
     m_InvitedPlayers[player->GetTeamId()].erase(player->GetGUID());
     m_PlayersWillBeKick[player->GetTeamId()].erase(player->GetGUID());
     m_players[player->GetTeamId()].erase(player->GetGUID());
     SendRemoveWorldStates(player);
     RemovePlayerFromResurrectQueue(player->GetGUID());
-    OnPlayerLeaveZone(player);                                 //For scripting
+    OnPlayerLeaveZone(player); // For scripting
 }
 
 bool Battlefield::Update(uint32 diff)
 {
-    //When global timer is end
+    // When global timer is end
     if (m_Timer <= diff)
     {
-        //Here end of battle by timer
+        // Here end of battle by timer
         if (IsWarTime())
         {
             EndBattle(true);
         }
-        //Start of battle
+        // Start of battle
         else
         {
             StartBattle();
@@ -952,6 +955,13 @@ void BfCapturePoint::HandlePlayerLeave(Player *player)
 {
     if (m_capturePoint)
         player->SendUpdateWorldState(m_capturePoint->GetGOInfo()->capturePoint.worldState1, 0);
+    
+    if (m_activePlayers[player->GetTeamId()].find(player->GetGUID()) == m_activePlayers[player->GetTeamId()].end()) // This should not EVER happen
+    {
+        sLog->outError("BfCapturePoint::HandlePlayerLeave() trying to remove a player from the list when the player is not in the list (%s (GUID: %u))", player->GetName(), player->GetGUIDLow());
+        return;
+    }
+           
     m_activePlayers[player->GetTeamId()].erase(player->GetGUID());
 }
 
@@ -962,25 +972,28 @@ void BfCapturePoint::SendChangePhase()
 
     // send this too, sometimes the slider disappears, dunno why :(
     SendUpdateWorldState(m_capturePoint->GetGOInfo()->capturePoint.worldState1, 1);
+    
     // send these updates to only the ones in this objective
     SendUpdateWorldState(m_capturePoint->GetGOInfo()->capturePoint.worldstate2, (uint32) ceil((m_value + m_maxValue) / (2 * m_maxValue) * 100.0f));
+    
     // send this too, sometimes it resets :S
     SendUpdateWorldState(m_capturePoint->GetGOInfo()->capturePoint.worldstate3, m_neutralValuePct);
 }
 
 bool BfCapturePoint::SetCapturePointData(uint32 entry, uint32 /*map */, float x, float y, float z, float o)
-{
+{ 
     sLog->outDebug(LOG_FILTER_BATTLEFIELD, "Creating capture point %u", entry);
-
+    m_capturePoint = NULL;  
+    
     // check info existence
     GameObjectTemplate const* goinfo = sObjectMgr->GetGameObjectTemplate(entry);
     if (!goinfo || goinfo->type != GAMEOBJECT_TYPE_CAPTURE_POINT)
     {
-        sLog->outError("OutdoorPvP: GO %u is not capture point!", entry);
+        sLog->outError("BattleField: GameObject %u is not capture point!", entry);
         return false;
     }
-    m_capturePoint = m_Bf->SpawnGameObject(entry, x, y, z, o);
-    if (m_capturePoint)
+  
+    if (m_capturePoint = m_Bf -> SpawnGameObject(entry, x, y, z, o))
     {
         // get the needed values from goinfo
         m_maxValue = goinfo->capturePoint.maxTime;
@@ -1000,8 +1013,8 @@ bool BfCapturePoint::SetCapturePointData(uint32 entry, uint32 /*map */, float x,
         }
         return true;
     }
-
-    return false;
+    else
+        return false;
 }
 
 bool BfCapturePoint::DelCapturePoint()
@@ -1026,7 +1039,7 @@ bool BfCapturePoint::Update(uint32 diff)
     for (uint8 team = 0; team < 2; ++team)
         for (GuidSet::iterator itr = m_activePlayers[team].begin(); itr != m_activePlayers[team].end(); ++itr)
             if (Player* player = ObjectAccessor::FindPlayer(*itr))
-                if (!m_capturePoint->IsWithinDistInMap(player, radius) || !player->IsOutdoorPvPActive())
+                if (!m_capturePoint->IsWithinDistInMap(player, radius) || !player->IsOutdoorPvPActive())  //IsOutdoorPvPActive() - OPVP or is this a BF?
                     HandlePlayerLeave(player);
 
     std::list<Player*>players;
