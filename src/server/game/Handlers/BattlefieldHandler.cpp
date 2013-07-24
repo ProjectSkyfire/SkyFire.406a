@@ -30,7 +30,7 @@
 //    Param1:(BattleId) the BattleId of Bf
 //    Param2:(ZoneId) the zone where the battle is (4197 for wg)
 //    Param3:(time) Time in second that the player have for accept
-void WorldSession::SendBfInvitePlayerToWar(uint32 BattleId,uint32 ZoneId,uint64 p_time)
+void WorldSession::SendBfInvitePlayerToWar(uint32 BattleId, uint32 ZoneId, uint64 time)
 {
     // Send packet
     WorldPacket data(SMSG_BATTLEFIELD_MGR_ENTRY_INVITE, 16);
@@ -103,7 +103,7 @@ void WorldSession::SendBfLeaveMessage(uint32 BattleId)
 }
 
 // Send by client when he click on accept for queue
-void WorldSession::HandleBfQueueInviteResponse(WorldPacket &recvData)
+void WorldSession::HandleBfQueueInviteResponse(WorldPacket& recvData)
 {
     uint64 data;
     uint8 Accepted;
@@ -121,7 +121,7 @@ void WorldSession::HandleBfQueueInviteResponse(WorldPacket &recvData)
 }
 
 // Send by client on clicking in accept or refuse of invitation windows for join game
-void WorldSession::HandleBfEntryInviteResponse(WorldPacket &recvData)
+void WorldSession::HandleBfEntryInviteResponse(WorldPacket& recvData)
 {
     uint8 Accepted;
     uint64 data;
@@ -146,7 +146,7 @@ void WorldSession::HandleBfEntryInviteResponse(WorldPacket &recvData)
     }
 }
 
-void WorldSession::HandleBfExitRequest(WorldPacket &recvData)
+void WorldSession::HandleBfExitRequest(WorldPacket& recvData)
 {
     uint64 BattleId;
 
@@ -161,7 +161,7 @@ void WorldSession::HandleBfExitRequest(WorldPacket &recvData)
 }
 
 //Send by client when he click on join the queue
-void WorldSession::HandleBfJoinQueue(WorldPacket &recvData)
+void WorldSession::HandleBfJoinQueue(WorldPacket& recvData)
 {
     uint64 data;
 
