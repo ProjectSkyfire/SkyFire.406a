@@ -1289,7 +1289,7 @@ class Player : public Unit, public GridObject<Player>
         Pet* GetPet() const;
         Pet* SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 despwtime, PetSlot slotID = PET_SLOT_UNK_SLOT);
         void RemovePet(Pet* pet, PetSlot mode, bool returnreagent = false);
- 
+
         PhaseMgr& GetPhaseMgr() { return phaseMgr; }
 
         void Say(const std::string& text, const uint32 language);
@@ -1946,7 +1946,7 @@ class Player : public Unit, public GridObject<Player>
         void SetGuildIdInvited(uint32 GuildId) { _GuildIdInvited = GuildId; }
         uint32 GetGuildId() { return guild;  }
         static uint32 GetGuildIdFromGUID(uint64 guid);
-        Guild* GetGuild();        
+        Guild* GetGuild();
         static uint8 GetRankFromDB(uint64 guid);
         int GetGuildIdInvited() { return _GuildIdInvited; }
         static void RemovePetitionsAndSigns(uint64 guid, uint32 type);
@@ -2851,9 +2851,9 @@ class Player : public Unit, public GridObject<Player>
         void SendTimeSync();
 
         ResurrectionData* _resurrectionData;
-        uint32 _resurrectHealth; 
-		int32 _resurrectMana;
-        
+        uint32 _resurrectHealth;
+        int32 _resurrectMana;
+
         WorldSession *m_session;
 
         typedef std::list<Channel*> JoinedChannelsList;
@@ -2997,11 +2997,11 @@ class Player : public Unit, public GridObject<Player>
         InstanceTimeMap _instanceResetTimes;
         uint32 _pendingBindId;
         uint32 _pendingBindTimer;
-        
+
         uint32 talentPoints;
         uint32 profPoints;
         uint32 guild;
-        
+
         bool _canUseMastery;
         PhaseMgr phaseMgr;
 };
