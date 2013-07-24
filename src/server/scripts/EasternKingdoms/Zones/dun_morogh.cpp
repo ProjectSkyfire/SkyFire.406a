@@ -18,10 +18,10 @@
  */
 
 /* ScriptData
-SFName: Tirisfal_Glades
+SFName: Dun_Morogh
 SF%Complete: 0
 SFComment: Script needed for zone quest support
-SFCategory: Tirisfal Glades
+SFCategory: Dun Morogh
 EndScriptData */
 
 /* ContentData
@@ -29,6 +29,6 @@ EndContentData */
 
 #include "ScriptPCH.h"
 
-void AddSC_tirisfal_glades()
+void AddSC_dun_morogh()
 {
 }
