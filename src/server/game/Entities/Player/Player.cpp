@@ -59,6 +59,8 @@
 #include "BattlegroundAV.h"
 #include "BattlegroundMgr.h"
 #include "BattlefieldMgr.h"
+#include "BattlefieldWG.h"
+#include "BattlefieldTB.h"
 #include "OutdoorPvP.h"
 #include "OutdoorPvPMgr.h"
 #include "ArenaTeam.h"
@@ -659,7 +661,7 @@ UpdateMask Player::updateVisualBits;
 Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reputationMgr(this), phaseMgr(this)
 {
 #ifdef _MSC_VER
-#	pragma warning(default:4355)
+#   pragma warning(default:4355)
 #endif
 
     _speakTime = 0;
@@ -8039,6 +8041,36 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
 
     // recent client version not send leave/join channel packets for built-in local channels
     UpdateLocalChannels(newZone);
+
+    // Send WG timer to player at login
+    if (sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE))
+    {
+        if (BattlefieldWG* BfWG = (BattlefieldWG*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG))
+        {
+            if (BfWG->IsWarTime())
+                SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL)));
+            else // Time to next battle
+            {
+                uint32 uiTime = BfWG->GetTimer()/1000;
+                SendUpdateWorldState(ClockWorldState[1], time(NULL) + uiTime);
+            }
+        }
+    }
+
+    // Send TB timer to player at login
+    if (sWorld->getBoolConfig(CONFIG_TOL_BARAD_ENABLE))
+    {
+        if (BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB))
+        {
+            if (BfTB->IsWarTime())
+                SendUpdateWorldState(TBClockWorldState[1], uint32(time(NULL)));
+            else // Time to next battle
+            {
+                uint32 uiTime = BfTB->GetTimer()/1000;
+                SendUpdateWorldState(TBClockWorldState[1], time(NULL) + uiTime);
+            }
+        }
+    }
 
     // group update
     if (GetGroup())
