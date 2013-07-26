@@ -8048,11 +8048,11 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
         if (BattlefieldWG* BfWG = (BattlefieldWG*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG))
         {
             if (BfWG->IsWarTime())
-                SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL)));
+                SendUpdateWorldState(WGClockWorldState[1], uint32(time(NULL)));
             else // Time to next battle
             {
                 uint32 uiTime = BfWG->GetTimer()/1000;
-                SendUpdateWorldState(ClockWorldState[1], time(NULL) + uiTime);
+                SendUpdateWorldState(WGClockWorldState[1], time(NULL) + uiTime);
             }
         }
     }
