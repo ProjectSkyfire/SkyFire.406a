@@ -2382,6 +2382,15 @@ GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range) const
     return go;
 }
 
+Player* WorldObject::FindNearestPlayer(float range, bool alive)
+{
+    Player* player = NULL;
+    SkyFire::AnyPlayerInObjectRangeCheck check(this, GetVisibilityRange());
+    SkyFire::PlayerSearcher<SkyFire::AnyPlayerInObjectRangeCheck> searcher(this, player, check);
+    VisitNearbyWorldObject(range, searcher);
+    return player;
+}
+
 void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& gameobjectList, uint32 entry, float maxSearchRange) const
 {
     CellCoord pair(SkyFire::ComputeCellCoord(this->GetPositionX(), this->GetPositionY()));
