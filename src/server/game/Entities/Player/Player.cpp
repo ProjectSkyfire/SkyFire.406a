@@ -15871,7 +15871,7 @@ void Player::AddQuest(Quest const *quest, Object *questGiver)
                 if (!HasAura(itr->second->spellId))
                     CastSpell(this, itr->second->spellId, true);
     }
-  
+
     switch (quest->GetQuestId())
     {
         case 26966:
@@ -15890,7 +15890,7 @@ void Player::AddQuest(Quest const *quest, Object *questGiver)
     phaseUdateData.AddQuestUpdate(quest_id);
 
     phaseMgr.NotifyConditionChanged(phaseUdateData);
-      
+
     UpdateForQuestWorldObjects();
 }
 
@@ -22746,7 +22746,7 @@ void Player::ModifyMoney(int32 d)
     else
     {
         uint64 newAmount = 0;
-        
+
         if (GetMoney() < uint32(MAX_MONEY_AMOUNT - d))
         {
             newAmount = GetMoney() + d;
@@ -22776,7 +22776,7 @@ void Player::ModifyMoney(int32 d)
                         guild->SetGuildMoney(GuildMoney);
                     }
                 }
-            } 
+            }
             this->SendPlayerMoneyNotify(this, d, GetGuildMoneyModifier());
         }
         else
@@ -22789,7 +22789,6 @@ void Player::ModifyMoney(int32 d)
         SetMoney (newAmount);
     }
 }
-
 
 Unit* Player::GetSelectedUnit() const
 {

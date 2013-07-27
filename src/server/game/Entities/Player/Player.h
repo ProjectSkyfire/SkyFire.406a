@@ -1586,7 +1586,7 @@ class Player : public Unit, public GridObject<Player>
 
         uint32 GetGuildMoneyModifier() { return m_GuildMoneyModifier; }
         uint32 SetGuildMoneyModifier(uint32 m_GuildMoneyMod) { return m_GuildMoneyModifier = m_GuildMoneyMod; }
-        
+
         void SendQuestComplete(uint32 quest_id);
         void SendQuestReward(Quest const *quest, uint32 XP, Object* questGiver);
         void SendQuestFailed(uint32 questId, InventoryResult reason = EQUIP_ERR_OK);
@@ -2661,10 +2661,10 @@ class Player : public Unit, public GridObject<Player>
         void AddWhisperWhiteList(uint64 guid) { WhisperList.push_back(guid); }
         bool IsInWhisperWhiteList(uint64 guid);
 
-    protected:      
+    protected:
         WhisperListContainer WhisperList; // Gamemaster whisper whitelist
-        uint32 m_GuildMoneyModifier;        
-		float _powerFraction[MAX_POWERS];
+        uint32 m_GuildMoneyModifier;
+        float _powerFraction[MAX_POWERS];
         uint32 _contestedPvPTimer;
 
         /*********************************************************/

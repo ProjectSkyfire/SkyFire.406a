@@ -1228,6 +1228,6 @@ void AddSC_kezan()
     new npc_bank_vault();
     new npc_liberate_chunk();
     new npc_447();
-    new npc_run_away();
+    //new npc_run_away();
     new go_mortar();
 }
