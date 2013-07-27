@@ -1246,8 +1246,8 @@ public:
 
         uint16 display_id = (uint16)atoi((char*)args);
 
-        Unit* target = handler->getSelectedUnit();
-        if (!target)
+        Unit* target = handler->getSelectedUnit();       
+		if (!target)
             target = handler->GetSession()->GetPlayer();
 
         // check online security
@@ -1264,18 +1264,22 @@ public:
     {
         if (!*args)
             return false;
+		
+		Unit* target = handler->getSelectedUnit();       
+		if (!target)
+			target = handler->GetSession()->GetPlayer();
 
         uint32 phasemask = (uint32)atoi((char*)args);
 
-        Unit* target = handler->getSelectedUnit();
-        if (!target)
-            target = handler->GetSession()->GetPlayer();
-
-        // check online security
-        else if (target->GetTypeId() == TYPEID_PLAYER && handler->HasLowerSecurity(target->ToPlayer(), 0))
-            return false;
-
-        target->SetPhaseMask(phasemask, true);
+        if (target)
+        {
+            if (target->GetTypeId() == TYPEID_PLAYER)
+                target->ToPlayer()->GetPhaseMgr().SetCustomPhase(phasemask);
+            else
+                target->SetPhaseMask(phasemask, true);
+        }
+        else
+            handler->GetSession()->GetPlayer()->GetPhaseMgr().SetCustomPhase(phasemask);
 
         return true;
     }

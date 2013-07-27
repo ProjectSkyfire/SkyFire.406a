@@ -276,7 +276,7 @@ namespace VMAP
     bool StaticMapTree::InitMap(const std::string &fname, VMapManager2* vm)
     {
         sLog->outDebug(LOG_FILTER_MAPS, "StaticMapTree::InitMap() : initializing StaticMapTree '%s'", fname.c_str());
-        bool success = true;
+        bool success = false;
         std::string fullname = iBasePath + fname;
         FILE* rf = fopen(fullname.c_str(), "rb");
         if (!rf)

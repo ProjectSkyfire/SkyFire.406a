@@ -1022,9 +1022,9 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
         if (Battlefield *bfWG = sBattlefieldMgr->GetBattlefieldByBattleId(1))
         {
             if (bfWG->IsWarTime())
-                pCurrChar->SendUpdateWorldState(ClockWorldState[1], uint32(time(NULL)));
+                pCurrChar->SendUpdateWorldState(WGClockWorldState[1], uint32(time(NULL)));
             else // Time to next battle
-                pCurrChar->SendUpdateWorldState(ClockWorldState[1], uint32(bfWG->GetTimer()));
+                pCurrChar->SendUpdateWorldState(WGClockWorldState[1], uint32(bfWG->GetTimer()));
         }
     }
 

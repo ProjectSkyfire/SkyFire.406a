@@ -38,6 +38,7 @@
 #include "Util.h"                                           // for Tokens typedef
 #include "WorldSession.h"
 #include "Group.h"
+#include "PhaseMgr.h"
 
 // for template
 #include "SpellMgr.h"
@@ -1072,6 +1073,15 @@ class TradeData
         uint64     _items[TRADE_SLOT_COUNT];               // traded itmes from _player side including non-traded slot
 };
 
+struct ResurrectionData
+{
+    uint64 GUID;
+    WorldLocation Location;
+    uint32 Health;
+    uint32 Mana;
+    uint32 Aura;
+};
+
 class KillRewarder
 {
 public:
@@ -1279,7 +1289,8 @@ class Player : public Unit, public GridObject<Player>
         Pet* GetPet() const;
         Pet* SummonPet(uint32 entry, float x, float y, float z, float ang, PetType petType, uint32 despwtime, PetSlot slotID = PET_SLOT_UNK_SLOT);
         void RemovePet(Pet* pet, PetSlot mode, bool returnreagent = false);
-        uint32 GetPhaseMaskForSpawn() const;                // used for proper set phase for DB at GM-mode creature/GO spawn
+
+        PhaseMgr& GetPhaseMgr() { return phaseMgr; }
 
         void Say(const std::string& text, const uint32 language);
         void Yell(const std::string& text, const uint32 language);
@@ -1844,19 +1855,32 @@ class Player : public Unit, public GridObject<Player>
         void SetLastPotionId(uint32 item_id) { _lastPotionId = item_id; }
         void UpdatePotionCooldown(Spell* spell = NULL);
 
-        void setResurrectRequestData(uint64 guid, uint32 mapId, float X, float Y, float Z, uint32 health, uint32 mana)
+        void SetResurrectRequestData(Unit* caster, uint32 health, uint32 mana, uint32 appliedAura)
         {
-            m_resurrectGUID = guid;
-            m_resurrectMap = mapId;
-            m_resurrectX = X;
-            m_resurrectY = Y;
-            m_resurrectZ = Z;
-            _resurrectHealth = health;
-            _resurrectMana = mana;
+            ASSERT(!IsResurrectRequested());
+            _resurrectionData = new ResurrectionData();
+            _resurrectionData->GUID = caster->GetGUID();
+            _resurrectionData->Location.WorldRelocate(*caster);
+            _resurrectionData->Health = health;
+            _resurrectionData->Mana = mana;
+            _resurrectionData->Aura = appliedAura;
         }
-        void clearResurrectRequestData() { setResurrectRequestData(0, 0, 0.0f, 0.0f, 0.0f, 0, 0); }
-        bool isRessurectRequestedBy(uint64 guid) const { return m_resurrectGUID == guid; }
-        bool isRessurectRequested() const { return m_resurrectGUID != 0; }
+
+        void ClearResurrectRequestData()
+        {
+            delete _resurrectionData;
+            _resurrectionData = NULL;
+        }
+
+        bool IsResurrectRequestedBy(uint64 guid) const
+        {
+            if (!IsResurrectRequested())
+                return false;
+
+            return _resurrectionData->GUID == guid;
+        }
+
+        bool IsResurrectRequested() const { return _resurrectionData != NULL; }
         void ResurectUsingRequestData();
 
         uint8 getCinematic()
@@ -1922,6 +1946,7 @@ class Player : public Unit, public GridObject<Player>
         void SetGuildIdInvited(uint32 GuildId) { _GuildIdInvited = GuildId; }
         uint32 GetGuildId() { return guild;  }
         static uint32 GetGuildIdFromGUID(uint64 guid);
+        Guild* GetGuild();
         static uint8 GetRankFromDB(uint64 guid);
         int GetGuildIdInvited() { return _GuildIdInvited; }
         static void RemovePetitionsAndSigns(uint64 guid, uint32 type);
@@ -2825,9 +2850,7 @@ class Player : public Unit, public GridObject<Player>
         void ResetTimeSync();
         void SendTimeSync();
 
-        uint64 m_resurrectGUID;
-        uint32 m_resurrectMap;
-        float m_resurrectX, m_resurrectY, m_resurrectZ;
+        ResurrectionData* _resurrectionData;
         uint32 _resurrectHealth;
         int32 _resurrectMana;
 
@@ -2974,10 +2997,13 @@ class Player : public Unit, public GridObject<Player>
         InstanceTimeMap _instanceResetTimes;
         uint32 _pendingBindId;
         uint32 _pendingBindTimer;
+
         uint32 talentPoints;
         uint32 profPoints;
         uint32 guild;
+
         bool _canUseMastery;
+        PhaseMgr phaseMgr;
 };
 
 void AddItemsSetItem(Player*player, Item *item);

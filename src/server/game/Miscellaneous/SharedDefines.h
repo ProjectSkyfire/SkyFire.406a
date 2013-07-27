@@ -870,7 +870,7 @@ enum SpellEffects
     SPELL_EFFECT_REMOVE_ITEM                            = 169,
     SPELL_EFFECT_170                                    = 170,
     SPELL_EFFECT_171                                    = 171,  // Summons gameobject
-    SPELL_EFFECT_172                                    = 172,  // Aoe resurrection
+    SPELL_EFFECT_RESURRECT_WITH_AURA                    = 172,  // Aoe resurrection
     SPELL_EFFECT_BUY_GUILD_TAB                          = 173,  // Guild tab unlocked (guild perk)
     SPELL_EFFECT_APPLY_AURA_2                           = 174,
     TOTAL_SPELL_EFFECTS                                 = 175
@@ -1487,6 +1487,19 @@ enum Targets
     TARGET_UNK_DEST_AREA_UNK_107                       = 107, // not enough info - only generic spells available
     TARGET_GAMEOBJECT_CONE                             = 108,
     TARGET_DEST_UNK_110                                = 110, // 1 spell
+    TARGET_UNK_111                                     = 111,
+    TARGET_UNK_112                                     = 112,
+    TARGET_UNK_113                                     = 113,
+    TARGET_UNK_114                                     = 114,
+    TARGET_UNK_115                                     = 115,
+    TARGET_UNK_116                                     = 116,
+    TARGET_UNK_117                                     = 117,
+    TARGET_UNK_118                                     = 118,
+    TARGET_UNK_119                                     = 119,   // 83968 Mass Resurrection
+    TARGET_UNK_120                                     = 120,
+    TARGET_UNK_121                                     = 121, 
+    TARGET_UNK_122                                     = 122, 
+    TARGET_UNK_123                                     = 123,    
     TOTAL_SPELL_TARGETS
 };
 

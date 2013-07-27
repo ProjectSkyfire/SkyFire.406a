@@ -94,28 +94,26 @@ void AddSC_npc_taxi();
 void AddSC_achievement_scripts();
 
 //eastern kingdoms
-void AddSC_elwynn_forest();
-
-void AddSC_alterac_valley();                 //Alterac Valley
+void AddSC_alterac_valley();                 // Alterac Valley
 void AddSC_boss_balinda();
 void AddSC_boss_drekthar();
 void AddSC_boss_galvangar();
 void AddSC_boss_vanndar();
-void AddSC_instance_baradin_hold();          //Baradin Hold
+void AddSC_instance_baradin_hold();          // Baradin Hold
 void AddSC_boss_argaloth();
-void AddSC_instance_bastion_of_twilight();   //BastionOfTwilight
+void AddSC_instance_bastion_of_twilight();   // BastionOfTwilight
 void AddSC_boss_theralion_and_valiona();
 void AddSC_boss_sinestra();
 void AddSC_boss_halfus_wyrmbreaker();
 void AddSC_boss_chogall();
 void AddSC_boss_assembly_of_ascendents();
-void AddSC_instance_blackrock_caverns();     //Blackrock Caverns
+void AddSC_instance_blackrock_caverns();     // Blackrock Caverns
 void AddSC_boss_romogg_bonecrusher();
 void AddSC_boss_karsh_steelbender();
 void AddSC_boss_corla_herald_of_twilight();
 void AddSC_boss_beauty();
 void AddSC_boss_ascendant_lord_obsidius();
-void AddSC_blackrock_depths();               //Blackrock Depths
+void AddSC_blackrock_depths();               // Blackrock Depths
 void AddSC_boss_ambassador_flamelash();
 void AddSC_boss_anubshiah();
 void AddSC_boss_draganthaurissan();
@@ -127,7 +125,7 @@ void AddSC_boss_magmus();
 void AddSC_boss_moira_bronzebeard();
 void AddSC_boss_tomb_of_seven();
 void AddSC_instance_blackrock_depths();
-void AddSC_boss_drakkisath();                //Blackrock Spire
+void AddSC_boss_drakkisath();                // Blackrock Spire
 void AddSC_boss_halycon();
 void AddSC_boss_highlordomokk();
 void AddSC_boss_mothersmolderweb();
@@ -140,7 +138,7 @@ void AddSC_boss_pyroguard_emberseer();
 void AddSC_boss_gyth();
 void AddSC_boss_rend_blackhand();
 void AddSC_instance_blackrock_spire();
-void AddSC_boss_razorgore();                 //Blackwing lair
+void AddSC_boss_razorgore();                 // Blackwing lair
 void AddSC_boss_vael();
 void AddSC_boss_broodlord();
 void AddSC_boss_firemaw();
@@ -149,14 +147,14 @@ void AddSC_boss_flamegor();
 void AddSC_boss_chromaggus();
 void AddSC_boss_nefarian();
 void AddSC_boss_victor_nefarius();
-void AddSC_boss_omnotron_defense_system();   //Blackwing Descent
+void AddSC_boss_omnotron_defense_system();   // Blackwing Descent
 void AddSC_boss_bd_nefarian();
 void AddSC_boss_maloriak();
 void AddSC_boss_atramedes();
 void AddSC_boss_magmaw();
 void AddSC_boss_chimaeron();
 void AddSC_instance_blackwing_descent();
-void AddSC_deadmines();                      //Deadmines
+void AddSC_deadmines();                      // Deadmines
 void AddSC_instance_deadmines();
 void AddSC_boss_admiral_ripsnarl();
 void AddSC_boss_captain_cookie();
@@ -164,14 +162,16 @@ void AddSC_boss_foe_reaper_5000();
 void AddSC_boss_glubtok();
 void AddSC_boss_helix_gearbreaker();
 void AddSC_boss_vanessa_vancleef();
-void AddSC_gnomeregan();                     //Gnomeregan
+void AddSC_gilneas();                        // Gilneas
+//void AddSC_gilneas2();
+void AddSC_gnomeregan();                     // Gnomeregan
 void AddSC_instance_gnomeregan();
-void AddSC_boss_general_umbriss();           //Grimbatol
+void AddSC_boss_general_umbriss();           // Grimbatol
 void AddSC_boss_forgemaster_throngus();
 void AddSC_boss_drahga_shadowburner();
 void AddSC_boss_erudax();
 void AddSC_instance_grim_batol();
-void AddSC_boss_attumen();                   //Karazhan
+void AddSC_boss_attumen();                   // Karazhan
 void AddSC_boss_curator();
 void AddSC_boss_maiden_of_virtue();
 void AddSC_boss_shade_of_aran();
@@ -189,7 +189,7 @@ void AddSC_boss_vexallus();
 void AddSC_boss_priestess_delrissa();
 void AddSC_instance_magisters_terrace();
 void AddSC_magisters_terrace();
-void AddSC_boss_lucifron();                  //Molten core
+void AddSC_boss_lucifron();                  // Molten core
 void AddSC_boss_magmadar();
 void AddSC_boss_gehennas();
 void AddSC_boss_garr();
@@ -200,11 +200,11 @@ void AddSC_boss_sulfuron();
 void AddSC_boss_majordomo();
 void AddSC_boss_ragnaros();
 void AddSC_instance_molten_core();
-void AddSC_the_scarlet_enclave();            //Scarlet Enclave
+void AddSC_the_scarlet_enclave();            // Scarlet Enclave
 void AddSC_the_scarlet_enclave_c1();
 void AddSC_the_scarlet_enclave_c2();
 void AddSC_the_scarlet_enclave_c5();
-void AddSC_boss_arcanist_doan();             //Scarlet Monastery
+void AddSC_boss_arcanist_doan();             // Scarlet Monastery
 void AddSC_boss_azshir_the_sleepless();
 void AddSC_boss_bloodmage_thalnos();
 void AddSC_boss_headless_horseman();
@@ -215,7 +215,7 @@ void AddSC_boss_interrogator_vishas();
 void AddSC_boss_scorn();
 void AddSC_instance_scarlet_monastery();
 void AddSC_boss_mograine_and_whitemane();
-void AddSC_boss_darkmaster_gandling();       //Scholomance
+void AddSC_boss_darkmaster_gandling();       // Scholomance
 void AddSC_boss_death_knight_darkreaver();
 void AddSC_boss_theolenkrastinov();
 void AddSC_boss_illuciabarov();
@@ -228,15 +228,15 @@ void AddSC_boss_rasfrost();
 void AddSC_boss_theravenian();
 void AddSC_boss_vectus();
 void AddSC_instance_scholomance();
-void AddSC_shadowfang_keep();                //Shadowfang keep
+void AddSC_shadowfang_keep();                // Shadowfang keep
 void AddSC_instance_shadowfang_keep();
-void AddSC_the_stonecore();                  //The Stonecore
+void AddSC_the_stonecore();                  // The Stonecore
 void AddSC_instance_the_stonecore();
 void AddSC_boss_priestess_azil();
 void AddSC_boss_ozruk();
 void AddSC_boss_slabhide();
 void AddSC_boss_corborus();
-void AddSC_boss_magistrate_barthilas();      //Stratholme
+void AddSC_boss_magistrate_barthilas();      // Stratholme
 void AddSC_boss_maleki_the_pallid();
 void AddSC_boss_nerubenkan();
 void AddSC_boss_cannon_master_willey();
@@ -251,7 +251,7 @@ void AddSC_instance_stratholme();
 void AddSC_stratholme();
 void AddSC_sunken_temple();                  // Sunken Temple
 void AddSC_instance_sunken_temple();
-void AddSC_instance_sunwell_plateau();       //Sunwell Plateau
+void AddSC_instance_sunwell_plateau();       // Sunwell Plateau
 void AddSC_boss_kalecgos();
 void AddSC_boss_brutallus();
 void AddSC_boss_felmyst();
@@ -259,16 +259,16 @@ void AddSC_boss_eredar_twins();
 void AddSC_boss_muru();
 void AddSC_boss_kiljaeden();
 void AddSC_sunwell_plateau();
-void AddSC_boss_lady_nazjar();              //Throne of the Tides
+void AddSC_boss_lady_nazjar();              // Throne of the Tides
 void AddSC_boss_commander_ulthok();
 void AddSC_boss_erunak_stonespeaker();
 void AddSC_neptulon();
 void AddSC_instance_throne_of_the_tides();
-void AddSC_boss_archaedas();                 //Uldaman
+void AddSC_boss_archaedas();                 // Uldaman
 void AddSC_boss_ironaya();
 void AddSC_uldaman();
 void AddSC_instance_uldaman();
-void AddSC_boss_akilzon();                   //Zul'Aman
+void AddSC_boss_akilzon();                   // Zul'Aman
 void AddSC_boss_halazzi();
 void AddSC_boss_hex_lord_malacrass();
 void AddSC_boss_janalai();
@@ -276,7 +276,7 @@ void AddSC_boss_nalorakk();
 void AddSC_boss_zuljin();
 void AddSC_instance_zulaman();
 void AddSC_zulaman();
-void AddSC_boss_jeklik();                    //Zul'Gurub
+void AddSC_boss_jeklik();                    // Zul'Gurub
 void AddSC_boss_venoxis();
 void AddSC_boss_marli();
 void AddSC_boss_mandokir();
@@ -300,8 +300,6 @@ void AddSC_duskwood();
 void AddSC_eastern_plaguelands();
 void AddSC_eversong_woods();
 void AddSC_ghostlands();
-void AddSC_gilneas();
-//void AddSC_gilneas2();
 void AddSC_hinterlands();
 void AddSC_ironforge();
 void AddSC_isle_of_queldanas();
@@ -313,11 +311,13 @@ void AddSC_silverpine_forest();
 void AddSC_stormwind_city();
 void AddSC_stranglethorn_vale();
 void AddSC_swamp_of_sorrows();
-//void AddSC_tirisfal_glades();
+void AddSC_tirisfal_glades();
 void AddSC_undercity();
 void AddSC_western_plaguelands();
 void AddSC_westfall();
 void AddSC_wetlands();
+void AddSC_elwynn_forest();
+void AddSC_dun_morogh();
 
 //kalimdor
 void AddSC_blackfathom_deeps();              //Blackfathom Depths
@@ -419,7 +419,7 @@ void AddSC_stonetalon_mountains();
 void AddSC_tanaris();
 void AddSC_teldrassil();
 void AddSC_the_barrens();
-//void AddSC_thousand_needles();
+void AddSC_thousand_needles();
 void AddSC_thunder_bluff();
 void AddSC_ungoro_crater();
 void AddSC_winterspring();
@@ -791,7 +791,6 @@ void AddWorldScripts()
 void AddEasternKingdomsScripts()
 {
 #ifdef SCRIPTS
-    AddSC_elwynn_forest();
     AddSC_alterac_valley();                 //Alterac Valley
     AddSC_boss_balinda();
     AddSC_boss_drekthar();
@@ -860,6 +859,8 @@ void AddEasternKingdomsScripts()
     AddSC_boss_glubtok();
     AddSC_boss_helix_gearbreaker();
     AddSC_boss_vanessa_vancleef();
+    AddSC_gilneas();                        //Gilneas
+    //AddSC_gilneas2();
     AddSC_gnomeregan();                     //Gnomeregan
     AddSC_instance_gnomeregan();
     AddSC_boss_general_umbriss();           //Grimbatol
@@ -996,8 +997,6 @@ void AddEasternKingdomsScripts()
     AddSC_eastern_plaguelands();
     AddSC_eversong_woods();
     AddSC_ghostlands();
-    AddSC_gilneas();
-    //AddSC_gilneas2();   
     AddSC_hinterlands();
     AddSC_ironforge();
     AddSC_isle_of_queldanas();
@@ -1009,11 +1008,13 @@ void AddEasternKingdomsScripts()
     AddSC_stormwind_city();
     AddSC_stranglethorn_vale();
     AddSC_swamp_of_sorrows();
-    //AddSC_tirisfal_glades();
+    AddSC_tirisfal_glades();
     AddSC_undercity();
     AddSC_western_plaguelands();
     AddSC_westfall();
     AddSC_wetlands();
+    AddSC_elwynn_forest();
+    AddSC_dun_morogh();
 #endif
 }
 
@@ -1119,7 +1120,7 @@ void AddKalimdorScripts()
     AddSC_tanaris();
     AddSC_teldrassil();
     AddSC_the_barrens();
-    //AddSC_thousand_needles();
+    AddSC_thousand_needles();
     AddSC_thunder_bluff();
     AddSC_ungoro_crater();
     AddSC_winterspring();

@@ -24,3 +24,6 @@ SFCategory: Zone script
 Script Data End */
 
 #include "ScriptPCH.h"
+#include "gilneas.h"
+
+// Phase 8

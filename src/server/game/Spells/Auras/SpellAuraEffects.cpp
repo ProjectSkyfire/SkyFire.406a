@@ -369,7 +369,7 @@ pAuraEffectHandler AuraEffectHandler[TOTAL_AURAS]=
     &AuraEffect::HandleNULL,                                      // 311 - 0 spells in 3.3.5
     &AuraEffect::HandleModStealth,                                // 312 - Stealth Aura
     &AuraEffect::HandleNULL,                                      // 313 - 0 spells in 3.3.5
-    &AuraEffect::HandlePreventResurrection,                       // 314 - SPELL_AURA_PREVENT_RESURRECTION todo
+    &AuraEffect::HandlePreventResurrection,                       // 314 - SPELL_AURA_PREVENT_RESURRECTION
     &AuraEffect::HandleNoImmediateEffect,                         // 315 - SPELL_AURA_UNDERWATER_WALKING todo
     &AuraEffect::HandleNoImmediateEffect,                         // 316 - SPELL_AURA_PERIODIC_HASTE implemented in AuraEffect::CalculatePeriodic
     &AuraEffect::HandleAuraModSpellPowerPercent,                  // 317 - SPELL_AURA_MOD_SPELL_POWER_PCT
@@ -1861,51 +1861,28 @@ void AuraEffect::HandleAuraGhost(AuraApplication const* aurApp, uint8 mode, bool
     }
 }
 
-void AuraEffect::HandlePhase(AuraApplication const * aurApp, uint8 mode, bool apply) const
+void AuraEffect::HandlePhase(AuraApplication const* aurApp, uint8 mode, bool apply) const
 {
-    // MiscValue is PhaseMask
-    // MiscValueB is PhaseID (from Phase.dbc)
     if (!(mode & AURA_EFFECT_HANDLE_REAL))
         return;
 
-    Unit * target = aurApp->GetTarget();
+    Unit* target = aurApp->GetTarget();
 
-    // no-phase is also phase state so same code for apply and remove
-    uint32 newPhase = 0;
-    uint32 newTerrainPhase = 0;
-
-    Unit::AuraEffectList const& phases = target->GetAuraEffectsByType(SPELL_AURA_PHASE);
-    if (!phases.empty())
-        for (Unit::AuraEffectList::const_iterator itr = phases.begin(); itr != phases.end(); ++itr)
-        {
-            newTerrainPhase |= (*itr)->GetMiscValue();
-            newPhase |= (*itr)->GetMiscValueB();
-        }
-
-    if (apply)
-    {
-        newPhase |= GetMiscValueB();
-        newTerrainPhase |= GetMiscValue();
-    }
-
-    // phase auras normally not expected at BG but anyway better check
     if (Player* player = target->ToPlayer())
     {
-        if (!newPhase)
-            newPhase = PHASEMASK_NORMAL;
-
-        // GM-mode have mask 0xFFFFFFFF
-        if (player->isGameMaster())
-            newPhase = 0xFFFFFFFF;
-
-        player->SetPhaseMask(newPhase, false);
-
-        //if (player->GetMapId() == 638)
-            player->GetSession()->SendTerrainPhase(41811968);
-        player->GetSession()->SendSetPhaseShift(newPhase, player->GetMapId());
+        if (apply)
+            player->GetPhaseMgr().RegisterPhasingAuraEffect(this);
+        else
+            player->GetPhaseMgr().UnRegisterPhasingAuraEffect(this);
     }
     else
     {
+        uint32 newPhase = 0;
+        Unit::AuraEffectList const& phases = target->GetAuraEffectsByType(SPELL_AURA_PHASE);
+        if (!phases.empty())
+            for (Unit::AuraEffectList::const_iterator itr = phases.begin(); itr != phases.end(); ++itr)
+                newPhase |= (*itr)->GetMiscValue();
+
         if (!newPhase)
         {
             newPhase = PHASEMASK_NORMAL;
@@ -1916,15 +1893,15 @@ void AuraEffect::HandlePhase(AuraApplication const * aurApp, uint8 mode, bool ap
 
         target->SetPhaseMask(newPhase, false);
     }
-    
+
     // call functions which may have additional effects after changing state of unit
     // phase auras normally not expected at BG but anyway better check
     if (apply && (mode & AURA_EFFECT_HANDLE_REAL))
     {
         // drop flag at invisibility in bg
         target->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
-    } 
-    
+    }
+
     // need triggering visibility update base at phase update of not GM invisible (other GMs anyway see in any phases)
     if (target->IsVisible())
         target->UpdateObjectVisibility();
@@ -5118,10 +5095,17 @@ void AuraEffect::HandleAuraDummy(AuraApplication const* aurApp, uint8 mode, bool
                     if (caster)
                         target->GetMotionMaster()->MoveFall();
                     break;
-                case 49028:
+                case 49028:                                     // Dancing Rune Weapon
                     if (caster)
+                    {
+                        caster->CastSpell(caster, 81256, true);
                         if (AuraEffect* aurEff = caster->GetAuraEffect(63330, 0)) // glyph of Dancing Rune Weapon
+                        {
                             GetBase()->SetDuration(GetBase()->GetDuration() + aurEff->GetAmount());
+                            if (Aura* aura = caster->GetAura(81256))
+                                aura->SetDuration(aura->GetDuration() + aurEff->GetAmount());
+                        }
+                    }
                     break;
                 case 52916: // Honor Among Thieves
                     if (target->GetTypeId() == TYPEID_PLAYER)

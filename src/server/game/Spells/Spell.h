@@ -332,6 +332,7 @@ class Spell
         // void EffectTriggerSpellWithValue(SpellEffIndex effIndex); NYI
         void EffectTriggerRitualOfSummoning(SpellEffIndex effIndex);
         void EffectSummonRaFFriend(SpellEffIndex effIndex);
+        void EffectUnlockGuildVaultTab(SpellEffIndex effIndex);        
         void EffectKillCreditPersonal(SpellEffIndex effIndex);
         void EffectKillCredit(SpellEffIndex effIndex);
         void EffectQuestFail(SpellEffIndex effIndex);
@@ -353,6 +354,7 @@ class Spell
         void EffectCastButtons(SpellEffIndex effIndex);
         void EffectRechargeManaGem(SpellEffIndex effIndex);
         void EffectDamageSelfPct(SpellEffIndex effIndex);
+        void EffectResurrectWithAura(SpellEffIndex effIndex);
         
         typedef std::set<Aura*> UsedSpellMods;
 

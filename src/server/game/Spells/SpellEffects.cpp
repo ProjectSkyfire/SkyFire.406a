@@ -212,7 +212,7 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectTriggerSpell,                             // 142 SPELL_EFFECT_TRIGGER_SPELL_WITH_VALUE
     &Spell::EffectApplyAreaAura,                            // 143 SPELL_EFFECT_APPLY_AREA_AURA_OWNER
     &Spell::EffectKnockBack,                                // 144 SPELL_EFFECT_KNOCK_BACK_DEST
-    &Spell::EffectPullTowards,                              // 145 SPELL_EFFECT_PULL_TOWARDS_DEST                      Black Hole Effect
+    &Spell::EffectPullTowards,                              // 145 SPELL_EFFECT_PULL_TOWARDS_DEST        Black Hole Effect
     &Spell::EffectActivateRune,                             // 146 SPELL_EFFECT_ACTIVATE_RUNE
     &Spell::EffectQuestFail,                                // 147 SPELL_EFFECT_QUEST_FAIL               quest fail
     &Spell::EffectTriggerMissileSpell,                      // 148 SPELL_EFFECT_TRIGGER_MISSILE_SPELL_WITH_VALUE
@@ -235,12 +235,12 @@ pEffect SpellEffects[TOTAL_SPELL_EFFECTS]=
     &Spell::EffectDamageSelfPct,                            // 165 SPELL_EFFECT_DAMAGE_PCT_SELF
     &Spell::EffectNULL,                                     // 166 SPELL_EFFECT_MODIFY_CURRENCY
     &Spell::EffectNULL,                                     // 167 - for phasing.
-    &Spell::EffectNULL,                                     // 168 - pet casting bar.
-    &Spell::EffectNULL,                                     // 169 Remove item.
+    &Spell::EffectNULL,                                     // 168 SPELL_EFFECT_ALLOW_CONTROL_PET        pet casting bar.
+    &Spell::EffectNULL,                                     // 169 SPELL_EFFECT_REMOVE_ITEM
     &Spell::EffectNULL,                                     // 170 - phasing related
     &Spell::EffectNULL,                                     // 171 - summon object.
-    &Spell::EffectResurrect,                                // 172 SPELL_EFFECT_MASS_RESSURECT
-    &Spell::EffectNULL,                                     // 173 SPELL_EFFECT_BUY_GUILD_TAB
+    &Spell::EffectResurrectWithAura,                        // 172 SPELL_EFFECT_RESURRECT_WITH_AURA      aoe resurrection - guild perk
+    &Spell::EffectUnlockGuildVaultTab,                      // 173 SPELL_EFFECT_UNLOCK_GUILD_VAULT_TAB   unlocks 7/8 guild vault tabs - guild perk
     &Spell::EffectNULL,                                     // 174 SPELL_EFFECT_APPLY_AURA_2
 };
 
@@ -270,14 +270,14 @@ void Spell::EffectResurrectNew(SpellEffIndex effIndex)
 
     Player* target = unitTarget->ToPlayer();
 
-    if (target->isRessurectRequested())       // already have one active request
+    if (target->IsResurrectRequested())       // already have one active request
         return;
 
-    uint32 health = damage;
-    uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
-    ExecuteLogEffectResurrect(effIndex, target);
-    target->setResurrectRequestData(m_caster->GetGUID(), m_caster->GetMapId(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), health, mana);
-    SendResurrectRequest(target);
+	uint32 health = damage;
+	uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
+	ExecuteLogEffectResurrect(effIndex, target);
+    target->SetResurrectRequestData(m_caster, health, mana, 0);
+	SendResurrectRequest(target);
 }
 
 void Spell::EffectInstaKill(SpellEffIndex /*effIndex*/)
@@ -2210,7 +2210,29 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
 
     if (!m_spellAura || !unitTarget)
         return;
+    // For some funky reason, some spells have to be cast as a spell on the enemy even if they're suppose to apply an aura.
 
+    // post effects for TARGET_DST_DB
+    switch (m_spellInfo->Id)
+    {
+        case 68992: // Darkflight, worgen's sprint spell.
+        case 87840: // Running Wild
+        {
+            if (m_caster->GetTypeId() == TYPEID_PLAYER)
+                m_caster->ToPlayer()->setInWorgenForm(UNIT_FLAG2_WORGEN_TRANSFORM2);
+            break;
+        }
+        case 89485: // Inner Focus
+        {
+            if (m_caster->HasAura(89488)) // Strength of Soul Rank 1
+                m_caster->CastSpell(m_caster, 96266, true);
+            
+            if (m_caster->HasAura(89489)) // Strength of Soul Rank 2
+                m_caster->CastSpell(m_caster, 96267, true);
+            
+            break;
+        }
+    }
     ASSERT(unitTarget == m_spellAura->GetOwner());
     m_spellAura->_ApplyEffectForTargets(effIndex);
 }
@@ -6335,7 +6357,7 @@ void Spell::EffectResurrect(SpellEffIndex effIndex)
 
     Player* target = unitTarget->ToPlayer();
 
-    if (target->isRessurectRequested())       // already have one active request
+    if (target->IsResurrectRequested())       // already have one active request
         return;
 
     uint32 health = target->CountPctFromMaxHealth(damage);
@@ -6343,7 +6365,7 @@ void Spell::EffectResurrect(SpellEffIndex effIndex)
 
     ExecuteLogEffectResurrect(effIndex, target);
 
-    target->setResurrectRequestData(m_caster->GetGUID(), m_caster->GetMapId(), m_caster->GetPositionX(), m_caster->GetPositionY(), m_caster->GetPositionZ(), health, mana);
+    target->SetResurrectRequestData(m_caster, health, mana, 0);
     SendResurrectRequest(target);
 }
 
@@ -7718,7 +7740,7 @@ void Spell::EffectBind(SpellEffIndex effIndex)
     player->SendDirectMessage(&data);
 }
 
-void Spell::EffectDamageSelfPct(SpellEffIndex effIndex)
+void Spell::EffectDamageSelfPct(SpellEffIndex /*effIndex*/)
 {
     if (!unitTarget || !unitTarget->isAlive() || damage < 0) return;
 
@@ -7737,4 +7759,48 @@ void Spell::EffectSummonRaFFriend(SpellEffIndex effIndex)
         return;
 
     m_caster->CastSpell(unitTarget, m_spellInfo->Effects[effIndex].TriggerSpell, true);
+}
+
+void Spell::EffectUnlockGuildVaultTab(SpellEffIndex effIndex)
+{
+    if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT)
+        return;
+
+    // Safety checks done in Spell::CheckCast
+    Player* caster = m_caster->ToPlayer();
+    if (Guild* guild = caster->GetGuild())
+        guild->HandleBuyBankTab(caster->GetSession(), m_spellInfo->Effects[effIndex].BasePoints - 1); // Bank tabs start at zero internally
+}
+
+void Spell::EffectResurrectWithAura(SpellEffIndex effIndex)
+{
+    if (effectHandleMode != SPELL_EFFECT_HANDLE_HIT_TARGET)
+        return;
+
+    if (!unitTarget || !unitTarget->IsInWorld())
+        return;
+
+    Player* target = unitTarget->ToPlayer();
+    if (!target)
+        return;
+
+    if (unitTarget->isAlive())
+        return;
+
+    if (target->IsResurrectRequested())       // already have one active request
+        return;
+
+    uint32 health = target->CountPctFromMaxHealth(damage);
+    uint32 mana   = CalculatePctU(target->GetMaxPower(POWER_MANA), damage);
+    uint32 resurrectAura = 0;
+    
+    if (sSpellMgr->GetSpellInfo(GetSpellInfo()->Effects[effIndex].TriggerSpell))
+        resurrectAura = GetSpellInfo()->Effects[effIndex].TriggerSpell;
+
+    if (resurrectAura && target->HasAura(resurrectAura))
+        return;
+
+    ExecuteLogEffectResurrect(effIndex, target);
+    target->SetResurrectRequestData(m_caster, health, mana, resurrectAura);
+    SendResurrectRequest(target);
 }

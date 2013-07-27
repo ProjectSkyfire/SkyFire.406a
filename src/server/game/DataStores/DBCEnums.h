@@ -117,6 +117,7 @@ enum AchievementCriteriaTypes
 {
     ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE                          = 0,
     ACHIEVEMENT_CRITERIA_TYPE_WIN_BG                                 = 1,
+    ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_RESEARCH_PROJECT              = 3,
     ACHIEVEMENT_CRITERIA_TYPE_REACH_LEVEL                            = 5,
     ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL                      = 7,
     ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_ACHIEVEMENT                   = 8,

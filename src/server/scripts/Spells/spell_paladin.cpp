@@ -43,6 +43,7 @@ enum PaladinSpells
     SPELL_PALADIN_JUDG_BOLD_OVERTIME             = 89906,
     SPELL_PALADIN_SELFLESS_HEALER_PROC           = 90811,
 
+    SPELL_PALADIN_GUARDIAN_ANCIENT_KINGS         = 86150,
     SPELL_PALADIN_RETRI_GUARDIAN                 = 86698,
     SPELL_PALADIN_HOLY_GUARDIAN                  = 86669,
     SPELL_PALADIN_PROT_GUARDIAN                  = 86659,
@@ -54,14 +55,14 @@ enum PaladinSpells
     SPELL_PALADIN_CONSECRATION_SUMMON            = 82366,
     SPELL_PALADIN_CONSECRATION_DAMAGE            = 81297,
 
-    SPELL_RIGHTEOUS_DEFENCE                     = 31789,
-    SPELL_RIGHTEOUS_DEFENCE_EFFECT_1            = 31790,
+    SPELL_RIGHTEOUS_DEFENCE                      = 31789,
+    SPELL_RIGHTEOUS_DEFENCE_EFFECT_1             = 31790,
 
-    PALADIN_SPELL_BLESSING_OF_KINGS_1           = 79062,
-    PALADIN_SPELL_BLESSING_OF_KINGS_2           = 79063,
+    PALADIN_SPELL_BLESSING_OF_KINGS_1            = 79062,
+    PALADIN_SPELL_BLESSING_OF_KINGS_2            = 79063,
 
-    PALADIN_SPELL_BLESSING_OF_MIGHT_1           = 79101,
-    PALADIN_SPELL_BLESSING_OF_MIGHT_2           = 79102
+    PALADIN_SPELL_BLESSING_OF_MIGHT_1            = 79101,
+    PALADIN_SPELL_BLESSING_OF_MIGHT_2            = 79102
 };
 
 // 31850 - Ardent Defender
@@ -600,10 +601,12 @@ class spell_pal_selfless_healer : public SpellScriptLoader
         }
 };
 
+// -86150 - Guardian of Ancient Kings
+// Fix: Summon guardian, need to implement other spells yet like Ancient Power and Ancient Fury
 class spell_pal_guardian_ancient_kings : public SpellScriptLoader
 {
 public:
-    spell_pal_guardian_ancient_kings() : SpellScriptLoader("spell_pal_guardian_ancient_kings") { }
+    spell_pal_guardian_ancient_kings() : SpellScriptLoader("spell_pal_guardian_ancient_kings") {}
 
     class spell_pal_guardian_ancient_kings_SpellScript : public SpellScript
     {
@@ -618,7 +621,8 @@ public:
 
         bool Validate (SpellInfo const* /*spellEntry*/)
         {
-            if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_HOLY_GUARDIAN) ||
+            if (!sSpellMgr->GetSpellInfo(SPELL_PALADIN_GUARDIAN_ANCIENT_KINGS) ||
+                !sSpellMgr->GetSpellInfo(SPELL_PALADIN_HOLY_GUARDIAN) ||
                 !sSpellMgr->GetSpellInfo(SPELL_PALADIN_RETRI_GUARDIAN) ||
                 !sSpellMgr->GetSpellInfo(SPELL_PALADIN_PROT_GUARDIAN))
                 return false;
@@ -635,11 +639,13 @@ public:
                     caster->CastSpell(caster, SPELL_PALADIN_HOLY_GUARDIAN, false);
                     return;
                 }
+
                 if (caster->ToPlayer()->HasSpell(85256)) // Templar's Verdict
                 {
                     caster->CastSpell(caster, SPELL_PALADIN_RETRI_GUARDIAN, false);
                     return;
                 }
+
                 if (caster->ToPlayer()->HasSpell(31935)) // Avenger's shield
                 {
                     caster->CastSpell(caster, SPELL_PALADIN_PROT_GUARDIAN, false);

@@ -59,6 +59,8 @@
 #include "BattlegroundAV.h"
 #include "BattlegroundMgr.h"
 #include "BattlefieldMgr.h"
+#include "BattlefieldWG.h"
+#include "BattlefieldTB.h"
 #include "OutdoorPvP.h"
 #include "OutdoorPvPMgr.h"
 #include "ArenaTeam.h"
@@ -656,10 +658,10 @@ UpdateMask Player::updateVisualBits;
 #ifdef _MSC_VER
 #pragma warning(disable:4355)
 #endif
-Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reputationMgr(this)
+Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reputationMgr(this), phaseMgr(this)
 {
 #ifdef _MSC_VER
-#pragma warning(default:4355)
+#   pragma warning(default:4355)
 #endif
 
     _speakTime = 0;
@@ -701,7 +703,7 @@ Player::Player(WorldSession* session): Unit(true), _achievementMgr(this), _reput
 
     _nextSave = sWorld->getIntConfig(CONFIG_INTERVAL_SAVE);
 
-    clearResurrectRequestData();
+    _resurrectionData = NULL;
 
     memset(_items, 0, sizeof(Item*)*PLAYER_SLOTS_COUNT);
 
@@ -905,6 +907,8 @@ Player::~Player ()
 
     delete _declinedname;
     delete _runes;
+
+    ClearResurrectRequestData();
 
     sWorld->DecreasePlayerCount();
 }
@@ -1829,7 +1833,7 @@ void Player::setDeathState(DeathState s)
         // lost combo points at any target (targeted combo points clear in Unit::setDeathState)
         ClearComboPoints();
 
-        clearResurrectRequestData();
+        ClearResurrectRequestData();
 
         //FIXME: is pet dismissed at dying or releasing spirit? if second, add setDeathState(DEAD) to HandleRepopRequestOpcode and define pet unsummon here with (s == DEAD)
         RemovePet(NULL, PET_SAVE_AS_CURRENT, true);
@@ -2362,6 +2366,9 @@ void Player::ProcessDelayedOperations()
         SetPower(POWER_RAGE, 0);
         SetPower(POWER_ENERGY, GetMaxPower(POWER_ENERGY));
         SetPower(POWER_ECLIPSE, 0);
+
+        if (uint32 aura = _resurrectionData->Aura)
+            CastSpell(this, aura, true, NULL, NULL, _resurrectionData->GUID);
 
         SpawnCorpseBones();
     }
@@ -8034,6 +8041,36 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
 
     // recent client version not send leave/join channel packets for built-in local channels
     UpdateLocalChannels(newZone);
+
+    // Send WG timer to player at login
+    if (sWorld->getBoolConfig(CONFIG_WINTERGRASP_ENABLE))
+    {
+        if (BattlefieldWG* BfWG = (BattlefieldWG*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_WG))
+        {
+            if (BfWG->IsWarTime())
+                SendUpdateWorldState(WGClockWorldState[1], uint32(time(NULL)));
+            else // Time to next battle
+            {
+                uint32 uiTime = BfWG->GetTimer()/1000;
+                SendUpdateWorldState(WGClockWorldState[1], time(NULL) + uiTime);
+            }
+        }
+    }
+
+    // Send TB timer to player at login
+    if (sWorld->getBoolConfig(CONFIG_TOL_BARAD_ENABLE))
+    {
+        if (BattlefieldTB* BfTB = (BattlefieldTB*)sBattlefieldMgr->GetBattlefieldByBattleId(BATTLEFIELD_BATTLEID_TB))
+        {
+            if (BfTB->IsWarTime())
+                SendUpdateWorldState(TBClockWorldState[1], uint32(time(NULL)));
+            else // Time to next battle
+            {
+                uint32 uiTime = BfTB->GetTimer()/1000;
+                SendUpdateWorldState(TBClockWorldState[1], time(NULL) + uiTime);
+            }
+        }
+    }
 
     // group update
     if (GetGroup())
@@ -15835,6 +15872,11 @@ void Player::AddQuest(Quest const *quest, Object *questGiver)
                     CastSpell(this, itr->second->spellId, true);
     }
 
+    PhaseUpdateData phaseUdateData;
+    phaseUdateData.AddQuestUpdate(quest_id);
+
+    phaseMgr.NotifyConditionChanged(phaseUdateData);
+
     UpdateForQuestWorldObjects();
 }
 
@@ -16025,6 +16067,11 @@ void Player::RewardQuest(Quest const *quest, uint32 reward, Object* questGiver, 
     RemoveActiveQuest(quest_id);
     _RewardedQuests.insert(quest_id);
     _RewardedQuestsSave[quest_id] = true;
+
+    PhaseUpdateData phaseUdateData;
+    phaseUdateData.AddQuestUpdate(quest_id);
+
+    phaseMgr.NotifyConditionChanged(phaseUdateData);
 
     // StoreNewItem, mail reward, etc. save data directly to the database
     // to prevent exploitable data desynchronisation we save the quest status to the database too
@@ -16623,6 +16670,11 @@ void Player::SetQuestStatus(uint32 quest_id, QuestStatus status)
         _QuestStatus[quest_id].Status = status;
         _QuestStatusSave[quest_id] = true;
     }
+
+    PhaseUpdateData phaseUdateData;
+    phaseUdateData.AddQuestUpdate(quest_id);
+
+    phaseMgr.NotifyConditionChanged(phaseUdateData);
 
     UpdateForQuestWorldObjects();
 }
@@ -22885,9 +22937,7 @@ void Player::SendInitialPacketsAfterAddToMap()
     uint32 newzone, newarea;
     GetZoneAndAreaId(newzone, newarea);
     UpdateZone(newzone, newarea);                            // also call SendInitWorldStates();
-   
-    GetSession()->SendTerrainPhase(41811968);
-    
+
     ResetTimeSync();
     SendTimeSync();
 
@@ -23864,7 +23914,9 @@ uint32 Player::GetBaseWeaponSkillValue (WeaponAttackType attType) const
 void Player::ResurectUsingRequestData()
 {
     /// Teleport before resurrecting by player, otherwise the player might get attacked from creatures near his corpse
-    TeleportTo(m_resurrectMap, m_resurrectX, m_resurrectY, m_resurrectZ, GetOrientation());
+    float x, y, z, o;
+    _resurrectionData->Location.GetPosition(x, y, z, o);
+    TeleportTo(_resurrectionData->Location.GetMapId(), x, y, z, o);
 
     //we cannot resurrect player when we triggered far teleport
     //player will be resurrected upon teleportation
@@ -24874,25 +24926,6 @@ void Player::_LoadSkills(PreparedQueryResult result)
     }
 }
 
-uint32 Player::GetPhaseMaskForSpawn() const
-{
-    uint32 phase = PHASEMASK_NORMAL;
-    if (!isGameMaster())
-        phase = GetPhaseMask();
-    else
-    {
-        AuraEffectList const& phases = GetAuraEffectsByType(SPELL_AURA_PHASE);
-        if (!phases.empty())
-            phase = phases.front()->GetMiscValue();
-    }
-
-    // some aura phases include 1 normal map in addition to phase itself
-    if (uint32 n_phase = phase & ~PHASEMASK_NORMAL)
-        return n_phase;
-
-    return PHASEMASK_NORMAL;
-}
-
 InventoryResult Player::CanEquipUniqueItem(Item* pItem, uint8 eslot, uint32 limit_count) const
 {
     ItemTemplate const* proto = pItem->GetTemplate();
@@ -25160,6 +25193,12 @@ bool Player::LearnTalent(uint32 talentId, uint32 talentRank)
     SetFreeTalentPoints(CurTalentPoints - (talentRank - curtalent_maxrank + 1));
 
     return true;
+}
+
+Guild* Player::GetGuild()
+{
+    uint32 guildId = GetGuildId();
+    return guildId ? sGuildMgr->GetGuildById(guildId) : NULL;
 }
 
 void Player::LearnPetTalent(uint64 petGuid, uint32 talentId, uint32 talentRank)

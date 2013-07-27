@@ -155,11 +155,54 @@ class ByteBuffer
 
             return value;
         }
+        // Reads a byte (if needed) in-place
+        void ReadByteSeq(uint8& b)
+        {
+            if (b != 0)
+                b ^= read<uint8>();
+        }
+
+        void WriteByteSeq(uint8 b)
+        {
+            if (b != 0)
+                append<uint8>(b ^ 1);
+        }
 
         template <typename T> void put(size_t pos, T value)
         {
             EndianConvert(value);
             put(pos, (uint8 *)&value, sizeof(value));
+        }
+
+        /**
+          * @name   PutBits
+          * @brief  Places specified amount of bits of value at specified position in packet.
+          *         To ensure all bits are correctly written, only call this method after
+          *         bit flush has been performed
+
+          * @param  pos Position to place the value at, in bits. The entire value must fit in the packet
+          *             It is advised to obtain the position using bitwpos() function.
+
+          * @param  value Data to write.
+          * @param  bitCount Number of bits to store the value on.
+        */
+        template <typename T> void PutBits(size_t pos, T value, uint32 bitCount)
+        {
+            if (!bitCount)
+                throw ByteBufferSourceException((pos + bitCount) / 8, size(), 0);
+
+            if (pos + bitCount > size() * 8)
+                throw ByteBufferPositionException(false, (pos + bitCount) / 8, size(), (bitCount - 1) / 8 + 1);
+
+            for (uint32 i = 0; i < bitCount; ++i)
+            {
+                size_t wp = (pos + i) / 8;
+                size_t bit = (pos + i) % 8;
+                if ((value >> (bitCount - i - 1)) & 1)
+                    _storage[wp] |= 1 << (7 - bit);
+                else
+                    _storage[wp] &= ~(1 << (7 - bit));
+            }
         }
 
         ByteBuffer &operator<<(uint8 value)

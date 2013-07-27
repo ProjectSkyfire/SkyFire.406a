@@ -1476,6 +1476,13 @@ struct OverrideSpellDataEntry
     //uint32      unk0;                                     // 11
 };
 
+struct PhaseEntry
+{
+    uint32    ID;                                           // 0
+    char*     Name;                                         // 1
+    uint32    flag;                                         // 2
+};
+
 struct PvPDifficultyEntry
 {
     //uint32      id;                                       // 0        m_ID
@@ -2238,13 +2245,6 @@ struct WMOAreaTableEntry
     //uint32 field12;                                       // 12
     //uint32 field13;                                       // 13
     //uint32 field14;                                       // 14
-};
-
-struct PhaseEntry
-{
-    uint32 ID;                                              // 0
-    char* Name;                                             // 1
-    uint32 phaseShift;                                      // 2
 };
 
 struct WorldMapAreaEntry

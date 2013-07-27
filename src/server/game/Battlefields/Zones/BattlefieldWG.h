@@ -26,10 +26,10 @@
 #include "Group.h"
 #include "Battlefield.h"
 
-const uint32 VehNumWorldState[2] = { 3680, 3490 };
+const uint32 VehNumWorldState[2]    = { 3680, 3490 };
 const uint32 MaxVehNumWorldState[2] = { 3681, 3491 };
-const uint32 ClockWorldState[2] = { 3781, 4354 };
-const uint32 WintergraspFaction[3] = { 1732, 1735, 35 };
+const uint32 WGClockWorldState[2]     = { 3781, 4354 };
+const uint32 WintergraspFaction[3]  = { 1732, 1735, 35 };
 
 const float WintergraspStalkerPos[4] = { 0, 0, 0, 0 };
 
@@ -86,7 +86,7 @@ enum WGSpell
     // Other spells
     SPELL_WINTERGRASP_WATER                     = 36444,
     SPELL_ESSENCE_OF_WINTERGRASP                = 58045,
-    SPELL_WINTERGRASP_RESTRICTED_FLIGHT_AREA    = 58730,
+    SPELL_WINTERGRASP_RESTRICTED_FLIGHT_AREA    = 83100,
 
     // Phasing spells
     SPELL_HORDE_CONTROLS_FACTORY_PHASE_SHIFT    = 56618,// ADDS PHASE 16
@@ -113,7 +113,6 @@ enum WGData32
 
 enum WB_ACHIEVEMENTS
 {
-// *INDENT-OFF*
     ACHIEVEMENTS_WIN_WG                          = 1717,
     ACHIEVEMENTS_WIN_WG_100                      = 1718, // todo
     ACHIEVEMENTS_WG_GNOMESLAUGHTER               = 1723, // todo
@@ -122,15 +121,9 @@ enum WB_ACHIEVEMENTS
     ACHIEVEMENTS_WG_TOWER_CANNON_KILL            = 1751, // todo
     ACHIEVEMENTS_WG_MASTER_A                     = 1752, // todo
     ACHIEVEMENTS_WIN_WG_TIMER_10                 = 1755,
-    ACHIEVEMENTS_STONE_KEEPER_50                 = 2085, // todo
-    ACHIEVEMENTS_STONE_KEEPER_100                = 2086, // todo
-    ACHIEVEMENTS_STONE_KEEPER_250                = 2087, // todo
-    ACHIEVEMENTS_STONE_KEEPER_500                = 2088, // todo
-    ACHIEVEMENTS_STONE_KEEPER_1000               = 2089, // todo
     ACHIEVEMENTS_WG_RANGER                       = 2199, // todo
     ACHIEVEMENTS_DESTRUCTION_DERBY_H             = 2476, // todo
     ACHIEVEMENTS_WG_MASTER_H                     = 2776, // todo
-// *INDENT-ON*
 };
 
 enum WGWorldStates
@@ -185,7 +178,6 @@ enum WGGossipText
 
 enum WGNpc
 {
-// *INDENT-OFF*
     BATTLEFIELD_WG_NPC_GUARD_H                      = 30739,
     BATTLEFIELD_WG_NPC_GUARD_A                      = 30740,
     BATTLEFIELD_WG_NPC_STALKER                      = 00000,
@@ -212,7 +204,6 @@ enum WGNpc
 
     NPC_TAUNKA_SPIRIT_GUIDE                         = 31841,    // Horde spirit guide for Wintergrasp
     NPC_DWARVEN_SPIRIT_GUIDE                        = 31842,    // Alliance spirit guide for Wintergrasp
-// *INDENT-ON*
 };
 
 struct BfWGCoordGY

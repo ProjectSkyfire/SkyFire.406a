@@ -3930,7 +3930,8 @@ void Unit::RemoveAurasWithInterruptFlags(uint32 flag, uint32 except)
     {
         Aura* aura = (*iter)->GetBase();
         ++iter;
-        if ((aura->GetSpellInfo()->AuraInterruptFlags & flag) && (!except || aura->GetId() != except))
+        if ((aura->GetSpellInfo()->AuraInterruptFlags & flag) && (!except || aura->GetId() != except)
+            && !(flag & AURA_INTERRUPT_FLAG_MOVE && HasAuraTypeWithAffectMask(SPELL_AURA_CAST_WHILE_MOVING, aura->GetSpellInfo())))
         {
             uint32 removedAuras = m_removedAurasCount;
             RemoveAura(aura);
@@ -15965,6 +15966,11 @@ bool Unit::HandleAuraRaidProcFromChargeWithValue(AuraEffect* triggeredByAura)
     }
 
     // heal
+    if (Unit* caster = triggeredByAura->GetCaster())
+        // Glyph of Prayer Of Mending, apply heal bonus on first jump  
+        if (caster->HasAura(55685) && jumps == 4)
+            heal += heal * 0.6f;  // 60% increased heal  
+            
     CastCustomSpell(this, 33110, &heal, NULL, NULL, true, NULL, NULL, caster_guid);
     return true;
 }

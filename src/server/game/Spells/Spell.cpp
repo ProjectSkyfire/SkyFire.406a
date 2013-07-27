@@ -35,6 +35,7 @@
 #include "Totem.h"
 #include "Spell.h"
 #include "DynamicObject.h"
+#include "Guild.h"
 #include "Group.h"
 #include "UpdateData.h"
 #include "MapManager.h"
@@ -5008,6 +5009,17 @@ SpellCastResult Spell::CheckCast(bool strict)
 
                 break;
             }
+            case SPELL_EFFECT_BUY_GUILD_TAB: // Perk: Guild Bank 7th Slot
+            {
+                if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                    return SPELL_FAILED_BAD_TARGETS;
+                
+                if (Guild* guild = m_caster->ToPlayer()->GetGuild())
+                    if (guild->GetLeaderGUID() != m_caster->ToPlayer()->GetGUID())
+                        return SPELL_FAILED_CANT_DO_THAT_RIGHT_NOW;
+                
+                break;
+            }            
             case SPELL_EFFECT_LEARN_PET_SPELL:
             {
                 // check target only for unit target case

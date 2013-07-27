@@ -40,8 +40,11 @@ add_custom_target(uninstall
 )
 message(STATUS "UNIX: Created uninstall target")
 
+message(STATUS "UNIX: Detected compiler: ${CMAKE_C_COMPILER}")
 if(CMAKE_C_COMPILER MATCHES "gcc")
   include(${CMAKE_SOURCE_DIR}/cmake/compiler/gcc/settings.cmake)
 elseif(CMAKE_C_COMPILER MATCHES "icc")
   include(${CMAKE_SOURCE_DIR}/cmake/compiler/icc/settings.cmake)
+else()
+  add_definitions(-D_BUILD_DIRECTIVE='"${CMAKE_BUILD_TYPE}"')
 endif()

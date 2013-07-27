@@ -284,6 +284,8 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Zones/stranglethorn_vale.cpp
   EasternKingdoms/Zones/swamp_of_sorrows.cpp
   EasternKingdoms/Zones/elwynnforest.cpp
+  EasternKingdoms/Zones/dun_morogh.cpp 
+  EasternKingdoms/Zones/tirisfal_glades.cpp
 )
 
 message("  -> Prepared: Eastern Kingdoms")
