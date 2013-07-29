@@ -273,11 +273,11 @@ void Spell::EffectResurrectNew(SpellEffIndex effIndex)
     if (target->IsResurrectRequested())       // already have one active request
         return;
 
-	uint32 health = damage;
-	uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
-	ExecuteLogEffectResurrect(effIndex, target);
+    uint32 health = damage;
+    uint32 mana = m_spellInfo->Effects[effIndex].MiscValue;
+    ExecuteLogEffectResurrect(effIndex, target);
     target->SetResurrectRequestData(m_caster, health, mana, 0);
-	SendResurrectRequest(target);
+    SendResurrectRequest(target);
 }
 
 void Spell::EffectInstaKill(SpellEffIndex /*effIndex*/)
@@ -1117,7 +1117,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
 
                     return;
                 }
-                case 51582:                                 // Rocket Boots Engaged (Rocket Boots Xtreme and Rocket Boots Xtreme Lite)
+                case 51582:                                  // Rocket Boots Engaged (Rocket Boots Xtreme and Rocket Boots Xtreme Lite)
                 {
                     if (m_caster->GetTypeId() != TYPEID_PLAYER)
                         return;
@@ -1142,7 +1142,7 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     return;
                 }
-                case 62324: // Throw Passenger
+                case 62324:                                  // Throw Passenger
                 {
                     if (m_targets.HasTraj())
                     {
@@ -1182,13 +1182,59 @@ void Spell::EffectDummy(SpellEffIndex effIndex)
                     }
                     return;
                 }
-                case 64385:                                 // Unusual Compass
+                case 64385:                                               // Unusual Compass
                 {
                     m_caster->SetOrientation(float(urand(0, 62832)) / 10000.0f);
                     WorldPacket data;
                     m_caster->BuildHeartBeatMsg(&data);
                     m_caster->SendMessageToSet(&data, true);
                     return;
+                }
+                case 66298:                                              // Honk Horn
+                {
+                    if (!unitTarget || !unitTarget->ToCreature() || !m_caster->IsVehicle())
+                    return;
+
+                    Unit* rider = m_caster->GetVehicleKit()->GetPassenger(0);
+                    if (!rider)
+                    return;
+
+
+                    if (unitTarget->HasAuraEffect(66392, EFFECT_0))
+                    return;
+
+                    m_caster->PlayDirectSound(22491, 0);
+
+                }
+                case 66299:                                            // Radio
+                {
+                    if (!unitTarget || !unitTarget->ToCreature() || !m_caster->IsVehicle())
+                    return;
+
+                    Unit* rider = m_caster->GetVehicleKit()->GetPassenger(0);
+                    if (!rider)
+                    return;
+
+                    if (unitTarget->HasAuraEffect(66392, EFFECT_0))
+                    {
+                        m_caster->PlayDirectSound(23406, 0);
+                    }
+
+                    if (unitTarget->HasAura(66299))
+                    return;
+
+                }
+                case 67682:                                          // Liberate Kaja'Cola Bomb
+                {
+                    if (m_caster->GetTypeId() != TYPEID_PLAYER)
+                        return;
+
+                    if (unitTarget->GetEntry() != 35818)
+                        return;
+
+                    m_caster->SummonGameObject(195492, m_caster->GetPositionX()-0.1, m_caster->GetPositionY()-0.1, m_caster->GetPositionZ(), m_caster->GetOrientation(), 0, 0, 0, 0, 100);
+                    m_caster->SummonGameObject(195492, m_caster->GetPositionX()+0.2, m_caster->GetPositionY()+0.2, m_caster->GetPositionZ(), m_caster->GetOrientation(), 0, 0, 0, 0, 100);
+                    m_caster->SummonGameObject(195492, m_caster->GetPositionX()+0.6, m_caster->GetPositionY()+0.6, m_caster->GetPositionZ(), m_caster->GetOrientation(), 0, 0, 0, 0, 100);
                 }
                 case 68996:                                 // Two forms (worgen transformation spell)
                 {
@@ -2226,10 +2272,10 @@ void Spell::EffectApplyAura(SpellEffIndex effIndex)
         {
             if (m_caster->HasAura(89488)) // Strength of Soul Rank 1
                 m_caster->CastSpell(m_caster, 96266, true);
-            
+
             if (m_caster->HasAura(89489)) // Strength of Soul Rank 2
                 m_caster->CastSpell(m_caster, 96267, true);
-            
+
             break;
         }
     }
@@ -7793,7 +7839,7 @@ void Spell::EffectResurrectWithAura(SpellEffIndex effIndex)
     uint32 health = target->CountPctFromMaxHealth(damage);
     uint32 mana   = CalculatePctU(target->GetMaxPower(POWER_MANA), damage);
     uint32 resurrectAura = 0;
-    
+
     if (sSpellMgr->GetSpellInfo(GetSpellInfo()->Effects[effIndex].TriggerSpell))
         resurrectAura = GetSpellInfo()->Effects[effIndex].TriggerSpell;
 

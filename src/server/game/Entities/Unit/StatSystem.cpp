@@ -323,7 +323,7 @@ void Player::UpdateAttackPowerAndDamage(bool ranged)
         switch (getClass())
         {
             case CLASS_HUNTER:
-                val2 = getLevel() * 2.0f + GetStat(STAT_AGILITY) * 2.0f - 20.0f;
+                val2 = (level + GetStat(STAT_AGILITY)* 2.0f);
                 break;
             case CLASS_ROGUE:
             case CLASS_WARRIOR:
