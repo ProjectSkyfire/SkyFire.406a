@@ -18,6 +18,7 @@
 #include "ScriptPCH.h"
 #include "ScriptedEscortAI.h"
 #include "ScriptedFollowerAI.h"
+#include "kezan.h"
 #include "SpellMgr.h"
 #include "Player.h"
 #include "Creature.h"
