@@ -29,9 +29,6 @@
 enum NPC_DeffiantTroll
 {
     DEFFIANT_KILL_CREDIT               = 34830,
-    SPELL_LIGHTNING_VISUAL             = 45870,
-    QUEST_GOOD_HELP_IS_HARD_TO_FIND    = 14069,
-    GO_DEPOSIT                         = 195489,
 };
 
 #define SAY_WORK_1 "Oops, break's over."
@@ -184,15 +181,6 @@ public:
     }
 };
 
-enum Hotrod
-{
-    SPELL_KNOCKBACK         = 66301,
-    NPC_ACE                 = 34957,
-    NPC_IZZY                = 34959,
-    NPC_GOBBLER             = 34958,
-    NPC_CITIZEN             = 35075
-};
-
 class npc_hotrod : public CreatureScript
 {
 public:
@@ -238,7 +226,7 @@ public:
 
                             if (!me->IsMounted())
                             {
-                                me->GetMotionMaster()->MoveFollow(player, 5.0f,1.86f);
+                                me->GetMotionMaster()->MoveFollow(player, 5.0f, 1.86f);
                             }
                     }
                 }
@@ -313,17 +301,6 @@ public:
     };
 };
 
-enum Bilgewater_Death
-{
-    SPELL_KICK_FOOTBOMB                 = 70051,
-    SPELL_CATS_MARK_AURA_INVIS          = 70086,
-    SPELL_EARTHQUAKE                    = 90615,
-    SPELL_SOUND_DEATHWING               = 69988,
-    SPELL_DEATHWING_ATTACK              = 66858,
-    SPELL_PANICKED_CITIZEN_INVIS        = 90636,
-    SPELL_SUMMON_DEATHWING              = 66322,
-    QUEST_FOURTH_GOAL                   = 24503
-};
 class npc_bilgewater_deathwing : public CreatureScript
 {
 public:
@@ -347,13 +324,6 @@ public:
         {
         }
     };
-};
-
-enum RobbingHoods
-{
-    SPELL_CREATE_ROBBING    = 67041,
-    NPC_HIRED_LOOTER        = 35234,
-    //knockback spell 66301
 };
 
 class npc_robbing_hoods : public CreatureScript
@@ -411,13 +381,6 @@ public:
             }
         }
     };
-};
-
-enum eTres
-{
-    SPELL_CREATE_SHINY_BLING    = 66780,
-    SPELL_CREATE_NEW_OUTFIT     = 66781,
-    SPELL_CREATE_COOL_SHADES    = 66782,
 };
 
 #define GOSSIP_SZABO "Szabo, I need a hip, new outfit for the party. I'm throwing!"
