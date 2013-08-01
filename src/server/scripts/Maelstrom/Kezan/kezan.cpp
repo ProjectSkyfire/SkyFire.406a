@@ -23,8 +23,7 @@
 #include "Player.h"
 #include "Creature.h"
 #include "Group.h"
-
-#include <map.h>
+#include "Map.h"
 
 // npc_deffiant_troll
 enum NPC_DeffiantTroll
