@@ -47,6 +47,38 @@ enum Spells
     SPELL_CREATE_SHINY_BLING            = 66780,
     SPELL_CREATE_NEW_OUTFIT             = 66781,
     SPELL_CREATE_COOL_SHADES            = 66782,
+    SPELL_OUTFIT_MALE                   = 66928,
+    SPELL_OUTFIT_FEMALE                 = 66927,
+    SPELL_OUTFIT_SECONDARY              = 66985,
+    SPELL_AWESOME_PARTY                 = 66908,
+    SPELL_COSMETIC_STUN                 = 46957,
+    SPELL_DRUNKEN_STATE                 = 55664,
+    SPELL_BUBBLY                        = 75042,
+    SPELL_BUCKET                        = 75044,
+    SPELL_DANCE                         = 75046,
+    SPELL_FIREWORKS                     = 75048,
+    SPELL_HORS_DEV                      = 75050,
+    SPELL_HAPPY_GUEST                   = 66916, 
+     SPELL_ENTER_VAULT                  = 67476,
+    SPELL_VAULT_CRACKED                 = 67492,
+    SPELL_VAULT_INTERACT                = 67555,
+    SPELL_POWER_CORRECT                 = 67493,
+    SPELL_POWER_INCORRECT               = 67494,
+    SPELL_SUMMON_BUNNY_VEH              = 67488,
+    SPELL_EMTEC_VEHICLE                 = 67579,
+    SPELL_DRILL                         = 67495,
+    SPELL_EXPLOSIVE                     = 67496,
+    SPELL_GRAY                          = 67499,
+    SPELL_LISTEN                        = 67497,
+    SPELL_LOCKPICK                      = 67498,
+    SPELL_TIMER                         = 67502,
+
+    //VEHICLE SPELLS
+    SPELL_GRAY_VEH                      = 67526,
+    SPELL_LOCKPICK_VEH                  = 67525,
+    SPELL_LISTEN_VEH                    = 67524,
+    SPELL_DRILL_VEH                     = 67522,
+    SPELL_EXPLOSIVE_VEH                 = 67508   
 
 };
 
@@ -62,7 +94,9 @@ enum Quests
     QUEST_FOURTH_AND_GOAL_2             = 28414,
     QUEST_GOOD_HELP_IS_HARD_TO_FIND     = 14069,
     QUEST_ROLLING_WITH_MY_HOMIES        = 14071,
-    QUEST_THE_NEW_YOU                   = 14109
+    QUEST_THE_NEW_YOU                   = 14109,
+    QUEST_LIFE_OF_THE_PARTY             = 14113,
+    QUEST_PIRATE_PARTY                  = 14115,
 };
 
 #endif

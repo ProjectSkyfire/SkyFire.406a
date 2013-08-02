@@ -531,12 +531,6 @@ public:
 
 enum LifeOfTheParty
 {
-    QUEST_LIFE_OF_THE_PARTY     = 14113,
-    QUEST_PIRATE_PARTY          = 14115,
-    SPELL_OUTFIT_MALE           = 66928,
-    SPELL_OUTFIT_FEMALE         = 66927,
-    SPELL_OUTFIT_SECONDARY      = 66985,
-    SPELL_AWESOME_PARTY         = 66908,
     SPELL_PHASE_2               = 59073,
     SPELL_PHASE_4               = 59074
 };
@@ -603,15 +597,6 @@ public:
 
 enum Guest
 {
-    SPELL_COSMETIC_STUN = 46957,
-    SPELL_DRUNKEN_STATE = 55664,
-    SPELL_BUBBLY        = 75042,
-    SPELL_BUCKET        = 75044,
-    SPELL_DANCE         = 75046,
-    SPELL_FIREWORKS     = 75048,
-    SPELL_HORS_DEV      = 75050,
-    SPELL_HAPPY_GUEST   = 66916,
-
     SPELL_U_FIREWORKS   = 66912,
     SPELL_U_BUBBLY      = 66909,
     SPELL_U_BUCKET      = 66910,
@@ -784,30 +769,6 @@ public:
             }
         }
     };
-};
-
-enum Vault
-{
-    SPELL_ENTER_VAULT       = 67476,
-    SPELL_VAULT_CRACKED     = 67492,
-    SPELL_VAULT_INTERACT    = 67555,
-    SPELL_POWER_CORRECT     = 67493,
-    SPELL_POWER_INCORRECT   = 67494,
-    SPELL_SUMMON_BUNNY_VEH  = 67488,
-    SPELL_EMTEC_VEHICLE     = 67579,
-    SPELL_DRILL             = 67495,
-    SPELL_EXPLOSIVE         = 67496,
-    SPELL_GRAY              = 67499,
-    SPELL_LISTEN            = 67497,
-    SPELL_LOCKPICK          = 67498,
-    SPELL_TIMER             = 67502,
-
-    //VEHICLE SPELLS
-    SPELL_GRAY_VEH          = 67526,
-    SPELL_LOCKPICK_VEH      = 67525,
-    SPELL_LISTEN_VEH        = 67524,
-    SPELL_DRILL_VEH         = 67522,
-    SPELL_EXPLOSIVE_VEH     = 67508
 };
 
 class npc_bank_vault : public CreatureScript
