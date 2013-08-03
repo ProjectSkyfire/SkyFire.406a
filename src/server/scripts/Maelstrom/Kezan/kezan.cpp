@@ -25,7 +25,7 @@
 #include "Group.h"
 #include "Map.h"
 
-// npc_deffiant_troll
+// Quest 34830: Good Help is Hard to Find
 enum NPC_DeffiantTroll
 {
     DEFFIANT_KILL_CREDIT               = 34830,
@@ -127,7 +127,7 @@ class npc_defiant_troll : public CreatureScript
                         me->HandleEmoteCommand(0);
                         break;
                 }
-                rebuffTimer = 120000;                 //Rebuff agian in 2 minutes
+                rebuffTimer = 120000;                 //Rebuff again in 2 minutes
             }
             else
                 rebuffTimer -= diff;
@@ -152,7 +152,32 @@ class npc_defiant_troll : public CreatureScript
     }
 };
 
-// this can be moved to SAI.
+
+class npc_bilgewater_deathwing : public CreatureScript
+{
+public:
+
+    npc_bilgewater_deathwing() : CreatureScript("npc_bilgewater") {}
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_bilgewater_deathwingAI(creature);
+    }
+
+    struct npc_bilgewater_deathwingAI : public ScriptedAI
+    {
+        npc_bilgewater_deathwingAI(Creature* creature) : ScriptedAI(creature){}
+
+        void Reset()
+        {
+        }
+
+        void UpdateAI()
+        {
+        }
+    };
+};
+
 // npc_fourth_and_goal_target - http://www.wowhead.com/npc=37203/fourth-and-goal-target
 class npc_fourth_and_goal_target : public CreatureScript
 {
@@ -170,7 +195,7 @@ public:
             Unit* target = NULL;
             target = me->SelectNearestTarget(5.0f);
             if (target && target->GetTypeId() == TYPEID_PLAYER)
-                if (target->ToPlayer()->GetQuestStatus(28414) == QUEST_STATUS_INCOMPLETE)
+                if (target->ToPlayer()->GetQuestStatus(QUEST_FOURTH_AND_GOAL_2) == QUEST_STATUS_INCOMPLETE)
                     target->ToPlayer()->KilledMonsterCredit(37203, 0);
         }
     };
@@ -206,7 +231,7 @@ public:
 
             if (Player* player = me->FindNearestPlayer(10.0f, true))
             {
-                if (player->GetQuestStatus(14071) == QUEST_STATUS_INCOMPLETE && player->HasAura(66392))
+                if (player->GetQuestStatus(QUEST_ROLLING_WITH_MY_HOMIES) == QUEST_STATUS_INCOMPLETE && player->HasAura(SPELL_HOTROD))
                 {
                     if (player->GetVehicle())
                     {
@@ -216,18 +241,20 @@ public:
                             if (player->GetVehicle()->HasEmptySeat(i))
                                 seat = i;
                             else
-                                if (player->GetVehicle()->GetPassenger(i)->GetEntry() == me->GetEntry())
-                                    return;
+                            if (player->GetVehicle()->GetPassenger(i)->GetEntry() == me->GetEntry())
+                                return;
                         }
 
                         if (seat > 0)
+                        {
                             me->EnterVehicle(player, seat);
-                            player->KilledMonsterCredit(me->GetEntry(), NULL);
+                            player->KilledMonsterCredit(me->GetEntry(), NULL); //KC 48323
 
                             if (!me->IsMounted())
                             {
                                 me->GetMotionMaster()->MoveFollow(player, 5.0f, 1.86f);
                             }
+                        }
                     }
                 }
             }
@@ -261,34 +288,34 @@ public:
         {
             if (TrioTimer <= diff)
             {
-                if (Creature* Auto = me->FindNearestCreature(34840, 10.0f, true))
+                if (Creature* Auto = me->FindNearestCreature(NPC_HOTROD, 10.0f, true))
                 {
-                    if ((Auto->GetOwner()) && (Auto->GetOwner()->GetTypeId() == TYPEID_PLAYER) && (Auto->GetOwner()->ToPlayer()->GetQuestStatus(14071) == QUEST_STATUS_INCOMPLETE))
+                    if ((Auto->GetOwner()) && (Auto->GetOwner()->GetTypeId() == TYPEID_PLAYER) && (Auto->GetOwner()->ToPlayer()->GetQuestStatus(QUEST_ROLLING_WITH_MY_HOMIES) == QUEST_STATUS_INCOMPLETE))
                     {
                         switch (me->GetEntry())
                         {
                             case 34954:
                             {
-                                if (me->FindNearestCreature(34958, 10.0f, true))
+                                if (me->FindNearestCreature(NPC_GOBBLER, 10.0f, true))
                                 return;
 
-                                me->SummonCreature(34958, -8180.56f, 1317.45f, 27.53f, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
+                                me->SummonCreature(NPC_GOBBLER, -8180.56f, 1317.45f, 27.53f, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
                                 break;
                             }
                             case 34892:
                             {
-                                if (me->FindNearestCreature(34957, 10.0f, true))
+                                if (me->FindNearestCreature(NPC_ACE, 10.0f, true))
                                 return;
 
-                                me->SummonCreature(34957, -8076.68f, 1476.48f, 8.84f, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
+                                me->SummonCreature(NPC_ACE, -8076.68f, 1476.48f, 8.84f, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
                                 break;
                             }
                             case 34890:
                             {
-                                if (me->FindNearestCreature(34959, 10.0f, true))
+                                if (me->FindNearestCreature(NPC_IZZY, 10.0f, true))
                                 return;
 
-                                me->SummonCreature(34959, -8503.83f, 1338.88f, 101.69f, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
+                                me->SummonCreature(NPC_IZZY, -8503.83f, 1338.88f, 101.69f, 0, TEMPSUMMON_DEAD_DESPAWN, 0);
                                 break;
                             }
                         }
@@ -301,88 +328,7 @@ public:
     };
 };
 
-class npc_bilgewater_deathwing : public CreatureScript
-{
-public:
-
-    npc_bilgewater_deathwing() : CreatureScript("npc_bilgewater") {}
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_bilgewater_deathwingAI(creature);
-    }
-
-    struct npc_bilgewater_deathwingAI : public ScriptedAI
-    {
-        npc_bilgewater_deathwingAI(Creature* creature) : ScriptedAI(creature){}
-
-        void Reset()
-        {
-        }
-
-        void UpdateAI()
-        {
-        }
-    };
-};
-
-class npc_robbing_hoods : public CreatureScript
-{
-public:
-
-    npc_robbing_hoods() : CreatureScript("npc_robbing_hoods") {}
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_robbing_hoodsAI(creature);
-    }
-
-    struct npc_robbing_hoodsAI : public ScriptedAI
-    {
-        npc_robbing_hoodsAI(Creature* creature) : ScriptedAI(creature){}
-
-        bool bCasted;
-        uint32 GetHitTimer;
-
-        void Reset()
-        {
-            bCasted = false;
-            GetHitTimer = 1000;
-        }
-
-        void MoveInLineOfSight(Unit* who)
-        {
-            ScriptedAI::MoveInLineOfSight(who);
-
-            if (who->GetTypeId() == TYPEID_UNIT)
-            {
-                if (who->GetEntry() == 34840 && me->IsWithinDistInMap(who, 3.0f))
-                {
-                    me->CastSpell(me, SPELL_KNOCKBACK, false);
-                    bCasted = true;
-
-                    if (Unit* owner = who->GetCharmerOrOwnerOrSelf())
-                    {
-                        owner->CastSpell(owner, SPELL_CREATE_ROBBING, true);
-                    }
-                }
-            }
-        }
-
-        void UpdateAI(uint32 const diff)
-        {
-            if (bCasted == true)
-            {
-                if (GetHitTimer <= diff)
-                {
-                    me->Kill(me);
-                }
-                GetHitTimer -= diff;
-            }
-        }
-    };
-};
-
+// Quests 14113,14153,14115,14116,14120: life of the party chain
 #define GOSSIP_SZABO "Szabo, I need a hip, new outfit for the party. I'm throwing!"
 #define GOSSIP_MISSA "I need some cool shades. What will two stacks of macaroons get me?"
 #define GOSSIP_GAPPY "Set me up with the phattest, shiniest bling you got!"
@@ -398,9 +344,18 @@ public:
         player->PlayerTalkClass->ClearMenus();
         switch (Action)
         {
-            case GOSSIP_ACTION_INFO_DEF: player->CastSpell(player, SPELL_CREATE_SHINY_BLING, true);   player->CLOSE_GOSSIP_MENU(); break;
-            case GOSSIP_ACTION_INFO_DEF+1: player->CastSpell(player, SPELL_CREATE_COOL_SHADES, true); player->CLOSE_GOSSIP_MENU(); break;
-            case GOSSIP_ACTION_INFO_DEF+2: player->CastSpell(player, SPELL_CREATE_NEW_OUTFIT, true);  player->CLOSE_GOSSIP_MENU(); break;
+            case GOSSIP_ACTION_INFO_DEF:
+                player->CastSpell(player, SPELL_CREATE_SHINY_BLING, true);
+                player->CLOSE_GOSSIP_MENU();
+                break;
+            case GOSSIP_ACTION_INFO_DEF + 1:
+                player->CastSpell(player, SPELL_CREATE_COOL_SHADES, true);
+                player->CLOSE_GOSSIP_MENU();
+                break;
+            case GOSSIP_ACTION_INFO_DEF + 2:
+                player->CastSpell(player, SPELL_CREATE_NEW_OUTFIT, true);
+                player->CLOSE_GOSSIP_MENU();
+                break;
         }
         return true;
     }
@@ -410,19 +365,19 @@ public:
         if (creature->isQuestGiver())
             player->PrepareQuestMenu(creature->GetGUID());
 
-        if (player->GetQuestStatus(14109) == QUEST_STATUS_INCOMPLETE && creature->GetEntry()== 35126)
+        if (player->GetQuestStatus(QUEST_THE_NEW_YOU) == QUEST_STATUS_INCOMPLETE && creature->GetEntry()== NPC_GAPPY_SILVERTOOTH)
         {
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_GAPPY, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
         }
 
-        if (player->GetQuestStatus(14109) == QUEST_STATUS_INCOMPLETE && creature->GetEntry()== 35130)
+        if (player->GetQuestStatus(QUEST_THE_NEW_YOU) == QUEST_STATUS_INCOMPLETE && creature->GetEntry()== NPC_MISSA_SPEKKIES)
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_MISSA, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_MISSA, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
 
-        if (player->GetQuestStatus(14109) == QUEST_STATUS_INCOMPLETE && creature->GetEntry()== 35128)
+        if (player->GetQuestStatus(QUEST_THE_NEW_YOU) == QUEST_STATUS_INCOMPLETE && creature->GetEntry()== NPC_SZABO)
         {
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SZABO, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+2);
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SZABO, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         }
 
         player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
@@ -455,6 +410,7 @@ public:
             RespawnTimer = 2000;
             DespawnTimer = 4000;
             PlayerGUID = 0;
+            
             me->SetVisible(true);
             me->RestoreFaction();
             me->GetMotionMaster()->MoveTargetedHome();
@@ -529,12 +485,6 @@ public:
     };
 };
 
-enum LifeOfTheParty
-{
-    SPELL_PHASE_2               = 59073,
-    SPELL_PHASE_4               = 59074
-};
-
 class npc_party_rock : public CreatureScript
 {
 public:
@@ -549,7 +499,7 @@ public:
                 player->CastSpell(player, SPELL_AWESOME_PARTY, false);
                 player->CastSpell(player, SPELL_OUTFIT_MALE, false);
                 player->CastSpell(player, SPELL_OUTFIT_SECONDARY, false);
-                player->CastSpell(player, SPELL_PHASE_2, false);
+                player->CastSpell(player, SPELL_LOTP_PHASE_2, false);
                 player->MonsterTextEmote("You're dressed to impress! Use your new powers below to make your party guests happy!", 0, true);
             }
             else
@@ -558,7 +508,7 @@ public:
                 player->CastSpell(player, SPELL_AWESOME_PARTY, false);
                 player->CastSpell(player, SPELL_OUTFIT_FEMALE, false);
                 player->CastSpell(player, SPELL_OUTFIT_SECONDARY, false);
-                player->CastSpell(player, SPELL_PHASE_2, false);
+                player->CastSpell(player, SPELL_LOTP_PHASE_2, false);
                 player->MonsterTextEmote("You're dressed to impress! Use your new powers below to make your party guests happy!", 0, true);
             }
         }
@@ -580,7 +530,7 @@ public:
                 player->RemoveAurasDueToSpell(SPELL_AWESOME_PARTY);
                 player->RemoveAurasDueToSpell(SPELL_OUTFIT_MALE);
                 player->RemoveAurasDueToSpell(SPELL_OUTFIT_SECONDARY);
-                player->CastSpell(player,SPELL_PHASE_4, false);
+                player->CastSpell(player, SPELL_LOTP_PHASE_4, false);
             }
             else
             if (player->getGender() == GENDER_FEMALE)
@@ -588,20 +538,11 @@ public:
                 player->RemoveAurasDueToSpell(SPELL_AWESOME_PARTY);
                 player->RemoveAurasDueToSpell(SPELL_OUTFIT_FEMALE);
                 player->RemoveAurasDueToSpell(SPELL_OUTFIT_SECONDARY);
-                player->CastSpell(player,SPELL_PHASE_4, false);
+                player->CastSpell(player, SPELL_LOTP_PHASE_4, false);
             }
         }
         return true;
     }
-};
-
-enum Guest
-{
-    SPELL_U_FIREWORKS   = 66912,
-    SPELL_U_BUBBLY      = 66909,
-    SPELL_U_BUCKET      = 66910,
-    SPELL_U_DANCE       = 66911,
-    SPELL_U_HORS        = 66913
 };
 
 const uint32 spellId[5] = {75042, 75044, 75046, 75048, 75050};
@@ -623,6 +564,7 @@ public:
 
         bool spellHit;
         uint32 ResetTimer;
+        uint32 AwesomeTimer;
         uint32 BucketTimer;
         uint32 FireWorkTimer;
         uint32 BubblyTimer;
@@ -633,6 +575,7 @@ public:
         {
             me->SetVisible(true);
             ResetTimer      = 5000;
+            AwesomeTimer    = 12000;
             BucketTimer     = 20000;
             BubblyTimer     = 13000;
             FireWorkTimer   = 16000;
@@ -642,25 +585,25 @@ public:
             me->CastSpell(me, spellId[urand(0, 4)], false);
         }
 
-        void UpdateAI(uint32 const diff)
+        void UpdateAI(SpellInfo const* spell, uint32 const diff)
         {
-            if (me->HasAura(SPELL_HAPPY_GUEST))
+            if (me->HasAura(SPELL_AWESOME_PARTY))
             {
-                if (ResetTimer <= diff)
+                if (AwesomeTimer <= diff)
                 {
-                    me->RemoveAurasDueToSpell(SPELL_HAPPY_GUEST);
+                    me->RemoveAurasDueToSpell(SPELL_AWESOME_PARTY);
                     me->SetVisible(false);
                     Reset();
                 }
                 else
-                    ResetTimer -= diff;
+                    AwesomeTimer -= diff;
             }
 
-            if (me->HasAura(SPELL_BUCKET))
+            if (me->HasAura(SPELL_BUCKET_1))
             {
                 me->CastSpell(me, SPELL_COSMETIC_STUN, false);
                 me->CastSpell(me, SPELL_DRUNKEN_STATE, false);
-
+                //me->CastSpell(me, SPELL_SUMMON_BUCKET_PC_LOTP, false);
                 if (BucketTimer <= diff)
                 {
                     me->MonsterSay("Ugh... I need a bucket!", 0, 0);
@@ -670,22 +613,41 @@ public:
                     BucketTimer -= diff;
             }
 
-            if (me->HasAura(SPELL_FIREWORKS))
+            if (me->HasAura(SPELL_FIREWORKS_1))
             {
                 if (FireWorkTimer <= diff)
                 {
-                    me->CastSpell(me,66918,false);
-                    me->MonsterSay("I love fireworks!", 0, 0);
-                    FireWorkTimer = 17000;
+                    switch (spell->Id)
+                    {
+                        case 66917:
+                            me->CastSpell(me, SPELL_FIREWORKS_BLUE, false);
+                            me->MonsterSay("I love fireworks!", 0, 0);
+                            FireWorkTimer = 17000;
+                            break;
+                        case 66918:
+                            me->CastSpell(me, SPELL_FIREWORKS_GREEN, false);
+                            me->MonsterSay("I love fireworks!", 0, 0);
+                            FireWorkTimer = 17000;
+                            break;
+                        case 66919:
+                            me->CastSpell(me, SPELL_FIREWORKS_RED, false);
+                            me->MonsterSay("I love fireworks!", 0, 0);
+                            FireWorkTimer = 17000;
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 else
                     FireWorkTimer -= diff;
             }
 
-            if (me->HasAura(SPELL_U_BUBBLY))
+            if (me->HasAura(SPELL_BUBBLY_1))
             {
                 if (BubblyTimer <= diff)
                 {
+                    me->CastSpell(me, SPELL_BUBBLY_2, false);
+                    me->CastSpell(me, SPELL_DRUNKEN_STATE, false);
                     me->MonsterSay("I could really use a refill on my drink here.", 0, 0);
                     BubblyTimer = 14000;
                 }
@@ -693,10 +655,12 @@ public:
                     BubblyTimer -= diff;
             }
 
-            if (me->HasAura(SPELL_DANCE))
+            if (me->HasAura(SPELL_DANCE_1))
             {
                 if (DanceTimer <= diff)
                 {
+                    me->CastSpell(me, SPELL_SUMMON_DISCO_BALL, false);
+                    me->CastSpell(me, SPELL_DANCE_2, false);
                     me->MonsterSay("If only I had someone to dance with.", 0, 0);
                     DanceTimer = 15000;
                 }
@@ -704,10 +668,12 @@ public:
                     DanceTimer -= diff;
             }
 
-            if (me->HasAura(SPELL_HORS_DEV))
+            if (me->HasAura(SPELL_HORS_DEV_1))
             {
                 if (HorsTimer <= diff)
                 {
+                    me->CastSpell(me, SPELL_HORS_DEV_2, false);
+                    me->CastSpell(me, SPELL_HAPPY_GUEST, false);
                     me->MonsterSay("This is delicious! Are there more hors d'oeuvres?", 0, 0);
                     HorsTimer = 21000;
                 }
@@ -716,54 +682,56 @@ public:
             }
         }
 
-        void SpellHit(Unit* caster, const SpellEntry* Spellkind)
+        void SpellHit(Unit* caster, SpellInfo const* Spellkind)
         {
-            if (me->HasAura(SPELL_FIREWORKS) && Spellkind->Id == 66912  &&  !spellHit)
+            if (me->HasAura(SPELL_FIREWORKS_1) && Spellkind->Id == SPELL_FIREWORKS_2  &&  !spellHit)
             {
-                me->RemoveAurasDueToSpell(SPELL_FIREWORKS);
+                me->RemoveAurasDueToSpell(SPELL_FIREWORKS_1);
                 me->CastSpell(me, SPELL_HAPPY_GUEST, false);
                 spellHit = true;
-                caster->CastSpell(caster, 66917, false);
+                caster->CastSpell(caster, SPELL_FIREWORKS_2, false);
                 caster->ToPlayer()->KilledMonsterCredit(35175, 0);
                 me->MonsterSay("Woo, hoo, fireworks! More, more!", 0, 0);
             }
 
-            if (me->HasAura(SPELL_HORS_DEV) && Spellkind->Id == 66913 && !spellHit)
+            if (me->HasAura(SPELL_HORS_DEV_1) && Spellkind->Id == SPELL_HORS_DEV_2 && !spellHit)
             {
-                me->RemoveAurasDueToSpell(SPELL_HORS_DEV);
+                me->RemoveAurasDueToSpell(SPELL_HORS_DEV_1);
                 me->CastSpell(me, SPELL_HAPPY_GUEST, false);
                 spellHit = true;
-                me->CastSpell(me, 75124, false);
+                me->CastSpell(me, SPELL_HORS_PC_LOTP, false);
                 caster->ToPlayer()->KilledMonsterCredit(35175, 0);
                 me->MonsterSay("Nom, nom, nom!", 0, 0);
             }
 
-            if (me->HasAura(SPELL_DANCE) && Spellkind->Id == 66911 && !spellHit)
+            if (me->HasAura(SPELL_DANCE_1) && Spellkind->Id == SPELL_DANCE_2 && !spellHit)
             {
-                me->RemoveAurasDueToSpell(SPELL_DANCE);
-                me->CastSpell(me, SPELL_HAPPY_GUEST, false);
+                me->RemoveAurasDueToSpell(SPELL_DANCE_1);
+                me->CastSpell(me, SPELL_SUMMON_DISCO_BALL, false);
                 spellHit = true;
-                me->CastSpell(me, 75123, false);
+                me->CastSpell(me, SPELL_DANCE_PC_LOTP, false);
                 caster->ToPlayer()->KilledMonsterCredit(35175, 0);
                 me->MonsterSay("Shake it like goblinoid picture.", 0, 0);
             }
 
-            if (me->HasAura(SPELL_BUCKET) && Spellkind->Id == 66910 && !spellHit)
+            if (me->HasAura(SPELL_BUCKET_1) && Spellkind->Id == SPELL_BUCKET_2 && !spellHit)
             {
-                me->RemoveAurasDueToSpell(SPELL_BUCKET);
-                me->CastSpell(me, SPELL_HAPPY_GUEST, false);
+                me->RemoveAurasDueToSpell(SPELL_BUCKET_1);
+                me->CastSpell(me, SPELL_COSMETIC_STUN, false);
+                me->CastSpell(me, SPELL_DRUNKEN_STATE, false);
                 spellHit = true;
-                me->CastSpell(me, 66931, false);
+                me->CastSpell(me, SPELL_SUMMON_BUCKET_PC_LOTP, false);
                 caster->ToPlayer()->KilledMonsterCredit(35175, 0);
                 me->MonsterSay("Shorry about your shoes.", 0, 0);
             }
 
-            if (me->HasAura(SPELL_BUBBLY) && Spellkind->Id == 66909 && !spellHit)
+            if (me->HasAura(SPELL_BUBBLY_1) && Spellkind->Id == SPELL_BUBBLY_2 && !spellHit)
             {
-                me->RemoveAurasDueToSpell(SPELL_BUBBLY);
+                me->RemoveAurasDueToSpell(SPELL_BUBBLY_1);
                 me->CastSpell(me, SPELL_HAPPY_GUEST, false);
+                me->CastSpell(me, SPELL_DRUNKEN_STATE, false);
                 spellHit = true;
-                me->CastSpell(me, 75122, false);
+                me->CastSpell(me, SPELL_BUBBLY_PC_LOTP, false);
                 caster->ToPlayer()->KilledMonsterCredit(35175, 0);
                 me->MonsterSay("Thanks for the refill, sir!", 0, 0);
             }
@@ -771,6 +739,7 @@ public:
     };
 };
 
+// Quest 14122: The Great Bank Heist
 class npc_bank_vault : public CreatureScript
 {
 public:
@@ -802,17 +771,17 @@ public:
             IsInCorrectPhase = WasClicked = false;
             SpellToClick = SelectedSpell = 0;
             /*
-            1 - Button 1 - 67526
-            2 - Button 2 - 67508
-            3 - Button 3 - 67524
-            4 - Button 4 - 67525
-            5 - Button 5 - 67522
+            1 - Button 1 - SPELL_AMAZING_G_RAY
+            2 - Button 2 - SPELL_BLASTCRACKERS
+            3 - Button 3 - SPELL_EAR_O_SCOPE
+            4 - Button 4 - SPELL_INFINIFOLD_LOCKPICK
+            5 - Button 5 - SPELL_KAJA_MITE_DRILL
             */
         }
 
-        void SpellHit(Unit* caster, SpellEntry const* spell)
+        void SpellHit(Unit* caster, SpellInfo const* spell)
         {
-            if (((caster->GetGUID() != PlayerGuid) || !caster->HasAura(67476)) || caster->GetTypeId() != TYPEID_PLAYER)
+            if (((caster->GetGUID() != PlayerGuid) || !caster->HasAura(SPELL_ENTER_VAULT)) || caster->GetTypeId() != TYPEID_PLAYER)
                 return;
 
             if (!WasClicked)
@@ -1018,6 +987,63 @@ public:
     };
 };
 
+class npc_robbing_hoods : public CreatureScript
+{
+public:
+
+    npc_robbing_hoods() : CreatureScript("npc_robbing_hoods") {}
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_robbing_hoodsAI(creature);
+    }
+
+    struct npc_robbing_hoodsAI : public ScriptedAI
+    {
+        npc_robbing_hoodsAI(Creature* creature) : ScriptedAI(creature){}
+
+        bool bCasted;
+        uint32 GetHitTimer;
+
+        void Reset()
+        {
+            bCasted = false;
+            GetHitTimer = 1000;
+        }
+
+        void MoveInLineOfSight(Unit* who)
+        {
+            ScriptedAI::MoveInLineOfSight(who);
+
+            if (who->GetTypeId() == TYPEID_UNIT)
+            {
+                if (who->GetEntry() == NPC_HOTROD && me->IsWithinDistInMap(who, 3.0f))
+                {
+                    me->CastSpell(me, SPELL_RWMH_KNOCKBACK_HOTROD, false);
+                    bCasted = true;
+
+                    if (Unit* owner = who->GetCharmerOrOwnerOrSelf())
+                    {
+                        owner->CastSpell(owner, SPELL_CREATE_ROBBING, true);
+                    }
+                }
+            }
+        }
+
+        void UpdateAI(uint32 const diff)
+        {
+            if (bCasted == true)
+            {
+                if (GetHitTimer <= diff)
+                {
+                    me->Kill(me);
+                }
+                GetHitTimer -= diff;
+            }
+        }
+    };
+};
+
 enum e477
 {
     SPELL_SUMMON_GASBOT = 70252, // http://www.wowhead.com/spell=70252/447-summon-gasbot
@@ -1152,6 +1178,5 @@ void AddSC_kezan()
     new npc_bank_vault();
     new npc_liberate_chunk();
     new npc_447();
-    //new npc_run_away();
     new go_mortar();
 }

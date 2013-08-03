@@ -85,13 +85,23 @@ TOO BAD FOR YOU THAT I\'M CHANGING THE TERMS OF OUR DEAL!\n
 You\'re now my slave. Get below deck and take a turn shoveling coal. Next stop, Azshara!\n
 Muahahahahahahahaha! ', RequestItemsText='Oh, $N, it\'s you. What an unexpected surprise. ', PrevQuestId=14125, NextQuestId=0, NextQuestInChain=0 WHERE entry=14126;
 
-UPDATE creature_template SET unit_flags = 8 WHERE entry=34865; -- Tunneling Worm
-UPDATE creature_template SET minlevel=10, maxlevel=10, spell1=66300, spell3=66298, spell4=66299, VehicleId=448, speed_run = 2.50 WHERE entry=34840; -- HotRod
+UPDATE creature SET curhealth = 84 WHERE id = 34865;
+UPDATE creature_template SET unit_flags = 8, MovementType = 1 WHERE entry=34865; -- Tunneling Worm
+UPDATE creature SET curhealth = 1102 WHERE id = 34840;
+UPDATE creature_template SET IconName='vehichleCursor', minlevel=1, maxlevel=1, unit_flags=32768, type_flags=2048, spell1=66300, spell3=66298, spell4=66299, VehicleId=468, speed_walk = 2,speed_run = 3,mechanic_immune_mask=1073741823, ScriptName='npc_hotrod' WHERE entry=34840; -- HotRod
+UPDATE creature_template SET ScriptName='npc_hotrod' WHERE entry IN(66392,34957,34958,34959);
+DELETE FROM npc_spellclick_spells WHERE npc_entry IN(66392,34840);
+INSERT INTO npc_spellclick_spells(`npc_entry`,`spell_id`,`cast_flags`,`user_type`)VALUES
+(34840,66300,1,0), -- Spell 66300: Punch it!
+(34840,66298,1,0), -- Spell 66298: honk horn
+(34840,66299,1,0), -- Spell 66299: Radio
+(66392,66300,1,0),
+(66392,66298,1,0),
+(66392,66299,1,0);
+
 UPDATE creature_template SET ScriptName='npc_trio' WHERE entry IN(34954,34890,34892);
 UPDATE creature_template SET unit_flags=33554432, InhabitType=4 WHERE entry=48572; -- Deathwing
 UPDATE creature_template SET ScriptName='npc_robbing_hoods' WHERE entry=35234;
-UPDATE creature SET curhealth = 1102 WHERE id = 34840;
-UPDATE creature_template SET ScriptName='npc_hotrod' WHERE entry IN(34957,34958,34959);
 
 DELETE FROM gameobject WHERE id =201603;
 INSERT INTO `gameobject` (`id`, `map`, `spawnMask`, `phaseMask`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecs`, `animprogress`, `state`) VALUES
@@ -239,7 +249,7 @@ INSERT INTO `creature` (`id`, `map`, `spawnMask`, `phaseMask`, `modelid`, `equip
 ('35209','648','1','2','0','35209','-8452.48','1294.18','102.589','1.99307','300','0','0','71','0','0','0','0','0'),
 ('35210','648','1','2','0','35210','-8454.04','1297.57','102.155','5.49595','300','0','0','71','0','0','0','0','0');
 
-UPDATE creature_template SET ScriptName='npc_bilgewater' WHERE entry=42777;
+UPDATE creature_template SET faction_A=35,faction_H=35,unit_flags=32768, type_flags=2048,VehicleId=468,ScriptName='npc_bilgewater' WHERE entry=48526;
 UPDATE creature_template SET ScriptName='npc_partygoer' WHERE entry IN(35185,35186,35175,35201);
 UPDATE creature_template_addon  SET auras=0 WHERE entry IN (35175,35186);
 UPDATE creature_template_addon SET emote=431 WHERE entry IN(37710,37708,37709,35238);
@@ -413,7 +423,7 @@ INSERT INTO quest_end_scripts (id, delay, command, datalong, datalong2)VALUES
 
 UPDATE gameobject SET phasemask = 15 WHERE guid IN(188318,188319);
 
-UPDATE creature_template SET ScriptName='npc_bank_vault',VehicleId=457, Spell1=67526,Spell2=67508,Spell3=67524,Spell4=67525,Spell5=67522,unit_flags=4 WHERE entry=35486;
+UPDATE creature_template SET ScriptName='npc_bank_vault',VehicleId=457, Spell1=67526, Spell2=67508, Spell3=67524, Spell4=67525, Spell5=67522, unit_flags=4 WHERE entry=35486;
 
 DELETE FROM spell_linked_spell WHERE spell_trigger=67555;
 INSERT INTO spell_linked_spell (spell_trigger, spell_effect, TYPE, COMMENT)VALUES
