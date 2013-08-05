@@ -669,8 +669,9 @@ void AddSC_zangarmarsh();
 
 // Maelstrom
 void AddSC_deepholm();
-void AddSC_kezan();
 void AddSC_tol_barad();
+void AddSC_kezan();                          //Kezan
+void AddSC_lost_isles();
 
 // battlegrounds
 
@@ -1382,8 +1383,9 @@ void AddMaelstromScripts()
 {
 #ifdef SCRIPTS
     AddSC_deepholm();
-    AddSC_kezan();
     AddSC_tol_barad();
+    AddSC_kezan();                          //Kezan
+    AddSC_lost_isles();
 #endif
 }
 

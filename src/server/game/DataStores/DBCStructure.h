@@ -1101,6 +1101,7 @@ struct GtRegenMPPerSptEntry
 
 struct GtSpellScalingEntry
 {
+    //uint32 id; 
     uint32   level;
     float    coef;
 };
