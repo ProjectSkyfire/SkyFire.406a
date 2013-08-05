@@ -1,4 +1,5 @@
-# ![logo](http://www.projectskyfire.org/public/style_images/9_1_s2QNl.png) Project SkyFire
+# ![logo](http://www.projectskyfire.org/public/style_images/9_1_s2QNl.png) 
+Project SkyFire
 
 
 ## Introduction
@@ -15,10 +16,11 @@ and functionality.
 It is completely open source; community involvement is highly encouraged.
 
 If you wish to contribute ideas or code please visit our site linked below or
-make pull requests to our [Github repository](https://github.com/ProjectSkyfire/SkyFireEMU).
+make pull requests to our 
+[Github repository](https://github.com/ProjectSkyfire/SkyFireEMU).
 
-For further information on the SkyFire project, please visit our project
-website at [projectskyfire.org](http://www.projectskyfire.org).
+For further information on the SkyFire project, please visit our project website at 
+[projectskyfire.org](http://www.projectskyfire.org).
 
 ## Status
 
@@ -39,9 +41,9 @@ website at [projectskyfire.org](http://www.projectskyfire.org).
 ## Install
 
 Detailed installation guides are available in the wiki for
-[Windows](http://wiki.projectskyfire.org/index.php?title=Installation_(Windows)),
-[Linux](http://wiki.projectskyfire.org/index.php?title=Installation_(Linux)) and
-[Mac OSX](http://wiki.projectskyfire.org/index.php?title=Installation_(Mac_OS_X)).
+[Windows](http://wiki.projectskyfire.org/index.php?title=Installation_(Windows) ),
+[Linux](http://wiki.projectskyfire.org/index.php?title=Installation_(Linux) ) and
+[Mac OSX](http://wiki.projectskyfire.org/index.php?title=Installation_(Mac_OS_X) ).
 
 
 ## Reporting issues
@@ -69,8 +71,8 @@ Read file [THANKS](THANKS)
 
 ## Links
 
-[Forum](http://www.projectskyfire.org)
+[Forum http://www.projectskyfire.org](http://www.projectskyfire.org)
 
-[Database] (http://www.projectskyfire.org/index.php?/files/)
+[Database http://www.projectskyfire.org/index.php?/files/] (http://www.projectskyfire.org/index.php?/files/)
 
-[Wiki](http://wiki.projectskyfire.org)
+[Wiki http://wiki.projectskyfire.org](http://wiki.projectskyfire.org)
