@@ -1,55 +1,76 @@
-# SkyFireEMU 4.0.6a Mmaps Version
-# General information
+# ![logo](http://www.projectskyfire.org/public/style_images/9_1_s2QNl.png) Project SkyFire
 
-Official Website
-http://www.projectskyfire.org/
 
-Official Public Database 
-http://www.projectskyfire.org/index.php?/files/
+## Introduction
 
-Install Intructions.
-http://wiki.projectskyfire.org/
-
-Our Bug Tracker is located here.
-http://www.projectskyfire.org/bugtracker/
-
-Build status.
-https://travis-ci.org/ProjectSkyfire/SkyFireEMU/builds
-
-## Copyright (C) SkyFireEMU  (http://www.projectskyfire.org)
-
-  SkyFireEMU is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation version 3 of the License.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-  In addition, as a special exception, the SkyFireEMU project
-  gives permission to link the code of its release of SkyFireEMU with
-  the OpenSSL project's "OpenSSL" library (or with modified versions of
-  it that use the same license as the "OpenSSL" library), and distribute
-  the linked executables.  You must obey the GNU General Public License
-  in all respects for all of the code used other than "OpenSSL".  If you
-  modify this file, you may extend this exception to your version of the
-  file, but you are not obligated to do so.  If you do not wish to do
-  so, delete this exception statement from your version.
+SkyFire is a *MMORPG* Framework based mostly in C++.
 
 SkyFireEMU is a MMORPG Framework based mostly on C++. It is completely 
 open source, and is community supported. It is derived
-from CactusCore, TrinityCore, and MaNGOS, the Massive Network Game Object Servers, 
+from CactusEmu, TrinityCore, and MaNGOS, the Massive Network Game Object Servers, 
 and is based on the code of there projects with extensive changes over time to optimize, 
 improve and cleanup the codebase at the same time as improving the ingame mechanics
-and functionality. If you wish to contribute ideas or code please visit 
-our site linked below or make pull requests to our github repo at 
-https://github.com/ProjectSkyfire/SkyFireEMU/
+and functionality.
 
-SQL files to create the database can be found in the database directory. Files
-to update your database from an older revision/version can be found in the
-database/updates directory.
+It is completely open source; community involvement is highly encouraged.
+
+If you wish to contribute ideas or code please visit our site linked below or
+make pull requests to our [Github repository](https://github.com/ProjectSkyfire/SkyFireEMU).
+
+For further information on the SkyFire project, please visit our project
+website at [projectskyfire.org](http://www.projectskyfire.org).
+
+## Status
+
+[Build status] (https://travis-ci.org/ProjectSkyfire/SkyFireEMU/builds)
+
+## Requirements
+
++ Platform: Linux, Windows or Mac
++ Processor with SSE2 support
++ ACE = 5.8.3 (included for Windows)
++ MySQL = 5.1.0 (included for Windows)
++ CMake = 2.8.0
++ OpenSSL = 0.9.8o
++ GCC = 4.3 (Linux only)
++ MS Visual Studio = 9 (2008) (Windows only)
+
+
+## Install
+
+Detailed installation guides are available in the wiki for
+[Windows](http://wiki.projectskyfire.org/index.php?title=Installation_(Windows)),
+[Linux](http://wiki.projectskyfire.org/index.php?title=Installation_(Linux)) and
+[Mac OSX](http://wiki.projectskyfire.org/index.php?title=Installation_(Mac_OS_X)).
+
+
+## Reporting issues
+
+Issues can be reported via the [Github issue tracker](https://github.com/ProjectSkyfire/SkyFireEMU/issues).
+
+Please take the time to review existing issues before submitting your own to
+prevent duplicates.
+
+## Submitting fixes
+
+Fixes are submitted as pull requests via Github. 
+
+## Copyright
+
+License: GPL 3.0
+
+Read file [COPYING](COPYING)
+
+
+## Authors &amp; Contributors
+
+Read file [THANKS](THANKS)
+
+
+## Links
+
+[Forum](http://www.projectskyfire.org)
+
+[Database] (http://www.projectskyfire.org/index.php?/files/)
+
+[Wiki](http://wiki.projectskyfire.org)
