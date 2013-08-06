@@ -22746,39 +22746,8 @@ void Player::ModifyMoney(int32 d)
     else
     {
         uint64 newAmount = 0;
-
         if (GetMoney() < uint32(MAX_MONEY_AMOUNT - d))
-        {
             newAmount = GetMoney() + d;
-            SetGuildMoneyModifier(1);
-
-            if (Guild* guild = sGuildMgr->GetGuildById(GetGuildId()))
-            {
-                if (guild)
-                {
-                    if (!this->HasAura(83940) && !this->HasAura(83941))
-                        SetGuildMoneyModifier(10);
-
-                    if (this->HasAura(83940) && !this->HasAura(83941))
-                        SetGuildMoneyModifier(15);
-
-                    if (this->HasAura(83941) && this->HasAura(83940))
-                        SetGuildMoneyModifier(25);
-
-                    // If we withdraw money from guild we don't get lootGUID, same in quests ;)
-                    if (this->GetLootGUID())
-                    {
-                        uint64 GuildMoney = (d * (GetGuildMoneyModifier() *0.01));
-
-                        if (GuildMoney < 1)
-                            GuildMoney = 1;
-
-                        guild->SetGuildMoney(GuildMoney);
-                    }
-                }
-            }
-            this->SendPlayerMoneyNotify(this, d, GetGuildMoneyModifier());
-        }
         else
         {
             // "At Gold Limit"
