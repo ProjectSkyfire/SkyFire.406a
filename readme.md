@@ -1,5 +1,4 @@
-# ![logo](http://www.projectskyfire.org/public/style_images/9_1_s2QNl.png) 
-Project SkyFire
+# ![logo](http://www.projectskyfire.org/public/style_images/9_1_s2QNl.png) Project SkyFire
 
 
 ## Introduction
@@ -41,9 +40,9 @@ For further information on the SkyFire project, please visit our project website
 ## Install
 
 Detailed installation guides are available in the wiki for
-[Windows] ("http://wiki.projectskyfire.org/index.php?title=Installation_(Windows)"),
-[Linux] ("http://wiki.projectskyfire.org/index.php?title=Installation_(Linux)") and
-[Mac OSX] ("http://wiki.projectskyfire.org/index.php?title=Installation_(Mac_OS_X)").
+[Windows] (http://wiki.projectskyfire.org/index.php?title=Installation_Windows),
+[Linux] (http://wiki.projectskyfire.org/index.php?title=Installation_Linux) and
+[Mac OSX] (http://wiki.projectskyfire.org/index.php?title=Installation_Mac_OS_X).
 
 
 ## Reporting issues
