@@ -60,12 +60,12 @@ Fixes are submitted as pull requests via Github.
 
 License: GPL 3.0
 
-Read file [COPYING](COPYING)
+Read file [COPYING](COPYING.md)
 
 
 ## Authors &amp; Contributors
 
-Read file [THANKS](THANKS)
+Read file [THANKS](THANKS.md)
 
 
 ## Links
