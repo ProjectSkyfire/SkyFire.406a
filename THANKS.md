@@ -2,10 +2,13 @@
 
 ## SkyfireEMU -- Thanks/credits file
 
-Copyright (C) SkyFireEMU  (http://www.projectskyfire.org)
-Copyright (C) Cactus      (http://www.cactusemu.com)
-Copyright (C) TrinityCore (http://www.trinitycore.org)
-Copyright (C) MaNGOS      (http://www.getmangos.com)
+Copyright (C) SkyFireEMU  [http://www.projectskyfire.org] (http://www.projectskyfire.org)
+
+Copyright (C) Cactus      [http://www.cactusemu.com] (http://www.cactusemu.com)
+
+Copyright (C) TrinityCore [http://www.trinitycore.org] (http://www.trinitycore.org)
+
+Copyright (C) MaNGOS      [http://www.getmangos.com] (http://www.getmangos.com)
 
 SkyFireEMU is a derivation/rewrite of TrinityCore, and MaNGOS, which was originally written
 by Team Python and the WoW Daemon Team. Many people further helped Trinity Core
@@ -25,8 +28,7 @@ Thanks go out to the following people for various patches/code from TrinityCore
 w12x, dythzer, XEQT, death420, balrok, TOM_RUS,
 runningnak3d, Seline, KingPin, raczman, bogie, Neo2003, NoFantasy, Derex,
 freghar, toilet1, megamage, MadJack, WarHead, gvcoman, Ntsc, arrai, jrkpote,
-Seraphim, vagoth, KerchumA222, Rognar, Blaymoira, DragonHunter, Molius, ApoC,
-SeT, hunuza, Wyk3d, VladimirMangos, rj686, Arthorius, QAston, Muhaha, dereka,
+Seraphim, vagoth, KerchumA222, Rognar, Blaymoira,QAston, Muhaha, dereka,
 Kaldorei, NuRRi, Biglad, Machiavelli, Nivelo, Paradox, Aokromes, EleGoS,
 Visagalis, reno, Cybrax, GriffonHeart, fgenesis, rilex, XTElite1, Anubisss, eL,
 Iskander, arclite, Bladex, EIFEL, Klaimmore, XTZGZoReX, panaut0lordv, DearScorpion,
@@ -93,5 +95,6 @@ Allnightlong, Snajl, NNN666, Portgas D.Ace, Fedr, Takenbacon, kaiser, DJScias, S
 Petrosson, HUNTERok, Roc13x, Et2012, iDani3l, Vcrx6, Subv2112, Lemex, Greymane,
 
 
-// todo: fill in the rest of involved names with core from catcus to present.
+## todo: 
+fill in the rest of involved names with core from catcus to present.
 only one name is needed, if there already listed in trinity thanks no need to add to skyfires.
