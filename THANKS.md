@@ -1,4 +1,6 @@
-= SkyfireEMU -- Thanks/credits file =
+# ![logo](http://www.projectskyfire.org/public/style_images/9_1_s2QNl.png)
+
+## SkyfireEMU -- Thanks/credits file
 
 Copyright (C) SkyFireEMU  (http://www.projectskyfire.org)
 Copyright (C) Cactus      (http://www.cactusemu.com)
@@ -29,7 +31,7 @@ Kaldorei, NuRRi, Biglad, Machiavelli, Nivelo, Paradox, Aokromes, EleGoS,
 Visagalis, reno, Cybrax, GriffonHeart, fgenesis, rilex, XTElite1, Anubisss, eL,
 Iskander, arclite, Bladex, EIFEL, Klaimmore, XTZGZoReX, panaut0lordv, DearScorpion,
 BlueSteel, AlexDereka, Drahy, krz, Xeptor, Sethoso, Sarjuuk, pasdVn, nissen,
-Triply, `win, Fog, emsy, McBitter, Lukaasm, maikash, Wormheart, DonTomika,
+Triply, win, Fog, emsy, McBitter, Lukaasm, maikash, Wormheart, DonTomika,
 DiSlord, Tiretunderl, Ramses_II, cccyril, Cha0S2, miebaik, Trazom, KiriX,
 darkEvil, Sorken, Kudlaty, Charlie2025, Medwise, Rat, Lutik, domingo,
 TrullyONE, rastikzzz, Tassader, Lightguard, KAPATEJIb, Tux`Volant, zhanhang03,
