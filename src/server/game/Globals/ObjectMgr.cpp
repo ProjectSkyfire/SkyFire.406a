@@ -2264,8 +2264,8 @@ void ObjectMgr::LoadItemTemplates()
                                              "TotemCategory, socketColor_1, socketContent_1, socketColor_2, socketContent_2, socketColor_3, socketContent_3, socketBonus, "
     //                                          111             112                         113               114           115             116         117         118
                                              "GemProperties, RequiredDisenchantSkill, ArmorDamageModifier, Duration, ItemLimitCategory, HolidayId, ScriptName, DisenchantID, "
-    //                                          119         120             121
-                                             "FoodType, minMoneyLoot, maxMoneyLoot FROM item_template");
+    //                                          119         120             121           122
+                                             "FoodType, minMoneyLoot, maxMoneyLoot, StatScalingFactor FROM item_template");
 
     if (!result)
     {
@@ -2379,10 +2379,11 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.FoodType                = uint32(fields[119].GetUInt8());
         itemTemplate.MinMoneyLoot            = fields[120].GetUInt32();
         itemTemplate.MaxMoneyLoot            = fields[121].GetUInt32();
+        itemTemplate.StatScalingFactor       = fields[122].GetFloat();
 
         FillItemDamageFields(itemTemplate, &itemTemplate.minDamage, &itemTemplate.maxDamage, &itemTemplate.DPS, itemTemplate.ItemLevel,
                itemTemplate.Class, itemTemplate.SubClass, itemTemplate.Quality, itemTemplate.Delay,
-               1, itemTemplate.InventoryType, itemTemplate.Flags2);
+               itemTemplate.StatScalingFactor, itemTemplate.InventoryType, itemTemplate.Flags2);
         // Checks
 
         ItemEntry const *db2item = sItemStore.LookupEntry(entry);

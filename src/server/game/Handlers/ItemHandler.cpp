@@ -427,7 +427,7 @@ void WorldSession::HandleRequestHotFix(WorldPacket& recvData)
                 data << uint32(proto->ItemLimitCategory);
                 data << uint32(proto->HolidayId);
 
-                data << float(0.0f); // StatScalingFactor
+                data << float(proto->StatScalingFactor);
                 data << uint32(0);
                 data << uint32(0);
             }

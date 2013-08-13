@@ -435,6 +435,9 @@ bool Master::_StartDB()
     }
     sLog->outString("Realm running as realm ID %d", realmID);
 
+    ///- Initialize the DB logging system
+    sLog->SetLogDBLater(ConfigMgr::GetBoolDefault("EnableLogDB", false)); // set var to enable DB logging once startup finished.
+    sLog->SetLogDB(false);
     sLog->SetRealmID(realmID);
 
     ///- Clean the database before starting
@@ -451,6 +454,7 @@ bool Master::_StartDB()
 
 void Master::_StopDB()
 {
+    sLog->SetLogDB(false);
     CharacterDatabase.Close();
     WorldDatabase.Close();
     LoginDatabase.Close();
