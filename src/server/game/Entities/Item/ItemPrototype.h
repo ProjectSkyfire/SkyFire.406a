@@ -637,6 +637,7 @@ struct ItemTemplate
     int32  Duration;                                        // negative = realtime, positive = ingame time
     uint32 ItemLimitCategory;                               // id from ItemLimitCategory.dbc
     uint32 HolidayId;                                       // id from Holidays.dbc
+    float StatScalingFactor;
     uint32 ScriptId;
     uint32 DisenchantID;
     uint32 FoodType;
