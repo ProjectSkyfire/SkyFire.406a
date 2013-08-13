@@ -2381,9 +2381,6 @@ void ObjectMgr::LoadItemTemplates()
         itemTemplate.MaxMoneyLoot            = fields[121].GetUInt32();
         itemTemplate.StatScalingFactor       = fields[122].GetFloat();
 
-        if (!itemTemplate.StatScalingFactor)
-            itemTemplate.StatScalingFactor = 1;
-
         FillItemDamageFields(itemTemplate, &itemTemplate.minDamage, &itemTemplate.maxDamage, &itemTemplate.DPS, itemTemplate.ItemLevel,
                itemTemplate.Class, itemTemplate.SubClass, itemTemplate.Quality, itemTemplate.Delay,
                itemTemplate.StatScalingFactor, itemTemplate.InventoryType, itemTemplate.Flags2);
