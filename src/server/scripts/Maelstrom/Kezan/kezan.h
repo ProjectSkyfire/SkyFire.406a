@@ -139,7 +139,7 @@ enum Spells
 
 enum Objects
 {
-    GO_DEPOSIT                          = 195489,
+    GO_DEPOSIT                          = 202593,
 //NYI     QUEST_ITEM_KEYS_TO_THE_HOTROD       = 46856,
 //NYI     QUEST_ITEM_LIFE_SAVINGS             = 49866,
 

@@ -9,7 +9,8 @@
 # WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 # implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-include(${CMAKE_SOURCE_DIR}/cmake/macros/EnsureVersion.cmake)
+# User has manually chosen to ignore the git-tests, so throw them a warning.
+# This is done EACH compile so they can be alerted about the consequences.
 
 if(NOT BUILDDIR)
   # Workaround for funny MSVC behaviour - this segment only run during compile

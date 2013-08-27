@@ -11,8 +11,7 @@
 
 # output generic information about the core and buildtype chosen
 message("")
-message("* SkyFireEMU revision: ${rev_hash} ${rev_date} (${rev_branch} branch)")
-
+message("* SkyFireEMU revision   : ${rev_hash} ${rev_date} (${rev_branch} branch)")
 if( UNIX )
   message("* SkyFireEMU buildtype  : ${CMAKE_BUILD_TYPE}")
 endif()
@@ -89,7 +88,6 @@ if( WIN32 )
   endif()
 endif( WIN32 )
 
-
 if ( WITHOUT_GIT )
   message("* Use GIT revision hash  : No")
   message("")
@@ -114,3 +112,4 @@ if ( NOJEM )
 endif()
 
 message("")
+
