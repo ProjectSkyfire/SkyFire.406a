@@ -1391,7 +1391,7 @@ void Player::HandleDrowning(uint32 time_diff)
     {
         int32 UnderWaterTime = getMaxTimer(BREATH_TIMER);
         // Need breath regen
-        _MirrorTimer[BREATH_TIMER]+=10*time_diff;
+        _MirrorTimer[BREATH_TIMER] += 10 * time_diff;
         if (_MirrorTimer[BREATH_TIMER] >= UnderWaterTime || !isAlive())
             StopMirrorTimer(BREATH_TIMER);
         else if (_MirrorTimerFlagsLast & UNDERWATER_INWATER)
@@ -1401,6 +1401,11 @@ void Player::HandleDrowning(uint32 time_diff)
     // In dark water
     if (_MirrorTimerFlags & UNDERWARER_INDARKWATER)
     {
+        if (_zoneUpdateId == 4815) return;
+        if (_zoneUpdateId == 4816) return;
+		if (_zoneUpdateId == 5144) return;
+		if (_zoneUpdateId == 5145) return;
+
         // Fatigue timer not activated - activate it
         if (_MirrorTimer[FATIGUE_TIMER] == DISABLED_MIRROR_TIMER)
         {
@@ -1413,7 +1418,7 @@ void Player::HandleDrowning(uint32 time_diff)
             // Timer limit - need deal damage or teleport ghost to graveyard
             if (_MirrorTimer[FATIGUE_TIMER] < 0)
             {
-                _MirrorTimer[FATIGUE_TIMER]+= 1*IN_MILLISECONDS;
+                _MirrorTimer[FATIGUE_TIMER] += 1 * IN_MILLISECONDS;
                 if (isAlive())                                            // Calculate and deal damage
                 {
                     uint32 damage = GetMaxHealth() / 5 + urand(0, getLevel()-1);
