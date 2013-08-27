@@ -1403,8 +1403,8 @@ void Player::HandleDrowning(uint32 time_diff)
     {
         if (_zoneUpdateId == 4815) return;
         if (_zoneUpdateId == 4816) return;
-		if (_zoneUpdateId == 5144) return;
-		if (_zoneUpdateId == 5145) return;
+        if (_zoneUpdateId == 5144) return;
+        if (_zoneUpdateId == 5145) return;
 
         // Fatigue timer not activated - activate it
         if (_MirrorTimer[FATIGUE_TIMER] == DISABLED_MIRROR_TIMER)
