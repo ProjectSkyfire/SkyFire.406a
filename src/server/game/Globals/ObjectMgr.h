@@ -712,7 +712,15 @@ class ObjectMgr
                 return itr->second;
             return 0;
         }
-
+        
+        uint32 GetQuestStartForAreaTrigger(uint32 Trigger_ID) const
+        {
+            QuestStartAreaTriggerContainer::const_iterator itr = _questStartAreaTriggerStore.find(Trigger_ID);
+            if (itr != _questStartAreaTriggerStore.end())
+                return itr->second;
+            return 0;
+        }
+        
         bool IsTavernAreaTrigger(uint32 Trigger_ID) const
         {
             return _tavernAreaTriggerStore.find(Trigger_ID) != _tavernAreaTriggerStore.end();
@@ -909,6 +917,7 @@ class ObjectMgr
         void LoadQuestAreaTriggers();
         void LoadAreaTriggerScripts();
         void LoadTavernAreaTriggers();
+        void LoadAreaTriggerQuestStart();        
         void LoadGameObjectForQuests();
 
         void LoadPageTexts();
@@ -1235,12 +1244,14 @@ class ObjectMgr
 
         typedef UNORDERED_MAP<uint32, GossipText> GossipTextContainer;
         typedef UNORDERED_MAP<uint32, uint32> QuestAreaTriggerContainer;
+        typedef UNORDERED_MAP<uint32, uint32> QuestStartAreaTriggerContainer;
         typedef std::set<uint32> TavernAreaTriggerContainer;
         typedef std::set<uint32> GameObjectForQuestContainer;
 
         GuildContainer            _guildStore;
         ArenaTeamContainer _arenaTeamStore;
         QuestAreaTriggerContainer _questAreaTriggerStore;
+        QuestStartAreaTriggerContainer _questStartAreaTriggerStore;
         TavernAreaTriggerContainer _tavernAreaTriggerStore;
         GameObjectForQuestContainer _gameObjectForQuestStore;
         GossipTextContainer _gossipTextStore;

@@ -1224,7 +1224,7 @@ void World::LoadConfigSettings(bool reload)
     VMAP::VMapFactory::preventSpellsFromBeingTestedForLoS(ignoreSpellIds.c_str());
     MMAP::MMapFactory::preventPathfindingOnMaps(ignoreMapIds.c_str());
     sLog->outString("WORLD: Collision support included. LineOfSight:%i, getHeight:%i, indoorCheck:%i, PetLOS:%i", enableLOS, enableHeight, enableIndoor, enablePetLOS);
-    sLog->outString("WORLD: Collision data directory is: %svmaps", m_dataPath.c_str()); 
+    sLog->outString("WORLD: Collision data directory is: %svmaps", m_dataPath.c_str());
     sLog->outString("WORLD: VMap support included. LineOfSight:%i, getHeight:%i, indoorCheck:%i PetLOS:%i", enableLOS, enableHeight, enableIndoor, enablePetLOS);
     sLog->outString("WORLD: VMap data directory is: %svmaps", m_dataPath.c_str());
 
@@ -1588,6 +1588,9 @@ void World::SetInitialWorldSettings()
 
     sLog->outString("Loading AreaTrigger script names...");
     sObjectMgr->LoadAreaTriggerScripts();
+
+    sLog->outString("Loading AreaTrigger Quest start...");
+    sObjectMgr->LoadAreaTriggerQuestStart();
 
     sLog->outString("Loading Graveyard-zone links...");
     sObjectMgr->LoadGraveyardZones();
@@ -2920,7 +2923,7 @@ void World::LoadDBAllowedSecurityLevel()
     PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_REALMLIST_SECURITY_LEVEL);
     stmt->setInt32(0, int32(realmID));
     PreparedQueryResult result = LoginDatabase.Query(stmt);
-    
+
     if (result)
         SetPlayerSecurityLimit(AccountTypes(result->Fetch()->GetUInt8()));
 }

@@ -886,10 +886,28 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket& recvData)
     if (sScriptMgr->OnAreaTrigger(player, atEntry))
         return;
 
-    if (player->isAlive())
-        if (uint32 questId = sObjectMgr->GetQuestForAreaTrigger(triggerId))
-            if (player->GetQuestStatus(questId) == QUEST_STATUS_INCOMPLETE)
-                player->AreaExploredOrEventHappens(questId);
+    uint32 quest_id = sObjectMgr->GetQuestForAreaTrigger(triggerId);
+    if (quest_id && GetPlayer()->isAlive() && GetPlayer()->IsActiveQuest(quest_id))
+    {
+        Quest const* quest = sObjectMgr->GetQuestTemplate(quest_id);
+        if (quest)
+        {
+            if (GetPlayer()->GetQuestStatus(quest_id) == QUEST_STATUS_INCOMPLETE)
+                GetPlayer()->AreaExploredOrEventHappens(quest_id);
+        }
+    }
+
+    if (GetPlayer()->GetMap()->IsDungeon())
+    {
+        uint32 QuestStartId = sObjectMgr->GetQuestStartForAreaTrigger(triggerId);
+        Quest const* quest = sObjectMgr->GetQuestTemplate(QuestStartId);
+
+        if (quest && (!GetPlayer()->IsActiveQuest(quest->GetQuestId())) && (GetPlayer()->GetQuestStatus(quest->GetQuestId()) != QUEST_STATUS_COMPLETE))
+        {
+            if (GetPlayer()->CanTakeQuest(quest, true))
+                GetPlayer()->PlayerTalkClass->SendQuestGiverQuestDetails(quest, GetPlayer()->GetGUID(), true);
+        }
+    }
 
     if (sObjectMgr->IsTavernAreaTrigger(triggerId))
     {
@@ -1322,7 +1340,7 @@ void WorldSession::HandleWhoisOpcode(WorldPacket& recvData)
     stmt->setUInt32(0, accid);
 
     PreparedQueryResult result = LoginDatabase.Query(stmt);
-    
+
     if (!result)
     {
         SendNotification(LANGUAGE_ACCOUNT_FOR_PLAYER_NOT_FOUND, charname.c_str());
@@ -1697,9 +1715,9 @@ void WorldSession::HandleReadyForAccountDataTimes(WorldPacket& /*recvData*/)
 }
 
 void WorldSession::SendSetPhaseShift(std::set<uint32> const& phaseIds, std::set<uint32> const& terrainswaps)
-{	
+{
     WorldPacket data(SMSG_SET_PHASE_SHIFT, 1 + 8 + 4 + 4 + 4 + 4 + 2 * phaseIds.size() + 4 + terrainswaps.size() * 2);
-    data << uint64(_player->GetGUID());    
+    data << uint64(_player->GetGUID());
     data.WriteBit(2);
     data.WriteBit(3);
     data.WriteBit(1);

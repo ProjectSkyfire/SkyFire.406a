@@ -122,15 +122,17 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket& recvData)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_QUESTGIVER_ACCEPT_QUEST npc = %u, quest = %u, unk1 = %u", uint32(GUID_LOPART(guid)), quest, unk1);
 
-    Object* object = ObjectAccessor::GetObjectByTypeMask(*_player, guid, TYPEMASK_UNIT|TYPEMASK_GAMEOBJECT|TYPEMASK_ITEM|TYPEMASK_PLAYER);
+    Object* object = ObjectAccessor::GetObjectByTypeMask(*_player, guid, TYPEMASK_UNIT | TYPEMASK_GAMEOBJECT | TYPEMASK_ITEM | TYPEMASK_PLAYER);
 
-    // no or incorrect quest giver
-    if (!object || (object->GetTypeId() != TYPEID_PLAYER && !object->hasQuest(quest)) ||
-        (object->GetTypeId() == TYPEID_PLAYER && !object->ToPlayer()->CanShareQuest(quest)))
+    // From 4.0.1 Player can be QuestGiver for self
+    if (!IS_PLAYER_GUID(guid))
     {
-        _player->PlayerTalkClass->SendCloseGossip();
-        _player->SetDivider(0);
-        return;
+        if (!object || (object->GetTypeId() != TYPEID_PLAYER && !object->hasQuest(quest)) || (object->GetTypeId() == TYPEID_PLAYER && !object->ToPlayer()->CanShareQuest(quest)))
+        {
+            _player->PlayerTalkClass->SendCloseGossip();
+            _player->SetDivider(0);
+            return;
+        }
     }
 
     // some kind of WPE protection
@@ -245,10 +247,13 @@ void WorldSession::HandleQuestgiverQueryQuestOpcode(WorldPacket& recvData)
 
     // Verify that the guid is valid and is a questgiver or involved in the requested quest
     Object* object = ObjectAccessor::GetObjectByTypeMask(*_player, guid, TYPEMASK_UNIT | TYPEMASK_GAMEOBJECT | TYPEMASK_ITEM);
-    if (!object || (!object->hasQuest(questId) && !object->hasInvolvedQuest(questId)))
+    if (!IS_PLAYER_GUID(guid))
     {
-        _player->PlayerTalkClass->SendCloseGossip();
-        return;
+        if (!object || (!object->hasQuest(questId) && !object->hasInvolvedQuest(questId)))
+        {
+            _player->PlayerTalkClass->SendCloseGossip();
+            return;
+        }
     }
 
     Quest const* quest = sObjectMgr->GetQuestTemplate(questId);
@@ -304,9 +309,12 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket& recvData)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_QUESTGIVER_CHOOSE_REWARD npc = %u, quest = %u, reward = %u", uint32(GUID_LOPART(guid)), questId, reward);
 
-    Object* object = ObjectAccessor::GetObjectByTypeMask(*_player, guid, TYPEMASK_UNIT|TYPEMASK_GAMEOBJECT);
-    if (!object || !object->hasInvolvedQuest(questId))
-        return;
+    Object* object = ObjectAccessor::GetObjectByTypeMask(*_player, guid, TYPEMASK_UNIT | TYPEMASK_GAMEOBJECT);
+    if (!IS_PLAYER_GUID(guid))
+    {
+        if (!object->hasInvolvedQuest(questId))
+            return;
+    }
 
     // some kind of WPE protection
     if (!_player->CanInteractWithQuestGiver(object))
@@ -317,8 +325,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket& recvData)
         if ((!_player->CanSeeStartQuest(quest) &&  _player->GetQuestStatus(questId) == QUEST_STATUS_NONE) ||
             (_player->GetQuestStatus(questId) != QUEST_STATUS_COMPLETE && !quest->IsAutoComplete()))
         {
-            sLog->outError("HACK ALERT: Player %s (guid: %u) is trying to complete quest (id: %u) but he has no right to do it!",
-                           _player->GetName(), _player->GetGUIDLow(), questId);
+            sLog->outError("HACK ALERT: Player %s (guid: %u) is trying to complete quest (id: %u) but he has no right to do it!", _player->GetName(), _player->GetGUIDLow(), questId);
             return;
         }
         if (_player->CanRewardQuest(quest, reward, true))
@@ -366,6 +373,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket& recvData)
                         _player->PlayerTalkClass->SendCloseGossip();
                     }
                     break;
+                case TYPEID_PLAYER: break;
                 default:
                     break;
             }
@@ -383,9 +391,12 @@ void WorldSession::HandleQuestgiverRequestRewardOpcode(WorldPacket& recvData)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_QUESTGIVER_REQUEST_REWARD npc = %u, quest = %u", uint32(GUID_LOPART(guid)), questid);
 
-    Object* object = ObjectAccessor::GetObjectByTypeMask(*_player, guid, TYPEMASK_UNIT|TYPEMASK_GAMEOBJECT);
-    if (!object || !object->hasInvolvedQuest(questid))
-        return;
+    Object* object = ObjectAccessor::GetObjectByTypeMask(*_player, guid, TYPEMASK_UNIT | TYPEMASK_GAMEOBJECT);
+    if (!IS_PLAYER_GUID(guid))
+    {
+        if (!object || !object->hasInvolvedQuest(questid))
+            return;
+    }
 
     // some kind of WPE protection
     if (!_player->CanInteractWithQuestGiver(object))

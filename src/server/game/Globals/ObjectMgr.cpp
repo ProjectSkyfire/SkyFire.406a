@@ -5734,6 +5734,52 @@ void ObjectMgr::LoadQuestAreaTriggers()
     sLog->outString();
 }
 
+void ObjectMgr::LoadAreaTriggerQuestStart()
+{
+    uint32 oldMSTime = getMSTime();
+    
+    _questStartAreaTriggerStore.clear();                           // needed for reload case
+    QueryResult result = WorldDatabase.Query("SELECT trigger_ID, quest_ID FROM areatrigger_queststart");
+
+    uint32 count = 0;
+
+    if (!result)
+    {
+        sLog->outString();
+        sLog->outString(">> Loaded %u queststart triggers", count);
+        return;
+    }
+
+    do
+    {
+        ++count;
+        Field *fields = result->Fetch();
+        uint32 Trigger_ID = fields[0].GetUInt32();
+        uint32 Quest_ID = fields[1].GetUInt32();
+
+        AreaTriggerEntry const* atEntry = sAreaTriggerStore.LookupEntry(Trigger_ID);
+
+        if (!atEntry)
+        {
+            sLog->outErrorDb("Area trigger (ID:%u) does not exist in `AreaTrigger.dbc`.", Trigger_ID);
+            continue;
+        }
+
+        Quest const* quest = GetQuestTemplate(Quest_ID);
+
+        if (!quest)
+        {
+            sLog->outErrorDb("Table `areatrigger_queststart` has record (id: %u) for not existing quest %u", Trigger_ID, Quest_ID);
+            continue;
+        }
+
+        _questStartAreaTriggerStore[Trigger_ID] = Quest_ID;
+    }
+    while(result->NextRow());
+        sLog->outString();
+        sLog->outString(">> Loaded %u QuestGivers triggers", count, GetMSTimeDiffToNow(oldMSTime));
+}
+
 void ObjectMgr::LoadTavernAreaTriggers()
 {
     uint32 oldMSTime = getMSTime();
