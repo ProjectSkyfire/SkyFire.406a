@@ -8621,7 +8621,7 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
             if (ssd->StatMod[i] < 0)
                 continue;
             statType = ssd->StatMod[i];
-            val = (ssv->getssdMultiplier(proto->ScalingStatValue) * ssd->Modifier[i]) / 10000;
+            val = (ssv->GetStatMultiplier(proto->InventoryType) * ssd->Modifier[i]) / 10000;
         }
         else
         {
@@ -8771,6 +8771,9 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
             case ITEM_MOD_MANA_REGENERATION:
                 ApplyManaRegenBonus(int32(val), apply);
                 break;
+            case ITEM_MOD_ARMOR_PENETRATION_RATING:
+                ApplyRatingMod(CR_ARMOR_PENETRATION, int32(val), apply);
+                break;
             case ITEM_MOD_SPELL_POWER:
                 ApplySpellPowerBonus(int32(val), apply);
                 break;
@@ -8811,14 +8814,15 @@ void Player::_ApplyItemBonuses(ItemTemplate const* proto, uint8 slot, bool apply
 
     // Apply Spell Power from ScalingStatValue if set
     if (ssv && proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON)
-        if (int32 spellbonus = int32(ssv->spellBonus))
+        if (int32 spellbonus = int32(ssv->Spellpower))
             ApplySpellPowerBonus(spellbonus, apply);
 
     // If set ScalingStatValue armor get it or use item armor
-    uint32 armor = proto->GetArmor();
-    if (ssv)
-        if (uint32 ssvarmor = ssv->getArmorMod(proto->ScalingStatValue))
-            armor = ssvarmor;
+    uint32 armor = proto->Armor;
+    if (ssv && proto->Class == ITEM_CLASS_ARMOR)
+        armor = ssv->GetArmor(proto->InventoryType, proto->SubClass - 1);
+    else if (armor && proto->ArmorDamageModifier)
+        armor -= uint32(proto->ArmorDamageModifier);
 
     if (armor)
     {
@@ -8882,7 +8886,7 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const* proto, ScalingSt
     if (ssv)
     {
         float damageMultiplier = 0.0f;
-        extraDPS = ssv->getDPSMod(proto->ScalingStatValue);
+        extraDPS = ssv->GetDPSAndDamageMultiplier(proto->SubClass, proto->Flags2 & ITEM_FLAGS_EXTRA_CASTER_WEAPON, &damageMultiplier);
 
         if (extraDPS)
         {
@@ -8904,7 +8908,7 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const* proto, ScalingSt
         SetBaseWeaponDamage(attType, MAXDAMAGE, damage);
     }
 
-    if (proto->Delay)
+    if (proto->Delay && !IsInFeralForm())
     {
         if (slot == EQUIPMENT_SLOT_RANGED)
             SetAttackTime(RANGED_ATTACK, apply ? proto->Delay: BASE_ATTACK_TIME);
@@ -8913,10 +8917,6 @@ void Player::_ApplyWeaponDamage(uint8 slot, ItemTemplate const* proto, ScalingSt
         else if (slot == EQUIPMENT_SLOT_OFFHAND)
             SetAttackTime(OFF_ATTACK, apply ? proto->Delay: BASE_ATTACK_TIME);
     }
-
-    // No need to modify any physical damage for ferals as it is calculated from stats only
-    if (IsInFeralForm())
-        return;
 
     if (CanModifyStats() && (damage || proto->Delay))
         UpdateDamagePhysical(attType);
@@ -12407,8 +12407,37 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
             if (!swap && GetItemByPos(INVENTORY_SLOT_BAG_0, eslot))
                 return EQUIP_ERR_NO_EQUIPMENT_SLOT_AVAILABLE;
 
-            // if swap ignore item (equipped also)
-            InventoryResult res2 = CanEquipUniqueItem(pItem, swap ? eslot : uint8(NULL_SLOT));
+            // if we are swapping 2 equiped items, CanEquipUniqueItem check
+            // should ignore the item we are trying to swap, and not the
+            // destination item. CanEquipUniqueItem should ignore destination
+            // item only when we are swapping weapon from bag
+            uint8 ignore = uint8(NULL_SLOT);
+            switch (eslot)
+            {
+                case EQUIPMENT_SLOT_MAINHAND:
+                    ignore = EQUIPMENT_SLOT_OFFHAND;
+                    break;
+                case EQUIPMENT_SLOT_OFFHAND:
+                    ignore = EQUIPMENT_SLOT_MAINHAND;
+                    break;
+                case EQUIPMENT_SLOT_FINGER1:
+                    ignore = EQUIPMENT_SLOT_FINGER2;
+                    break;
+                case EQUIPMENT_SLOT_FINGER2:
+                    ignore = EQUIPMENT_SLOT_FINGER1;
+                    break;
+                case EQUIPMENT_SLOT_TRINKET1:
+                    ignore = EQUIPMENT_SLOT_TRINKET2;
+                    break;
+                case EQUIPMENT_SLOT_TRINKET2:
+                    ignore = EQUIPMENT_SLOT_TRINKET1;
+                    break;
+            }
+
+            if (ignore == uint8(NULL_SLOT) || pItem != GetItemByPos(INVENTORY_SLOT_BAG_0, ignore))
+                ignore = eslot;
+
+            InventoryResult res2 = CanEquipUniqueItem(pItem, swap ? ignore : uint8(NULL_SLOT));
             if (res2 != EQUIP_ERR_OK)
                 return res2;
 
@@ -12427,7 +12456,10 @@ InventoryResult Player::CanEquipItem(uint8 slot, uint16 &dest, Item *pItem, bool
 
             if (eslot == EQUIPMENT_SLOT_OFFHAND)
             {
-                if (type == INVTYPE_WEAPON || type == INVTYPE_WEAPONOFFHAND)
+                // Do not allow polearm to be equipped in the offhand (rare case for the only 1h polearm 41750)
+                if (type == INVTYPE_WEAPON && proto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM)
+                    return EQUIP_ERR_CANT_DUAL_WIELD;
+                else if (type == INVTYPE_WEAPON || type == INVTYPE_WEAPONOFFHAND)
                 {
                     if (!CanDualWield())
                         return EQUIP_ERR_CANT_DUAL_WIELD;
