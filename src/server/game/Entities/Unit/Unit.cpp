@@ -13127,13 +13127,16 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced)
         case MOVE_SWIM:
         case MOVE_FLIGHT:
         {
-            // Set creature speed rate from CreatureInfo
+            // Set creature speed rate
             if (GetTypeId() == TYPEID_UNIT)
-                if (isPet() && !isInCombat())
+			{
+				Unit* pOwner = GetCharmerOrOwner(); // Must check for owner or crash on "Tame Pet"
+
+				if (isPet() && !isInCombat() && pOwner)
                 {
                     // For every yard over 5, increase speed by 0.01
                     //  to help prevent pet from lagging behind and despawning
-                    float dist = GetDistance(GetCharmerOrOwner());
+                    float dist = GetDistance(pOwner);
                     float base_rate = 1.00f; // base speed is 100% of owner speed
 
                     if (dist < 5)
@@ -13141,11 +13144,11 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced)
 
                     float mult = base_rate + ((dist - 5) * 0.01f);
 
-                    speed *= GetCharmerOrOwner()->GetSpeedRate(mtype) * mult; // pets default to owner's speed when not in combat
+                    speed *= pOwner->GetSpeedRate(mtype) * mult; // pets default to owner's speed when not in combat
                 }
                 else
                     speed *= ToCreature()->GetCreatureTemplate()->speed_run;    // at this point, MOVE_WALK is never reached
-
+				}
             // Normalize speed by 191 aura SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED if need
             // TODO: possible affect only on MOVE_RUN
             if (int32 normalization = GetMaxPositiveAuraModifier(SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED))
@@ -14482,7 +14485,8 @@ void Unit::DeleteCharmInfo()
 
 CharmInfo::CharmInfo(Unit* unit)
 : m_unit(unit), m_CommandState(COMMAND_FOLLOW), m_petnumber(0), m_barInit(false),
-  m_isCommandAttack(false), m_isAtStay(false), m_isFollowing(false), m_isReturning(false)
+  m_isCommandAttack(false), m_isAtStay(false), m_isFollowing(false), m_isReturning(false),
+  m_stayX(0.0f), m_stayY(0.0f), m_stayZ(0.0f)
 {
     for (uint8 i = 0; i < MAX_SPELL_CHARM; ++i)
         m_charmspells[i].SetActionAndType(0, ACT_DISABLED);
@@ -14677,12 +14681,12 @@ void CharmInfo::LoadPetActionBar(const std::string& data)
     if (tokens.size() != (ACTION_BAR_INDEX_END-ACTION_BAR_INDEX_START) * 2)
         return;                                             // non critical, will reset to default
 
-    uint8 index;
-    Tokens::iterator iter;
-    for (iter = tokens.begin(), index = ACTION_BAR_INDEX_START; index < ACTION_BAR_INDEX_END; ++iter, ++index)
+    uint8 index = ACTION_BAR_INDEX_START;
+    Tokens::const_iterator iter = tokens.begin();
+    for (; index < ACTION_BAR_INDEX_END; ++iter, ++index)
     {
         // use unsigned cast to avoid sign negative format use at long->ActiveStates (int) conversion
-        ActiveStates type  = ActiveStates(atol(*iter));
+        ActiveStates type = ActiveStates(atol(*iter));
         ++iter;
         uint32 action = uint32(atol(*iter));
 
@@ -17859,7 +17863,7 @@ void Unit::ExitVehicle(Position const* /*exitPosition*/)
     //! to specify exit coordinates and either store those per passenger, or we need to
     //! init spline movement based on those coordinates in unapply handlers, and
     //! relocate exiting passengers based on Unit::moveSpline data. Either way,
-    //! Coming Soon™
+    //! Coming Soonâ„¢
 }
 
 void Unit::_ExitVehicle(Position const* exitPosition)
@@ -18640,3 +18644,13 @@ void Unit::ResetHealingDoneInPastSecs(uint32 secs)
     for (uint32 i = 0; i < secs; i++)
         m_heal_done[i] = 0;
 };
+
+void CharmInfo::SetIsCommandFollow(bool val)
+{
+    _isCommandFollow = val;
+}
+
+bool CharmInfo::IsCommandFollow()
+{
+    return _isCommandFollow;
+}
