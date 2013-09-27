@@ -83,17 +83,6 @@ void WorldSession::HandlePetAction(WorldPacket& recvData)
         return;
     }
 
-    float pos_x = pet->GetPositionX();
-    float pos_y = pet->GetPositionY();
-    float pos_z = pet->GetPositionZ();
-
-    recvData >> pos_x;                                     // 4.0.3, x
-    recvData >> pos_y;                                     // 4.0.3, y
-    recvData >> pos_z;                                     // 4.0.3, z
-
-    // used also for charmed creature
-    sLog->outDetail("HandlePetAction: Pet %u - flag: %u, spellid: %u, target: %u.", uint32(GUID_LOPART(guid1)), uint32(flag), spellid, uint32(GUID_LOPART(guid2)));
-
     if (pet != GetPlayer()->GetFirstControlled())
     {
         sLog->outError("HandlePetAction: Pet (GUID: %u) does not belong to player '%s'", uint32(GUID_LOPART(guid1)), GetPlayer()->GetName());
@@ -125,9 +114,6 @@ void WorldSession::HandlePetAction(WorldPacket& recvData)
         for (std::vector<Unit*>::iterator itr = controlled.begin(); itr != controlled.end(); ++itr)
             HandlePetActionHelper(*itr, guid1, spellid, flag, guid2, x, y, z);
     }
-
-    if (pet->GetTypeId() != TYPEID_PLAYER && flag == ACT_COMMAND && spellid == COMMAND_MOVE)
-        pet->MonsterMoveWithSpeed(pos_x, pos_y, pos_z, 3000);
 }
 
 void WorldSession::HandlePetStopAttack(WorldPacket &recvData)
@@ -173,8 +159,8 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
             switch (spellid)
             {
                 case COMMAND_STAY:                          //flat=1792  //STAY
-                    pet->AttackStop();
-                    pet->InterruptNonMeleeSpells(false);
+					pet->AttackStop();
+					pet->InterruptNonMeleeSpells(false);
                     pet->StopMoving();
                     pet->GetMotionMaster()->Clear(false);
                     pet->GetMotionMaster()->MoveIdle();
@@ -182,6 +168,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
 
                     charmInfo->SetIsCommandAttack(false);
                     charmInfo->SetIsAtStay(true);
+                    charmInfo->SetIsCommandFollow(false);
                     charmInfo->SetIsFollowing(false);
                     charmInfo->SetIsReturning(false);
                     charmInfo->SaveStayPosition();
@@ -195,6 +182,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
                     charmInfo->SetIsCommandAttack(false);
                     charmInfo->SetIsAtStay(false);
                     charmInfo->SetIsReturning(true);
+                    charmInfo->SetIsCommandFollow(true);
                     charmInfo->SetIsFollowing(false);
                     break;
                 case COMMAND_ATTACK:                        //spellid=1792  //ATTACK
@@ -235,6 +223,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
                             charmInfo->SetIsCommandAttack(true);
                             charmInfo->SetIsAtStay(false);
                             charmInfo->SetIsFollowing(false);
+                            charmInfo->SetIsCommandFollow(false);
                             charmInfo->SetIsReturning(false);
 
                             pet->ToCreature()->AI()->AttackStart(TargetUnit);
@@ -256,6 +245,7 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
                             charmInfo->SetIsCommandAttack(true);
                             charmInfo->SetIsAtStay(false);
                             charmInfo->SetIsFollowing(false);
+                            charmInfo->SetIsCommandFollow(false);
                             charmInfo->SetIsReturning(false);
 
                             pet->Attack(TargetUnit, true);
@@ -364,18 +354,20 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
                 if (unit_target)
                 {
                     pet->SetInFront(unit_target);
-                    if (unit_target->GetTypeId() == TYPEID_PLAYER)
-                        pet->SendUpdateToPlayer((Player*)unit_target);
+                    if (Player* player = unit_target->ToPlayer())
+                        pet->SendUpdateToPlayer(player);
                 }
                 else if (Unit* unit_target2 = spell->m_targets.GetUnitTarget())
                 {
                     pet->SetInFront(unit_target2);
-                    if (unit_target2->GetTypeId() == TYPEID_PLAYER)
-                        pet->SendUpdateToPlayer((Player*)unit_target2);
+                    if (Player* player = unit_target2->ToPlayer())
+                        pet->SendUpdateToPlayer(player);
                 }
+
                 if (Unit* powner = pet->GetCharmerOrOwner())
-                    if (powner->GetTypeId() == TYPEID_PLAYER)
-              pet->SendUpdateToPlayer(powner->ToPlayer());
+                    if (Player* player = powner->ToPlayer())
+                        pet->SendUpdateToPlayer(player);
+
                 result = SPELL_CAST_OK;
             }
 
