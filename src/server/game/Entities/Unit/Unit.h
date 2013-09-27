@@ -1199,6 +1199,8 @@ struct CharmInfo
         bool IsReturning();
         void SaveStayPosition();
         void GetStayPosition(float &x, float &y, float &z);
+		void SetIsCommandFollow(bool val);
+        bool IsCommandFollow();
 
     private:
 
@@ -1213,6 +1215,7 @@ struct CharmInfo
         ReactStates     m_oldReactState;
 
         bool m_isCommandAttack;
+		bool _isCommandFollow;
         bool m_isAtStay;
         bool m_isFollowing;
         bool m_isReturning;
