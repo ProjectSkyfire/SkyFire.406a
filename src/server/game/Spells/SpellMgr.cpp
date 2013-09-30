@@ -1590,6 +1590,7 @@ void SpellMgr::LoadSpellTargetPositions()
         {
             if (spellInfo->Effects[i].TargetA.GetTarget() == TARGET_DEST_DB || spellInfo->Effects[i].TargetB.GetTarget() == TARGET_DEST_DB)
             {
+                /* Remove this due to it's causing failure. Why? because target_Z is not working! ;) 
                 // additional requirements
                 if (spellInfo->Effects[i].Effect == SPELL_EFFECT_BIND && spellInfo->Effects[i].MiscValue)
                 {
@@ -1600,7 +1601,7 @@ void SpellMgr::LoadSpellTargetPositions()
                         break;
                     }
                 }
-
+                */
                 found = true;
                 break;
             }
