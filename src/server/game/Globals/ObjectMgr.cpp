@@ -5996,13 +5996,13 @@ void ObjectMgr::LoadGraveyardZones()
         }
 
         AreaTableEntry const* areaEntry = GetAreaEntryByAreaID(zoneId);
-        if (!areaEntry)
+        if (!areaEntry && zoneId != 3535)
         {
             sLog->outErrorDb("Table `game_graveyard_zone` has a record for not existing zone id (%u), skipped.", zoneId);
             continue;
         }
 
-        if (areaEntry->zone != 0)
+        if (areaEntry->zone != 0 && zoneId != 33 && zoneId != 5287)
         {
             sLog->outErrorDb("Table `game_graveyard_zone` has a record for subzone id (%u) instead of zone, skipped.", zoneId);
             continue;
