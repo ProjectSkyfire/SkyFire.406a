@@ -106,7 +106,7 @@ public:
                 break;
         }
 
-        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_DISABLES);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SELECT_DISABLES);
         stmt->setUInt32(0, entry);
         stmt->setUInt8(1, disableType);
         PreparedQueryResult result = WorldDatabase.Query(stmt);
@@ -117,7 +117,7 @@ public:
             return;
         }
 
-        PreparedStatement* stmt2 = WorldDatabase.GetPreparedStatement(WORLD_INS_DISABLES);
+        PreparedStatement* stmt2 = WorldDatabase.GetPreparedStatement(WORLD_INSERT_DISABLES);
         stmt2->setUInt32(0, entry);
         stmt2->setUInt8(1, disableType);
         stmt2->setUInt16(2, flags);

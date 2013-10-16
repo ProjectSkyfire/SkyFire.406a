@@ -162,7 +162,7 @@ public:
     static bool HandleGMListFullCommand(ChatHandler* handler, char const* /*args*/)
     {
         ///- Get the accounts with GM Level >0
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_GM_ACCOUNTS);
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_GM_ACCOUNTS);
         stmt->setUInt8(0, uint8(SEC_MODERATOR));
         stmt->setInt32(1, int32(realmID));
         PreparedQueryResult result = LoginDatabase.Query(stmt);

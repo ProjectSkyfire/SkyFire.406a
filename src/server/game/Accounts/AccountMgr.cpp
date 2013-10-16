@@ -54,7 +54,7 @@ AccountOpResult CreateAccount(std::string username, std::string password)
 AccountOpResult DeleteAccount(uint32 accountId)
 {
     // Check if accounts exists
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BY_ID);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_BY_ID);
     stmt->setUInt32(0, accountId);
     PreparedQueryResult result = LoginDatabase.Query(stmt);
 
@@ -109,7 +109,7 @@ AccountOpResult DeleteAccount(uint32 accountId)
 AccountOpResult ChangeUsername(uint32 accountId, std::string newUsername, std::string newPassword)
 {
     // Check if accounts exists
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BY_ID);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_BY_ID);
     stmt->setUInt32(0, accountId);
     PreparedQueryResult result = LoginDatabase.Query(stmt);
 
@@ -212,7 +212,7 @@ bool CheckPassword(uint32 accountId, std::string password)
     normalizeString(username);
     normalizeString(password);
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_CHECK_PASSWORD);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_CHECK_PASSWORD);
     stmt->setUInt32(0, accountId);
     stmt->setString(1, CalculateShaPassHash(username, password));
     PreparedQueryResult result = LoginDatabase.Query(stmt);

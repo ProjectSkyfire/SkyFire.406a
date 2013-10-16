@@ -236,7 +236,7 @@ bool ChatHandler::HandleAddItemCommand(const char *args)
             std::string itemName = citemName+1;
             WorldDatabase.EscapeString(itemName);
 
-            PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_ITEM_TEMPLATE_BY_NAME);
+            PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SELECT_ITEM_TEMPLATE_BY_NAME);
             stmt->setString(0, itemName);
             PreparedQueryResult result = WorldDatabase.Query(stmt);
 

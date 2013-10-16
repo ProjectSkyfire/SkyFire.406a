@@ -2114,7 +2114,7 @@ void World::Update(uint32 diff)
         {
             _timers[WUPDATE_CLEANDB].Reset();
 
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_LOGS);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DELETE_OLD_LOGS);
 
             stmt->setUInt32(0, sWorld->getIntConfig(CONFIG_LOGDB_CLEARTIME));
             stmt->setUInt32(1, uint32(time(0)));
@@ -2412,7 +2412,7 @@ BanReturn World::BanAccount(BanMode mode, std::string nameOrIP, std::string dura
     {
         case BAN_IP:
             // No SQL injection with prepared statements
-            stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BY_IP);
+            stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_BY_IP);
             stmt->setString(0, nameOrIP);
             resultAccounts = LoginDatabase.Query(stmt);
             stmt = LoginDatabase.GetPreparedStatement(LOGIN_SET_IP_BANNED);
@@ -2788,7 +2788,7 @@ void World::_UpdateRealmCharCount(PreparedQueryResult resultCharCount)
         uint32 accountId = fields[0].GetUInt32();
         uint32 charCount = fields[1].GetUInt32();
 
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_REALMCHARACTERS);
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DELETE_REALMCHARACTERS);
         stmt->setUInt32(0, accountId);
         stmt->setUInt32(1, realmID);
         LoginDatabase.Execute(stmt);
@@ -2920,7 +2920,7 @@ void World::ResetDailyQuests()
 
 void World::LoadDBAllowedSecurityLevel()
 {
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_REALMLIST_SECURITY_LEVEL);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_REALMLIST_SECURITY_LEVEL);
     stmt->setInt32(0, int32(realmID));
     PreparedQueryResult result = LoginDatabase.Query(stmt);
 

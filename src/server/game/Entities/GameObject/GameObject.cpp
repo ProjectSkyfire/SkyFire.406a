@@ -778,10 +778,10 @@ void GameObject::DeleteFromDB()
     sObjectMgr->RemoveGORespawnTime(_DBTableGuid, GetInstanceId());
     sObjectMgr->DeleteGOData(_DBTableGuid);
 
-    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GAMEOBJECT);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DELETE_GAMEOBJECT);
     stmt->setUInt32(0, _DBTableGuid);
     WorldDatabase.Execute(stmt);
-    stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_EVENT_GAMEOBJECT);
+    stmt = WorldDatabase.GetPreparedStatement(WORLD_DELETE_EVENT_GAMEOBJECT);
     stmt->setUInt32(0, _DBTableGuid);
     WorldDatabase.Execute(stmt);
 }

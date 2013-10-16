@@ -1376,7 +1376,7 @@ bool ObjectMgr::SetCreatureLinkedRespawn(uint32 guidLow, uint32 linkedGuidLow)
     if (!linkedGuidLow) // we're removing the linking
     {
         _linkedRespawnStore.erase(guid);
-        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_CRELINKED_RESPAWN);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DELETE_CRELINKED_RESPAWN);
         stmt->setUInt32(0, guidLow);
         WorldDatabase.Execute(stmt);
         return true;
@@ -1400,7 +1400,7 @@ bool ObjectMgr::SetCreatureLinkedRespawn(uint32 guidLow, uint32 linkedGuidLow)
     uint64 linkedGuid = MAKE_NEW_GUID(linkedGuidLow, slave->id, HIGHGUID_UNIT);
 
     _linkedRespawnStore[guid] = linkedGuid;
-    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_REP_CRELINKED_RESPAWN);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_REPLACE_CRELINKED_RESPAWN);
     stmt->setUInt32(0, guidLow);
     stmt->setUInt32(1, linkedGuidLow);
     WorldDatabase.Execute(stmt);
@@ -5078,7 +5078,7 @@ void ObjectMgr::LoadWaypointScripts()
     for (ScriptMapMap::const_iterator itr = sWaypointScripts.begin(); itr != sWaypointScripts.end(); ++itr)
         actionSet.insert(itr->first);
 
-    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_WAYPOINT_DATA_ACTION);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SELECT_WAYPOINT_DATA_ACTION);
     PreparedQueryResult result = WorldDatabase.Query(stmt);
 
     if (result)
@@ -6191,7 +6191,7 @@ bool ObjectMgr::AddGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool per
     // add link to DB
     if (persist)
     {
-        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_GRAVEYARD_ZONE);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INSERT_GRAVEYARD_ZONE);
 
         stmt->setUInt32(0, id);
         stmt->setUInt32(1, zoneId);
@@ -6244,7 +6244,7 @@ void ObjectMgr::RemoveGraveYardLink(uint32 id, uint32 zoneId, uint32 team, bool 
     // remove link from DB
     if (persist)
     {
-        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GRAVEYARD_ZONE);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DELETE_GRAVEYARD_ZONE);
 
         stmt->setUInt32(0, id);
         stmt->setUInt32(1, zoneId);
@@ -8383,7 +8383,7 @@ bool ObjectMgr::AddGameTele(GameTele& tele)
 
     _gameTeleStore[new_id] = tele;
 
-    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_GAME_TELE);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INSERT_GAME_TELE);
 
     stmt->setUInt32(0, new_id);
     stmt->setFloat(1, tele.position_x);
@@ -8412,7 +8412,7 @@ bool ObjectMgr::DeleteGameTele(const std::string& name)
     {
         if (itr->second.wnameLow == wname)
         {
-            PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_GAME_TELE);
+            PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DELETE_GAME_TELE);
 
             stmt->setString(0, itr->second.name);
 
@@ -8610,7 +8610,7 @@ void ObjectMgr::LoadTrainerSpell()
 int ObjectMgr::LoadReferenceVendor(int32 vendor, int32 item, std::set<uint32> *skip_vendors)
 {
     // find all items from the reference vendor
-    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_NPC_VENDOR_REF);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SELECT_NPC_VENDOR_REF);
     stmt->setUInt32(0, uint32(item));
     PreparedQueryResult result = WorldDatabase.Query(stmt);
 
@@ -8809,7 +8809,7 @@ void ObjectMgr::AddVendorItem(uint32 entry, uint32 item, int32 maxcount, uint32 
 
     if (persist)
     {
-        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INS_NPC_VENODR);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_INSERT_NPC_VENODR);
 
         stmt->setUInt32(0, entry);
         stmt->setUInt32(1, item);
@@ -8832,7 +8832,7 @@ bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item, bool persist /*= tru
 
     if (persist)
     {
-        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DEL_NPC_VENDOR);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_DELETE_NPC_VENDOR);
 
         stmt->setUInt32(0, entry);
         stmt->setUInt32(1, item);
