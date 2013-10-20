@@ -13129,10 +13129,10 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced)
         {
             // Set creature speed rate
             if (GetTypeId() == TYPEID_UNIT)
-			{
-				Unit* pOwner = GetCharmerOrOwner(); // Must check for owner or crash on "Tame Pet"
+            {
+                Unit* pOwner = GetCharmerOrOwner(); // Must check for owner or crash on "Tame Pet"
 
-				if (isPet() && !isInCombat() && pOwner)
+                if (isPet() && !isInCombat() && pOwner)
                 {
                     // For every yard over 5, increase speed by 0.01
                     //  to help prevent pet from lagging behind and despawning
@@ -13148,7 +13148,7 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced)
                 }
                 else
                     speed *= ToCreature()->GetCreatureTemplate()->speed_run;    // at this point, MOVE_WALK is never reached
-				}
+                }
             // Normalize speed by 191 aura SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED if need
             // TODO: possible affect only on MOVE_RUN
             if (int32 normalization = GetMaxPositiveAuraModifier(SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED))

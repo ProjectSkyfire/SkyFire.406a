@@ -159,8 +159,8 @@ void WorldSession::HandlePetActionHelper(Unit* pet, uint64 guid1, uint32 spellid
             switch (spellid)
             {
                 case COMMAND_STAY:                          //flat=1792  //STAY
-					pet->AttackStop();
-					pet->InterruptNonMeleeSpells(false);
+                    pet->AttackStop();
+                    pet->InterruptNonMeleeSpells(false);
                     pet->StopMoving();
                     pet->GetMotionMaster()->Clear(false);
                     pet->GetMotionMaster()->MoveIdle();
