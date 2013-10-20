@@ -1,4 +1,4 @@
------ Quests -----
+-- Quests --
 -- Lockdown!
 UPDATE quest_template SET QuestFlags = 8 WHERE entry = 14078;
 UPDATE quest_template SET SpecialFlags = 0 WHERE entry = 14078;
