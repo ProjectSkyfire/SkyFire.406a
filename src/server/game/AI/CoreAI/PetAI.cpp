@@ -471,3 +471,64 @@ bool PetAI::CanAttack(Unit* target)
     // default, though we shouldn't ever get here
     return false;
 }
+
+void PetAI::AttackedBy(Unit* attacker)
+{
+    // Called when pet takes damage. This function helps keep pets from running off
+    //  simply due to gaining aggro.
+
+    if (!attacker)
+        return;
+
+    // Passive pets don't do anything
+    if (me->HasReactState(REACT_PASSIVE))
+        return;
+
+    // Prevent pet from disengaging from current target
+    if (me->getVictim() && me->getVictim()->isAlive())
+        return;
+
+    // Continue to evaluate and attack if necessary
+    AttackStart(attacker);
+}
+
+void PetAI::OwnerAttacked(Unit* target)
+{
+    // Called when owner attacks something. Allows defensive pets to know
+    //  that they need to assist
+
+    // Target might be NULL if called from spell with invalid cast targets
+    if (!target)
+        return;
+
+    // Passive pets don't do anything
+    if (me->HasReactState(REACT_PASSIVE))
+        return;
+
+    // Prevent pet from disengaging from current target
+    if (me->getVictim() && me->getVictim()->isAlive())
+        return;
+
+    // Continue to evaluate and attack if necessary
+    AttackStart(target);
+}
+
+void PetAI::OwnerAttackedBy(Unit* attacker)
+{
+    // Called when owner takes damage. This function helps keep pets from running off
+    //  simply due to owner gaining aggro.
+
+    if (!attacker)
+        return;
+
+    // Passive pets don't do anything
+    if (me->HasReactState(REACT_PASSIVE))
+        return;
+
+    // Prevent pet from disengaging from current target
+    if (me->getVictim() && me->getVictim()->isAlive())
+        return;
+
+    // Continue to evaluate and attack if necessary
+    AttackStart(attacker);
+}
