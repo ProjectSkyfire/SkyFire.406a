@@ -65,7 +65,7 @@ Read file [COPYING](COPYING.md)
 
 ## Authors &amp; Contributors
 
-Read file [THANKS](THANKS.md)
+Read file [THANKS](https://github.com/ProjectSkyfire/SkyFireEMU/tree/master/doc/THANKS.md)
 
 
 ## Links
