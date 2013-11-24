@@ -42,7 +42,9 @@ enum RealmFlags
 // Storage object for a realm
 struct Realm
 {
-    char address[ACE_MAX_FULLY_QUALIFIED_NAME_LEN + 16];
+    ACE_INET_Addr ExternalAddress;
+    ACE_INET_Addr LocalAddress;
+    ACE_INET_Addr LocalSubnetMask;
     std::string name;
     uint8 icon;
     RealmFlags flag;
@@ -74,7 +76,7 @@ public:
 
 private:
     void UpdateRealms(bool init = false);
-    void UpdateRealm(uint32 ID, const std::string& name, ACE_INET_Addr const& address, uint8 icon, RealmFlags flag, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, uint32 build);
+    void UpdateRealm(uint32 id, const std::string& name, ACE_INET_Addr const& address, ACE_INET_Addr const& localAddr, ACE_INET_Addr const& localSubmask, uint8 icon, RealmFlags flag, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, uint32 build);
 
     RealmMap m_realms;                                  ///< Internal map of realms
     uint32   m_UpdateInterval;
