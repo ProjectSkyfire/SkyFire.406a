@@ -1,7 +1,9 @@
-// $Id: Priority_Reactor.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: Priority_Reactor.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Priority_Reactor.h"
 #include "ace/Malloc_T.h"
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -139,6 +141,7 @@ ACE_Priority_Reactor::dispatch_io_set (int number_of_active_handles,
       while (!bucket_[i]->is_empty ()
              && number_dispatched < number_of_active_handles)
         {
+
           ACE_Event_Tuple et;
 
           bucket_[i]->dequeue_head (et);
@@ -174,11 +177,11 @@ ACE_Priority_Reactor::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Priority_Reactor::dump");
 
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
 
   ACE_Select_Reactor::dump ();
 
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

@@ -4,7 +4,7 @@
 /**
  *  @file    Object_Manager_Base.h
  *
- *  $Id: Object_Manager_Base.h 84163 2009-01-15 07:57:27Z johnnyw $
+ *  $Id: Object_Manager_Base.h 97262 2013-08-09 08:32:10Z johnnyw $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  *  @author Jesper S. M|ller<stophph@diku.dk>
@@ -18,7 +18,7 @@
 #define ACE_OBJECT_MANAGER_BASE_H
 #include /**/ "ace/pre.h"
 
-#include "ace/config-lite.h"
+#include /**/ "ace/config-lite.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once

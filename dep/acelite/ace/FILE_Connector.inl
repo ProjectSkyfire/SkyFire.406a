@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: FILE_Connector.inl 82723 2008-09-16 09:35:44Z johnnyw $
+// $Id: FILE_Connector.inl 96985 2013-04-11 15:50:32Z huangh $
 
 // Creates a Local ACE_FILE.
 
@@ -19,7 +19,7 @@ ACE_FILE_Connector::ACE_FILE_Connector (ACE_FILE_IO &new_io,
   if (this->connect (new_io, remote_sap, timeout, local_sap,
                      reuse_addr, flags, perms) == ACE_IO_SAP::INVALID_HANDLE
       && timeout != 0 && !(errno == EWOULDBLOCK || errno == ETIME))
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("address %s, %p\n"),
                 remote_sap.get_path_name (),
                 ACE_TEXT ("ACE_FILE_IO")));

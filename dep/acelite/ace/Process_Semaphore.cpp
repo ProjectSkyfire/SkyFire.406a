@@ -1,7 +1,7 @@
-// $Id: Process_Semaphore.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: Process_Semaphore.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Process_Semaphore.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/OS_Memory.h"
 
 #if !defined (__ACE_INLINE__)
@@ -10,6 +10,8 @@
 
 #include "ace/ACE.h"
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 void
@@ -17,9 +19,9 @@ ACE_Process_Semaphore::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
 // ACE_TRACE ("ACE_Process_Semaphore::dump");
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
   this->lock_.dump ();
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

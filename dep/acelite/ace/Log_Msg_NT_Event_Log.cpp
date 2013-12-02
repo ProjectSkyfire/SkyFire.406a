@@ -1,14 +1,16 @@
-// $Id: Log_Msg_NT_Event_Log.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: Log_Msg_NT_Event_Log.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/config-all.h"
 
 #if defined (ACE_HAS_LOG_MSG_NT_EVENT_LOG)
 
 #include "ace/Log_Msg_NT_Event_Log.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Log_Record.h"
 #include "ace/OS_NS_stdio.h"
 #include "ace/OS_NS_string.h"
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

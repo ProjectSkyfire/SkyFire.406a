@@ -4,7 +4,7 @@
 /**
  *  @file    Time_Value.h
  *
- *  $Id: Time_Value.h 95761 2012-05-15 18:23:04Z johnnyw $
+ *  $Id: Time_Value.h 96061 2012-08-16 09:36:07Z mcorino $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -79,6 +79,9 @@ public:
 
   /// Construct the ACE_Time_Value object from a timespec_t.
   explicit ACE_Time_Value (const timespec_t &t);
+
+  /// Destructor
+  virtual ~ACE_Time_Value ();
 
 # if defined (ACE_WIN32)
   /// Construct the ACE_Time_Value object from a Win32 FILETIME
@@ -319,6 +322,51 @@ public:
   friend ACE_Export ACE_Time_Value operator * (const ACE_Time_Value &tv,
                                                double d);
   //@}
+
+  /// Get current time of day.
+  /**
+   * @return  Time value representing current time of day.
+   *
+   * @note    This method is overloaded in the time policy based template
+   *          instantiations derived from this class. Allows for time policy
+   *          aware time values.
+   */
+  virtual ACE_Time_Value now () const;
+
+  /// Converts absolute time value to time value relative to current time of day.
+  /**
+   * @return  Relative time value.
+   *
+   * @note    This method is overloaded in the time policy based template
+   *          instantiations derived from this class. Allows for time policy
+   *          aware time values.
+   *          The developer is responsible for making sure this is an absolute
+   *          time value compatible with the active time policy (which is system
+   *          time for the base class).
+   */
+  virtual ACE_Time_Value to_relative_time () const;
+
+  /// Converts relative time value to absolute time value based on current time of day.
+  /**
+   * @return  Absolute time value.
+   *
+   * @note    This method is overloaded in the time policy based template
+   *          instantiations derived from this class. Allows for time policy
+   *          aware time values.
+   *          The developer is responsible for making sure this is a relative
+   *          time value. Current time of day is determined based on time policy
+   *          (which is system time for the base class).
+   */
+  virtual ACE_Time_Value to_absolute_time () const;
+
+  /// Duplicates this time value (incl. time policy).
+  /**
+   * @return  Dynamically allocated time value copy.
+   *
+   * @note    The caller is responsible for freeing the copy when it's not needed
+   *          anymore.
+   */
+  virtual ACE_Time_Value * duplicate () const;
 
   /// Dump is a no-op.
   /**

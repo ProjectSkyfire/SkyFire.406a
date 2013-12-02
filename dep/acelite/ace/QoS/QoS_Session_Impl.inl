@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: QoS_Session_Impl.inl 91813 2010-09-17 07:52:52Z johnnyw $
+// $Id: QoS_Session_Impl.inl 96985 2013-04-11 15:50:32Z huangh $
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -49,7 +49,7 @@ ACE_RAPI_Session::rsvp_events_handle (void)
   if (rapi_fd == -1)
     {
       this->close ();
-      ACE_ERROR_RETURN ((LM_ERROR,
+      ACELIB_ERROR_RETURN ((LM_ERROR,
                          "Error in rapi_getfd ()\n"),
                         -1);
     }

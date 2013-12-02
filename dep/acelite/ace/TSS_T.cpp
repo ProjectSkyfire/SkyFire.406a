@@ -1,4 +1,4 @@
-// $Id: TSS_T.cpp 93792 2011-04-07 11:48:50Z mcorino $
+// $Id: TSS_T.cpp 97130 2013-05-13 17:36:26Z mesnier_p $
 
 #ifndef ACE_TSS_T_CPP
 #define ACE_TSS_T_CPP
@@ -14,7 +14,7 @@
 #endif /* __ACE_INLINE__ */
 
 #include "ace/Thread.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Guard_T.h"
 #include "ace/OS_NS_stdio.h"
 
@@ -84,11 +84,11 @@ ACE_TSS<TYPE>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
 #if defined (ACE_HAS_THREADS) && (defined (ACE_HAS_THREAD_SPECIFIC_STORAGE) || defined (ACE_HAS_TSS_EMULATION))
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
   this->keylock_.dump ();
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("key_ = %d\n"), this->key_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nonce_ = %d\n"), this->once_));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("key_ = %d\n"), this->key_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nonce_ = %d\n"), this->once_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* defined (ACE_HAS_THREADS) && (defined (ACE_HAS_THREAD_SPECIFIC_STORAGE) || defined (ACE_HAS_TSS_EMULATION)) */
 #endif /* ACE_HAS_DUMP */
 }
@@ -338,9 +338,9 @@ template <class ACE_LOCK> void
 ACE_TSS_Guard<ACE_LOCK>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("key_ = %d\n"), this->key_));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("key_ = %d\n"), this->key_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -350,11 +350,11 @@ ACE_TSS_Guard<ACE_LOCK>::init_key (void)
   this->key_ = ACE_OS::NULL_key;
   ACE_Thread::keycreate (&this->key_,
 #if defined (ACE_HAS_THR_C_DEST)
-                         &ACE_TSS_C_cleanup,
+                         &ACE_TSS_C_cleanup
 #else
-                         &ACE_TSS_Guard<ACE_LOCK>::cleanup,
+                         &ACE_TSS_Guard<ACE_LOCK>::cleanup
 #endif /* ACE_HAS_THR_C_DEST */
-                         (void *) this);
+                         );
 }
 
 template <class ACE_LOCK>

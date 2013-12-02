@@ -1,6 +1,8 @@
-// $Id: UPIPE_Acceptor.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: UPIPE_Acceptor.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/UPIPE_Acceptor.h"
+
+
 
 #if defined (ACE_HAS_THREADS)
 
@@ -61,7 +63,7 @@ ACE_UPIPE_Acceptor::ACE_UPIPE_Acceptor (const ACE_UPIPE_Addr &local_addr,
   ACE_TRACE ("ACE_UPIPE_Acceptor::ACE_UPIPE_Acceptor");
 
   if (this->open (local_addr, reuse_addr) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_UPIPE_Acceptor")));
 }
@@ -101,16 +103,16 @@ ACE_UPIPE_Acceptor::accept (ACE_UPIPE_Stream &new_stream,
       if (ACE_OS::read (new_stream.get_handle (),
                         (char *) &remote_stream,
                         sizeof remote_stream) == -1)
-        ACE_ERROR ((LM_ERROR,
+        ACELIB_ERROR ((LM_ERROR,
                     ACE_TEXT ("ACE_UPIPE_Acceptor: %p\n"),
                     ACE_TEXT ("read stream address failed")));
       else if (new_stream.stream_.link (remote_stream->stream_) == -1)
-        ACE_ERROR ((LM_ERROR,
+        ACELIB_ERROR ((LM_ERROR,
                     ACE_TEXT ("ACE_UPIPE_Acceptor: %p\n"),
                     ACE_TEXT ("link streams failed")));
       // Send a message over the new streampipe to confirm acceptance.
       else if (new_stream.send (&mb_, 0) == -1)
-        ACE_ERROR ((LM_ERROR,
+        ACELIB_ERROR ((LM_ERROR,
                     ACE_TEXT ("ACE_UPIPE_Acceptor: %p\n"),
                     ACE_TEXT ("linked stream.put failed")));
 

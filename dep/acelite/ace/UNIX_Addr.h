@@ -4,7 +4,7 @@
 /**
  *  @file    UNIX_Addr.h
  *
- *  $Id: UNIX_Addr.h 80826 2008-03-04 14:51:23Z wotte $
+ *  $Id: UNIX_Addr.h 96985 2013-04-11 15:50:32Z huangh $
  *
  *  @author Doug Schmidt
  */
@@ -25,7 +25,7 @@
 #if !defined (ACE_LACKS_UNIX_DOMAIN_SOCKETS)
 
 #include "ace/Addr.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/ACE.h"
 #include "ace/os_include/sys/os_un.h"
 

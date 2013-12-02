@@ -6,6 +6,7 @@
 #include "ace/Shared_Memory_SV.inl"
 #endif /* __ACE_INLINE__ */
 
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 ACE_ALLOC_HOOK_DEFINE(ACE_Shared_Memory_SV)

@@ -4,7 +4,7 @@
 /**
  *  @file    Log_Msg_Callback.h
  *
- *  $Id: Log_Msg_Callback.h 91064 2010-07-12 10:11:24Z johnnyw $
+ *  $Id: Log_Msg_Callback.h 97246 2013-08-07 07:10:20Z johnnyw $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -54,6 +54,9 @@ class ACE_Log_Record;
 class ACE_Export ACE_Log_Msg_Callback
 {
 public:
+  /// Default constructor
+  ACE_Log_Msg_Callback (void);
+
   /// No-op virtual destructor.
   virtual ~ACE_Log_Msg_Callback (void);
 

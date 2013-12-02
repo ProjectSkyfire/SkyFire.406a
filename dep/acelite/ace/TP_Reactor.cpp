@@ -1,10 +1,10 @@
-// $Id: TP_Reactor.cpp 95332 2011-12-15 11:09:41Z mcorino $
+// $Id: TP_Reactor.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/TP_Reactor.h"
 #include "ace/Thread.h"
 #include "ace/Timer_Queue.h"
 #include "ace/Sig_Handler.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Functor_T.h"
 #include "ace/OS_NS_sys_time.h"
 
@@ -93,6 +93,7 @@ ACE_TP_Token_Guard::acquire_token (ACE_Time_Value *max_wait_time)
 
   return result;
 }
+
 
 ACE_TP_Reactor::ACE_TP_Reactor (ACE_Sig_Handler *sh,
                                 ACE_Timer_Queue *tq,
@@ -251,6 +252,7 @@ ACE_TP_Reactor::dispatch_i (ACE_Time_Value *max_wait_time,
   return result;
 }
 
+
 #if 0
   // @Ciju
   // signal handling isn't in a production state yet.
@@ -299,6 +301,7 @@ endif
   return -1;
 }
 #endif // #if 0
+
 
 int
 ACE_TP_Reactor::handle_timer_events (int & /*event_count*/,
@@ -365,6 +368,7 @@ int
 ACE_TP_Reactor::handle_socket_events (int &event_count,
                                       ACE_TP_Token_Guard &guard)
 {
+
   // We got the lock, lets handle some I/O events.
   ACE_EH_Dispatch_Info dispatch_info;
 
@@ -380,6 +384,7 @@ ACE_TP_Reactor::handle_socket_events (int &event_count,
           this->handler_rep_.unbind(dispatch_info.handle_,
                                     dispatch_info.mask_);
         }
+
 
       return 0;
     }
@@ -620,7 +625,7 @@ ACE_TP_Reactor::notify_handle (ACE_HANDLE,
                                ACE_Event_Handler *eh,
                                ACE_EH_PTMF)
 {
-  ACE_ERROR ((LM_ERROR,
+  ACELIB_ERROR ((LM_ERROR,
               ACE_TEXT ("ACE_TP_Reactor::notify_handle: ")
               ACE_TEXT ("Wrong version of notify_handle() got called\n")));
 

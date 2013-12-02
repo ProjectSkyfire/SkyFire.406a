@@ -1,5 +1,5 @@
 /* -*- C++ -*- */
-// $Id: config-netbsd.h 93530 2011-03-11 12:12:40Z olli $
+// $Id: config-netbsd.h 97326 2013-09-11 07:52:09Z johnnyw $
 
 #ifndef ACE_CONFIG_H
 #define ACE_CONFIG_H
@@ -71,7 +71,7 @@
 #define ACE_HAS_STRINGS 1
 #define ACE_HAS_STRING_CLASS 1
 #define ACE_HAS_SVR4_DYNAMIC_LINKING 1
-#define ACE_HAS_SYSV_IPC 1
+#define ACE_HAS_SYSV_IPC
 #define ACE_HAS_SYS_FILIO_H 1
 #define ACE_HAS_STRSIGNAL
 #define ACE_HAS_SYS_SOCKIO_H 1

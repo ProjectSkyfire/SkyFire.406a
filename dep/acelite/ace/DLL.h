@@ -4,7 +4,7 @@
 /**
  *  @file    DLL.h
  *
- *  $Id: DLL.h 95229 2011-12-05 22:25:15Z shuston $
+ *  $Id: DLL.h 96137 2012-09-10 13:58:10Z johnnyw $
  *
  *  @author Kirthika Parameswaran <kirthika@cs.wustl.edu>
  */
@@ -94,10 +94,10 @@ public:
    *        regardless of platform. The set of name transforms is listed
    *        below. A @i decorator is a platform's name designator for a debug
    *        vs release build. For example, on Windows it is usually "d".
-   *        @li Name + decorator + suffix
-   *        @li Name + suffix
    *        @li Prefix + name + decorator + suffix
    *        @li Prefix + name + suffix
+   *        @li Name + decorator + suffix
+   *        @li Name + suffix
    *        @li Name
    *        Note that the transforms with @i decorator will be avoided if
    *        ACE is built with the @c ACE_DISABLE_DEBUG_DLL_CHECK config macro.
@@ -161,12 +161,12 @@ public:
   ACE_TCHAR *error (void) const;
 
   /**
-   * Return the handle to the caller.  If @a become_owner is non-0 then
+   * Return the handle to the caller.  If @a become_owner is true then
    * caller assumes ownership of the handle and the ACE_DLL object
    * won't call close() when it goes out of scope, even if
    * @c close_handle_on_destruction is set.
    */
-  ACE_SHLIB_HANDLE get_handle (int become_owner = 0) const;
+  ACE_SHLIB_HANDLE get_handle (bool become_owner = false) const;
 
   /// Set the handle for the DLL object. By default, the close()
   /// operation on / the object will be invoked before it is destroyed.
@@ -200,7 +200,6 @@ public:
 
   /// Flag to record if the last operation had an error.
   bool error_;
-
 };
 
 ACE_END_VERSIONED_NAMESPACE_DECL

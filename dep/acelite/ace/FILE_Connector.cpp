@@ -1,4 +1,4 @@
-// $Id: FILE_Connector.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: FILE_Connector.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/FILE_Connector.h"
 #include "ace/Handle_Ops.h"
@@ -7,6 +7,8 @@
 #if !defined (__ACE_INLINE__)
 #include "ace/FILE_Connector.inl"
 #endif /* __ACE_INLINE__ */
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -18,9 +20,9 @@ ACE_FILE_Connector::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_FILE_Connector::dump");
 
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\n")));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\n")));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

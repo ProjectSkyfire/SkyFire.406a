@@ -1,4 +1,4 @@
-//$Id: Timer_Queue_Iterator.cpp 95334 2011-12-15 12:52:50Z msmit $
+//$Id: Timer_Queue_Iterator.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #ifndef ACE_TIMER_QUEUE_ITERATOR_CPP
 #define ACE_TIMER_QUEUE_ITERATOR_CPP
@@ -20,19 +20,23 @@ ACE_Timer_Node_T<TYPE>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Timer_Node_T::dump");
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nact_ = %x"), this->act_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nact_ = %x"), this->act_));
   this->timer_value_.dump ();
   this->interval_.dump ();
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nprev_ = %x"), this->prev_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nnext_ = %x"), this->next_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\ntimer_id_ = %d\n"), this->timer_id_));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nprev_ = %x"), this->prev_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nnext_ = %x"), this->next_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\ntimer_id_ = %d\n"), this->timer_id_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
 template <class TYPE>
 ACE_Timer_Node_T<TYPE>::ACE_Timer_Node_T (void)
+  : act_ (0),
+    prev_ (0),
+    next_ (0),
+    timer_id_ (-1)
 {
   ACE_TRACE ("ACE_Timer_Node_T::ACE_Timer_Node_T");
 }

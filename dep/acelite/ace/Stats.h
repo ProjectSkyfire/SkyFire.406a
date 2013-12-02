@@ -4,7 +4,7 @@
 /**
  *  @file    Stats.h
  *
- *  $Id: Stats.h 80826 2008-03-04 14:51:23Z wotte $
+ *  $Id: Stats.h 96985 2013-04-11 15:50:32Z huangh $
  *
  *  @author David L. Levine
  */
@@ -23,7 +23,7 @@
 #endif /* ACE_LACKS_PRAGMA_ONCE */
 
 #include "ace/Unbounded_Queue.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Basic_Stats.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL

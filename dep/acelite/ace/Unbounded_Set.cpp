@@ -1,11 +1,11 @@
-// $Id: Unbounded_Set.cpp 81624 2008-05-06 17:14:57Z wotte $
+// $Id: Unbounded_Set.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #ifndef ACE_UNBOUNDED_SET_CPP
 #define ACE_UNBOUNDED_SET_CPP
 
 #include "ace/Unbounded_Set.h"
 #include "ace/Malloc_Base.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once

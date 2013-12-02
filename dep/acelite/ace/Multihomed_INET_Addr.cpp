@@ -1,9 +1,9 @@
-// $Id: Multihomed_INET_Addr.cpp 91368 2010-08-16 13:03:34Z mhengstmengel $
+// $Id: Multihomed_INET_Addr.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 // Extends ACE_INET_Addr with support for multi-homed addresses.
 
 #include "ace/Multihomed_INET_Addr.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 
 #if !defined (__ACE_INLINE__)
 #  include "ace/Multihomed_INET_Addr.inl"
@@ -33,6 +33,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                    int address_family,
                                                    const char *(secondary_host_names[]),
                                                    size_t size){
+
   // Initialize the primary INET addr
   ACE_INET_Addr::set(port_number, host_name, encode, address_family);
 
@@ -48,7 +49,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                        encode,
                                                        address_family);
       if (ret) {
-        ACE_DEBUG ((LM_DEBUG,
+        ACELIB_DEBUG ((LM_DEBUG,
                     ACE_TEXT ("Invalid INET addr (%C:%u) will be ignored\n"),
                     secondary_host_names[i], port_number));
         this->secondaries_.size(this->secondaries_.size() - 1);
@@ -68,6 +69,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                    int address_family,
                                                    const wchar_t *(secondary_host_names[]),
                                                    size_t size){
+
   // Initialize the primary INET addr
   ACE_INET_Addr::set(port_number, host_name, encode, address_family);
 
@@ -83,7 +85,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                        encode,
                                                        address_family);
       if (ret) {
-        ACE_DEBUG ((LM_DEBUG,
+        ACELIB_DEBUG ((LM_DEBUG,
                     ACE_TEXT ("Invalid INET addr (%s:%u) will be ignored\n"),
                     ACE_TEXT_WCHAR_TO_TCHAR (secondary_host_names[i]), port_number));
         this->secondaries_.size(this->secondaries_.size() - 1);
@@ -102,6 +104,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                    int encode,
                                                    const ACE_UINT32 *secondary_ip_addrs,
                                                    size_t size){
+
   // Initialize the primary INET addr
   ACE_INET_Addr::set(port_number, primary_ip_addr, encode);
 
@@ -117,7 +120,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                               encode);
 
       if (ret) {
-        ACE_DEBUG ((LM_DEBUG,
+        ACELIB_DEBUG ((LM_DEBUG,
                     "Invalid INET addr (%u:%u) will be ignored\n",
                     secondary_ip_addrs[i], port_number));
         this->secondaries_.size(this->secondaries_.size() - 1);
@@ -142,6 +145,7 @@ ACE_Multihomed_INET_Addr::set (u_short port_number,
   this->secondaries_.size(size);
 
   for (size_t i = 0; i < size; ++i) {
+
     int const ret = this->secondaries_[i].set(port_number,
                                               secondary_host_names[i],
                                               encode,
@@ -169,6 +173,7 @@ ACE_Multihomed_INET_Addr::set (u_short port_number,
   this->secondaries_.size(size);
 
   for (size_t i = 0; i < size; ++i) {
+
     int ret = this->secondaries_[i].set(port_number,
                                        secondary_host_names[i],
                                        encode,
@@ -192,6 +197,7 @@ ACE_Multihomed_INET_Addr::set (u_short port_number,
   this->secondaries_.size(size);
 
   for (size_t i = 0; i < size; ++i) {
+
     int ret = this->secondaries_[i].set(port_number,
                                        secondary_ip_addrs[i],
                                        encode);
@@ -224,6 +230,7 @@ ACE_Multihomed_INET_Addr::get_secondary_addresses(ACE_INET_Addr *secondary_addrs
 
   for (size_t i = 0; i < top; ++i)
     {
+
       int ret =
         secondary_addrs[i].set (this->secondaries_[i]);
 
@@ -280,8 +287,10 @@ ACE_Multihomed_INET_Addr::get_addresses(sockaddr_in6 *addrs,
 }
 #endif /* ACE_HAS_IPV6 */
 
+
 ACE_Multihomed_INET_Addr::~ACE_Multihomed_INET_Addr (void)
 {
+
 }
 
 ACE_END_VERSIONED_NAMESPACE_DECL

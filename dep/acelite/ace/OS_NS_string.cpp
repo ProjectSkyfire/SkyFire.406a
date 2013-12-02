@@ -1,6 +1,7 @@
-// $Id: OS_NS_string.cpp 93549 2011-03-15 19:50:24Z olli $
+// $Id: OS_NS_string.cpp 97310 2013-09-01 14:03:47Z mesnier_p $
 
 #include "ace/ACE.h"
+#include "ace/Global_Macros.h"
 #include "ace/OS_NS_string.h"
 #include "ace/OS_NS_stdio.h"
 #include "ace/OS_NS_stdlib.h"
@@ -144,6 +145,7 @@ ACE_OS::strerror_emulation (int)
   return const_cast <char*> ("Unknown Error");
 }
 #endif /* ACE_LACKS_STRERROR */
+
 
 char *
 ACE_OS::strsignal (int signum)

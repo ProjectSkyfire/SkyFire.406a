@@ -1,6 +1,6 @@
-// $Id: Proactor.cpp 95368 2011-12-19 13:38:49Z mcorino $
+// $Id: Proactor.cpp 97262 2013-08-09 08:32:10Z johnnyw $
 
-#include "ace/config-lite.h"
+#include /**/ "ace/config-lite.h"
 #include "ace/Proactor.h"
 #if defined (ACE_HAS_WIN32_OVERLAPPED_IO) || defined (ACE_HAS_AIO_CALLS)
 
@@ -16,8 +16,9 @@
 #    include "ace/Service_Config.h"
 #endif /* !ACE_HAS_WINCE && !ACE_LACKS_ACE_SVCCONF */
 
+
 #include "ace/Task_T.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Framework_Component.h"
 
 #if defined (ACE_HAS_AIO_CALLS)
@@ -167,7 +168,7 @@ ACE_Proactor_Timer_Handler::svc (void)
               break;
             default:
               // Error.
-              ACE_ERROR_RETURN ((LM_ERROR,
+              ACELIB_ERROR_RETURN ((LM_ERROR,
                                  ACE_TEXT ("%N:%l:(%P | %t):%p\n"),
                                  ACE_TEXT ("ACE_Proactor_Timer_Handler::svc:wait failed")),
                                 -1);
@@ -223,7 +224,7 @@ ACE_Proactor_Handle_Timeout_Upcall::timeout (ACE_Proactor_Timer_Queue &,
                                              const ACE_Time_Value &time)
 {
   if (this->proactor_ == 0)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT ("(%t) No Proactor set in ACE_Proactor_Handle_Timeout_Upcall,")
                        ACE_TEXT (" no completion port to post timeout to?!@\n")),
                       -1);
@@ -238,7 +239,7 @@ ACE_Proactor_Handle_Timeout_Upcall::timeout (ACE_Proactor_Timer_Queue &,
                                           -1);
 
   if (asynch_timer == 0)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT ("%N:%l:(%P | %t):%p\n"),
                        ACE_TEXT ("ACE_Proactor_Handle_Timeout_Upcall::timeout:")
                        ACE_TEXT ("create_asynch_timer failed")),
@@ -249,7 +250,7 @@ ACE_Proactor_Handle_Timeout_Upcall::timeout (ACE_Proactor_Timer_Queue &,
   // Post a completion.
   if (-1 == safe_asynch_timer->post_completion
       (this->proactor_->implementation ()))
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT ("Failure in dealing with timers: ")
                        ACE_TEXT ("PostQueuedCompletionStatus failed\n")),
                       -1);
@@ -299,7 +300,7 @@ ACE_Proactor_Handle_Timeout_Upcall::proactor (ACE_Proactor &proactor)
       return 0;
     }
   else
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT ("ACE_Proactor_Handle_Timeout_Upcall is only suppose")
                        ACE_TEXT (" to be used with ONE (and only one) Proactor\n")),
                       -1);
@@ -357,7 +358,7 @@ ACE_Proactor::ACE_Proactor (ACE_Proactor_Impl *implementation,
 
   // Activate <timer_handler>.
   if (this->timer_handler_->activate () == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%N:%l:(%P | %t):%p\n"),
                 ACE_TEXT ("Task::activate:could not create thread\n")));
 }
@@ -612,7 +613,7 @@ ACE_Proactor::close (void)
 {
   // Close the implementation.
   if (this->implementation ()->close () == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%N:%l:(%P | %t):%p\n"),
                 ACE_TEXT ("ACE_Proactor::close: implementation close")));
 
@@ -813,6 +814,7 @@ ACE_Proactor::implementation (void) const
   return this->implementation_;
 }
 
+
 ACE_Asynch_Read_Stream_Impl *
 ACE_Proactor::create_asynch_read_stream (void)
 {
@@ -888,6 +890,7 @@ ACE_Proactor::create_asynch_read_stream_result
      priority,
      signal_number);
 }
+
 
 ACE_Asynch_Write_Stream_Result_Impl *
 ACE_Proactor::create_asynch_write_stream_result

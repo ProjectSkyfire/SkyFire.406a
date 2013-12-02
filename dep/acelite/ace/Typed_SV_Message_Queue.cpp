@@ -1,4 +1,4 @@
-// $Id: Typed_SV_Message_Queue.cpp 80826 2008-03-04 14:51:23Z wotte $
+// $Id: Typed_SV_Message_Queue.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #ifndef ACE_TYPED_SV_MESSAGE_QUEUE_CPP
 #define ACE_TYPED_SV_MESSAGE_QUEUE_CPP
@@ -10,7 +10,7 @@
 #endif /* ACE_LACKS_PRAGMA_ONCE */
 
 #include "ace/Typed_SV_Message_Queue.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 
 #if !defined (__ACE_INLINE__)
 #include "ace/Typed_SV_Message_Queue.inl"
@@ -41,7 +41,7 @@ ACE_Typed_SV_Message_Queue<T>::ACE_Typed_SV_Message_Queue (key_t external_id,
 {
   ACE_TRACE ("ACE_Typed_SV_Message_Queue<T>::ACE_Typed_SV_Message_Queue");
   if (this->open (external_id, create, perms) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 "ACE_Typed_SV_Message_Queue::ACE_Typed_SV_Message_Queue"));
 }
 

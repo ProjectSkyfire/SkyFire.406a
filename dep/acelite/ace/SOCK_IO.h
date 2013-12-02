@@ -4,7 +4,7 @@
 /**
  *  @file    SOCK_IO.h
  *
- *  $Id: SOCK_IO.h 81014 2008-03-19 11:41:31Z johnnyw $
+ *  $Id: SOCK_IO.h 97075 2013-04-24 15:01:48Z schmidt $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -29,7 +29,7 @@ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
  * @class ACE_SOCK_IO
  *
  * @brief Defines the methods for the ACE socket wrapper I/O routines
- * (e.g., send/recv).
+ * described below.
  *
  * If @a timeout == 0, then the call behaves as a normal
  * send/recv call, i.e., for blocking sockets, the call will

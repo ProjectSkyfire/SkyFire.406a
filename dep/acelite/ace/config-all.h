@@ -4,7 +4,7 @@
 /**
  *  @file   config-all.h
  *
- *  $Id: config-all.h 84216 2009-01-22 18:34:40Z johnnyw $
+ *  $Id: config-all.h 97262 2013-08-09 08:32:10Z johnnyw $
  *
  *  @author (Originally in OS.h)Doug Schmidt <schmidt@cs.wustl.edu>
  *  @author Jesper S. M|ller<stophph@diku.dk>
@@ -17,7 +17,7 @@
 
 #include /**/ "ace/pre.h"
 
-#include "ace/config-lite.h"
+#include /**/ "ace/config-lite.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once

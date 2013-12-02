@@ -1,11 +1,11 @@
-// $Id: SUN_Proactor.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: SUN_Proactor.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/SUN_Proactor.h"
 
 #if defined (ACE_HAS_AIO_CALLS) && defined (sun)
 
 #include "ace/Task_T.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Object_Manager.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -105,7 +105,7 @@ ACE_SUN_Proactor::handle_events_i (ACE_Time_Value *delta)
          break;         // we should process "post_completed" queue
 
        default:         // EFAULT
-         ACE_ERROR_RETURN ((LM_ERROR,
+         ACELIB_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT("%N:%l:(%P | %t)::%p \nNumAIO=%d\n"),
                        ACE_TEXT("ACE_SUN_Proactor::handle_events: aiowait failed"),
                         num_started_aio_),
@@ -137,6 +137,7 @@ ACE_SUN_Proactor::handle_events_i (ACE_Time_Value *delta)
   retval += this->process_result_queue ();
 
   return retval > 0 ? 1 : 0 ;
+
 }
 
 int
@@ -144,6 +145,7 @@ ACE_SUN_Proactor::get_result_status (ACE_POSIX_Asynch_Result* asynch_result,
                                      int &error_status,
                                      size_t &transfer_count)
 {
+
    // Get the error status of the aio_ operation.
    error_status  = asynch_result->aio_resultp.aio_errno;
    ssize_t op_return = asynch_result->aio_resultp.aio_return;
@@ -193,7 +195,7 @@ ACE_SUN_Proactor::find_completed_aio (aio_result_t *result,
                                error_status,
                                transfer_count) == 0)
     { // should never be
-      ACE_ERROR ((LM_ERROR,
+      ACELIB_ERROR ((LM_ERROR,
                   ACE_TEXT("%N:%l:(%P | %t)::%p\n"),
                   ACE_TEXT("ACE_SUN_Proactor::find_completed_aio:")
                   ACE_TEXT("should never be !!!\n")));
@@ -275,7 +277,7 @@ ACE_SUN_Proactor::start_aio_i (ACE_POSIX_Asynch_Result *result)
       if (errno == EAGAIN || errno == ENOMEM) // Defer - retry this later.
         ret_val = 1;
       else
-        ACE_ERROR ((LM_ERROR,
+        ACELIB_ERROR ((LM_ERROR,
                     ACE_TEXT ("%N:%l:(%P | %t)::start_aio: aio%s %p\n"),
                     ptype,
                     ACE_TEXT ("queueing failed\n")));

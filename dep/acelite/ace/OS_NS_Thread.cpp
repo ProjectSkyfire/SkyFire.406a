@@ -1,4 +1,4 @@
-// $Id: OS_NS_Thread.cpp 95770 2012-05-16 17:45:58Z shuston $
+// $Id: OS_NS_Thread.cpp 97326 2013-09-11 07:52:09Z johnnyw $
 
 #include "ace/OS_NS_Thread.h"
 
@@ -14,11 +14,11 @@
 #include "ace/Object_Manager_Base.h"
 #include "ace/OS_NS_errno.h"
 #include "ace/OS_NS_ctype.h"
-#include "ace/Log_Msg.h" // for ACE_ASSERT
+#include "ace/Log_Category.h" // for ACE_ASSERT
 // This is necessary to work around nasty problems with MVS C++.
 #include "ace/Auto_Ptr.h"
 #include "ace/Thread_Mutex.h"
-#include "ace/Condition_T.h"
+#include "ace/Condition_Thread_Mutex.h"
 #include "ace/Guard_T.h"
 
 extern "C" void
@@ -26,6 +26,7 @@ ACE_MUTEX_LOCK_CLEANUP_ADAPTER_NAME (void *args)
 {
   ACE_VERSIONED_NAMESPACE_NAME::ACE_OS::mutex_lock_cleanup (args);
 }
+
 
 #if !defined(ACE_WIN32) && defined (__IBMCPP__) && (__IBMCPP__ >= 400)
 # define ACE_BEGINTHREADEX(STACK, STACKSIZE, ENTRY_POINT, ARGS, FLAGS, THR_ID) \
@@ -53,12 +54,11 @@ ACE_Thread_ID::to_string (char *thr_string) const
   ACE_OS::sprintf (thr_string, "%u",
                    static_cast <unsigned> (this->thread_id_));
 #else
-  // Yes, this is an ugly C-style cast, but the
-  // correct C++ cast is different depending on
-  // whether the t_id is an integral type or a pointer
-  // type. FreeBSD uses a pointer type, but doesn't
-  // have a _np function to get an integral type like
-  // other OSes, so use the bigger hammer.
+  // Yes, this is an ugly C-style cast, but the correct C++ cast is
+  // different depending on whether the t_id is an integral type or a
+  // pointer type. FreeBSD uses a pointer type, but doesn't have a _np
+  // function to get an integral type like other OSes, so use the
+  // bigger hammer.
   ACE_OS::sprintf (thr_string, "%lu",
                    (unsigned long) thread_handle_);
 #endif /* ACE_WIN32 */
@@ -399,10 +399,10 @@ ACE_TSS_Info::dump (void)
   //  ACE_OS_TRACE ("ACE_TSS_Info::dump");
 
 #   if 0
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("key_ = %u\n"), this->key_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("destructor_ = %u\n"), this->destructor_));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("key_ = %u\n"), this->key_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("destructor_ = %u\n"), this->destructor_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #   endif /* 0 */
 # endif /* ACE_HAS_DUMP */
 }
@@ -545,6 +545,7 @@ private:
   ACE_thread_key_t in_use_;
 };
 
+
 /*****************************************************************************/
 /**
  * @class TSS_Cleanup_Instance
@@ -586,7 +587,7 @@ private:
   static unsigned int reference_count_;
   static ACE_TSS_Cleanup * instance_;
   static ACE_Thread_Mutex* mutex_;
-  static ACE_Thread_Condition<ACE_Thread_Mutex>* condition_;
+  static ACE_Condition_Thread_Mutex* condition_;
 
 private:
   ACE_TSS_Cleanup * ptr_;
@@ -609,7 +610,7 @@ TSS_Cleanup_Instance::TSS_Cleanup_Instance (Purpose purpose)
   if (mutex_ == 0)
     {
       ACE_NEW (mutex_, ACE_Thread_Mutex ());
-      ACE_NEW (condition_, ACE_Thread_Condition<ACE_Thread_Mutex> (*mutex_));
+      ACE_NEW (condition_, ACE_Condition_Thread_Mutex (*mutex_));
     }
 
   ACE_GUARD (ACE_Thread_Mutex, m, *mutex_);
@@ -709,7 +710,7 @@ TSS_Cleanup_Instance::operator ->()
 unsigned int TSS_Cleanup_Instance::reference_count_ = 0;
 ACE_TSS_Cleanup * TSS_Cleanup_Instance::instance_ = 0;
 ACE_Thread_Mutex* TSS_Cleanup_Instance::mutex_ = 0;
-ACE_Thread_Condition<ACE_Thread_Mutex>* TSS_Cleanup_Instance::condition_ = 0;
+ACE_Condition_Thread_Mutex* TSS_Cleanup_Instance::condition_ = 0;
 
 ACE_TSS_Cleanup::~ACE_TSS_Cleanup (void)
 {
@@ -883,8 +884,12 @@ ACE_TSS_Cleanup::thread_detach_key (ACE_thread_key_t key)
     ACE_TSS_CLEANUP_GUARD
 
     u_int key_index = key;
-    ACE_ASSERT (key_index < sizeof(this->table_)/sizeof(this->table_[0])
-        && this->table_[key_index].key_ == key);
+    ACE_ASSERT (key_index < sizeof(this->table_)/sizeof(this->table_[0]));
+    // If this entry was never set, just bug out. If it is set, but is the
+    // wrong key, assert.
+    if (this->table_[key_index].key_ == 0)
+      return 0;
+    ACE_ASSERT (this->table_[key_index].key_ == key);
     ACE_TSS_Info &info = this->table_ [key_index];
 
     // sanity check
@@ -1409,7 +1414,7 @@ ACE_OS::cond_timedwait (ACE_cond_t *cv,
       // Note that we must convert between absolute time (which is
       // passed as a parameter) and relative time (which is what
       // WaitForSingleObjects() expects).
-      ACE_Time_Value relative_time (*timeout - ACE_OS::gettimeofday ());
+      ACE_Time_Value relative_time = timeout->to_relative_time ();
 
       // Watchout for situations where a context switch has caused the
       // current time to be > the timeout.
@@ -1466,7 +1471,7 @@ ACE_OS::cond_timedwait (ACE_cond_t *cv,
     return -1;
 
 #     if defined (ACE_WIN32)
-  if (result != WAIT_OBJECT_0)
+  if (result != (int)WAIT_OBJECT_0)
     {
       switch (result)
         {
@@ -1582,7 +1587,7 @@ ACE_OS::cond_timedwait (ACE_cond_t *cv,
   int msec_timeout = 0;
   int result = 0;
 
-  ACE_Time_Value relative_time (*timeout - ACE_OS::gettimeofday ());
+  ACE_Time_Value relative_time = timeout->to_relative_time ();
   // Watchout for situations where a context switch has caused the
   // current time to be > the timeout.
   if (relative_time > ACE_Time_Value::zero)
@@ -1611,7 +1616,7 @@ ACE_OS::cond_timedwait (ACE_cond_t *cv,
       // Note that we must convert between absolute time (which is
       // passed as a parameter) and relative time (which is what
       // WaitForSingleObjects() expects).
-      ACE_Time_Value relative_time (*timeout - ACE_OS::gettimeofday ());
+      ACE_Time_Value relative_time = timeout->to_relative_time ();
 
       // Watchout for situations where a context switch has caused the
       // current time to be > the timeout.
@@ -1649,7 +1654,7 @@ ACE_OS::cond_timedwait (ACE_cond_t *cv,
   if (ACE_OS::thread_mutex_unlock (&cv->waiters_lock_) != 0)
     return -1;
 
-  if (result != WAIT_OBJECT_0)
+  if (result != (int)WAIT_OBJECT_0)
     {
       switch (result)
         {
@@ -1741,7 +1746,7 @@ ACE_OS::cond_wait (ACE_cond_t *cv,
   if (ACE_OS::thread_mutex_unlock (&cv->waiters_lock_) != 0)
     return -1;
 
-  if (result != WAIT_OBJECT_0)
+  if (result != (int)WAIT_OBJECT_0)
     {
       switch (result)
         {
@@ -2143,7 +2148,7 @@ ACE_OS::mutex_lock (ACE_mutex_t *m,
   // Note that we must convert between absolute time (which is passed
   // as a parameter) and relative time (which is what the system call
   // expects).
-  ACE_Time_Value relative_time (timeout - ACE_OS::gettimeofday ());
+  ACE_Time_Value relative_time = timeout.to_relative_time ();
 
   switch (m->type_)
   {
@@ -2177,7 +2182,7 @@ ACE_OS::mutex_lock (ACE_mutex_t *m,
   // Note that we must convert between absolute time (which is passed
   // as a parameter) and relative time (which is what the system call
   // expects).
-  ACE_Time_Value relative_time (timeout - ACE_OS::gettimeofday ());
+  ACE_Time_Value relative_time = timeout.to_relative_time ();
 
   int ticks_per_sec = ::sysClkRateGet ();
 
@@ -2494,15 +2499,17 @@ ACE_OS::event_destroy (ACE_event_t *event)
 
 int
 ACE_OS::event_init (ACE_event_t *event,
+                    int type,
+                    ACE_condattr_t *attributes,
                     int manual_reset,
                     int initial_state,
-                    int type,
                     const char *name,
                     void *arg,
                     LPSECURITY_ATTRIBUTES sa)
 {
 #if defined (ACE_WIN32)
   ACE_UNUSED_ARG (type);
+  ACE_UNUSED_ARG (attributes);
   ACE_UNUSED_ARG (arg);
   SECURITY_ATTRIBUTES sa_buffer;
   SECURITY_DESCRIPTOR sd_buffer;
@@ -2610,10 +2617,15 @@ ACE_OS::event_init (ACE_event_t *event,
 # if (defined (ACE_HAS_PTHREADS) && defined (_POSIX_THREAD_PROCESS_SHARED) && !defined (ACE_LACKS_CONDATTR_PSHARED)) || \
     (!defined (ACE_USES_FIFO_SEM) && \
       (!defined (ACE_HAS_POSIX_SEM) || !defined (ACE_HAS_POSIX_SEM_TIMEOUT) || defined (ACE_LACKS_NAMED_POSIX_SEM)))
-          int result = ACE_OS::cond_init (&event->eventdata_->condition_,
-                                          static_cast<short> (type),
-                                          name,
-                                          arg);
+          int result = attributes == 0 ?
+                          ACE_OS::cond_init (&event->eventdata_->condition_,
+                                             type,
+                                             name,
+                                             arg) :
+                          ACE_OS::cond_init (&event->eventdata_->condition_,
+                                             *attributes,
+                                             name,
+                                             arg);
 # else
           char   sem_name[128];
           ACE_OS::strncpy (sem_name,
@@ -2623,6 +2635,7 @@ ACE_OS::event_init (ACE_event_t *event,
           int result = ACE_OS::sema_init (&event->semaphore_,
                                           0,
                                           type,
+                                          attributes,
                                           sem_name,
                                           arg);
 # endif
@@ -2646,6 +2659,7 @@ ACE_OS::event_init (ACE_event_t *event,
             result = ACE_OS::sema_init (&event->lock_,
                                         0,
                                         type,
+                                        attributes,
                                         lck_name,
                                         arg);
             if (result == 0)
@@ -2660,9 +2674,9 @@ ACE_OS::event_init (ACE_event_t *event,
 
           event->name_ = 0;
           event->eventdata_ = evtdata;
-#if (!defined (ACE_HAS_PTHREADS) || !defined (_POSIX_THREAD_PROCESS_SHARED) || defined (ACE_LACKS_CONDATTR_PSHARED)) && \
-  (defined (ACE_USES_FIFO_SEM) || \
-    (defined (ACE_HAS_POSIX_SEM) && defined (ACE_HAS_POSIX_SEM_TIMEOUT) && !defined (ACE_LACKS_NAMED_POSIX_SEM)))
+# if (!defined (ACE_HAS_PTHREADS) || !defined (_POSIX_THREAD_PROCESS_SHARED) || defined (ACE_LACKS_CONDATTR_PSHARED)) && \
+      (defined (ACE_USES_FIFO_SEM) || \
+      (defined (ACE_HAS_POSIX_SEM) && defined (ACE_HAS_POSIX_SEM_TIMEOUT) && !defined (ACE_LACKS_NAMED_POSIX_SEM)))
           char   sem_name[128];
           ACE_OS::strncpy (sem_name,
                            name,
@@ -2671,6 +2685,7 @@ ACE_OS::event_init (ACE_event_t *event,
           result = ACE_OS::sema_init(&event->semaphore_,
                                      0,
                                      type,
+                                     attributes,
                                      sem_name,
                                      arg);
 # endif
@@ -2690,6 +2705,7 @@ ACE_OS::event_init (ACE_event_t *event,
               result = ACE_OS::sema_init (&event->lock_,
                                           0,
                                           type,
+                                          attributes,
                                           lck_name,
                                           arg);
             }
@@ -2712,14 +2728,20 @@ ACE_OS::event_init (ACE_event_t *event,
 # if (defined (ACE_HAS_PTHREADS) && defined (_POSIX_THREAD_PROCESS_SHARED) && !defined (ACE_LACKS_CONDATTR_PSHARED)) || \
     (!defined (ACE_USES_FIFO_SEM) && \
       (!defined (ACE_HAS_POSIX_SEM) || !defined (ACE_HAS_POSIX_SEM_TIMEOUT) || defined (ACE_LACKS_NAMED_POSIX_SEM)))
-      int result = ACE_OS::cond_init (&event->eventdata_->condition_,
-                                      static_cast<short> (type),
-                                      name,
-                                      arg);
+      int result = attributes == 0 ?
+                      ACE_OS::cond_init (&event->eventdata_->condition_,
+                                         type,
+                                         name,
+                                         arg) :
+                      ACE_OS::cond_init (&event->eventdata_->condition_,
+                                         *attributes,
+                                         name,
+                                         arg);
 # else
       int result = ACE_OS::sema_init (&event->semaphore_,
                                       0,
                                       type,
+                                      attributes,
                                       name,
                                       arg);
 # endif
@@ -2736,6 +2758,7 @@ ACE_OS::event_init (ACE_event_t *event,
       result = ACE_OS::sema_init (&event->lock_,
                                   0,
                                   type,
+                                  attributes,
                                   name,
                                   arg);
       if (result == 0)
@@ -2749,6 +2772,7 @@ ACE_OS::event_init (ACE_event_t *event,
   ACE_UNUSED_ARG (manual_reset);
   ACE_UNUSED_ARG (initial_state);
   ACE_UNUSED_ARG (type);
+  ACE_UNUSED_ARG (attributes);
   ACE_UNUSED_ARG (name);
   ACE_UNUSED_ARG (arg);
   ACE_UNUSED_ARG (sa);
@@ -3014,7 +3038,7 @@ ACE_OS::event_timedwait (ACE_event_t *event,
         {
           // Time is given in absolute time, we should use
           // gettimeofday() to calculate relative time
-          ACE_Time_Value relative_time (*timeout - ACE_OS::gettimeofday ());
+          ACE_Time_Value relative_time = timeout->to_relative_time ();
 
           // Watchout for situations where a context switch has caused
           // the current time to be > the timeout.  Thanks to Norbert
@@ -3075,7 +3099,7 @@ ACE_OS::event_timedwait (ACE_event_t *event,
           // cond_timewait() expects absolute time, check
           // <use_absolute_time> flag.
           if (use_absolute_time == 0)
-            absolute_timeout += ACE_OS::gettimeofday ();
+            absolute_timeout = timeout->to_absolute_time ();
 
           while (event->eventdata_->is_signaled_ == 0 &&
                  event->eventdata_->auto_event_signaled_ == false)
@@ -3571,6 +3595,7 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
 
   if (sched_params.scope () == ACE_SCOPE_THREAD)
     {
+
       // Setting the REALTIME_PRIORITY_CLASS on Windows is almost always
       // a VERY BAD THING. This include guard will allow people
       // to easily disable this feature in ACE.
@@ -3596,6 +3621,7 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
     }
   else if (sched_params.scope () == ACE_SCOPE_PROCESS)
     {
+
 # if defined (ACE_HAS_PHARLAP_RT)
       ACE_NOTSUP_RETURN (-1);
 # else
@@ -3627,6 +3653,7 @@ ACE_OS::sched_params (const ACE_Sched_Params &sched_params,
       ::CloseHandle (hProcess);
       return 0;
 #endif /* ACE_HAS_PHARLAP_RT */
+
     }
   else
     {
@@ -4099,14 +4126,11 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
       if (ACE_BIT_ENABLED (flags, THR_SCOPE_SYSTEM)
           || ACE_BIT_ENABLED (flags, THR_SCOPE_PROCESS))
         {
-#     if defined (ACE_CONFIG_LINUX_H) || defined (HPUX) || defined (ACE_VXWORKS)
-          // LinuxThreads do not have support for PTHREAD_SCOPE_PROCESS.
-          // Neither does HPUX (up to HP-UX 11.00, as far as I know).
-          // Also VxWorks only delivers scope system
+#     if defined (ACE_LACKS_PTHREAD_SCOPE_PROCESS)
           int scope = PTHREAD_SCOPE_SYSTEM;
-#     else /* ACE_CONFIG_LINUX_H */
+#     else /* ACE_LACKS_PTHREAD_SCOPE_PROCESS */
           int scope = PTHREAD_SCOPE_PROCESS;
-#     endif /* ACE_CONFIG_LINUX_H */
+#     endif /* ACE_LACKS_PTHREAD_SCOPE_PROCESS */
           if (ACE_BIT_ENABLED (flags, THR_SCOPE_SYSTEM))
             scope = PTHREAD_SCOPE_SYSTEM;
 
@@ -4123,6 +4147,7 @@ ACE_OS::thr_create (ACE_THR_FUNC func,
         {
            if (ACE_ADAPT_RETVAL(::pthread_attr_setcreatesuspend_np(&attr), result) != 0)
             {
+
               ::pthread_attr_destroy (&attr);
               return -1;
             }

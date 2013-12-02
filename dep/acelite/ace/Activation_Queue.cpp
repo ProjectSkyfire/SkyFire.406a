@@ -1,4 +1,4 @@
-// $Id: Activation_Queue.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: Activation_Queue.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Activation_Queue.h"
 
@@ -6,7 +6,7 @@
 #include "ace/Activation_Queue.inl"
 #endif /* __ACE_INLINE__ */
 
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Method_Request.h"
 #include "ace/Malloc_Base.h"
 #include "ace/Time_Value.h"
@@ -17,19 +17,19 @@ void
 ACE_Activation_Queue::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG,
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG,
               ACE_TEXT ("delete_queue_ = %d\n"),
               this->delete_queue_));
-  ACE_DEBUG ((LM_INFO, ACE_TEXT ("queue_:\n")));
+  ACELIB_DEBUG ((LM_INFO, ACE_TEXT ("queue_:\n")));
   if (this->queue_)
     this->queue_->dump();
   else
     //FUZZ: disable check_for_NULL
-    ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("(NULL)\n")));
+    ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("(NULL)\n")));
     //FUZZ: enable check_for_NULL
 
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

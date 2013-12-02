@@ -1,4 +1,4 @@
-// $Id: TTY_IO.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: TTY_IO.cpp 97246 2013-08-07 07:10:20Z johnnyw $
 
 #include "ace/TTY_IO.h"
 #include "ace/OS_NS_errno.h"
@@ -25,6 +25,10 @@ namespace
 }
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
+
+ACE_TTY_IO::ACE_TTY_IO (void)
+{
+}
 
 ACE_TTY_IO::Serial_Params::Serial_Params (void)
 {
@@ -682,6 +686,7 @@ int ACE_TTY_IO::control (Control_Mode cmd, Serial_Params *arg) const
 
     default:
       return -1; // Wrong cmd.
+
     } // arg switch
 #else
   ACE_UNUSED_ARG (cmd);

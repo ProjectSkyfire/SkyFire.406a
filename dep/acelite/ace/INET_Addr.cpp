@@ -1,4 +1,4 @@
-// $Id: INET_Addr.cpp 95533 2012-02-14 22:59:17Z wotte $
+// $Id: INET_Addr.cpp 97355 2013-09-27 22:16:09Z shuston $
 
 // Defines the Internet domain address family address format.
 
@@ -8,7 +8,7 @@
 #include "ace/INET_Addr.inl"
 #endif /* __ACE_INLINE__ */
 
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/OS_NS_stdio.h"
 #include "ace/OS_NS_errno.h"
 #include "ace/OS_NS_stdlib.h"
@@ -17,6 +17,7 @@
 #include "ace/OS_NS_netdb.h"
 #include "ace/OS_NS_unistd.h"
 #include "ace/OS_NS_sys_socket.h"
+#include "ace/Truncate.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -80,12 +81,12 @@ ACE_INET_Addr::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_INET_Addr::dump");
 
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
 
   ACE_TCHAR s[ACE_MAX_FULLY_QUALIFIED_NAME_LEN + 16];
   this->addr_to_string(s, ACE_MAX_FULLY_QUALIFIED_NAME_LEN + 16);
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("%s"), s));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("%s"), s));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -137,6 +138,7 @@ ACE_INET_Addr::is_ip_equal (const ACE_INET_Addr &sap) const
 #endif /* ACE_HAS_IPV6 */
   return this->get_ip_address () == sap.get_ip_address();
 }
+
 
 u_long
 ACE_INET_Addr::hash (void) const
@@ -309,6 +311,7 @@ ACE_INET_Addr::set (u_short port_number,
   return 0;
 }
 
+
 // Initializes a ACE_INET_Addr from a PORT_NUMBER and the remote
 // HOST_NAME.
 
@@ -377,7 +380,8 @@ ACE_INET_Addr::set (u_short port_number,
       if ((error = ::getaddrinfo (host_name, 0, &hints, &res)) == 0)
         {
           this->set_type (res->ai_family);
-          this->set_addr (res->ai_addr, res->ai_addrlen);
+          this->set_addr (res->ai_addr,
+                          ACE_Utils::truncate_cast<int>(res->ai_addrlen));
           this->set_port_number (port_number, encode);
           ::freeaddrinfo (res);
           return 0;
@@ -539,7 +543,7 @@ ACE_INET_Addr::ACE_INET_Addr (u_short port_number,
                  host_name,
                  1,
                  address_family) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("ACE_INET_Addr::ACE_INET_Addr: %p\n"),
                 ACE_TEXT_CHAR_TO_TCHAR ((host_name == 0) ?
                                         "<unknown>" : host_name)));
@@ -557,7 +561,7 @@ ACE_INET_Addr::ACE_INET_Addr (u_short port_number,
                  host_name,
                  1,
                  address_family) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("ACE_INET_Addr::ACE_INET_Addr: %p\n"),
                 ACE_TEXT_WCHAR_TO_TCHAR ((host_name == 0) ?
                                          ACE_TEXT_WIDE ("<unknown>") :
@@ -664,7 +668,7 @@ ACE_INET_Addr::ACE_INET_Addr (u_short port_number,
   ACE_TRACE ("ACE_INET_Addr::ACE_INET_Addr");
   this->reset ();
   if (this->set (port_number, inet_address) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_INET_Addr::ACE_INET_Addr")));
 }
@@ -682,7 +686,7 @@ ACE_INET_Addr::ACE_INET_Addr (const char port_name[],
   if (this->set (port_name,
                  host_name,
                  protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("ACE_INET_Addr::ACE_INET_Addr")));
 }
 
@@ -697,7 +701,7 @@ ACE_INET_Addr::ACE_INET_Addr (const wchar_t port_name[],
   if (this->set (port_name,
                  host_name,
                  protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("ACE_INET_Addr::ACE_INET_Addr")));
 }
 #endif /* ACE_HAS_WCHAR */
@@ -714,7 +718,7 @@ ACE_INET_Addr::ACE_INET_Addr (const char port_name[],
   if (this->set (port_name,
                  ACE_HTONL (inet_address),
                  protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("ACE_INET_Addr::ACE_INET_Addr")));
 }
 
@@ -729,7 +733,7 @@ ACE_INET_Addr::ACE_INET_Addr (const wchar_t port_name[],
   if (this->set (port_name,
                  ACE_HTONL (inet_address),
                  protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("ACE_INET_Addr::ACE_INET_Addr")));
 }
 #endif /* ACE_HAS_WCHAR */
@@ -924,6 +928,7 @@ int ACE_INET_Addr::set_address (const char *ip_addr,
       if (encode)
         ip4 = ACE_HTONL (ip4);
 
+
       if (this->get_type () == AF_INET && map == 0) {
         this->base_set (AF_INET, sizeof (this->inet_addr_.in4_));
 #ifdef ACE_HAS_SOCKADDR_IN_SIN_LEN
@@ -1002,6 +1007,7 @@ int ACE_INET_Addr::set_address (const char *ip_addr,
   // Here with an unrecognized length.
   errno = EAFNOSUPPORT;
   return -1;
+
 }
 
 #if (defined (ACE_LINUX) || defined (ACE_WIN32)) && defined (ACE_HAS_IPV6)
@@ -1027,6 +1033,7 @@ ACE_INET_Addr::set_interface (const char *intf_name)
     }
   else
     return 0;
+
 }
 #endif /* ACE_LINUX && ACE_HAS_IPV6 */
 
@@ -1122,7 +1129,7 @@ ACE_INET_Addr::get_ip_address (void) const
           return ACE_NTOHL (addr);
         }
 
-      ACE_ERROR ((LM_ERROR,
+      ACELIB_ERROR ((LM_ERROR,
                   ACE_TEXT ("ACE_INET_Addr::get_ip_address: address is a IPv6 address not IPv4\n")));
       errno = EAFNOSUPPORT;
       return 0;

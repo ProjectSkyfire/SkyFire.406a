@@ -1,4 +1,4 @@
-// $Id: Token_Invariants.cpp 91287 2010-08-05 10:30:49Z johnnyw $
+// $Id: Token_Invariants.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Token_Invariants.h"
 
@@ -140,14 +140,15 @@ ACE_Token_Invariant_Manager::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Token_Invariant_Manager::dump");
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("mutex_collection_:\n")));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("mutex_collection_:\n")));
   mutex_collection_.dump ();
-  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("rwlock_collection_:\n")));
+  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("rwlock_collection_:\n")));
   rwlock_collection_.dump ();
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
+
 
 int
 ACE_Token_Invariant_Manager::get_mutex (const ACE_TCHAR *token_name,
@@ -201,6 +202,7 @@ ACE_Token_Invariant_Manager::get_rwlock (const ACE_TCHAR *token_name,
 
   return 0;
 }
+
 
 ACE_Token_Invariant_Manager::~ACE_Token_Invariant_Manager (void)
 {
@@ -265,9 +267,9 @@ ACE_Mutex_Invariants::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Mutex_Invariants::dump");
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("owners_ = %d\n"), owners_));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("owners_ = %d\n"), owners_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -340,10 +342,10 @@ ACE_RWLock_Invariants::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_RWLock_Invariants::dump");
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("writers_ = %d readers_ = %d\n"),
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("writers_ = %d readers_ = %d\n"),
               writers_, readers_));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

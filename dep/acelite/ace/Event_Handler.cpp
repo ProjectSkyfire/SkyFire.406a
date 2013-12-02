@@ -14,6 +14,8 @@
 
 #include <algorithm>
 
+
+
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
 // Implement conceptually abstract virtual functions in the base class
@@ -142,6 +144,7 @@ ACE_Event_Handler::resume_handler (void)
   // resuming the handler
   return ACE_Event_Handler::ACE_REACTOR_RESUMES_HANDLER;
 }
+
 
 int
 ACE_Event_Handler::handle_qos (ACE_HANDLE)

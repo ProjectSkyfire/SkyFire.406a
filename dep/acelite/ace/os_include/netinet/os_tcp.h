@@ -6,7 +6,7 @@
  *
  *  definitions for the Internet Transmission Control Protocol (TCP)
  *
- *  $Id: os_tcp.h 88499 2010-01-12 19:34:34Z olli $
+ *  $Id: os_tcp.h 97259 2013-08-09 08:14:31Z johnnyw $
  *
  *  @author Don Hinton <dhinton@dresystems.com>
  *  @author This code was originally in various places including ace/OS.h.
@@ -18,7 +18,7 @@
 
 #include /**/ "ace/pre.h"
 
-#include /**/ "ace/config-all.h"
+#include /**/ "ace/config-lite.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once

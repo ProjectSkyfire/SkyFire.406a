@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: config-linux.h 95533 2012-02-14 22:59:17Z wotte $
+// $Id: config-linux.h 97326 2013-09-11 07:52:09Z johnnyw $
 
 // The following configuration file is designed to work for Linux
 // platforms using GNU C++.
@@ -72,20 +72,21 @@
 
 #if defined (__powerpc__) || defined (__x86_64__)
 # if !defined (ACE_DEFAULT_BASE_ADDR)
-#   define ACE_DEFAULT_BASE_ADDR ((char *) 0x40000000)
+#   define ACE_DEFAULT_BASE_ADDR (reinterpret_cast< char* >(0x40000000))
 # endif /* ! ACE_DEFAULT_BASE_ADDR */
 #elif defined (__ia64)
 # if !defined (ACE_DEFAULT_BASE_ADDR)
 // Zero base address should work fine for Linux of IA-64: it just lets
 // the kernel to choose the right value.
-#   define ACE_DEFAULT_BASE_ADDR ((char *) 0x0000000000000000)
+#   define ACE_DEFAULT_BASE_ADDR (reinterpret_cast< char*>(0x0000000000000000))
 # endif /* ! ACE_DEFAULT_BASE_ADDR */
 #endif /* ! __powerpc__  && ! __ia64 */
 
 // Then glibc/libc5 specific parts
 
-#if defined(__GLIBC__)
-# if (__GLIBC__  < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 3)
+#if defined(__GLIBC__) || defined (__INTEL_COMPILER)
+# if !defined (__INTEL_COMPILER) && \
+     (__GLIBC__  < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 3)
 #   define ACE_HAS_RUSAGE_WHO_ENUM enum __rusage_who
 #   define ACE_HAS_RLIMIT_RESOURCE_ENUM enum __rlimit_resource
 #   define ACE_LACKS_ISCTYPE
@@ -202,7 +203,7 @@
 #define ACE_HAS_3_PARAM_READDIR_R
 
 #if !defined (ACE_DEFAULT_BASE_ADDR)
-#  define ACE_DEFAULT_BASE_ADDR ((char *) 0x80000000)
+#  define ACE_DEFAULT_BASE_ADDR (reinterpret_cast< char* >(0x80000000))
 #endif /* ! ACE_DEFAULT_BASE_ADDR */
 
 #define ACE_HAS_ALLOCA
@@ -323,6 +324,8 @@
 # define ACE_SIZEOF_LONG_DOUBLE 16
 #endif
 
+#define ACE_LACKS_PTHREAD_SCOPE_PROCESS
+
 #define ACE_LACKS_GETIPNODEBYADDR
 #define ACE_LACKS_GETIPNODEBYNAME
 
@@ -341,8 +344,11 @@
 // According to man pages Linux uses different (compared to UNIX systems) types
 // for setting IP_MULTICAST_TTL and IPV6_MULTICAST_LOOP / IP_MULTICAST_LOOP
 // in setsockopt/getsockopt.
+// In the current (circa 2012) kernel source however there is an explicit check
+// for IPV6_MULTICAST_LOOP being sizeof(int). Anything else is rejected so it must
+// not be a passed a bool, irrespective of what the man pages (still) say.
+// i.e. #define ACE_HAS_IPV6_MULTICAST_LOOP_AS_BOOL 1 is wrong
 #define ACE_HAS_IP_MULTICAST_TTL_AS_INT 1
-#define ACE_HAS_IPV6_MULTICAST_LOOP_AS_BOOL 1
 #define ACE_HAS_IP_MULTICAST_LOOP_AS_INT 1
 
 #if defined (ACE_LACKS_NETWORKING)
@@ -352,13 +358,14 @@
 # define ACE_HAS_GETIFADDRS
 #endif
 
+#if !defined (ACE_LACKS_LINUX_VERSION_H)
+# include <linux/version.h>
+#endif /* !ACE_LACKS_LINUX_VERSION_H */
+
 #if !defined (ACE_GETNAME_RETURNS_RANDOM_SIN_ZERO)
 // Detect if getsockname() and getpeername() returns random values in
 // the sockaddr_in::sin_zero field by evaluation of the kernel
 // version. Since version 2.5.47 this problem is fixed.
-#  if !defined (ACE_LACKS_LINUX_VERSION_H)
-#    include <linux/version.h>
-#  endif /* !ACE_LACKS_LINUX_VERSION_H */
 #  if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,47))
 #    define ACE_GETNAME_RETURNS_RANDOM_SIN_ZERO 0
 #  else
@@ -367,11 +374,26 @@
 #endif  /* ACE_GETNAME_RETURNS_RANDOM_SIN_ZERO */
 
 #if !defined (ACE_HAS_EVENT_POLL) && !defined (ACE_HAS_DEV_POLL)
+# if (LINUX_VERSION_CODE > KERNEL_VERSION (2,6,0))
+#  define ACE_HAS_EVENT_POLL
+# endif
+#endif
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,5,8))
+# define ACE_HAS_SCHED_GETAFFINITY 1
+# define ACE_HAS_SCHED_SETAFFINITY 1
+#endif
+
+// This is ghastly, but as long as there are platforms supported
+// which define the right POSIX macros but lack actual support
+// we have no choice.
+// RHEL4 fails (2.6.9) while RHEL5 works (2.6.18)
+#if !defined (ACE_LACKS_CONDATTR_SETCLOCK)
 # if !defined (ACE_LACKS_LINUX_VERSION_H)
 #  include <linux/version.h>
 # endif /* !ACE_LACKS_LINUX_VERSION_H */
-# if (LINUX_VERSION_CODE > KERNEL_VERSION (2,6,0))
-#  define ACE_HAS_EVENT_POLL
+# if (LINUX_VERSION_CODE < KERNEL_VERSION (2,6,18))
+#  define ACE_LACKS_CONDATTR_SETCLOCK
 # endif
 #endif
 

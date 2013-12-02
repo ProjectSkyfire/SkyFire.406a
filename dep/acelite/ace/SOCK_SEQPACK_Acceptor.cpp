@@ -1,9 +1,9 @@
-// $Id: SOCK_SEQPACK_Acceptor.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: SOCK_SEQPACK_Acceptor.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/SOCK_SEQPACK_Acceptor.h"
 
 #include "ace/Auto_Ptr.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/OS_Memory.h"
 #include "ace/OS_NS_string.h"
 #include "ace/OS_NS_sys_socket.h"
@@ -12,6 +12,8 @@
 #if !defined (__ACE_INLINE__)
 #include "ace/SOCK_SEQPACK_Acceptor.inl"
 #endif /* __ACE_INLINE__ */
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -468,7 +470,7 @@ ACE_SOCK_SEQPACK_Acceptor::ACE_SOCK_SEQPACK_Acceptor (const ACE_Addr &local_sap,
                   protocol_family,
                   backlog,
                   protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_SEQPACK_Acceptor")));
 }
@@ -561,7 +563,7 @@ ACE_SOCK_SEQPACK_Acceptor::ACE_SOCK_SEQPACK_Acceptor (const ACE_Addr &local_sap,
                   protocol_family,
                   backlog,
                   protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_SEQPACK_Acceptor")));
 }
@@ -580,7 +582,7 @@ ACE_SOCK_SEQPACK_Acceptor::ACE_SOCK_SEQPACK_Acceptor (const ACE_Multihomed_INET_
                   protocol_family,
                   backlog,
                   protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_SEQPACK_Acceptor")));
 }

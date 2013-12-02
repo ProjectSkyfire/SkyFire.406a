@@ -1,25 +1,12 @@
 // -*- C++ -*-
-//
-// $Id: Condition_Thread_Mutex.inl 92069 2010-09-28 11:38:59Z johnnyw $
+// $Id: Condition_Thread_Mutex.inl 96174 2012-10-03 08:25:59Z johnnyw $
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
-ACE_INLINE
-ACE_Condition_Attributes::ACE_Condition_Attributes (int type)
-{
-  (void) ACE_OS::condattr_init (this->attributes_, type);
-}
-
-ACE_INLINE
-ACE_Condition_Attributes::~ACE_Condition_Attributes (void)
-{
-  ACE_OS::condattr_destroy (this->attributes_);
-}
-
 ACE_INLINE int
-ACE_Condition_Thread_Mutex::remove (void)
+ACE_Condition<ACE_Thread_Mutex>::remove (void)
 {
-// ACE_TRACE ("ACE_Condition_Thread_Mutex::remove");
+// ACE_TRACE ("ACE_Condition<ACE_Thread_Mutex>::remove");
 
   // <cond_destroy> is called in a loop if the condition variable is
   // BUSY.  This avoids a condition where a condition is signaled and
@@ -44,9 +31,9 @@ ACE_Condition_Thread_Mutex::remove (void)
 }
 
 ACE_INLINE ACE_Thread_Mutex &
-ACE_Condition_Thread_Mutex::mutex (void)
+ACE_Condition<ACE_Thread_Mutex>::mutex (void)
 {
-// ACE_TRACE ("ACE_Condition_Thread_Mutex::mutex");
+// ACE_TRACE ("ACE_Condition<ACE_Thread_Mutex>::mutex");
   return this->mutex_;
 }
 

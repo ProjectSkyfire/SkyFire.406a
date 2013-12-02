@@ -4,7 +4,7 @@
 /**
  *  @file   Connection_Recycling_Strategy.h
  *
- *  $Id: Connection_Recycling_Strategy.h 80826 2008-03-04 14:51:23Z wotte $
+ *  $Id: Connection_Recycling_Strategy.h 97246 2013-08-07 07:10:20Z johnnyw $
  *
  *  @author Doug Schmidt
  */
@@ -29,6 +29,8 @@ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 class ACE_Export ACE_Connection_Recycling_Strategy
 {
 public:
+  ACE_Connection_Recycling_Strategy (void);
+
   /// Virtual Destructor
   virtual ~ACE_Connection_Recycling_Strategy (void);
 

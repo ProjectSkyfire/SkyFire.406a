@@ -1,4 +1,4 @@
-// $Id: POSIX_Proactor.cpp 92069 2010-09-28 11:38:59Z johnnyw $
+// $Id: POSIX_Proactor.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/POSIX_Proactor.h"
 
@@ -15,7 +15,7 @@
 #include "ace/ACE.h"
 #include "ace/Flag_Manip.h"
 #include "ace/Task_T.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Object_Manager.h"
 #include "ace/OS_NS_sys_socket.h"
 #include "ace/OS_NS_signal.h"
@@ -48,6 +48,7 @@ public:
 
   /// Destructor.
   virtual ~ACE_POSIX_Wakeup_Completion (void);
+
 
   /// This method calls the <handler>'s <handle_wakeup> method.
   virtual void complete (size_t bytes_transferred = 0,
@@ -179,6 +180,7 @@ ACE_POSIX_Proactor::create_asynch_read_stream_result
   return implementation;
 }
 
+
 ACE_Asynch_Write_Stream_Impl *
 ACE_POSIX_Proactor::create_asynch_write_stream (void)
 {
@@ -213,6 +215,7 @@ ACE_POSIX_Proactor::create_asynch_write_stream_result
                   0);
   return implementation;
 }
+
 
 ACE_Asynch_Read_File_Impl *
 ACE_POSIX_Proactor::create_asynch_read_file (void)
@@ -253,6 +256,7 @@ ACE_POSIX_Proactor::create_asynch_read_file_result
   return implementation;
 }
 
+
 ACE_Asynch_Write_File_Impl *
 ACE_POSIX_Proactor::create_asynch_write_file (void)
 {
@@ -291,6 +295,7 @@ ACE_POSIX_Proactor::create_asynch_write_file_result
                   0);
   return implementation;
 }
+
 
 ACE_Asynch_Read_Dgram_Impl *
 ACE_POSIX_Proactor::create_asynch_read_dgram (void)
@@ -332,6 +337,7 @@ ACE_POSIX_Proactor::create_asynch_read_dgram_result
   return implementation;
 }
 
+
 ACE_Asynch_Write_Dgram_Impl *
 ACE_POSIX_Proactor::create_asynch_write_dgram (void)
 {
@@ -371,6 +377,7 @@ ACE_POSIX_Proactor::create_asynch_write_dgram_result
   return implementation;
 }
 
+
 ACE_Asynch_Accept_Impl *
 ACE_POSIX_Proactor::create_asynch_accept (void)
 {
@@ -409,6 +416,7 @@ ACE_POSIX_Proactor::create_asynch_accept_result
   return implementation;
 }
 
+
 ACE_Asynch_Connect_Impl *
 ACE_POSIX_Proactor::create_asynch_connect (void)
 {
@@ -440,6 +448,7 @@ ACE_POSIX_Proactor::create_asynch_connect_result
                   0);
   return implementation;
 }
+
 
 ACE_Asynch_Transmit_File_Impl *
 ACE_POSIX_Proactor::create_asynch_transmit_file (void)
@@ -552,6 +561,7 @@ ACE_POSIX_Proactor::get_impl_type (void)
   return PROACTOR_POSIX;
 }
 
+
 /**
  * @class ACE_AIOCB_Notify_Pipe_Manager
  *
@@ -620,7 +630,11 @@ ACE_AIOCB_Notify_Pipe_Manager::ACE_AIOCB_Notify_Pipe_Manager (ACE_POSIX_AIOCB_Pr
     read_stream_ (posix_aiocb_proactor)
 {
   // Open the pipe.
-  this->pipe_.open ();
+  if (this->pipe_.open () == -1)
+    ACELIB_ERROR ((LM_ERROR,
+                ACE_TEXT("%N:%l:%p\n"),
+                ACE_TEXT("ACE_AIOCB_Notify_Pipe_Manager::ACE_AIOCB_Notify_Pipe_Manager:")
+                ACE_TEXT("Open of pipe failed")));
 
   // Set write side in NONBLOCK mode
   ACE::set_flags (this->pipe_.write_handle (), ACE_NONBLOCK);
@@ -637,7 +651,7 @@ ACE_AIOCB_Notify_Pipe_Manager::ACE_AIOCB_Notify_Pipe_Manager (ACE_POSIX_AIOCB_Pr
                                0, // Completion Key
                                0) // Proactor
       == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT("%N:%l:%p\n"),
                 ACE_TEXT("ACE_AIOCB_Notify_Pipe_Manager::ACE_AIOCB_Notify_Pipe_Manager:")
                 ACE_TEXT("Open on Read Stream failed")));
@@ -648,7 +662,7 @@ ACE_AIOCB_Notify_Pipe_Manager::ACE_AIOCB_Notify_Pipe_Manager (ACE_POSIX_AIOCB_Pr
                                0, // ACT
                                0) // Priority
       == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT("%N:%l:%p\n"),
                 ACE_TEXT("ACE_AIOCB_Notify_Pipe_Manager::ACE_AIOCB_Notify_Pipe_Manager:")
                 ACE_TEXT("Read from pipe failed")));
@@ -676,7 +690,9 @@ ACE_AIOCB_Notify_Pipe_Manager::~ACE_AIOCB_Notify_Pipe_Manager (void)
   h = this->pipe_.read_handle ();
   if ( h != ACE_INVALID_HANDLE)
      ACE_OS::closesocket (h);
+
 }
+
 
 int
 ACE_AIOCB_Notify_Pipe_Manager::notify ()
@@ -691,7 +707,7 @@ ACE_AIOCB_Notify_Pipe_Manager::notify ()
     {
       if (errno != EWOULDBLOCK)
 #if 0
-        ACE_ERROR ((LM_ERROR,
+        ACELIB_ERROR ((LM_ERROR,
                     ACE_TEXT ("(%P %t):%p\n"),
                     ACE_TEXT ("ACE_AIOCB_Notify_Pipe_Manager::notify")
                     ACE_TEXT ("Error:Writing on to notify pipe failed")));
@@ -719,10 +735,11 @@ ACE_AIOCB_Notify_Pipe_Manager::handle_read_stream
                                      1,   // enough to read 1 byte
                                      0,   // ACT
                                      0))  // Priority
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%N:%l:(%P | %t):%p\n"),
                 ACE_TEXT ("ACE_AIOCB_Notify_Pipe_Manager::handle_read_stream:")
                 ACE_TEXT ("Read from pipe failed")));
+
 
   // 2. Do the upcalls
   // this->posix_aiocb_proactor_->process_result_queue ();
@@ -749,6 +766,7 @@ ACE_POSIX_AIOCB_Proactor::ACE_POSIX_AIOCB_Proactor (size_t max_aio_operations)
   // start pseudo-asynchronous accept task
   // one per all future acceptors
   this->get_asynch_pseudo_task().start ();
+
 }
 
 // Special protected constructor for ACE_SUN_Proactor
@@ -783,6 +801,7 @@ ACE_POSIX_AIOCB_Proactor::get_impl_type (void)
 {
   return PROACTOR_AIOCB;
 }
+
 
 int
 ACE_POSIX_AIOCB_Proactor::close (void)
@@ -862,7 +881,8 @@ int ACE_POSIX_AIOCB_Proactor::delete_result_aiocb_list (void)
           char * op = (aiocb_list_[ai]->aio_lio_opcode == LIO_WRITE )?
             "WRITE":"READ" ;
 
-          ACE_ERROR ((LM_ERROR,
+
+          ACELIB_ERROR ((LM_ERROR,
                       ACE_TEXT("slot=%d op=%s status=%d xfercnt=%d %s\n"),
                       ai,
                       op,
@@ -884,7 +904,7 @@ int ACE_POSIX_AIOCB_Proactor::delete_result_aiocb_list (void)
   // and complain about POSIX implementation.
   // We know that we have memory leaks, but it is better than
   // segmentation fault!
-  ACE_DEBUG
+  ACELIB_DEBUG
     ((LM_DEBUG,
       ACE_TEXT("ACE_POSIX_AIOCB_Proactor::delete_result_aiocb_list\n")
       ACE_TEXT(" number pending AIO=%d\n"),
@@ -946,13 +966,13 @@ void ACE_POSIX_AIOCB_Proactor::check_max_aio_num ()
       && aiocb_list_max_size_ > (unsigned long) max_num_files)
     aiocb_list_max_size_ = (unsigned long) max_num_files;
 
-  ACE_DEBUG ((LM_DEBUG,
+  ACELIB_DEBUG ((LM_DEBUG,
              "(%P | %t) ACE_POSIX_AIOCB_Proactor::Max Number of AIOs=%d\n",
               aiocb_list_max_size_));
 
 #if defined(__sgi)
 
-   ACE_DEBUG((LM_DEBUG,
+   ACELIB_DEBUG((LM_DEBUG,
               ACE_TEXT( "SGI IRIX specific: aio_init!\n")));
 
 //typedef struct aioinit {
@@ -1051,7 +1071,7 @@ ACE_POSIX_AIOCB_Proactor::putq_result (ACE_POSIX_Asynch_Result *result)
   int ret_val = this->result_queue_.enqueue_tail (result);
 
   if (ret_val == -1)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                        "%N:%l:ACE_POSIX_AIOCB_Proactor::putq_result failed\n"),
                       -1);
 
@@ -1064,6 +1084,7 @@ ACE_POSIX_Asynch_Result * ACE_POSIX_AIOCB_Proactor::getq_result (void)
 {
   ACE_MT (ACE_GUARD_RETURN (ACE_SYNCH_MUTEX, ace_mon, this->mutex_, 0));
 
+
   ACE_POSIX_Asynch_Result* result = 0;
 
   if (this->result_queue_.dequeue_head (result) != 0)
@@ -1071,7 +1092,7 @@ ACE_POSIX_Asynch_Result * ACE_POSIX_AIOCB_Proactor::getq_result (void)
 
 //  don't waste time if queue is empty - it is normal
 //  or check queue size before dequeue_head
-//    ACE_ERROR_RETURN ((LM_ERROR,
+//    ACELIB_ERROR_RETURN ((LM_ERROR,
 //                       ACE_TEXT("%N:%l:(%P | %t):%p\n"),
 //                       ACE_TEXT("ACE_POSIX_AIOCB_Proactor::getq_result failed")),
 //                      0);
@@ -1139,7 +1160,7 @@ ACE_POSIX_AIOCB_Proactor::handle_events_i (u_long milli_seconds)
     {
       if (errno != EAGAIN &&   // Timeout
           errno != EINTR )    // Interrupted call
-          ACE_ERROR ((LM_ERROR,
+          ACELIB_ERROR ((LM_ERROR,
                       ACE_TEXT ("%N:%l:(%P|%t)::%p\n"),
                       ACE_TEXT ("handle_events: aio_suspend failed")));
       // let continue work
@@ -1227,6 +1248,7 @@ ACE_POSIX_AIOCB_Proactor::find_completed_aio (int &error_status,
                                         error_status,
                                         transfer_count))  // completed
         break;
+
     } // end for
 
   if (count == 0) // all processed , nothing found
@@ -1247,6 +1269,7 @@ ACE_POSIX_AIOCB_Proactor::find_completed_aio (int &error_status,
 
   return asynch_result;
 }
+
 
 int
 ACE_POSIX_AIOCB_Proactor::start_aio (ACE_POSIX_Asynch_Result *result,
@@ -1273,7 +1296,7 @@ ACE_POSIX_AIOCB_Proactor::start_aio (ACE_POSIX_Asynch_Result *result,
       break;
 
     default:
-      ACE_ERROR_RETURN ((LM_ERROR,
+      ACELIB_ERROR_RETURN ((LM_ERROR,
                          ACE_TEXT ("%N:%l:(%P|%t)::")
                          ACE_TEXT ("start_aio: Invalid op code %d\n"),
                          op),
@@ -1331,7 +1354,7 @@ ACE_POSIX_AIOCB_Proactor::allocate_aio_slot (ACE_POSIX_Asynch_Result *result)
       if (result_list_[i] != 0)           // only 1 request
         {                                   // is allowed
           errno   = EAGAIN;
-          ACE_ERROR_RETURN ((LM_ERROR,
+          ACELIB_ERROR_RETURN ((LM_ERROR,
                      "%N:%l:(%P | %t)::\n"
                      "ACE_POSIX_AIOCB_Proactor::allocate_aio_slot:"
                      "internal Proactor error 0\n"),
@@ -1346,7 +1369,7 @@ ACE_POSIX_AIOCB_Proactor::allocate_aio_slot (ACE_POSIX_Asynch_Result *result)
     }
 
   if (i >= this->aiocb_list_max_size_)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
               "%N:%l:(%P | %t)::\n"
               "ACE_POSIX_AIOCB_Proactor::allocate_aio_slot:"
               "internal Proactor error 1\n"),
@@ -1400,7 +1423,7 @@ ACE_POSIX_AIOCB_Proactor::start_aio_i (ACE_POSIX_Asynch_Result *result)
       if (errno == EAGAIN || errno == ENOMEM)  //Ok, it will be deferred AIO
         ret_val = 1;
       else
-        ACE_ERROR ((LM_ERROR,
+        ACELIB_ERROR ((LM_ERROR,
                     ACE_TEXT ("%N:%l:(%P | %t)::start_aio_i: aio_%s %p\n"),
                     ptype,
                     ACE_TEXT ("queueing failed")));
@@ -1408,6 +1431,7 @@ ACE_POSIX_AIOCB_Proactor::start_aio_i (ACE_POSIX_Asynch_Result *result)
 
   return ret_val;
 }
+
 
 int
 ACE_POSIX_AIOCB_Proactor::start_deferred_aio ()
@@ -1433,7 +1457,7 @@ ACE_POSIX_AIOCB_Proactor::start_deferred_aio ()
       break;
 
   if (i >= this->aiocb_list_max_size_)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                  "%N:%l:(%P | %t)::\n"
                  "start_deferred_aio:"
                  "internal Proactor error 3\n"),
@@ -1531,6 +1555,7 @@ ACE_POSIX_AIOCB_Proactor::cancel_aio (ACE_HANDLE handle)
               num_cancelled++;     //it is OS responsiblity
           }
       }
+
   } // release mutex_
 
   if (num_total == 0)
@@ -1558,6 +1583,7 @@ ACE_POSIX_AIOCB_Proactor::cancel_aiocb (ACE_POSIX_Asynch_Result * result)
     return 2;
 }
 
+
 // *********************************************************************
 
 #if defined(ACE_HAS_POSIX_REALTIME_SIGNALS)
@@ -1575,7 +1601,7 @@ ACE_POSIX_SIG_Proactor::ACE_POSIX_SIG_Proactor (size_t max_aio_operations)
 
   // Add the signal number to the signal set.
   if (ACE_OS::sigaddset (&this->RT_completion_signals_, ACE_SIGRTMIN) == -1)
-    ACE_ERROR ((LM_ERROR, ACE_TEXT ("ACE_POSIX_SIG_Proactor: %p\n"),
+    ACELIB_ERROR ((LM_ERROR, ACE_TEXT ("ACE_POSIX_SIG_Proactor: %p\n"),
                 ACE_TEXT ("sigaddset")));
   this->block_signals ();
   // Set up the signal action for SIGRTMIN.
@@ -1601,7 +1627,7 @@ ACE_POSIX_SIG_Proactor::ACE_POSIX_SIG_Proactor (const sigset_t signal_set,
 
   // Empty the signal set first.
   if (sigemptyset (&this->RT_completion_signals_) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT("Error:(%P | %t):%p\n"),
                 ACE_TEXT("sigemptyset failed")));
 
@@ -1614,7 +1640,7 @@ ACE_POSIX_SIG_Proactor::ACE_POSIX_SIG_Proactor (const sigset_t signal_set,
       member = sigismember (&signal_set,
                             si);
       if (member == -1)
-        ACE_ERROR ((LM_ERROR,
+        ACELIB_ERROR ((LM_ERROR,
                     ACE_TEXT("%N:%l:(%P | %t)::%p\n"),
                     ACE_TEXT("ACE_POSIX_SIG_Proactor::ACE_POSIX_SIG_Proactor:")
                     ACE_TEXT("sigismember failed")));
@@ -1669,7 +1695,7 @@ ACE_POSIX_SIG_Proactor::notify_completion (int sig_num)
   // Get this process id.
   pid_t const pid = ACE_OS::getpid ();
   if (pid == (pid_t) -1)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT("Error:%N:%l(%P | %t):%p"),
                        ACE_TEXT("<getpid> failed")),
                       -1);
@@ -1687,7 +1713,7 @@ ACE_POSIX_SIG_Proactor::notify_completion (int sig_num)
     return 0;
 
   if (errno != EAGAIN)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT("Error:%N:%l:(%P | %t):%p\n"),
                        ACE_TEXT("<sigqueue> failed")),
                       -1);
@@ -1716,7 +1742,7 @@ ACE_POSIX_SIG_Proactor::create_asynch_timer
           is_member = sigismember (&this->RT_completion_signals_,
                                    si);
           if (is_member == -1)
-            ACE_ERROR_RETURN ((LM_ERROR,
+            ACELIB_ERROR_RETURN ((LM_ERROR,
                                "%N:%l:(%P | %t)::%s\n",
                                "ACE_POSIX_SIG_Proactor::create_asynch_timer:"
                                "sigismember failed"),
@@ -1724,7 +1750,7 @@ ACE_POSIX_SIG_Proactor::create_asynch_timer
         }
 
       if (is_member == 0)
-        ACE_ERROR_RETURN ((LM_ERROR,
+        ACELIB_ERROR_RETURN ((LM_ERROR,
                            "Error:%N:%l:(%P | %t)::%s\n",
                            "ACE_POSIX_SIG_Proactor::ACE_POSIX_SIG_Proactor:"
                            "Signal mask set empty"),
@@ -1751,7 +1777,7 @@ static void
 sig_handler (int sig_num, siginfo_t *, ucontext_t *)
 {
   // Should never be called
-  ACE_DEBUG ((LM_DEBUG,
+  ACELIB_DEBUG ((LM_DEBUG,
               "%N:%l:(%P | %t)::sig_handler received signal: %d\n",
                sig_num));
 }
@@ -1779,7 +1805,7 @@ ACE_POSIX_SIG_Proactor::setup_signal_handler (int signal_number) const
                                             &reaction,
                                             0);
   if (sigaction_return == -1)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT("Error:%p\n"),
                        ACE_TEXT("Proactor couldnt do sigaction for the RT SIGNAL")),
                       -1);
@@ -1788,6 +1814,7 @@ ACE_POSIX_SIG_Proactor::setup_signal_handler (int signal_number) const
 #endif
   return 0;
 }
+
 
 int
 ACE_POSIX_SIG_Proactor::block_signals (void) const
@@ -1806,7 +1833,7 @@ ACE_POSIX_SIG_Proactor::allocate_aio_slot (ACE_POSIX_Asynch_Result *result)
       break;
 
   if (i >= this->aiocb_list_max_size_)
-    ACE_ERROR_RETURN ((LM_ERROR,
+    ACELIB_ERROR_RETURN ((LM_ERROR,
               "%N:%l:(%P | %t)::\n"
               "ACE_POSIX_SIG_Proactor::allocate_aio_slot "
               "internal Proactor error 1\n"),
@@ -1895,7 +1922,7 @@ ACE_POSIX_SIG_Proactor::handle_events_i (const ACE_Time_Value *timeout)
       // may some other third-party libraries could send it
       // or message queue could also generate it !
       // So print the message and check our completions
-      ACE_ERROR ((LM_DEBUG,
+      ACELIB_ERROR ((LM_DEBUG,
                   ACE_TEXT ("%N:%l:(%P | %t): ")
                   ACE_TEXT ("ACE_POSIX_SIG_Proactor::handle_events: ")
                   ACE_TEXT ("Unexpected signal code (%d) returned ")
@@ -1932,7 +1959,7 @@ ACE_POSIX_SIG_Proactor::handle_events_i (const ACE_Time_Value *timeout)
   // Uncomment this  if you want to test
   // and research the behavior of you system
 #if 0
-  ACE_DEBUG ((LM_DEBUG,
+  ACELIB_DEBUG ((LM_DEBUG,
               "(%t) NumAIO=%d NumQueue=%d\n",
               ret_aio, ret_que));
 #endif
@@ -1968,6 +1995,7 @@ ACE_POSIX_Asynch_Timer::complete (size_t       /* bytes_transferred */,
     handler->handle_time_out (this->time_, this->act ());
 }
 
+
 // *********************************************************************
 
 ACE_POSIX_Wakeup_Completion::ACE_POSIX_Wakeup_Completion
@@ -1997,6 +2025,7 @@ ACE_POSIX_Wakeup_Completion::complete (size_t       /* bytes_transferred */,
                                        const void * /* completion_key */,
                                        u_long       /*  error */)
 {
+
   ACE_Handler *handler = this->handler_proxy_.get ()->handler ();
   if (handler != 0)
     handler->handle_wakeup ();

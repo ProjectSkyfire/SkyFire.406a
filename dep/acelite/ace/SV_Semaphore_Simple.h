@@ -4,7 +4,7 @@
 /**
  *  @file    SV_Semaphore_Simple.h
  *
- *  $Id: SV_Semaphore_Simple.h 86494 2009-08-13 19:09:03Z johnnyw $
+ *  $Id: SV_Semaphore_Simple.h 97314 2013-09-03 13:11:59Z johnnyw $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -110,7 +110,7 @@ public:
    * call is intended to be called from a server, for example, when it
    * is being shut down, as we do an IPC_RMID on the ACE_SV_Semaphore,
    * regardless of whether other processes may be using it or not.
-   * Most other processes should use <close> below.
+   * Most other processes should use close() below.
    */
   int remove (void) const;
 

@@ -1,4 +1,4 @@
-// $Id: Monitor_Admin.cpp 81753 2008-05-21 19:02:47Z parsons $
+// $Id: Monitor_Admin.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Monitor_Admin.h"
 
@@ -58,7 +58,7 @@ namespace ACE
 
       if (!good_reg_add)
         {
-          ACE_ERROR_RETURN ((LM_ERROR,
+          ACELIB_ERROR_RETURN ((LM_ERROR,
                              "registration of %s failed\n",
                              monitor_point->name ()),
                              good_reg_add);

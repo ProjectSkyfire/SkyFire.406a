@@ -1,11 +1,11 @@
-// $Id: Log_Msg_UNIX_Syslog.cpp 92791 2010-12-04 16:25:22Z shuston $
+// $Id: Log_Msg_UNIX_Syslog.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/config-all.h"
 
 #if !defined (ACE_LACKS_UNIX_SYSLOG)
 
 #include "ace/ACE.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Log_Msg_UNIX_Syslog.h"
 #include "ace/Log_Record.h"
 #include "ace/OS_NS_string.h"

@@ -1,5 +1,5 @@
 /* -*- C++ -*- */
-// $Id: config-hpux-11.00.h 93530 2011-03-11 12:12:40Z olli $
+// $Id: config-hpux-11.00.h 97326 2013-09-11 07:52:09Z johnnyw $
 
 // The following configuration file is designed to work for HP
 // platforms running HP-UX 11.00 using aC++ or gcc (2.95 and up).
@@ -164,6 +164,11 @@
 #define ACE_HAS_CLOCK_GETTIME
 #define ACE_HAS_CLOCK_SETTIME
 
+#define ACE_LACKS_CLOCK_MONOTONIC
+#define ACE_LACKS_MONOTONIC_TIME
+
+#define ACE_LACKS_PTHREAD_SCOPE_PROCESS
+
 // Prototypes for both signal() and struct sigaction are consistent.
 #define ACE_HAS_CONSISTENT_SIGNAL_PROTOTYPES
 
@@ -228,10 +233,9 @@
 
 // HP-UX 11 has reentrant netdb functions.  The catch is that the old
 // functions (gethostbyname, etc.) are thread-safe and the _r versions are
-// not used and will be removed at some point.  So, define things so
-// the _r versions are not used.  This will slow things down a bit due to
-// the extra mutex lock in the ACE_NETDBCALL_RETURN macro, and will be fixed
-// in the future (problem ID P64).
+// obsolescent.  So, define things so the _r versions are not used.
+// OS_NS_netdb.inl ensures no funny lock games are played in the
+// ACE_NETDBCALL_RETURN macro.
 #define ACE_LACKS_NETDB_REENTRANT_FUNCTIONS
 
 /* Platform lacks pri_t (e.g., Tandem NonStop UNIX). */
@@ -418,6 +422,7 @@
 #  define ACE_HAS_RECURSIVE_MUTEXES
 #  define ACE_HAS_THREAD_SPECIFIC_STORAGE
 #  define ACE_LACKS_PTHREAD_ATTR_SETSTACK
+#  define ACE_LACKS_CONDATTR_SETCLOCK
 #endif /* ACE_HAS_THREADS */
 
 #define ACE_HAS_POSIX_SEM

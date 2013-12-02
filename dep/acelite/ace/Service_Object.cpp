@@ -1,4 +1,4 @@
-// $Id: Service_Object.cpp 93539 2011-03-13 09:40:44Z vzykov $
+// $Id: Service_Object.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/config-all.h"
 
@@ -12,7 +12,7 @@
 #include "ace/Service_Types.h"
 #include "ace/DLL.h"
 #include "ace/ACE.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #if defined (ACE_OPENVMS)
 # include "ace/Lib_Find.h"
 #endif
@@ -29,6 +29,7 @@ ACE_Service_Type::dump (void) const
   ACE_TRACE ("ACE_Service_Type::dump");
 #endif /* ACE_HAS_DUMP */
 
+
   // Using printf, since the log facility may not have been
   // initialized yet. Using a "//" prefix, in case the executable
   // happens to be a code generator and the output gets embedded in
@@ -40,6 +41,7 @@ ACE_Service_Type::dump (void) const
                   static_cast<void const *> (this->type_),
                   (this->type_ != 0) ? this->type_->object () : 0,
                   this->active_);
+
 }
 
 ACE_Service_Type::ACE_Service_Type (const ACE_TCHAR *n,
@@ -82,7 +84,7 @@ int
 ACE_Service_Type::fini (void)
 {
   if (ACE::debug ())
-    ACE_DEBUG ((LM_DEBUG,
+    ACELIB_DEBUG ((LM_DEBUG,
                 ACE_TEXT ("ACE (%P|%t) ST::fini - destroying name=%s, dll=%s\n"),
                 this->name_,
                 this->dll_.dll_name_));

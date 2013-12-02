@@ -1,5 +1,5 @@
 //* -*- C++ -*- */
-// $Id: config-vxworks6.9.h 95543 2012-02-21 14:52:48Z mitza $
+// $Id: config-vxworks6.9.h 97138 2013-05-16 17:55:36Z mitza $
 
 // The following configuration file is designed to work for VxWorks
 // 6.9 platforms using one of these compilers:
@@ -14,6 +14,8 @@
 # define ACE_VXWORKS 0x690
 #endif /* ! ACE_VXWORKS */
 
+#define ACE_HAS_SSIZE_T
+
 #include "ace/config-vxworks6.8.h"
 
 #ifndef ACE_HAS_2_PARAM_ASCTIME_R_AND_CTIME_R
@@ -21,13 +23,12 @@
 # define ACE_HAS_2_PARAM_ASCTIME_R_AND_CTIME_R 1
 #endif
 
-#ifndef ACE_LACKS_RAND_R
-# define ACE_LACKS_RAND_R 1
-#endif
-
 #if defined(__RTP__)
 // bzero is in strings.h
 # define ACE_HAS_STRINGS 1
+# if defined ACE_HAS_PTHREADS
+#  define ACE_HAS_RECURSIVE_THR_EXIT_SEMANTICS
+# endif
 #endif
 
 #include /**/ "ace/post.h"

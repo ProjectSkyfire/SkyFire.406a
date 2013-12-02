@@ -4,7 +4,7 @@
 /**
  *  @file    FILE_Connector.h
  *
- *  $Id: FILE_Connector.h 82723 2008-09-16 09:35:44Z johnnyw $
+ *  $Id: FILE_Connector.h 96985 2013-04-11 15:50:32Z huangh $
  *
  *  @author Doug Schmidt <schmidt@cs.wustl.edu>
  */
@@ -15,7 +15,7 @@
 #include /**/ "ace/pre.h"
 
 #include "ace/FILE_IO.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/os_include/os_fcntl.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)

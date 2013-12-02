@@ -4,7 +4,7 @@
 /**
  *  @file    Log_Msg.h
  *
- *  $Id: Log_Msg.h 95128 2011-11-27 21:22:15Z johnnyw $
+ *  $Id: Log_Msg.h 96984 2013-04-11 15:22:24Z huangh $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -143,6 +143,7 @@ class ACE_Log_Msg_Backend;
 // Forward declaration
 class ACE_Thread_Descriptor;
 class ACE_Log_Record;
+class ACE_Log_Category_TSS;
 template<typename M, typename T> class ACE_Atomic_Op;
 
 /**
@@ -539,7 +540,8 @@ public:
    */
   ssize_t log (const ACE_TCHAR *format,
                ACE_Log_Priority priority,
-               va_list argp);
+               va_list argp,
+               ACE_Log_Category_TSS* category=0);
 
   /// Log a custom built log record to the currently enabled logging
   /// sinks.
@@ -554,7 +556,8 @@ public:
   int log_hexdump (ACE_Log_Priority log_priority,
                    const char *buffer,
                    size_t size,
-                   const ACE_TCHAR *text = 0);
+                   const ACE_TCHAR *text = 0,
+                   ACE_Log_Category_TSS* category=0);
 
   /**
    * Init hook, create a Log_Msg_Attribute object, initialize its
@@ -742,6 +745,7 @@ void
 ACE_TSS_CLEANUP_NAME (void *ptr);
 # endif /* ACE_HAS_THREAD_SPECIFIC_STORAGE || ACE_HAS_TSS_EMULATION */
 #endif /* ACE_MT_SAFE */
+
 
 #if defined (__ACE_INLINE__)
 #include "ace/Log_Msg.inl"

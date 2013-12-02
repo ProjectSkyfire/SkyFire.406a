@@ -1,7 +1,7 @@
-// $Id: SV_Semaphore_Simple.cpp 91287 2010-08-05 10:30:49Z johnnyw $
+// $Id: SV_Semaphore_Simple.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/SV_Semaphore_Simple.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/ACE.h"
 #include "ace/os_include/sys/os_sem.h"
 
@@ -112,7 +112,7 @@ ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple (key_t k,
 {
   ACE_TRACE ("ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple");
   if (this->open (k, flags, initial_value, n, perms) == -1)
-    ACE_ERROR ((LM_ERROR,  ACE_TEXT ("%p\n"),  ACE_TEXT ("ACE_SV_Semaphore::ACE_SV_Semaphore")));
+    ACELIB_ERROR ((LM_ERROR,  ACE_TEXT ("%p\n"),  ACE_TEXT ("ACE_SV_Semaphore::ACE_SV_Semaphore")));
 }
 
 // Convert name to key.  This function is used internally to create keys
@@ -141,7 +141,7 @@ ACE_SV_Semaphore_Simple::name_2_key (const char *name)
 #  pragma warning(push)
 #  pragma warning(disable : 4312)
 #endif /* defined (ACE_WIN32) && defined (_MSC_VER) */
-  return (key_t) ACE::crc32 (name);
+  return (key_t)(intptr_t)ACE::crc32 (name);
 #if defined (ACE_WIN32) && defined (_MSC_VER)
 #  pragma warning(pop)
 #endif /* defined (ACE_WIN32) && defined (_MSC_VER) */
@@ -181,7 +181,7 @@ ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple (const char *name,
                   initial_value,
                   n,
                   perms) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple")));
 }
@@ -199,7 +199,7 @@ ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple (const wchar_t *name,
                   initial_value,
                   nsems,
                   perms) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple")));
 }
@@ -211,7 +211,8 @@ ACE_SV_Semaphore_Simple::~ACE_SV_Semaphore_Simple (void)
   this->close ();
 }
 
-ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple (void)
+ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple (void) :
+  sem_number_ (0)
 {
   ACE_TRACE ("ACE_SV_Semaphore_Simple::ACE_SV_Semaphore_Simple");
   this->init ();

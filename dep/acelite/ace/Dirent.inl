@@ -1,8 +1,8 @@
 // -*- C++ -*-
 //
-// $Id: Dirent.inl 80826 2008-03-04 14:51:23Z wotte $
+// $Id: Dirent.inl 96985 2013-04-11 15:50:32Z huangh $
 
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -37,7 +37,7 @@ ACE_Dirent::ACE_Dirent (const ACE_TCHAR *dirname)
   : dirp_ (0)
 {
   if (this->open (dirname) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_Dirent::ACE_Dirent")));
 }

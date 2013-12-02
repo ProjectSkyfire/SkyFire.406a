@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: OS_NS_sys_stat.inl 84373 2009-02-10 18:21:50Z johnnyw $
+// $Id: OS_NS_sys_stat.inl 96943 2013-03-30 09:42:31Z mcorino $
 
 #include "ace/OS_NS_unistd.h"
 #include "ace/OS_NS_fcntl.h"
@@ -262,7 +262,7 @@ namespace ACE_OS
     return 0;
 #elif defined (__BORLANDC__) \
       || defined (_MSC_VER) \
-      || defined (__MINGW32__)
+      || (defined (__MINGW32__) && !defined (__MINGW64_VERSION_MAJOR))
     ACE_OSCALL_RETURN (ACE_WSTAT_FUNC_NAME (file, stp), int, -1);
 #else /* ACE_HAS_WINCE */
     ACE_Wide_To_Ascii nfile (file);

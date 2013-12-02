@@ -1,8 +1,8 @@
-// $Id: DLL.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: DLL.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/DLL.h"
 
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/ACE.h"
 #include "ace/DLL_Manager.h"
 #include "ace/OS_NS_string.h"
@@ -10,6 +10,8 @@
 #include "ace/OS_NS_Thread.h"
 
 #include <algorithm>
+
+
 
   ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -41,7 +43,7 @@ ACE_DLL::ACE_DLL (const ACE_DLL &rhs)
                      rhs.open_mode_,
                      rhs.close_handle_on_destruction_) != 0
       && ACE::debug ())
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
     ACE_TEXT ("ACE_DLL::copy_ctor: error: %s\n"),
     this->error ()));
 }
@@ -65,6 +67,7 @@ ACE_DLL::operator= (const ACE_DLL &rhs)
   return *this;
 }
 
+
 // If the library name and the opening mode are specified than on
 // object creation the library is implicitly opened.
 
@@ -81,7 +84,7 @@ ACE_DLL::ACE_DLL (const ACE_TCHAR *dll_name,
 
   if (this->open (dll_name, this->open_mode_, close_handle_on_destruction) != 0
       && ACE::debug ())
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("ACE_DLL::open: error calling open: %s\n"),
                 this->error ()));
 }
@@ -137,7 +140,7 @@ ACE_DLL::open_i (const ACE_TCHAR *dll_filename,
   if (!dll_filename)
     {
       if (ACE::debug ())
-        ACE_ERROR ((LM_ERROR,
+        ACELIB_ERROR ((LM_ERROR,
                     ACE_TEXT ("ACE_DLL::open_i: dll_name is %s\n"),
                     this->dll_name_ == 0 ? ACE_TEXT ("(null)")
         : this->dll_name_));
@@ -232,7 +235,7 @@ ACE_DLL::error (void) const
 // means the user temporarily wants to take the handle.
 
 ACE_SHLIB_HANDLE
-ACE_DLL::get_handle (int become_owner) const
+ACE_DLL::get_handle (bool become_owner) const
 {
   ACE_TRACE ("ACE_DLL::get_handle");
 

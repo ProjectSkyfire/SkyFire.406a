@@ -1,15 +1,17 @@
-// $Id: SOCK_SEQPACK_Association.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: SOCK_SEQPACK_Association.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/SOCK_SEQPACK_Association.h"
 
 #include "ace/Auto_Ptr.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/OS_Memory.h"
 #include "ace/OS_NS_string.h"
 
 #if !defined (__ACE_INLINE__)
 #include "ace/SOCK_SEQPACK_Association.inl"
 #endif /* __ACE_INLINE__ */
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -203,6 +205,7 @@ ACE_SOCK_SEQPACK_Association::get_local_addrs (ACE_INET_Addr *addrs, size_t &siz
 #endif /* ACE_HAS_LKSCTP */
   return 0;
 }
+
 
 int
 ACE_SOCK_SEQPACK_Association::get_remote_addrs (ACE_INET_Addr *addrs, size_t &size) const

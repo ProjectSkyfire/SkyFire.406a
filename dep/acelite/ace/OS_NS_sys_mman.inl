@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: OS_NS_sys_mman.inl 92464 2010-11-01 14:58:30Z mitza $
+// $Id: OS_NS_sys_mman.inl 97286 2013-08-12 18:11:28Z johnnyw $
 
 #include "ace/OS_NS_fcntl.h"
 #include "ace/OS_NS_unistd.h"
@@ -106,7 +106,7 @@ ACE_OS::mmap (void *addr,
       const DWORD len_low = static_cast<DWORD>(len),
         len_high = static_cast<DWORD>(len >> 32);
 #  else
-      const DWORD len_low = len, len_high = 0;
+      const DWORD len_low = static_cast<DWORD>(len), len_high = 0;
 #  endif
 
       *file_mapping = ACE_TEXT_CreateFileMapping (file_handle,

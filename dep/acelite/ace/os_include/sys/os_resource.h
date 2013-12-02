@@ -6,7 +6,7 @@
  *
  *  definitions for XSI resource operations
  *
- *  $Id: os_resource.h 93895 2011-04-14 07:59:18Z olli $
+ *  $Id: os_resource.h 97262 2013-08-09 08:32:10Z johnnyw $
  *
  *  @author Don Hinton <dhinton@dresystems.com>
  *  @author This code was originally in various places including ace/OS.h.
@@ -18,7 +18,7 @@
 
 #include /**/ "ace/pre.h"
 
-#include "ace/config-lite.h"
+#include /**/ "ace/config-lite.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once

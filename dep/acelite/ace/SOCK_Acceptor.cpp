@@ -1,8 +1,8 @@
-// $Id: SOCK_Acceptor.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: SOCK_Acceptor.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/SOCK_Acceptor.h"
 
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/OS_Errno.h"
 #include "ace/OS_NS_string.h"
 #include "ace/OS_NS_sys_socket.h"
@@ -15,6 +15,8 @@
 #if !defined (ACE_HAS_WINCE)
 #include "ace/OS_QoS.h"
 #endif  // ACE_HAS_WINCE
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -338,7 +340,7 @@ ACE_SOCK_Acceptor::ACE_SOCK_Acceptor (const ACE_Addr &local_sap,
                   protocol_family,
                   backlog,
                   protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_Acceptor")));
 }
@@ -390,7 +392,7 @@ ACE_SOCK_Acceptor::ACE_SOCK_Acceptor (const ACE_Addr &local_sap,
                   protocol_family,
                   backlog,
                   protocol) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_Acceptor")));
 }
