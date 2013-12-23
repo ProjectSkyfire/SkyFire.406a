@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: ATM_Acceptor.inl 80826 2008-03-04 14:51:23Z wotte $
+// $Id: ATM_Acceptor.inl 96985 2013-04-11 15:50:32Z huangh $
 
 // Open versioned namespace, if enabled by the user.
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -23,7 +23,7 @@ ACE_ATM_Acceptor::ACE_ATM_Acceptor (const ACE_Addr &remote_sap,
   //FUZZ: disable check_for_lack_ACE_OS
   if (open (remote_sap, backlog, params) < 0)
   //FUZZ: enable check_for_lack_ACE_OS
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_ATM_Acceptor::ACE_ATM_Acceptor")));
 }

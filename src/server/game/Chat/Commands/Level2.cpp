@@ -329,7 +329,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     uint32 security             = 0;
     std::string last_login      = GetSkyFireString(LANGUAGE_ERROR);
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_PINFO);
     stmt->setInt32(0, int32(realmID));
     stmt->setUInt32(1, accId);
     PreparedQueryResult result = LoginDatabase.Query(stmt);
@@ -364,7 +364,7 @@ bool ChatHandler::HandlePInfoCommand(const char* args)
     std::string bannedby = "unknown";
     std::string banreason = "";
 
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_PINFO_BANS);
+    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_PINFO_BANS);
     stmt->setUInt32(0, accId);
     PreparedQueryResult result2 = LoginDatabase.Query(stmt);
     if (!result2)

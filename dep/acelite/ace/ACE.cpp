@@ -1,4 +1,4 @@
-// $Id: ACE.cpp 95676 2012-04-03 16:32:27Z schmidt $
+// $Id: ACE.cpp 97355 2013-09-27 22:16:09Z shuston $
 
 #include "ace/ACE.h"
 
@@ -8,7 +8,8 @@
 #include "ace/SString.h"
 #include "ace/Version.h"
 #include "ace/Message_Block.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
+#include "ace/Flag_Manip.h"
 #include "ace/OS_NS_sys_select.h"
 #include "ace/OS_NS_string.h"
 #include "ace/OS_NS_strings.h"
@@ -51,6 +52,7 @@ namespace ACE
   // Keeps track of whether we're in some global debug mode.
   char debug_;
 }
+
 
 int
 ACE::out_of_handles (int error)
@@ -158,7 +160,7 @@ ACE::nibble2hex (u_int n)
 bool
 ACE::debug (void)
 {
-  static const char* debug = ACE_OS::getenv ("ACE_DEBUG");
+  static const char* debug = ACE_OS::getenv ("ACELIB_DEBUG");
   return (ACE::debug_ != 0) ? ACE::debug_ : (debug != 0 ? (*debug != '0') : false);
 }
 
@@ -1012,7 +1014,8 @@ ACE::recvv_n_i (ACE_HANDLE handle,
         {
           char *base = static_cast<char *> (iov[s].iov_base);
           iov[s].iov_base = base + n;
-          iov[s].iov_len = iov[s].iov_len - n;
+          // This blind cast is safe because n < iov_len, after above loop.
+          iov[s].iov_len = iov[s].iov_len - static_cast<u_long> (n);
         }
     }
 
@@ -1078,7 +1081,8 @@ ACE::recvv_n_i (ACE_HANDLE handle,
         {
           char *base = reinterpret_cast<char *> (iov[s].iov_base);
           iov[s].iov_base = base + n;
-          iov[s].iov_len = iov[s].iov_len - n;
+          // This blind cast is safe because n < iov_len, after above loop.
+          iov[s].iov_len = iov[s].iov_len - static_cast<u_long> (n);
         }
     }
 
@@ -1790,7 +1794,8 @@ ACE::sendv_n_i (ACE_HANDLE handle,
         {
           char *base = reinterpret_cast<char *> (iov[s].iov_base);
           iov[s].iov_base = base + n;
-          iov[s].iov_len = iov[s].iov_len - n;
+          // This blind cast is safe because n < iov_len, after above loop.
+          iov[s].iov_len = iov[s].iov_len - static_cast<u_long> (n);
         }
     }
 
@@ -1862,7 +1867,8 @@ ACE::sendv_n_i (ACE_HANDLE handle,
         {
           char *base = reinterpret_cast<char *> (iov[s].iov_base);
           iov[s].iov_base = base + n;
-          iov[s].iov_len = iov[s].iov_len - n;
+          // This blind cast is safe because n < iov_len, after above loop.
+          iov[s].iov_len = iov[s].iov_len - static_cast<u_long> (n);
         }
     }
 
@@ -2104,7 +2110,8 @@ ACE::readv_n (ACE_HANDLE handle,
         {
           char *base = reinterpret_cast<char *> (iov[s].iov_base);
           iov[s].iov_base = base + n;
-          iov[s].iov_len = iov[s].iov_len - n;
+          // This blind cast is safe because n < iov_len, after above loop.
+          iov[s].iov_len = iov[s].iov_len - static_cast<u_long> (n);
         }
     }
 
@@ -2146,7 +2153,8 @@ ACE::writev_n (ACE_HANDLE handle,
         {
           char *base = reinterpret_cast<char *> (iov[s].iov_base);
           iov[s].iov_base = base + n;
-          iov[s].iov_len = iov[s].iov_len - n;
+          // This blind cast is safe because n < iov_len, after above loop.
+          iov[s].iov_len = iov[s].iov_len - static_cast<u_long> (n);
         }
     }
 
@@ -2303,7 +2311,7 @@ ACE::format_hexdump (const char *buffer,
                                ACE_TEXT (" "));
               ++obuf;
             }
-          textver[j] = ACE_OS::ace_isprint (c) ? c : '.';
+          textver[j] = ACE_OS::ace_isprint (c) ? c : u_char ('.');
         }
 
       textver[j] = 0;
@@ -2335,7 +2343,7 @@ ACE::format_hexdump (const char *buffer,
                                ACE_TEXT (" "));
               ++obuf;
             }
-          textver[i] = ACE_OS::ace_isprint (c) ? c : '.';
+          textver[i] = ACE_OS::ace_isprint (c) ? c : u_char ('.');
         }
 
       for (i = size % 16; i < 16; i++)
@@ -2547,7 +2555,13 @@ ACE::handle_timed_complete (ACE_HANDLE h,
 
   else
 # if defined (ACE_HAS_POLL)
-    need_to_check = (fds.revents & POLLIN);
+    {
+      // The "official" bit for failed connect is POLLIN. However, POLLERR
+      // is often set and there are occasional cases seen with some kernels
+      // where only POLLERR is set on a failed connect.
+      need_to_check = (fds.revents & POLLIN) || (fds.revents & POLLERR);
+      known_failure = (fds.revents & POLLERR);
+    }
 # else
     need_to_check = true;
 # endif /* ACE_HAS_POLL */
@@ -2805,7 +2819,7 @@ ACE::max_handles (void)
 #endif /* RLIMIT_NOFILE && !ACE_LACKS_RLIMIT */
 
 #if defined (_SC_OPEN_MAX)
-  return ACE_OS::sysconf (_SC_OPEN_MAX);
+  return static_cast<int> (ACE_OS::sysconf (_SC_OPEN_MAX));
 #elif defined (FD_SETSIZE)
   return FD_SETSIZE;
 #else
@@ -2890,6 +2904,7 @@ ACE::gcd (u_long x, u_long y)
   return x;
 }
 
+
 // Calculates the minimum enclosing frame size for the given values.
 u_long
 ACE::minimum_frame_size (u_long period1, u_long period2)
@@ -2932,6 +2947,7 @@ ACE::minimum_frame_size (u_long period1, u_long period2)
       return (period1 * period2) / greatest_common_divisor;
     }
 }
+
 
 u_long
 ACE::is_prime (const u_long n,
@@ -3297,6 +3313,7 @@ ACE::strnew (const wchar_t *s)
 // helper functions for ACE::wild_match()
 namespace
 {
+
   inline bool equal_char (char a, char b, bool case_sensitive)
   {
     if (case_sensitive)
@@ -3328,7 +3345,7 @@ namespace
             // characters are allowed as the range endpoints.  These characters
             // are the same values in both signed and unsigned chars so we
             // don't have to account for any "pathological cases."
-            for (char range = p[-1] + 1; range <= p[1]; ++range)
+            for (char range = static_cast<char> (p[-1] + 1); range <= p[1]; ++range)
               {
                 if (equal_char (s, range, case_sensitive))
                   {

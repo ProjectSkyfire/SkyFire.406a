@@ -51,6 +51,7 @@ source_group(World FILES ${sources_World})
  endif()
 
 message(STATUS "SCRIPT PREPARATIONS")
+include(Examples/CMakeLists.txt)
 include(Spells/CMakeLists.txt)
 include(Commands/CMakeLists.txt)
 
@@ -66,10 +67,6 @@ source_group(ScriptedAI FILES ${sources_ScriptedAI})
   ${scripts_STAT_SRCS}
   ${sources_ScriptedAI}
   )
-
-if(EXAMPLES)
-  include(Examples/CMakeLists.txt)
- endif()
  
 if(SCRIPTS)
   include(Custom/CMakeLists.txt)

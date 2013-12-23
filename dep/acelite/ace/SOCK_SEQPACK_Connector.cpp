@@ -1,9 +1,9 @@
-// $Id: SOCK_SEQPACK_Connector.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: SOCK_SEQPACK_Connector.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/SOCK_SEQPACK_Connector.h"
 
 #include "ace/INET_Addr.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Time_Value.h"
 #include "ace/OS_Memory.h"
 #include "ace/OS_NS_string.h"
@@ -17,6 +17,8 @@
 #if !defined (__ACE_INLINE__)
 #include "ace/SOCK_SEQPACK_Connector.inl"
 #endif /* __ACE_INLINE__ */
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -37,6 +39,8 @@ ACE_SOCK_SEQPACK_Connector::shared_open (ACE_SOCK_SEQPACK_Association &new_assoc
                                  int reuse_addr)
 {
   ACE_TRACE ("ACE_SOCK_SEQPACK_Connector::shared_open");
+
+
 
   // Only open a new socket if we don't already have a valid handle.
   if (new_association.get_handle () == ACE_INVALID_HANDLE &&
@@ -264,6 +268,7 @@ ACE_SOCK_SEQPACK_Connector::shared_connect_finish (ACE_SOCK_SEQPACK_Association 
 
 // Actively connect and produce a new ACE_SOCK_SEQPACK_Association if things go well...
 
+
 int
 ACE_SOCK_SEQPACK_Connector::connect (ACE_SOCK_SEQPACK_Association &new_association,
                              const ACE_Addr &remote_sap,
@@ -402,7 +407,7 @@ ACE_SOCK_SEQPACK_Connector::ACE_SOCK_SEQPACK_Connector (ACE_SOCK_SEQPACK_Associa
                      protocol) == -1
       && timeout != 0
       && !(errno == EWOULDBLOCK || errno == ETIME || errno == ETIMEDOUT))
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_SEQPACK_Connector::ACE_SOCK_SEQPACK_Connector")));
 }
@@ -429,7 +434,7 @@ ACE_SOCK_SEQPACK_Connector::ACE_SOCK_SEQPACK_Connector (ACE_SOCK_SEQPACK_Associa
                      protocol) == -1
       && timeout != 0
       && !(errno == EWOULDBLOCK || errno == ETIME || errno == ETIMEDOUT))
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_SEQPACK_Connector::ACE_SOCK_SEQPACK_Connector")));
 }

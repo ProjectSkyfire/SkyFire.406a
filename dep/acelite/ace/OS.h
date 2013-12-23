@@ -4,7 +4,7 @@
 /**
  *  @file  OS.h
  *
- *  $Id: OS.h 95319 2011-12-13 14:54:44Z mhengstmengel $
+ *  $Id: OS.h 97130 2013-05-13 17:36:26Z mesnier_p $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  *  @author Jesper S. M|ller<stophph@diku.dk>

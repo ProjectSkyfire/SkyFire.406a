@@ -4,7 +4,7 @@
 /**
  * @file    Array_Map.h
  *
- * $Id: Array_Map.h 92386 2010-10-28 07:44:37Z johnnyw $
+ * $Id: Array_Map.h 97262 2013-08-09 08:32:10Z johnnyw $
  *
  * Light weight array-based map with fast iteration but linear
  * (i.e. O(n)) search times.  STL-style interface is exposed.
@@ -22,7 +22,7 @@
 
 #include /**/ "ace/pre.h"
 
-#include "ace/config-lite.h"
+#include /**/ "ace/config-lite.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once

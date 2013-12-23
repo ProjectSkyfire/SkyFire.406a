@@ -41,6 +41,9 @@ class PetAI : public CreatureAI
         void KilledUnit(Unit* /*victim*/);
         void AttackStart(Unit* target);
         void MovementInform(uint32 moveType, uint32 data);
+        void AttackedBy(Unit* attacker); // To control Pet, when enemy attacks pet. ex: do nothing in passive mode!
+        void OwnerAttackedBy(Unit* attacker); //when owner get's attacked
+        void OwnerAttacked(Unit* target); //If owner attacks 
 
     private:
         bool _isVisible(Unit*) const;
@@ -58,5 +61,6 @@ class PetAI : public CreatureAI
         void HandleReturnMovement();
         void DoAttack(Unit* target, bool chase);
         bool CanAttack(Unit* target);
+        void ClearCharmInfoFlags(); // Reset function
 };
 #endif

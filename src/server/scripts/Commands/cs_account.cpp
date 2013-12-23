@@ -216,7 +216,7 @@ public:
             uint32 account = fieldsDB[1].GetUInt32();
 
             // No SQL injection. account is uint32.
-            stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_INFO);
+            stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_INFO);
             stmt->setUInt32(0, account);
             PreparedQueryResult resultLogin = LoginDatabase.Query(stmt);
 
@@ -464,7 +464,7 @@ public:
         // Check and abort if the target gm has a higher rank on one of the realms and the new realm is -1
         if (gmRealmID == -1 && !AccountMgr::IsConsoleAccount(playerSecurity))
         {
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_ACCESS_GMLEVEL_TEST);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_ACCESS_GMLEVEL_TEST);
 
             stmt->setUInt32(0, targetAccountId);
             stmt->setUInt8(1, uint8(gm));
@@ -492,13 +492,13 @@ public:
 
         if (gmRealmID == -1)
         {
-            stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_ACCOUNT_ACCESS);
+            stmt = LoginDatabase.GetPreparedStatement(LOGIN_DELETE_ACCOUNT_ACCESS);
 
             stmt->setUInt32(0, targetAccountId);
         }
         else
         {
-            stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_ACCOUNT_ACCESS_BY_REALM);
+            stmt = LoginDatabase.GetPreparedStatement(LOGIN_DELETE_ACCOUNT_ACCESS_BY_REALM);
 
             stmt->setUInt32(0, targetAccountId);
             stmt->setUInt32(1, realmID);
@@ -508,7 +508,7 @@ public:
 
         if (gm != 0)
         {
-            stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT_ACCESS);
+            stmt = LoginDatabase.GetPreparedStatement(LOGIN_INSERT_ACCOUNT_ACCESS);
 
             stmt->setUInt32(0, targetAccountId);
             stmt->setUInt8(1, uint8(gm));

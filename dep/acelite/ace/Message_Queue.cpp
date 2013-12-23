@@ -1,7 +1,7 @@
-// $Id: Message_Queue.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: Message_Queue.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Message_Queue.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 
 #if !defined (__ACE_INLINE__)
 #include "ace/Message_Queue.inl"

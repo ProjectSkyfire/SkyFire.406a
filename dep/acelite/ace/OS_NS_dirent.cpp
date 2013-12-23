@@ -1,6 +1,8 @@
-// $Id: OS_NS_dirent.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: OS_NS_dirent.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/OS_NS_dirent.h"
+
+
 
 #if !defined (ACE_HAS_INLINED_OSCALLS)
 # include "ace/OS_NS_dirent.inl"
@@ -8,7 +10,7 @@
 
 #include "ace/OS_NS_errno.h"
 #include "ace/OS_NS_string.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/OS_NS_stdlib.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL

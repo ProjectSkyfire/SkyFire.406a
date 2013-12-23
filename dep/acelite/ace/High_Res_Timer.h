@@ -4,7 +4,7 @@
 /**
  *  @file    High_Res_Timer.h
  *
- *  $Id: High_Res_Timer.h 95743 2012-05-13 12:29:28Z johnnyw $
+ *  $Id: High_Res_Timer.h 95798 2012-05-31 07:58:55Z johnnyw $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -74,8 +74,8 @@ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
  * ACE_hrtime_t values.  Those methods do _not_ check for overflow!
  * @note Gabe <begeddov@proaxis.com> raises this issue regarding
  * <ACE_OS::gethrtime>: on multi-processors, the processor that
- * you query for your <timer.stop> value might not be the one
- * you queried for <timer.start>.  Its not clear how much
+ * you query for your @c timer.stop() value might not be the one
+ * you queried for @c timer.start().  Its not clear how much
  * divergence there would be, if any.
  * This issue is not mentioned in the Solaris 2.5.1 gethrtime
  * man page.
@@ -168,11 +168,6 @@ public:
   void stop (const ACE_OS::ACE_HRTimer_Op = ACE_OS::ACE_HRTIMER_GETTIME);
 
   /// Set @a tv to the number of microseconds elapsed.
-  /**
-   *  Could overflow within hours on windows with emulated 64 bit int's
-   *  and a fast counter. VC++ and Borland normaly use __int64 and
-   *  so normaly don't have this problem.
-   */
   void elapsed_time (ACE_Time_Value &tv) const;
 
   /// Set @a nanoseconds to the number of nanoseconds elapsed.
@@ -204,7 +199,7 @@ public:
   /// to start_incr and stop_incr.
   void elapsed_time_incr (ACE_Time_Value &tv) const;
 
-  /// Set <nsec> to the number of nanoseconds elapsed between all calls
+  /// Set @a nanoseconds to the number of nanoseconds elapsed between all calls
   /// to start_incr and stop_incr.
   void elapsed_time_incr (ACE_hrtime_t &nanoseconds) const;
 

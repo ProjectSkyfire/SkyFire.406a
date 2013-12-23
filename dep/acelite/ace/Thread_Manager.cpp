@@ -1,4 +1,4 @@
-// $Id: Thread_Manager.cpp 95587 2012-03-03 20:48:36Z johnnyw $
+// $Id: Thread_Manager.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/TSS_T.h"
 #include "ace/Thread_Manager.h"
@@ -66,10 +66,10 @@ ACE_Thread_Manager::dump (void)
   ACE_MT (ACE_GUARD (ACE_Thread_Mutex, ace_mon,
                      ((ACE_Thread_Manager *) this)->lock_));
 
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
 
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\ngrp_id_ = %d"), this->grp_id_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\ncurrent_count_ = %d"), this->thr_list_.size ()));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\ngrp_id_ = %d"), this->grp_id_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\ncurrent_count_ = %d"), this->thr_list_.size ()));
 
   for (ACE_Double_Linked_List_Iterator<ACE_Thread_Descriptor> iter (this->thr_list_);
        !iter.done ();
@@ -78,7 +78,7 @@ ACE_Thread_Manager::dump (void)
       iter.next ()->dump ();
     }
 
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -246,15 +246,15 @@ ACE_Thread_Descriptor::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Thread_Descriptor::dump");
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
 
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nthr_id_ = %d"), this->thr_id_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nthr_handle_ = %d"), this->thr_handle_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\ngrp_id_ = %d"), this->grp_id_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nthr_state_ = %d"), this->thr_state_));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nflags_ = %x\n"), this->flags_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nthr_id_ = %d"), this->thr_id_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nthr_handle_ = %d"), this->thr_handle_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\ngrp_id_ = %d"), this->grp_id_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nthr_state_ = %d"), this->thr_state_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nflags_ = %x\n"), this->flags_));
 
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -374,6 +374,25 @@ ACE_Thread_Manager::ACE_Thread_Manager (size_t prealloc,
   ACE_TRACE ("ACE_Thread_Manager::ACE_Thread_Manager");
 }
 
+ACE_Thread_Manager::ACE_Thread_Manager (const ACE_Condition_Attributes &attributes,
+                                        size_t prealloc,
+                                        size_t lwm,
+                                        size_t inc,
+                                        size_t hwm)
+  : grp_id_ (1),
+    automatic_wait_ (1)
+#if defined (ACE_HAS_THREADS)
+    , zero_cond_ (lock_, attributes)
+#endif /* ACE_HAS_THREADS */
+    , thread_desc_freelist_ (ACE_FREE_LIST_WITH_POOL,
+                             prealloc, lwm, hwm, inc)
+{
+#if !defined (ACE_HAS_THREADS)
+  ACE_UNUSED_ARG (attributes);
+#endif /* ACE_HAS_THREADS */
+  ACE_TRACE ("ACE_Thread_Manager::ACE_Thread_Manager");
+}
+
 #if ! defined (ACE_THREAD_MANAGER_LACKS_STATICS)
 ACE_Thread_Manager *
 ACE_Thread_Manager::instance (void)
@@ -459,6 +478,7 @@ ACE_Thread_Manager::~ACE_Thread_Manager (void)
   ACE_TRACE ("ACE_Thread_Manager::~ACE_Thread_Manager");
   this->close ();
 }
+
 
 // Run the entry point for thread spawned under the control of the
 // <ACE_Thread_Manager>.  This must be an extern "C" to make certain
@@ -1607,13 +1627,16 @@ ACE_Thread_Manager::wait (const ACE_Time_Value *timeout,
 {
   ACE_TRACE ("ACE_Thread_Manager::wait");
 
-  ACE_Time_Value local_timeout;
+  ACE_Auto_Ptr<ACE_Time_Value> local_timeout;
   // Check to see if we're using absolute time or not.
   if (use_absolute_time == false && timeout != 0)
     {
-      local_timeout = *timeout;
-      local_timeout += ACE_OS::gettimeofday ();
-      timeout = &local_timeout;
+      // create time value duplicate (preserves time policy)
+      local_timeout.reset (timeout->duplicate ());
+      // convert time value to absolute time
+      (*local_timeout) = local_timeout->to_absolute_time ();
+      // replace original time by abs time duplicate
+      timeout = local_timeout.get ();
     }
 
 #if !defined (ACE_HAS_VXTHREADS)
@@ -1995,6 +2018,7 @@ ACE_Thread_Manager::thread_all_list (ACE_thread_t thread_list[],
 
   return ACE_Utils::truncate_cast<ssize_t> (thread_count);
 }
+
 
 int
 ACE_Thread_Manager::thr_state (ACE_thread_t id,

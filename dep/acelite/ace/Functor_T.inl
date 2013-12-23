@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: Functor_T.inl 95332 2011-12-15 11:09:41Z mcorino $
+// $Id: Functor_T.inl 96943 2013-03-30 09:42:31Z mcorino $
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -40,7 +40,7 @@ ACE_Pointer_Hash<TYPE>::operator () (TYPE t) const
 #  pragma warning(push)
 #  pragma warning(disable : 4311)   /* Truncate pointer to unsigned long */
 #endif /* ACE_WIN64 */
-  return reinterpret_cast<unsigned long> (t);
+  return ACE_Utils::truncate_cast<unsigned long> ((intptr_t)t);
 #if defined (ACE_WIN64)
 #  pragma warning(pop)
 #endif /* ACE_WIN64 */

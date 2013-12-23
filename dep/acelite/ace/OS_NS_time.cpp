@@ -165,6 +165,7 @@ ACE_OS::difftime (time_t t1, time_t t0)
         }
 
 #   undef ISLEAPYEAR
+
     }
   else
     {
@@ -541,6 +542,7 @@ ACE_OS::strptime_emulation (const char *buf, const char *format, struct tm *tm)
             default:                        /* unrecognised */
               return const_cast<char*> (buf + bi);
             } /* switch (format[fi]) */
+
         }
       else
         { /* if (percent) */

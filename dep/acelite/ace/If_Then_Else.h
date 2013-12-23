@@ -8,7 +8,7 @@
  *  template described in the book "C++ Templates" by Vandevoorde and
  *  Josuttis.
  *
- *  $Id: If_Then_Else.h 80826 2008-03-04 14:51:23Z wotte $
+ *  $Id: If_Then_Else.h 97262 2013-08-09 08:32:10Z johnnyw $
  *
  *  @author Ossama Othman <ossama@dre.vanderbilt.edu>
  */
@@ -17,7 +17,7 @@
 #ifndef ACE_IF_THEN_ELSE_H
 #define ACE_IF_THEN_ELSE_H
 
-#include "ace/config-lite.h"
+#include /**/ "ace/config-lite.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

@@ -1335,7 +1335,7 @@ void WorldSession::HandleWhoisOpcode(WorldPacket& recvData)
 
     uint32 accid = player->GetSession()->GetAccountId();
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_WHOIS);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_WHOIS);
 
     stmt->setUInt32(0, accid);
 

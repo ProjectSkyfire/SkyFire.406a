@@ -1,5 +1,5 @@
 //* -*- C++ -*- */
-// $Id: config-vxworks6.4.h 93571 2011-03-17 07:37:11Z olli $
+// $Id: config-vxworks6.4.h 97326 2013-09-11 07:52:09Z johnnyw $
 
 // The following configuration file is designed to work for VxWorks
 // 6.4 platforms using one of these compilers:
@@ -201,6 +201,8 @@
 #define ACE_HAS_CHARPTR_SOCKOPT
 #define ACE_LACKS_SYMLINKS
 #define ACE_LACKS_ISCTYPE
+
+#define ACE_LACKS_PTHREAD_SCOPE_PROCESS
 
 #if defined __RTP__
   // We are building for RTP mode

@@ -4,7 +4,7 @@
 /**
  *  @file    Functor_T.h
  *
- *  $Id: Functor_T.h 95332 2011-12-15 11:09:41Z mcorino $
+ *  $Id: Functor_T.h 96943 2013-03-30 09:42:31Z mcorino $
  *
  *   Templatized classes for implementing function objects that are
  *   used in various places in ACE.  There are currently two major
@@ -37,6 +37,7 @@
 #endif /* ACE_LACKS_PRAGMA_ONCE */
 
 #include "ace/Functor_String.h"
+#include "ace/Truncate.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

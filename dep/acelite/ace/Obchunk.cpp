@@ -1,4 +1,4 @@
-// $Id: Obchunk.cpp 92580 2010-11-15 09:48:02Z johnnyw $
+// $Id: Obchunk.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Obchunk.h"
 
@@ -16,10 +16,10 @@ ACE_Obchunk::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Obchunk::dump");
 
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("end_ = %x\n"), this->end_));
-  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("cur_ = %x\n"), this->cur_));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("end_ = %x\n"), this->end_));
+  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("cur_ = %x\n"), this->cur_));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

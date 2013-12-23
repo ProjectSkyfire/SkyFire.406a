@@ -1,4 +1,4 @@
-// $Id: CDR_Stream.cpp 95579 2012-02-29 16:55:18Z sma $
+// $Id: CDR_Stream.cpp 96411 2012-11-29 10:31:26Z johnnyw $
 
 #include "ace/CDR_Stream.h"
 #include "ace/SString.h"
@@ -531,22 +531,10 @@ ACE_OutputCDR::write_8 (const ACE_CDR::ULongLong *x)
 
   if (this->adjust (ACE_CDR::LONGLONG_SIZE, buf) == 0)
     {
-#if defined (__arm__) && !defined (ACE_HAS_IPHONE)
-      // Convert to Intel format (12345678 => 56781234)
-      const char *orig = reinterpret_cast<const char *> (x);
-      char *target = buf;
-      register ACE_UINT32 x =
-        *reinterpret_cast<const ACE_UINT32 *> (orig);
-      register ACE_UINT32 y =
-        *reinterpret_cast<const ACE_UINT32 *> (orig + 4);
-      *reinterpret_cast<ACE_UINT32 *> (target) = y;
-      *reinterpret_cast<ACE_UINT32 *> (target + 4) = x;
-      return true;
-#else
-#  if !defined (ACE_ENABLE_SWAP_ON_WRITE)
+#if !defined (ACE_ENABLE_SWAP_ON_WRITE)
       *reinterpret_cast<ACE_CDR::ULongLong *> (buf) = *x;
       return true;
-#  else
+#else
       if (!this->do_byte_swap_)
         {
           *reinterpret_cast<ACE_CDR::ULongLong *> (buf) = *x;
@@ -557,8 +545,7 @@ ACE_OutputCDR::write_8 (const ACE_CDR::ULongLong *x)
           ACE_CDR::swap_8 (reinterpret_cast<const char*> (x), buf);
           return true;
         }
-#  endif /* ACE_ENABLE_SWAP_ON_WRITE */
-#endif /* !__arm__ */
+#endif /* ACE_ENABLE_SWAP_ON_WRITE */
      }
 
   return false;
@@ -631,6 +618,7 @@ ACE_OutputCDR::write_wchar_array_i (const ACE_CDR::WChar *x,
   return false;
 }
 
+
 ACE_CDR::Boolean
 ACE_OutputCDR::write_array (const void *x,
                             size_t size,
@@ -680,6 +668,7 @@ ACE_OutputCDR::write_array (const void *x,
   return false;
 }
 
+
 ACE_CDR::Boolean
 ACE_OutputCDR::write_boolean_array (const ACE_CDR::Boolean* x,
                                     ACE_CDR::ULong length)
@@ -721,6 +710,72 @@ ACE_OutputCDR::write_short_placeholder (void)
   return buf;
 }
 
+char *
+ACE_OutputCDR::write_boolean_placeholder (void)
+{
+  char *buf = 0;
+  if (this->adjust (ACE_CDR::OCTET_SIZE, buf) == 0)
+    *reinterpret_cast<ACE_CDR::Boolean*> (buf) = 0;
+  else
+    buf = 0;
+  return buf;
+}
+
+char *
+ACE_OutputCDR::write_char_placeholder (void)
+{
+  char *buf = 0;
+  if (this->adjust (ACE_CDR::OCTET_SIZE, buf) == 0)
+    *reinterpret_cast<ACE_CDR::Char*> (buf) = 0;
+  else
+    buf = 0;
+  return buf;
+}
+
+char *
+ACE_OutputCDR::write_octet_placeholder (void)
+{
+  char *buf = 0;
+  if (this->adjust (ACE_CDR::OCTET_SIZE, buf) == 0)
+    *reinterpret_cast<ACE_CDR::Octet*> (buf) = 0;
+  else
+    buf = 0;
+  return buf;
+}
+
+char *
+ACE_OutputCDR::write_longlong_placeholder (void)
+{
+  char *buf = 0;
+  if (this->adjust (ACE_CDR::LONGLONG_SIZE, buf) == 0)
+    *reinterpret_cast<ACE_CDR::ULongLong*> (buf) = 0;
+  else
+    buf = 0;
+  return buf;
+}
+
+char *
+ACE_OutputCDR::write_float_placeholder (void)
+{
+  char *buf = 0;
+  if (this->adjust (ACE_CDR::LONG_SIZE, buf) == 0)
+    *reinterpret_cast<ACE_CDR::ULong*> (buf) = 0;
+  else
+    buf = 0;
+  return buf;
+}
+
+char *
+ACE_OutputCDR::write_double_placeholder (void)
+{
+  char *buf = 0;
+  if (this->adjust (ACE_CDR::LONGLONG_SIZE, buf) == 0)
+    *reinterpret_cast<ACE_CDR::ULongLong*> (buf) = 0;
+  else
+    buf = 0;
+  return buf;
+}
+
 ACE_CDR::Boolean
 ACE_OutputCDR::replace (ACE_CDR::Long x, char* loc)
 {
@@ -733,6 +788,28 @@ ACE_OutputCDR::replace (ACE_CDR::Long x, char* loc)
   if (!this->do_byte_swap_)
   {
     *reinterpret_cast<ACE_CDR::Long *> (loc) = x;
+  }
+  else
+  {
+    ACE_CDR::swap_4 (reinterpret_cast<const char*> (&x), loc);
+  }
+#endif /* ACE_ENABLE_SWAP_ON_WRITE */
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::ULong x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+#if !defined (ACE_ENABLE_SWAP_ON_WRITE)
+  *reinterpret_cast<ACE_CDR::ULong*> (loc) = x;
+#else
+  if (!this->do_byte_swap_)
+  {
+    *reinterpret_cast<ACE_CDR::ULong *> (loc) = x;
   }
   else
   {
@@ -759,6 +836,149 @@ ACE_OutputCDR::replace (ACE_CDR::Short x, char* loc)
   else
   {
     ACE_CDR::swap_2 (reinterpret_cast<const char*> (&x), loc);
+  }
+#endif /* ACE_ENABLE_SWAP_ON_WRITE */
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::UShort x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+#if !defined (ACE_ENABLE_SWAP_ON_WRITE)
+  *reinterpret_cast<ACE_CDR::UShort*> (loc) = x;
+#else
+  if (!this->do_byte_swap_)
+  {
+    *reinterpret_cast<ACE_CDR::UShort *> (loc) = x;
+  }
+  else
+  {
+    ACE_CDR::swap_2 (reinterpret_cast<const char*> (&x), loc);
+  }
+#endif /* ACE_ENABLE_SWAP_ON_WRITE */
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::Boolean x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+  *reinterpret_cast<ACE_CDR::Boolean*> (loc) = x;
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::Char x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+  *reinterpret_cast<ACE_CDR::Char*> (loc) = x;
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::Octet x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+  *reinterpret_cast<ACE_CDR::Octet*> (loc) = x;
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::LongLong x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+#if !defined (ACE_ENABLE_SWAP_ON_WRITE)
+  *reinterpret_cast<ACE_CDR::LongLong*> (loc) = x;
+#else
+  if (!this->do_byte_swap_)
+  {
+    *reinterpret_cast<ACE_CDR::LongLong*> (loc) = x;
+  }
+  else
+  {
+    ACE_CDR::swap_8 (reinterpret_cast<const char*> (&x), loc);
+  }
+#endif /* ACE_ENABLE_SWAP_ON_WRITE */
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::ULongLong x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+#if !defined (ACE_ENABLE_SWAP_ON_WRITE)
+  *reinterpret_cast<ACE_CDR::ULongLong*> (loc) = x;
+#else
+  if (!this->do_byte_swap_)
+  {
+    *reinterpret_cast<ACE_CDR::ULongLong*> (loc) = x;
+  }
+  else
+  {
+    ACE_CDR::swap_8 (reinterpret_cast<const char*> (&x), loc);
+  }
+#endif /* ACE_ENABLE_SWAP_ON_WRITE */
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::Float x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+#if !defined (ACE_ENABLE_SWAP_ON_WRITE)
+  *reinterpret_cast<ACE_CDR::Float*> (loc) = x;
+#else
+  if (!this->do_byte_swap_)
+  {
+    *reinterpret_cast<ACE_CDR::Float*> (loc) = x;
+  }
+  else
+  {
+    ACE_CDR::swap_4 (reinterpret_cast<const char*> (&x), loc);
+  }
+#endif /* ACE_ENABLE_SWAP_ON_WRITE */
+
+  return true;
+}
+
+ACE_CDR::Boolean
+ACE_OutputCDR::replace (ACE_CDR::Double x, char* loc)
+{
+  if (this->find (loc) == 0)
+    return false;
+
+#if !defined (ACE_ENABLE_SWAP_ON_WRITE)
+  *reinterpret_cast<ACE_CDR::Double*> (loc) = x;
+#else
+  if (!this->do_byte_swap_)
+  {
+    *reinterpret_cast<ACE_CDR::Double*> (loc) = x;
+  }
+  else
+  {
+    ACE_CDR::swap_8 (reinterpret_cast<const char*> (&x), loc);
   }
 #endif /* ACE_ENABLE_SWAP_ON_WRITE */
 
@@ -808,6 +1028,7 @@ ACE_OutputCDR::consolidate (void)
 
   return 0;
 }
+
 
 ACE_Message_Block*
 ACE_OutputCDR::find (char* loc)
@@ -1273,6 +1494,7 @@ ACE_InputCDR::read_wchar (ACE_CDR::WChar& x)
               x = static_cast<ACE_CDR::WChar> (ox);
               return true;
             }
+
         }
     }
   return (this->good_bit_ = false);
@@ -1389,6 +1611,7 @@ ACE_InputCDR::read_wstring (ACE_CDR::WChar*& x)
 
           if (this->read_wchar_array (x, len))
             {
+
               //Null character used by applications to find the end of
               //the wstring
               //Is this okay with the GIOP 1.2 spec??
@@ -1517,6 +1740,7 @@ ACE_InputCDR::read_wchar_array_i (ACE_CDR::WChar* x,
   return false;
 }
 
+
 ACE_CDR::Boolean
 ACE_InputCDR::read_boolean_array (ACE_CDR::Boolean *x,
                                   ACE_CDR::ULong length)
@@ -1602,39 +1826,10 @@ ACE_InputCDR::read_8 (ACE_CDR::ULongLong *x)
   if (this->adjust (ACE_CDR::LONGLONG_SIZE, buf) == 0)
     {
 #if !defined (ACE_DISABLE_SWAP_ON_READ)
-#  if defined (__arm__) && !defined (ACE_HAS_IPHONE)
-      if (!this->do_byte_swap_)
-        {
-          // Convert from Intel format (12345678 => 56781234)
-          const char *orig = buf;
-          char *target = reinterpret_cast<char *> (x);
-          register ACE_UINT32 x =
-            *reinterpret_cast<const ACE_UINT32 *> (orig);
-          register ACE_UINT32 y =
-            *reinterpret_cast<const ACE_UINT32 *> (orig + 4);
-          *reinterpret_cast<ACE_UINT32 *> (target) = y;
-          *reinterpret_cast<ACE_UINT32 *> (target + 4) = x;
-        }
-      else
-        {
-          // Convert from Sparc format (12345678 => 43218765)
-          const char *orig = buf;
-          char *target = reinterpret_cast<char *> (x);
-          register ACE_UINT32 x =
-            *reinterpret_cast<const ACE_UINT32 *> (orig);
-          register ACE_UINT32 y =
-            *reinterpret_cast<const ACE_UINT32 *> (orig + 4);
-          x = (x << 24) | ((x & 0xff00) << 8) | ((x & 0xff0000) >> 8) | (x >> 24);
-          y = (y << 24) | ((y & 0xff00) << 8) | ((y & 0xff0000) >> 8) | (y >> 24);
-          *reinterpret_cast<ACE_UINT32 *> (target) = x;
-          *reinterpret_cast<ACE_UINT32 *> (target + 4) = y;
-        }
-#  else
       if (!this->do_byte_swap_)
         *x = *reinterpret_cast<ACE_CDR::ULongLong *> (buf);
       else
         ACE_CDR::swap_8 (buf, reinterpret_cast<char *> (x));
-#  endif /* !__arm__ */
 #else
       *x = *reinterpret_cast<ACE_CDR::ULongLong *> (buf);
 #endif /* ACE_DISABLE_SWAP_ON_READ */

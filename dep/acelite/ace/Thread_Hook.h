@@ -4,7 +4,7 @@
 /**
  *  @file    Thread_Hook.h
  *
- *  $Id: Thread_Hook.h 94054 2011-05-11 18:28:20Z johnnyw $
+ *  $Id: Thread_Hook.h 97246 2013-08-07 07:10:20Z johnnyw $
  *
  *  @author Carlos O'Ryan <coryan@uci.edu>
  */
@@ -34,6 +34,9 @@ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 class ACE_Export ACE_Thread_Hook
 {
 public:
+  /// Default constructor
+  ACE_Thread_Hook (void);
+
   /// Destructor.
   virtual ~ACE_Thread_Hook (void);
 

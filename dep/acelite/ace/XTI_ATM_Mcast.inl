@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: XTI_ATM_Mcast.inl 80826 2008-03-04 14:51:23Z wotte $
+// $Id: XTI_ATM_Mcast.inl 96985 2013-04-11 15:50:32Z huangh $
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -24,7 +24,7 @@ ACE_XTI_ATM_Mcast::ACE_XTI_ATM_Mcast (ACE_TLI_Stream &new_stream,
            info, rw_flag,
            udata, opt) == ACE_INVALID_HANDLE
       && timeout != 0 && !(errno == EWOULDBLOCK || errno == ETIME))
-    ACE_ERROR ((LM_ERROR,  ACE_TEXT ("%p\n"),  ACE_TEXT ("ACE_TLI_Stream::ACE_TLI_Stream")));
+    ACELIB_ERROR ((LM_ERROR,  ACE_TEXT ("%p\n"),  ACE_TEXT ("ACE_TLI_Stream::ACE_TLI_Stream")));
 }
 
 // Connect the <new_stream> to the <remote_sap>, waiting up to

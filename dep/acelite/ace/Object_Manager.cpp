@@ -1,4 +1,4 @@
-// $Id: Object_Manager.cpp 93159 2011-01-25 10:52:44Z mcorino $
+// $Id: Object_Manager.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Object_Manager.h"
 #if !defined (ACE_LACKS_ACE_TOKEN)
@@ -10,7 +10,7 @@
 #  include "ace/Service_Config.h"
 #endif /* ! ACE_LACKS_ACE_SVCCONF */
 #include "ace/Signal.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 #include "ace/Malloc.h"
 #include "ace/Sig_Adapter.h"
 #include "ace/Framework_Component.h"
@@ -170,9 +170,9 @@ LONG _stdcall ACE_UnhandledExceptionFilter (PEXCEPTION_POINTERS pExceptionInfo)
   DWORD dwExceptionCode = pExceptionInfo->ExceptionRecord->ExceptionCode;
 
   if (dwExceptionCode == EXCEPTION_ACCESS_VIOLATION)
-    ACE_ERROR ((LM_ERROR, ACE_TEXT ("\nERROR: ACCESS VIOLATION\n")));
+    ACELIB_ERROR ((LM_ERROR, ACE_TEXT ("\nERROR: ACCESS VIOLATION\n")));
   else
-    ACE_ERROR ((LM_ERROR, ACE_TEXT ("\nERROR: UNHANDLED EXCEPTION\n")));
+    ACELIB_ERROR ((LM_ERROR, ACE_TEXT ("\nERROR: UNHANDLED EXCEPTION\n")));
 
   return EXCEPTION_EXECUTE_HANDLER;
 }
@@ -319,6 +319,7 @@ ACE_Object_Manager::init (void)
 #    endif // _M_IX86
 #  endif // (_MSC_VER >= 1400) // VC++ 8.0 and above.
 #endif /* ACE_DISABLE_WIN32_ERROR_WINDOWS */
+
 
 #     if !defined (ACE_LACKS_ACE_SVCCONF)
           ACE_NEW_RETURN (preallocations_,
@@ -683,6 +684,7 @@ ACE_Object_Manager::get_singleton_lock (ACE_RW_Thread_Mutex *&lock)
                               -1);
               lock = &lock_adapter->object ();
 
+
               // Register the lock for destruction at program
               // termination.  This call will cause us to grab the
               // ACE_Object_Manager::instance ()->internal_lock_
@@ -835,6 +837,7 @@ ACE_Object_Manager::fini (void)
 
   return 0;
 }
+
 
 #if !defined (ACE_HAS_NONSTATIC_OBJECT_MANAGER)
 /**

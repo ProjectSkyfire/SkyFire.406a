@@ -4,7 +4,7 @@
 /**
  *  @file    Countdown_Time_T.h
  *
- *  $Id: Countdown_Time_T.h 95345 2011-12-15 19:46:06Z johnnyw $
+ *  $Id: Countdown_Time_T.h 97130 2013-05-13 17:36:26Z mesnier_p $
  *
  *  @author Douglas C. Schmidt <schmidt@cs.wustl.edu>
  */
@@ -70,8 +70,11 @@ private:
   /// The policy to return the current time of day
   TIME_POLICY time_policy_;
 
-  /// Maximum time we were willing to wait.
+  /// Maximum time we are monitoring
   ACE_Time_Value *max_wait_time_;
+
+  /// Copy of the maximum time value, used to avoid nested decrements
+  ACE_Time_Value max_wait_value_;
 
   /// Beginning of the start time.
   ACE_Time_Value start_time_;

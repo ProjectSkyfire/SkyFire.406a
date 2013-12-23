@@ -2,7 +2,7 @@
 /**
  *  @file   Stack_Trace.cpp
  *
- *  $Id: Stack_Trace.cpp 95534 2012-02-17 23:19:33Z mitza $
+ *  $Id: Stack_Trace.cpp 96017 2012-08-08 22:18:09Z mitza $
  *
  *  @brief  Encapsulate string representation of stack trace.
  *
@@ -189,6 +189,7 @@ ACE_Stack_Trace::generate_trace (ssize_t starting_frame_offset,
   trcStack (&regs, (FUNCPTR)ACE_Stack_Trace_Add_Frame_To_Buf, taskIdSelf ());
 }
 
+
 #elif defined(VXWORKS) && defined(__RTP__)
 #  include <setjmp.h>
 #  include <taskLib.h>
@@ -254,8 +255,19 @@ ACE_Stack_Trace::generate_trace (ssize_t starting_frame_offset,
           const char *fnName = "(no symbols)";
 
           static const int N_ARGS = 12;
-          int buf[N_ARGS];
-          int *pArgs = 0;
+#if (ACE_VXWORKS < 0x690)
+# define ACE_VX_USR_ARG_T int
+# define ACE_VX_ARG_FORMAT "%x"
+#else
+# define ACE_VX_USR_ARG_T _Vx_usr_arg_t
+# ifdef _WRS_CONFIG_LP64
+#  define ACE_VX_ARG_FORMAT "%lx"
+# else
+#  define ACE_VX_ARG_FORMAT "%x"
+# endif
+#endif
+          ACE_VX_USR_ARG_T buf[N_ARGS];
+          ACE_VX_USR_ARG_T *pArgs = 0;
           int numArgs =
             trcLibFuncs.lvlArgsGet (prevPc, prevFn, prevFp,
                                     buf, N_ARGS, &pArgs);
@@ -276,7 +288,9 @@ ACE_Stack_Trace::generate_trace (ssize_t starting_frame_offset,
             {
               if (arg == 0) *cursor++ = '(', --space;
               written = ACE_OS::snprintf (cursor, space,
-                                          (arg < numArgs - 1) ? "%x, " : "%x",
+                                          (arg < numArgs - 1) ?
+                                          ACE_VX_ARG_FORMAT ", " :
+                                          ACE_VX_ARG_FORMAT,
                                           pArgs[arg]);
               cursor += written;
               space -= written;
@@ -509,6 +523,7 @@ typedef struct _dbghelp_functions
   SymCleanup_t SymCleanup;
 } dbghelp_functions;
 
+
 #  pragma warning (push)
 #  pragma warning (disable:4706)
 static bool load_dbghelp_library_if_needed (dbghelp_functions *pDbg)
@@ -533,6 +548,7 @@ static bool load_dbghelp_library_if_needed (dbghelp_functions *pDbg)
 #  undef LINK_T
 }
 #  pragma warning (pop)
+
 
 struct frame_state {
   STACKFRAME64 sf;

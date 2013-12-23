@@ -357,7 +357,7 @@ public:
 
     static bool HandleBanListAccountCommand(ChatHandler* handler, char const* args)
     {
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_IP_BANS);
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DELETE_OLD_IP_BANS);
         LoginDatabase.Execute(stmt);
 
         char* filterStr = strtok((char*)args, " ");
@@ -367,12 +367,12 @@ public:
 
         if (filter.empty())
         {
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BANNED_ALL);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_BANNED_ALL);
             result = LoginDatabase.Query(stmt);
         }
         else
         {
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_BANNED_BY_USERNAME);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_BANNED_BY_USERNAME);
             stmt->setString(0, filter);
             result = LoginDatabase.Query(stmt);
         }
@@ -553,7 +553,7 @@ public:
 
     static bool HandleBanListIPCommand(ChatHandler* handler, char const* args)
     {
-        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_OLD_IP_BANS);
+        PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DELETE_OLD_IP_BANS);
         LoginDatabase.Execute(stmt);
 
         char* filterStr = strtok((char*)args, " ");
@@ -564,12 +564,12 @@ public:
 
         if (filter.empty())
         {
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_IP_BANNED_ALL);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_IP_BANNED_ALL);
             result = LoginDatabase.Query(stmt);
         }
         else
         {
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_IP_BANNED_BY_IP);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_IP_BANNED_BY_IP);
             stmt->setString(0, filter);
             result = LoginDatabase.Query(stmt);
         }

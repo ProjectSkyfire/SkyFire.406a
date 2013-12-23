@@ -1,4 +1,4 @@
-// $Id: OS_NS_stdlib.cpp 94456 2011-09-08 17:54:04Z johnnyw $
+// $Id: OS_NS_stdlib.cpp 96017 2012-08-08 22:18:09Z mitza $
 
 #include "ace/OS_NS_stdlib.h"
 
@@ -723,6 +723,7 @@ ACE_OS::strtoul_emulation (const char *nptr,
 }
 #endif /* ACE_LACKS_STRTOUL */
 
+
 #if defined (ACE_HAS_WCHAR) && defined (ACE_LACKS_WCSTOUL)
 unsigned long
 ACE_OS::wcstoul_emulation (const wchar_t *nptr,
@@ -841,7 +842,7 @@ ACE_OS::strtoll_emulation (const char *nptr,
       break;
     if (c >= base)
       break;
-    if (any < 0 || acc > cutoff || acc == cutoff && c > cutlim)
+    if (any < 0 || acc > cutoff || (acc == cutoff && c > cutlim))
       any = -1;
     else {
       any = 1;
@@ -927,6 +928,7 @@ ACE_OS::wcstoll_emulation (const wchar_t *nptr,
   return (acc);
 }
 #endif /* ACE_HAS_WCHAR && ACE_LACKS_WCSTOLL */
+
 
 #if defined (ACE_LACKS_STRTOULL)
 ACE_UINT64

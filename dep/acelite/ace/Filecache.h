@@ -4,7 +4,7 @@
 /**
  *  @file    Filecache.h
  *
- *  $Id: Filecache.h 91066 2010-07-12 11:05:04Z johnnyw $
+ *  $Id: Filecache.h 97202 2013-06-19 22:35:11Z mesnier_p $
  *
  *  @author James Hu
  */
@@ -146,8 +146,6 @@ private:
 
   /// A dup'd version of the one from file_.
   ACE_HANDLE handle_;
-
-  int mapit_;
 };
 
 typedef ACE_Hash_Map_Manager_Ex<const ACE_TCHAR *, ACE_Filecache_Object *, ACE_Hash<const ACE_TCHAR *>, ACE_Equal_To<const ACE_TCHAR *>, ACE_Null_Mutex>

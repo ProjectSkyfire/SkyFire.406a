@@ -1,3 +1,4 @@
+
 //=============================================================================
 /**
  *  @file    Functor.cpp
@@ -23,12 +24,15 @@
  */
 //=============================================================================
 
+
 #include "ace/Functor_T.h"
 #include "ace/Functor.h"
 
 #if !defined (__ACE_INLINE__)
 #include "ace/Functor.inl"
 #endif /* __ACE_INLINE__ */
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

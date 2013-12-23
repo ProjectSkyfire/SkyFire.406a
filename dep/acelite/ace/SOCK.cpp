@@ -1,11 +1,13 @@
-// $Id: SOCK.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: SOCK.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/SOCK.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 
 #if !defined (__ACE_INLINE__)
 #include "ace/SOCK.inl"
 #endif /* __ACE_INLINE__ */
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -120,7 +122,7 @@ ACE_SOCK::ACE_SOCK (int type,
                   protocol_family,
                   protocol,
                   reuse_addr) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK::ACE_SOCK")));
 }
@@ -175,7 +177,7 @@ ACE_SOCK::ACE_SOCK (int type,
                   g,
                   flags,
                   reuse_addr) == -1)
-    ACE_ERROR ((LM_ERROR,
+    ACELIB_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK::ACE_SOCK")));
 }

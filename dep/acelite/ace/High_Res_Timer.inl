@@ -1,6 +1,5 @@
 // -*- C++ -*- */
-//
-// $Id: High_Res_Timer.inl 95763 2012-05-16 06:43:51Z johnnyw $
+// $Id: High_Res_Timer.inl 95798 2012-05-31 07:58:55Z johnnyw $
 
 #include "ace/Global_Macros.h"
 
@@ -10,13 +9,9 @@
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
-// Be very careful before changing the calculations inside
-// ACE_High_Res_Timer.  The precision matters and we are using integer
-// calculations not floating point.  Also look closely at the emulated 64
-// bit int class (inside Basic_Types{h,i,cpp} before changing
-// anything.  It's operator/ only returns 32 bits not 64 bits, among
-// other things.
-
+/// Be very careful before changing the calculations inside
+/// ACE_High_Res_Timer. The precision matters and we are using integer
+/// calculations not floating point.
 ACE_INLINE void
 ACE_High_Res_Timer::hrtime_to_tv (ACE_Time_Value &tv,
                                   const ACE_hrtime_t hrt)
@@ -37,18 +32,16 @@ ACE_High_Res_Timer::hrtime_to_tv (ACE_Time_Value &tv,
     tmp *= ((ACE_UINT32) ACE_HR_SCALE_CONVERSION * global_scale_factor ());
     tv.usec ((suseconds_t) ((hrt - tmp) / global_scale_factor ()));
 #else
-
     // This a higher-precision version, specific for Windows systems
     // The following are based on the units of global_scale_factor_
     // being 1/microsecond.  Therefore, dividing by it converts
     // clock ticks to microseconds.
     tv.sec ((time_t) (hrt / global_scale_factor () ));
 
-    // Calculate usec
-    ACE_hrtime_t tmp = tv.sec ();
+    // Calculate usec, first calculate the seconds in hrtime
+    ACE_High_Res_Timer::global_scale_factor_type tmp = tv.sec ();
     tmp *= global_scale_factor ();
     tv.usec ((suseconds_t) ((hrt - tmp) * ACE_HR_SCALE_CONVERSION / global_scale_factor ()));
-
 #endif
 }
 
@@ -71,13 +64,12 @@ ACE_High_Res_Timer::gettimeofday (const ACE_OS::ACE_HRTimer_Op op)
   return tv;
 }
 
-
-// Get the current high res timer as the time of day. This is intended
-// to be used for a gettimeofday replacement in ACE_Timer_Queue and
-// derived classes so the timers will bebased on high res timers rather
-// than wall clock time. It uses the ACE_High_Res_Timer::gettimeofday
-// function, which is deprecated. If it gets removed, please move the
-// code down here, intact.
+/// Get the current high res timer as the time of day. This is intended
+/// to be used for a gettimeofday replacement in ACE_Timer_Queue and
+/// derived classes so the timers will be based on high res timers rather
+/// than wall clock time. It uses the ACE_High_Res_Timer::gettimeofday
+/// function, which is deprecated. If it gets removed, please move the
+/// code down here, intact.
 ACE_INLINE ACE_Time_Value
 ACE_High_Res_Timer::gettimeofday_hr (void)
 {

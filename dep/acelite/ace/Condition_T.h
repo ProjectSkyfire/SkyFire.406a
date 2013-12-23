@@ -4,7 +4,7 @@
 /**
  *  @file    Condition_T.h
  *
- *  $Id: Condition_T.h 93359 2011-02-11 11:33:12Z mcorino $
+ *  $Id: Condition_T.h 96061 2012-08-16 09:36:07Z mcorino $
  *
  *   Moved from Synch.h.
  *
@@ -18,7 +18,7 @@
 #include /**/ "ace/pre.h"
 
 #include "ace/OS_NS_Thread.h"
-#include "ace/Lock.h"
+#include "ace/Condition_Attributes.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once
@@ -57,6 +57,12 @@ public:
   /// Initialize the condition variable.
   ACE_Condition (MUTEX &m, int type = USYNC_THREAD,
                  const ACE_TCHAR *name = 0, void *arg = 0);
+
+  /// Initialize the condition variable.
+  ACE_Condition (MUTEX &m,
+                 const ACE_Condition_Attributes &attributes,
+                 const ACE_TCHAR *name = 0,
+                 void *arg = 0);
 
   /// Implicitly destroy the condition variable.
   ~ACE_Condition (void);

@@ -220,7 +220,7 @@ ChatCommand* ChatHandler::getCommandTable()
                 added += appendCommandTable(commandTableCache + added, *it);
         }
 
-        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_COMMANDS);
+        PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SELECT_COMMANDS);
 
         PreparedQueryResult result = WorldDatabase.Query(stmt);
 

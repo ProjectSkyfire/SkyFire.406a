@@ -99,7 +99,7 @@ void WaypointMgr::ReloadPath(uint32 id)
         _waypointStore.erase(itr);
     }
 
-    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SEL_WAYPOINT_DATA_BY_ID);
+    PreparedStatement* stmt = WorldDatabase.GetPreparedStatement(WORLD_SELECT_WAYPOINT_DATA_BY_ID);
 
     stmt->setUInt32(0, id);
 

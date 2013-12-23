@@ -1,4 +1,4 @@
-// $Id: Time_Value.cpp 95742 2012-05-12 11:18:13Z johnnyw $
+// $Id: Time_Value.cpp 96061 2012-08-16 09:36:07Z mcorino $
 
 #include "ace/Time_Value.h"
 
@@ -9,6 +9,7 @@
 #include "ace/Numeric_Limits.h"
 #include "ace/If_Then_Else.h"
 #include "ace/OS_NS_math.h"
+#include "ace/Time_Policy.h"
 
 #ifdef ACE_HAS_CPP98_IOSTREAMS
 #include <ostream>
@@ -32,6 +33,9 @@ const ACE_Time_Value ACE_Time_Value::max_time (
   ACE_ONE_SECOND_IN_USECS - 1);
 
 ACE_ALLOC_HOOK_DEFINE (ACE_Time_Value)
+
+ACE_Time_Value::~ACE_Time_Value()
+{}
 
 /// Increment microseconds (the only reason this is here is to allow
 /// the use of ACE_Atomic_Op with ACE_Time_Value).
@@ -127,6 +131,35 @@ ACE_Time_Value::operator FILETIME () const
 }
 #endif /* ACE_WIN32 */
 
+ACE_Time_Value
+ACE_Time_Value::now () const
+{
+  ACE_System_Time_Policy systp;
+  return systp ();
+}
+
+ACE_Time_Value
+ACE_Time_Value::to_relative_time () const
+{
+  ACE_System_Time_Policy systp;
+  return (*this) - systp ();
+}
+
+ACE_Time_Value
+ACE_Time_Value::to_absolute_time () const
+{
+  ACE_System_Time_Policy systp;
+  return (*this) + systp ();
+}
+
+ACE_Time_Value *
+ACE_Time_Value::duplicate () const
+{
+  ACE_Time_Value * tmp = 0;
+  ACE_NEW_RETURN (tmp, ACE_Time_Value (*this), 0);
+  return tmp;
+}
+
 void
 ACE_Time_Value::dump (void) const
 {
@@ -197,6 +230,7 @@ ACE_Time_Value::normalize (bool saturate)
     }
 #endif /* __QNX__  */
 }
+
 
 ACE_Time_Value &
 ACE_Time_Value::operator *= (double d)

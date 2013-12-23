@@ -1,7 +1,7 @@
 /**
  * @file Recursive_Thread_Mutex.cpp
  *
- * $Id: Recursive_Thread_Mutex.cpp 91688 2010-09-09 11:21:50Z johnnyw $
+ * $Id: Recursive_Thread_Mutex.cpp 96985 2013-04-11 15:50:32Z huangh $
  *
  * Originally in Synch.cpp
  *
@@ -16,7 +16,7 @@
 #include "ace/Recursive_Thread_Mutex.inl"
 #endif /* __ACE_INLINE__ */
 
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -30,7 +30,7 @@ ACE_Recursive_Thread_Mutex::ACE_Recursive_Thread_Mutex (const ACE_TCHAR *name,
    if (ACE_OS::recursive_mutex_init (&this->lock_,
                                      name,
                                      arg) == -1)
-     ACE_ERROR ((LM_ERROR,
+     ACELIB_ERROR ((LM_ERROR,
                  ACE_TEXT ("%p\n"),
                  ACE_TEXT ("recursive_mutex_init")));
 }
@@ -103,18 +103,14 @@ ACE_Recursive_Thread_Mutex::get_nesting_level (void)
 #endif /* !ACE_HAS_WINCE */
 }
 
-ACE_Recursive_Thread_Mutex::ACE_Recursive_Thread_Mutex (const ACE_Recursive_Thread_Mutex &)
-{
-}
-
 void
 ACE_Recursive_Thread_Mutex::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
 // ACE_TRACE ("ACE_Recursive_Thread_Mutex::dump");
 
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

@@ -1,7 +1,8 @@
-// $Id: SPIPE_Connector.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: SPIPE_Connector.cpp 97308 2013-09-01 00:58:08Z mesnier_p $
 
 #include "ace/SPIPE_Connector.h"
-#include "ace/Log_Msg.h"
+#include "ace/Handle_Ops.h"
+#include "ace/Log_Category.h"
 #include "ace/OS_NS_sys_time.h"
 #include "ace/OS_NS_fcntl.h"
 #include "ace/OS_NS_unistd.h"
@@ -9,6 +10,8 @@
 #if !defined (__ACE_INLINE__)
 #include "ace/SPIPE_Connector.inl"
 #endif /* __ACE_INLINE__ */
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -30,7 +33,7 @@ ACE_SPIPE_Connector::ACE_SPIPE_Connector (ACE_SPIPE_Stream &new_io,
   if (this->connect (new_io, remote_sap, timeout, local_sap,
                      reuse_addr, flags, perms, sa, pipe_mode) == -1
       && timeout != 0 && !(errno == EWOULDBLOCK || errno == ETIME))
-    ACE_ERROR ((LM_ERROR, ACE_TEXT ("address %s, %p\n"),
+    ACELIB_ERROR ((LM_ERROR, ACE_TEXT ("address %s, %p\n"),
                remote_sap.get_path_name (), ACE_TEXT ("ACE_SPIPE_Connector")));
 }
 
@@ -112,6 +115,7 @@ ACE_SPIPE_Connector::connect (ACE_SPIPE_Stream &new_io,
             }
           // Get the amount of time remaining for ::WaitNamedPipe.
           time_out_value = relative_time.msec ();
+
         }
 
       // Wait for the named pipe to become available.

@@ -6,7 +6,7 @@
  *
  *  data types
  *
- *  $Id: os_types.h 95534 2012-02-17 23:19:33Z mitza $
+ *  $Id: os_types.h 97262 2013-08-09 08:32:10Z johnnyw $
  *
  *  @author Don Hinton <dhinton@dresystems.com>
  *  @author This code was originally in various places including ace/OS.h.
@@ -18,7 +18,7 @@
 
 #include /**/ "ace/pre.h"
 
-#include "ace/config-lite.h"
+#include /**/ "ace/config-lite.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once
@@ -47,13 +47,9 @@ extern "C"
 
 typedef double ACE_timer_t;
 
-// todo: don't forget to clean this up!  ;-)
-#if !defined (ACE_HAS_CLOCK_GETTIME) && !(defined (_CLOCKID_T_) || defined (_CLOCKID_T))
+#if defined (ACE_LACKS_CLOCKID_T)
    typedef int clockid_t;
-#  if !defined (CLOCK_REALTIME)
-#    define CLOCK_REALTIME 0
-#  endif /* CLOCK_REALTIME */
-#endif /* ! ACE_HAS_CLOCK_GETTIME && ! _CLOCKID_T_ */
+#endif /* ACE_LACKS_CLOCKID_T */
 
 #if defined (ACE_LACKS_DEV_T)
    typedef unsigned int dev_t;

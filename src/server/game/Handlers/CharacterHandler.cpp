@@ -655,7 +655,7 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
             SQLTransaction trans = LoginDatabase.BeginTransaction();
 
-            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DEL_REALMCHARACTERS);
+            PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_DELETE_REALMCHARACTERS);
             stmt->setUInt32(0, GetAccountId());
             stmt->setUInt32(1, realmID);
             trans->Append(stmt);

@@ -1,10 +1,12 @@
-// $Id: Dump.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: Dump.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Dump.h"
 #include "ace/Guard_T.h"
 #include "ace/Thread_Mutex.h"
 #include "ace/Object_Manager.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

@@ -1,4 +1,4 @@
-// $Id: Atomic_Op.cpp 91286 2010-08-05 09:04:31Z johnnyw $
+// $Id: Atomic_Op.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Atomic_Op.h"
 #include "ace/OS_NS_unistd.h"
@@ -14,6 +14,7 @@
 #endif /* ACE_INCLUDE_ATOMIC_OP_SPARC */
 
 namespace {
+
 #if defined (_MSC_VER)
 // Disable "no return value" warning, as we will be putting
 // the return values directly into the EAX register.
@@ -229,6 +230,7 @@ multi_cpu_exchange_add (volatile long *value, long rhs)
 #if defined (_MSC_VER)
 #pragma warning (pop)
 #endif /* _MSC_VER */
+
 } // end namespace
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
@@ -261,8 +263,8 @@ void
 ACE_Atomic_Op<ACE_Thread_Mutex, long>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -294,8 +296,8 @@ void
 ACE_Atomic_Op<ACE_Thread_Mutex, unsigned long>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

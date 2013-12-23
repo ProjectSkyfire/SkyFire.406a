@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: Hash_Multi_Map_Manager_T.inl 94520 2011-09-22 14:55:20Z johnnyw $
+// $Id: Hash_Multi_Map_Manager_T.inl 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Guard_T.h"
 
@@ -17,7 +17,7 @@ ACE_Hash_Multi_Map_Manager<EXT_ID, INT_ID, HASH_KEY, COMPARE_KEYS, ACE_LOCK>::AC
     cur_size_ (0)
 {
   if (this->open (size, table_alloc, entry_alloc) == -1)
-    ACE_ERROR ((LM_ERROR, ACE_TEXT ("ACE_Hash_Multi_Map_Manager\n")));
+    ACELIB_ERROR ((LM_ERROR, ACE_TEXT ("ACE_Hash_Multi_Map_Manager\n")));
 }
 
 template <class EXT_ID, class INT_ID, class HASH_KEY, class COMPARE_KEYS, class ACE_LOCK> ACE_INLINE
@@ -30,7 +30,7 @@ ACE_Hash_Multi_Map_Manager<EXT_ID, INT_ID, HASH_KEY, COMPARE_KEYS, ACE_LOCK>::AC
     cur_size_ (0)
 {
   if (this->open (ACE_DEFAULT_MAP_SIZE, table_alloc, entry_alloc) == -1)
-    ACE_ERROR ((LM_ERROR, ACE_TEXT ("ACE_Hash_Multi_Map_Manager\n")));
+    ACELIB_ERROR ((LM_ERROR, ACE_TEXT ("ACE_Hash_Multi_Map_Manager\n")));
 }
 
 template <class EXT_ID, class INT_ID, class HASH_KEY, class COMPARE_KEYS, class ACE_LOCK> ACE_INLINE int

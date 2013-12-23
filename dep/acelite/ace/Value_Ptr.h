@@ -4,7 +4,7 @@
 /**
  *  @file Value_Ptr.h
  *
- *  $Id: Value_Ptr.h 92386 2010-10-28 07:44:37Z johnnyw $
+ *  $Id: Value_Ptr.h 97262 2013-08-09 08:32:10Z johnnyw $
  *
  *  Value_Ptr implementation based on code in Herb Sutter's book "More
  *  Exceptional C++".
@@ -16,7 +16,7 @@
 #ifndef ACE_VALUE_PTR_H
 #define ACE_VALUE_PTR_H
 
-#include "ace/config-lite.h"
+#include /**/ "ace/config-lite.h"
 
 #include <algorithm>
 

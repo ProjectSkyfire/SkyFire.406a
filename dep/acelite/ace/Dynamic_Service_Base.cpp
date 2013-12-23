@@ -1,13 +1,15 @@
-// $Id: Dynamic_Service_Base.cpp 91813 2010-09-17 07:52:52Z johnnyw $
+// $Id: Dynamic_Service_Base.cpp 96985 2013-04-11 15:50:32Z huangh $
 
 #include "ace/Dynamic_Service_Base.h"
 #include "ace/ACE.h"
 #include "ace/Service_Config.h"
 #include "ace/Service_Repository.h"
 #include "ace/Service_Types.h"
-#include "ace/Log_Msg.h"
+#include "ace/Log_Category.h"
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
+
 
 void
 ACE_Dynamic_Service_Base::dump (void) const
@@ -15,9 +17,9 @@ ACE_Dynamic_Service_Base::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Dynamic_Service_Base::dump");
 
-  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\n")));
-  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\n")));
+  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -53,6 +55,7 @@ ACE_Dynamic_Service_Base::find_i (const ACE_Service_Gestalt* &repo,
   return svc_rec;
 }
 
+
 // Get the instance using <name> for specific configuration repository.
 void *
 ACE_Dynamic_Service_Base::instance (const ACE_Service_Gestalt* repo,
@@ -79,7 +82,7 @@ ACE_Dynamic_Service_Base::instance (const ACE_Service_Gestalt* repo,
 
       if (repo->repo_ != repo_found->repo_)
         {
-          ACE_DEBUG ((LM_DEBUG,
+          ACELIB_DEBUG ((LM_DEBUG,
                     ACE_TEXT ("ACE (%P|%t) DSB::instance, repo=%@, name=%s")
                     ACE_TEXT (" type=%@ => %@")
                     ACE_TEXT (" [in repo=%@]\n"),
@@ -88,7 +91,7 @@ ACE_Dynamic_Service_Base::instance (const ACE_Service_Gestalt* repo,
         }
       else
         {
-          ACE_DEBUG ((LM_DEBUG,
+          ACELIB_DEBUG ((LM_DEBUG,
                     ACE_TEXT ("ACE (%P|%t) DSB::instance, repo=%@, name=%s")
                     ACE_TEXT (" type=%@ => %@\n"),
                     repo->repo_, name, type, obj));

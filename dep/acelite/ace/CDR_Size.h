@@ -4,7 +4,7 @@
 /**
  *  @file   CDR_Size.h
  *
- *  $Id: CDR_Size.h 93359 2011-02-11 11:33:12Z mcorino $
+ *  $Id: CDR_Size.h 96688 2013-01-22 12:28:42Z johnnyw $
  *
  *
  * ACE Common Data Representation (CDR) size-calculating stream.
@@ -42,7 +42,6 @@ ACE_BEGIN_VERSIONED_NAMESPACE_DECL
  * @class ACE_SizeCDR
  *
  * @brief A CDR stream for calculating size of the representation.
- *
  */
 class ACE_Export ACE_SizeCDR
 {
@@ -54,14 +53,11 @@ public:
   /// Returns @c false if an error has ocurred.
   bool good_bit (void) const;
 
-
   /// Reset current size.
   void reset (void);
 
-
   /// Return current size.
   size_t total_length (void) const;
-
 
   // Return 0 on failure and 1 on success.
   //@{ @name Size-calculating pseudo-write operations

@@ -839,7 +839,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
                 clientSeed);
 
     // Get the account information from the realmd database
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_INFO_BY_NAME);
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_INFO_BY_NAME);
 
     stmt->setString(0, account);
 
@@ -941,7 +941,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // Re-check account ban (same check as in realmd)
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_BANS);
+    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_BANS);
 
     stmt->setUInt32(0, id);
     stmt->setString(1, GetRemoteAddress());
@@ -991,7 +991,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
                 address.c_str());
 
     // Check if this user is by any chance a recruiter
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_ACCOUNT_RECRUITER);
+    stmt = LoginDatabase.GetPreparedStatement(LOGIN_SELECT_ACCOUNT_RECRUITER);
 
     stmt->setUInt32(0, id);
 

@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: FIFO_Recv_Msg.inl 91813 2010-09-17 07:52:52Z johnnyw $
+// $Id: FIFO_Recv_Msg.inl 97246 2013-08-07 07:10:20Z johnnyw $
 
 #include "ace/Min_Max.h"
 #include "ace/OS_NS_stropts.h"
@@ -32,7 +32,7 @@ ACE_FIFO_Recv_Msg::recv (ACE_Str_Buf &recv_msg)
 #else /* Do the ol' 2-read trick... */
   if (ACE_OS::read (this->get_handle (),
                     (char *) &recv_msg.len,
-                    sizeof recv_msg.len) != sizeof recv_msg.len)
+                    sizeof recv_msg.len) != (ssize_t) sizeof recv_msg.len)
     {
       return -1;
     }

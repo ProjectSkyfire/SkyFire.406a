@@ -4,7 +4,7 @@
 /**
  *  @file    Timer_Hash_T.h
  *
- *  $Id: Timer_Hash_T.h 95368 2011-12-19 13:38:49Z mcorino $
+ *  $Id: Timer_Hash_T.h 96230 2012-11-06 22:18:13Z schmidt $
  *
  *  @author Darrell Brunsch <brunsch@cs.wustl.edu>
  */
@@ -29,6 +29,7 @@ template <class TYPE, class FUNCTOR, class ACE_LOCK, class BUCKET, typename TIME
 class ACE_Timer_Hash_T;
 template <typename TYPE>
 class Hash_Token;
+class ACE_Event_Handler;
 
 /**
  * @class ACE_Timer_Hash_Upcall
@@ -324,8 +325,8 @@ private:
   HASH_ITERATOR *iterator_;
 
 #if defined (ACE_WIN64)
-  // Part of a hack... see comments in schedule().
-  // This is, essentially, the upper 32 bits of a 64-bit pointer on Win64.
+  /// Part of a hack... see comments in schedule().
+  /// This is, essentially, the upper 32 bits of a 64-bit pointer on Win64.
   ptrdiff_t pointer_base_;
 #endif
 
