@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2013 Project SkyFire <http://www.projectskyfire.org/>
+ * Copyright (C) 2011-2014 Project SkyFire <http://www.projectskyfire.org/>
  * Copyright (C) 2011 TrilliumEMU <http://www.arkania.net/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
