@@ -1232,7 +1232,7 @@ const dtOffMeshConnection* dtNavMesh::getOffMeshConnectionByRef(dtPolyRef ref) c
     const dtMeshTile* tile = &m_tiles[it];
     if (ip >= (unsigned int)tile->header->polyCount)
         return 0;
-	if (ip >= (unsigned int)tile->header->polyCount) return 0;
+
 	const dtPoly* poly = &tile->polys[ip];
 	
 	// Make sure that the current poly is indeed off-mesh link.
