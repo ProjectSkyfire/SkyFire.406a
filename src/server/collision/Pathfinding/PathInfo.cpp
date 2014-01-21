@@ -411,7 +411,7 @@ void PathInfo::BuildPolyPath(PathNode startPos, PathNode endPos)
 
         if (!m_polyLength || dtResult != DT_SUCCESS)
         {
-            // only happens if we passed bad data to findPath(), or navmesh is messed up
+            ///- only happens if we passed bad data to findPath(), or navmesh is messed up
             sLog->outError("%u's Path Build failed: 0 length path", m_sourceUnit->GetGUID());
             BuildShortcut();
             m_type = PATHFIND_NOPATH;
@@ -439,7 +439,7 @@ void PathInfo::BuildPointPath(float *startPoint, float *endPoint)
     if ((m_type & PATHFIND_INCOMPLETE) && DT_SUCCESS == m_navMeshQuery->closestPointOnPoly(m_pathPolyRefs[m_polyLength-1], endPoint, closestPoint))
     {
         dtVcopy(endPoint, closestPoint);
-        setActualEndPosition(PathNode(endPoint[2],endPoint[0],endPoint[1]));
+        setActualEndPosition(PathNode (endPoint[2], endPoint[0], endPoint[1]));
     }
 
     float pathPoints[MAX_POINT_PATH_LENGTH*VERTEX_SIZE];
@@ -588,7 +588,7 @@ uint32 PathInfo::fixupCorridor(dtPolyRef* path, const uint32 npath, const uint32
     // Adjust beginning of the buffer to include the visited.
     uint32 req = nvisited - furthestVisited;
     uint32 orig = uint32(furthestPath+1) < npath ? furthestPath+1 : npath;
-    uint32 size = npath-orig > 0 ? npath-orig : 0;
+    uint32 size = npath-orig > 0 ? npath-orig : 0; // 'npath - orig > o' will work as 'npath != orig' as well.
     if (req+size > maxPath)
         size = maxPath-req;
 
