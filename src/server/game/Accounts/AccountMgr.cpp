@@ -237,12 +237,14 @@ bool normalizeString(std::string& utf8String)
     size_t maxLength = MAX_ACCOUNT_STR;
     if (!Utf8toWStr(utf8String, buffer, maxLength))
         return false;
+
 #ifdef _MSC_VER
-#pragma warning(disable: 4996)
+#   pragma warning(push)
+#   pragma warning(disable:4996)
 #endif
     std::transform(&buffer[0], buffer+maxLength, &buffer[0], wcharToUpperOnlyLatin);
 #ifdef _MSC_VER
-#pragma warning(default: 4996)
+#   pragma warning(pop)
 #endif
 
     return WStrToUtf8(buffer, maxLength, utf8String);
