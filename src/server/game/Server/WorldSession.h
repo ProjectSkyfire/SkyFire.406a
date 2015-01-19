@@ -379,10 +379,10 @@ class WorldSession
         void SetLatency(uint32 latency) { m_latency = latency; }
         uint32 getDialogStatus(Player* player, Object* questgiver, uint32 defstatus);
 
-        time_t m_timeOutTime;
+        ACE_Atomic_Op<ACE_Thread_Mutex, time_t> m_timeOutTime;
         void UpdateTimeOutTime(uint32 diff)
         {
-            if (time_t(diff) > m_timeOutTime)
+            if (time_t(diff) > m_timeOutTime.value())
                 m_timeOutTime = 0;
             else
                 m_timeOutTime -= diff;

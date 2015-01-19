@@ -24,6 +24,7 @@
 
 #include <ace/Singleton.h>
 #include <ace/Null_Mutex.h>
+#include <ace/INET_Addr.h>
 
 enum RealmFlags
 {
@@ -41,7 +42,9 @@ enum RealmFlags
 // Storage object for a realm
 struct Realm
 {
-    std::string address;
+    ACE_INET_Addr ExternalAddress;
+    ACE_INET_Addr LocalAddress;
+    ACE_INET_Addr LocalSubnetMask;
     std::string name;
     uint8 icon;
     RealmFlags flag;
@@ -65,7 +68,7 @@ public:
 
     void UpdateIfNeed();
 
-    void AddRealm(Realm NewRealm) {m_realms[NewRealm.name] = NewRealm;}
+    void AddRealm(const Realm NewRealm) {m_realms[NewRealm.name] = NewRealm; }
 
     RealmMap::const_iterator begin() const { return m_realms.begin(); }
     RealmMap::const_iterator end() const { return m_realms.end(); }
@@ -73,7 +76,7 @@ public:
 
 private:
     void UpdateRealms(bool init = false);
-    void UpdateRealm(uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, RealmFlags flag, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, uint32 build);
+    void UpdateRealm(uint32 id, const std::string& name, ACE_INET_Addr const& address, ACE_INET_Addr const& localAddr, ACE_INET_Addr const& localSubmask, uint8 icon, RealmFlags flag, uint8 timezone, AccountTypes allowedSecurityLevel, float popu, uint32 build);
 
     RealmMap m_realms;                                  ///< Internal map of realms
     uint32   m_UpdateInterval;

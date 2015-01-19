@@ -24,6 +24,9 @@
 #include "BigNumber.h"
 #include "RealmSocket.h"
 
+class ACE_INET_Addr;
+struct Realm;
+
 // Handle login commands
 class AuthSocket: public RealmSocket::Session
 {
@@ -36,6 +39,8 @@ public:
     virtual void OnRead(void);
     virtual void OnAccept(void);
     virtual void OnClose(void);
+
+    static ACE_INET_Addr const& GetAddressForClient(Realm const& realm, ACE_INET_Addr const& clientAddr);	
 
     bool _HandleLogonChallenge();
     bool _HandleLogonProof();
@@ -65,6 +70,7 @@ private:
     bool _authed;
 
     std::string _login;
+    std::string _tokenKey;
 
     // Since GetLocaleByName() is _NOT_ bijective, we have to store the locale as a string. Otherwise we can't differ
     // between enUS and enGB, which is important for the patch system
