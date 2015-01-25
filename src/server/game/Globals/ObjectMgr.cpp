@@ -2328,6 +2328,10 @@ void ObjectMgr::LoadItemTemplates()
         else
             itemTemplate.DamageType     = 0;
 
+        itemTemplate.Armor  = FillItemArmor(itemTemplate.ItemLevel, itemTemplate.Class,
+                                            itemTemplate.SubClass, itemTemplate.Quality,
+                                            itemTemplate.InventoryType);
+
         itemTemplate.Delay          = uint32(fields[49].GetUInt16());
         itemTemplate.RangedModRange = fields[50].GetFloat();
 

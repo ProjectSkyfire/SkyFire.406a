@@ -334,11 +334,15 @@ enum ItemSubclassWeapon
     ITEM_SUBCLASS_WEAPON_POLEARM                = 6,
     ITEM_SUBCLASS_WEAPON_SWORD                  = 7,
     ITEM_SUBCLASS_WEAPON_SWORD2                 = 8,
+    ITEM_SUBCLASS_WEAPON_Obsolete               = 9,
     ITEM_SUBCLASS_WEAPON_STAFF                  = 10,
+    ITEM_SUBCLASS_WEAPON_EXOTIC                 = 11,
+    ITEM_SUBCLASS_WEAPON_EXOTIC2                = 12,
     ITEM_SUBCLASS_WEAPON_FIST                   = 13,
     ITEM_SUBCLASS_WEAPON_MISC                   = 14,
     ITEM_SUBCLASS_WEAPON_DAGGER                 = 15,
     ITEM_SUBCLASS_WEAPON_THROWN                 = 16,
+    ITEM_SUBCLASS_WEAPON_SPEAR                  = 17,
     ITEM_SUBCLASS_WEAPON_CROSSBOW               = 18,
     ITEM_SUBCLASS_WEAPON_WAND                   = 19,
     ITEM_SUBCLASS_WEAPON_FISHING_POLE           = 20
@@ -645,10 +649,10 @@ struct ItemTemplate
     uint32 MaxMoneyLoot;
 
     // extra fields
-    float  DPS;
-    uint32 Armor;
     float  minDamage;
     float  maxDamage;
+    float  DPS;
+    uint32 Armor;
 
     // helpers
     bool CanChangeEquipStateInCombat() const
@@ -711,10 +715,6 @@ struct ItemTemplate
         }
         return itemLevel;
     }
-
-    // Remove this.
-    uint32 GetArmor() const;
-    ItemDamageEntry const* FindItemDamageEntry() const;
 
     bool IsPotion() const { return Class == ITEM_CLASS_CONSUMABLE && SubClass == ITEM_SUBCLASS_POTION; }
     bool IsArmorVellum() const { return Class == ITEM_CLASS_TRADE_GOODS && SubClass == ITEM_SUBCLASS_ARMOR_ENCHANTMENT; }

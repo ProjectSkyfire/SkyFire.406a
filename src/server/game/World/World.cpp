@@ -82,7 +82,6 @@
 #include "WardenCheckMgr.h"
 #include "Warden.h"
 #include "CalendarMgr.h"
-#include "ItemInfo.h"
 
 //TODO REMOVE
 #include "CreatureAISelector.h"
