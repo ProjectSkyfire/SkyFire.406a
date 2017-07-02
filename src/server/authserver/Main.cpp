@@ -109,7 +109,7 @@ extern int main(int argc, char **argv)
     sLog->outString("  \\ \\___  \\ \\  _'-\\ \\____ \\ \\  __\\ \\ \\ \\  __<\\ \\  __\\ ");
     sLog->outString("   \\/\\_____\\ \\_\\ \\_\\/\\_____\\ \\_\\  \\ \\_\\ \\_\\ \\_\\ \\_____\\ ");
     sLog->outString("    \\/_____/\\/_/\\/_/\\/_____/\\/_/   \\/_/\\/_/ /_/\\/_____/ ");
-    sLog->outString("  Project SkyFireEmu 2012(c) Open-sourced Game Emulation ");
+    sLog->outString("  Project SkyFireEmu 2017(c) Open-sourced Game Emulation ");
     sLog->outString("           <http://www.projectskyfire.org/> \n");
 
     sLog->outDetail("%s (Library: %s)", OPENSSL_VERSION_TEXT, SSLeay_version(SSLEAY_VERSION));

@@ -131,7 +131,7 @@ int Master::Run()
     sLog->outString("  \\ \\___  \\ \\  _'-\\ \\____ \\ \\  __\\ \\ \\ \\  __<\\ \\  __\\ ");
     sLog->outString("   \\/\\_____\\ \\_\\ \\_\\/\\_____\\ \\_\\  \\ \\_\\ \\_\\ \\_\\ \\_____\\ ");
     sLog->outString("    \\/_____/\\/_/\\/_/\\/_____/\\/_/   \\/_/\\/_/ /_/\\/_____/ ");
-    sLog->outString("  Project SkyFireEmu 2012(c) Open-Sourced Game Emulation Project ");
+    sLog->outString("  Project SkyFireEmu 2017(c) Open-Sourced Game Emulation Project ");
     sLog->outString("           <http://www.projectskyfire.org/> \n");
 
     ///- Worldserver PID file creation
