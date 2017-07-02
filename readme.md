@@ -1,4 +1,5 @@
-# ![logo](http://www.projectskyfire.org/public/style_images/9_1_s2QNl.png) Project SkyFire
+[![Stories in Ready](https://badge.waffle.io/ProjectSkyfire/SkyFire.548.png?label=ready&title=Ready)](https://waffle.io/ProjectSkyfire/SkyFire.548)
+# ![logo](http://www.projectskyfire.org/public/style_images/15_14_skyfire_logo.png)
 
 
 ## Introduction
@@ -16,14 +17,19 @@ It is completely open source; community involvement is highly encouraged.
 
 If you wish to contribute ideas or code please visit our site linked below or
 make pull requests to our 
-[Github repository](https://github.com/ProjectSkyfire/SkyFireEMU).
+[Github repository](https://github.com/ProjectSkyfire/SkyFire.406a).
 
 For further information on the SkyFire project, please visit our project website at 
 [projectskyfire.org](http://www.projectskyfire.org).
 
-## Status
+## Supported Client Version
+**MoP 4.0.6a Build 13623**
 
-[Build status] (https://travis-ci.org/ProjectSkyfire/SkyFireEMU/builds)
+## Client Patch
+[SkyFire-Community-Tools](https://github.com/ProjectSkyfire/SkyFire-Community-Tools).
+
+## Build Status
+# [![Build Status](https://travis-ci.org/ProjectSkyfire/SkyFire.406a.png)](https://travis-ci.org/ProjectSkyfire/SkyFire.406a)
 
 ## Requirements
 
