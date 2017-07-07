@@ -1,4 +1,4 @@
-// $Id: Map_Manager.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Map_Manager.cpp 91809 2010-09-17 07:20:41Z johnnyw $
 
 #ifndef ACE_MAP_MANAGER_CPP
 #define ACE_MAP_MANAGER_CPP
@@ -496,7 +496,9 @@ ACE_Map_Manager<EXT_ID, INT_ID, ACE_LOCK>::resize_i (ACE_UINT32 new_size)
   ENTRY *temp = 0;
 
   // Allocate new memory.
-  ACE_ALLOCATOR_RETURN (temp, (ENTRY *) this->allocator_->malloc(new_size * sizeof (ENTRY)), -1);
+  ACE_ALLOCATOR_RETURN (temp,
+                        (ENTRY *) this->allocator_->malloc (new_size * sizeof (ENTRY)),
+                        -1);
 
   // Copy over the occupied entires.
   for (i = this->occupied_list_.next ();
@@ -593,15 +595,15 @@ template <class EXT_ID, class INT_ID> void
 ACE_Map_Entry<EXT_ID, INT_ID>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("next_ = %d"), this->next_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("prev_ = %d"), this->prev_));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("next_ = %d"), this->next_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("prev_ = %d"), this->prev_));
 
 #if defined (ACE_HAS_LAZY_MAP_MANAGER)
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("free_ = %d"), this->free_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("free_ = %d"), this->free_));
 #endif /* ACE_HAS_LAZY_MAP_MANAGER */
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -609,12 +611,12 @@ template <class EXT_ID, class INT_ID, class ACE_LOCK> void
 ACE_Map_Manager<EXT_ID, INT_ID, ACE_LOCK>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("total_size_ = %d"), this->total_size_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\ncur_size_ = %d"), this->cur_size_));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("total_size_ = %d"), this->total_size_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\ncur_size_ = %d"), this->cur_size_));
   this->allocator_->dump ();
   this->lock_.dump ();
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -622,9 +624,9 @@ template <class EXT_ID, class INT_ID, class ACE_LOCK> void
 ACE_Map_Iterator_Base<EXT_ID, INT_ID, ACE_LOCK>::dump_i (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("next_ = %d"), this->next_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("next_ = %d"), this->next_));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -632,9 +634,9 @@ template <class EXT_ID, class INT_ID, class ACE_LOCK> void
 ACE_Map_Const_Iterator_Base<EXT_ID, INT_ID, ACE_LOCK>::dump_i (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("next_ = %d"), this->next_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("next_ = %d"), this->next_));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

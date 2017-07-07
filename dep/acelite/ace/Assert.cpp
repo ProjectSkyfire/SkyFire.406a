@@ -1,7 +1,7 @@
-// $Id: Assert.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Assert.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/Assert.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

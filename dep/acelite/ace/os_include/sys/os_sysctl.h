@@ -6,7 +6,7 @@
  *
  *  declarations for sysctl
  *
- *  $Id: os_sysctl.h 97262 2013-08-09 08:32:10Z johnnyw $
+ *  $Id: os_sysctl.h 80826 2008-03-04 14:51:23Z wotte $
  *
  *  @author Johnny Willemsen  <jwillemsen@remedy.nl>
  */
@@ -17,7 +17,7 @@
 
 #include /**/ "ace/pre.h"
 
-#include /**/ "ace/config-lite.h"
+#include "ace/config-lite.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once

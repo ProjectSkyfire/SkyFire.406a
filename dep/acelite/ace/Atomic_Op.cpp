@@ -1,4 +1,4 @@
-// $Id: Atomic_Op.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Atomic_Op.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/Atomic_Op.h"
 #include "ace/OS_NS_unistd.h"
@@ -263,8 +263,8 @@ void
 ACE_Atomic_Op<ACE_Thread_Mutex, long>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -296,8 +296,8 @@ void
 ACE_Atomic_Op<ACE_Thread_Mutex, unsigned long>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

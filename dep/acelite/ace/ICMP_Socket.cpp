@@ -1,12 +1,11 @@
-// $Id: ICMP_Socket.cpp 97309 2013-09-01 13:10:27Z mesnier_p $
+// $Id: ICMP_Socket.cpp 93560 2011-03-16 13:54:49Z johnnyw $
 
 #include "ace/ICMP_Socket.h"
 
 #if defined (ACE_HAS_ICMP_SUPPORT) && (ACE_HAS_ICMP_SUPPORT == 1)
 
 #include "ace/ACE.h"
-#include "ace/Sock_Connect.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/OS_NS_netdb.h"
 #include "ace/OS_NS_sys_socket.h"
 
@@ -90,7 +89,7 @@ ACE_ICMP_Socket::open (ACE_Addr const & local,
 
   if (! (proto = ACE_OS::getprotobyname ("icmp")))
     {
-      ACELIB_ERROR_RETURN
+      ACE_ERROR_RETURN
         ((LM_ERROR,
           ACE_TEXT ("(%P|%t) ACE_ICMP_Socket::open: %p; %s\n"),
           ACE_TEXT ("getprotobyname"),
@@ -102,7 +101,7 @@ ACE_ICMP_Socket::open (ACE_Addr const & local,
 
   if (proto_number != IPPROTO_ICMP || proto_number != protocol)
     {
-      ACELIB_ERROR_RETURN ((LM_ERROR,
+      ACE_ERROR_RETURN ((LM_ERROR,
                          ACE_TEXT ("(%P|%t) ACE::ICMP_Socket::open - ")
                          ACE_TEXT ("only IPPROTO_ICMP protocol is ")
                          ACE_TEXT ("currently supported.\n")),

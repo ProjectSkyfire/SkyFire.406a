@@ -1,9 +1,9 @@
-// $Id: Multihomed_INET_Addr.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Multihomed_INET_Addr.cpp 91368 2010-08-16 13:03:34Z mhengstmengel $
 
 // Extends ACE_INET_Addr with support for multi-homed addresses.
 
 #include "ace/Multihomed_INET_Addr.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 
 #if !defined (__ACE_INLINE__)
 #  include "ace/Multihomed_INET_Addr.inl"
@@ -49,7 +49,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                        encode,
                                                        address_family);
       if (ret) {
-        ACELIB_DEBUG ((LM_DEBUG,
+        ACE_DEBUG ((LM_DEBUG,
                     ACE_TEXT ("Invalid INET addr (%C:%u) will be ignored\n"),
                     secondary_host_names[i], port_number));
         this->secondaries_.size(this->secondaries_.size() - 1);
@@ -85,7 +85,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                        encode,
                                                        address_family);
       if (ret) {
-        ACELIB_DEBUG ((LM_DEBUG,
+        ACE_DEBUG ((LM_DEBUG,
                     ACE_TEXT ("Invalid INET addr (%s:%u) will be ignored\n"),
                     ACE_TEXT_WCHAR_TO_TCHAR (secondary_host_names[i]), port_number));
         this->secondaries_.size(this->secondaries_.size() - 1);
@@ -120,7 +120,7 @@ ACE_Multihomed_INET_Addr::ACE_Multihomed_INET_Addr(u_short port_number,
                                                               encode);
 
       if (ret) {
-        ACELIB_DEBUG ((LM_DEBUG,
+        ACE_DEBUG ((LM_DEBUG,
                     "Invalid INET addr (%u:%u) will be ignored\n",
                     secondary_ip_addrs[i], port_number));
         this->secondaries_.size(this->secondaries_.size() - 1);

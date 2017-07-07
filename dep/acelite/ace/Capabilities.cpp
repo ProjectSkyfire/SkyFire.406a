@@ -1,4 +1,4 @@
-// $Id: Capabilities.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Capabilities.cpp 91287 2010-08-05 10:30:49Z johnnyw $
 
 #include "ace/Capabilities.h"
 #include "ace/OS_NS_ctype.h"
@@ -220,7 +220,7 @@ ACE_Capabilities::is_entry (const ACE_TCHAR *name, const ACE_TCHAR *line)
         ++line;
       else
         {
-          ACELIB_DEBUG ((LM_DEBUG,
+          ACE_DEBUG ((LM_DEBUG,
                       ACE_TEXT ("Invalid entry\n")));
           break;
         }
@@ -311,7 +311,7 @@ ACE_Capabilities::getent (const ACE_TCHAR *fname, const ACE_TCHAR *name)
   FILE *fp = ACE_OS::fopen (fname, ACE_TEXT ("r"));
 
   if (fp == 0)
-    ACELIB_ERROR_RETURN ((LM_ERROR,
+    ACE_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT ("Can't open %s file\n"),
                        fname),
                       -1);

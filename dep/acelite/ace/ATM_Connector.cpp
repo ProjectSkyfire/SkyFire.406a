@@ -1,5 +1,5 @@
 // ATM_Connector.cpp
-// $Id: ATM_Connector.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: ATM_Connector.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/ATM_Connector.h"
 #if defined (ACE_HAS_ATM)
@@ -52,7 +52,7 @@ ACE_ATM_Connector::connect (ACE_ATM_Stream &new_stream,
                             params.get_user_data(),
                             &options.get_qos());
 #elif defined (ACE_HAS_FORE_ATM_WS2)
-  ACELIB_DEBUG(LM_DEBUG,
+  ACE_DEBUG(LM_DEBUG,
             ACE_TEXT ("ATM_Connector(connect): set QoS parameters\n" ));
 
   ACE_HANDLE s = new_stream.get_handle();
@@ -65,7 +65,7 @@ ACE_ATM_Connector::connect (ACE_ATM_Stream &new_stream,
                                              0,
                                              0);
 
-  ACELIB_DEBUG(LM_DEBUG,
+  ACE_DEBUG(LM_DEBUG,
             ACE_TEXT ("ATM_Connector(connect): connecting...\n"));
 
   int result = ACE_OS::connect( s,
@@ -103,7 +103,7 @@ ACE_ATM_Connector::connect (ACE_ATM_Stream &new_stream,
                          SO_ATMQOS,
                          reinterpret_cast<char*> (&qos),
                          sizeof(qos)) < 0) {
-    ACELIB_DEBUG((LM_DEBUG,ACE_TEXT ("ATM_Connector(connect): unable to set qos %d\n"),
+    ACE_DEBUG((LM_DEBUG,ACE_TEXT ("ATM_Connector(connect): unable to set qos %d\n"),
                errno));
     return -1;
   }
@@ -113,7 +113,7 @@ ACE_ATM_Connector::connect (ACE_ATM_Stream &new_stream,
                                sizeof( remote_addr->sockaddratmsvc));
 
   if ( result != 0 )
-    ACELIB_DEBUG(LM_DEBUG,
+    ACE_DEBUG(LM_DEBUG,
               ACE_TEXT ("ATM_Connector(connect): connection failed, %d\n"),
               errno);
 

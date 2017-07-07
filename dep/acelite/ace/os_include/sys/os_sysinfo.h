@@ -4,7 +4,7 @@
 /**
  *  @file    os_sysinfo.h
  *
- *  $Id: os_sysinfo.h 97262 2013-08-09 08:32:10Z johnnyw $
+ *  $Id: os_sysinfo.h 81692 2008-05-14 12:25:02Z johnnyw $
  *
  *  @author Johnny Willemsen  <jwillemsen@remedy.nl>
  */
@@ -15,7 +15,7 @@
 
 #include /**/ "ace/pre.h"
 
-#include /**/ "ace/config-lite.h"
+#include "ace/config-lite.h"
 
 #if !defined (ACE_LACKS_PRAGMA_ONCE)
 # pragma once

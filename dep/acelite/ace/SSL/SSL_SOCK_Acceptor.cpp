@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: SSL_SOCK_Acceptor.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: SSL_SOCK_Acceptor.cpp 91368 2010-08-16 13:03:34Z mhengstmengel $
 
 
 #include "SSL_SOCK_Acceptor.h"
@@ -8,7 +8,7 @@
 #include "ace/Handle_Set.h"
 #include "ace/OS_Errno.h"
 #include "ace/OS_NS_errno.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/Time_Value.h"
 #include "ace/Countdown_Time.h"
 #include "ace/Truncate.h"

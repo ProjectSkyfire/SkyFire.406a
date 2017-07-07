@@ -1,8 +1,8 @@
-// $Id: Sbrk_Memory_Pool.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Sbrk_Memory_Pool.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/OS_NS_unistd.h"
 #include "ace/Sbrk_Memory_Pool.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 
 
 
@@ -20,16 +20,16 @@ ACE_Sbrk_Memory_Pool::acquire (size_t nbytes,
 {
   ACE_TRACE ("ACE_Sbrk_Memory_Pool::acquire");
   rounded_bytes = this->round_up (nbytes);
-  // ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("(%P|%t) acquiring more chunks, nbytes = %d, rounded_bytes = %d\n"), nbytes, rounded_bytes));
+  // ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("(%P|%t) acquiring more chunks, nbytes = %d, rounded_bytes = %d\n"), nbytes, rounded_bytes));
   void *cp = ACE_OS::sbrk (rounded_bytes);
 
   if (cp == MAP_FAILED)
-    ACELIB_ERROR_RETURN ((LM_ERROR,
+    ACE_ERROR_RETURN ((LM_ERROR,
                        "(%P|%t) cp = %u\n",
                        cp),
                       0);
   else
-    // ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("(%P|%t) acquired more chunks, nbytes = %d, rounded_bytes = %d, new break = %u\n"), nbytes, rounded_bytes, cp));
+    // ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("(%P|%t) acquired more chunks, nbytes = %d, rounded_bytes = %d, new break = %u\n"), nbytes, rounded_bytes, cp));
   return cp;
 }
 

@@ -11,10 +11,9 @@
 
 # NOTE: Do not use glob here, it would include files we don't want
 set(ace_STAT_SRCS
-  PrecompiledHeaders/WinAcePCH.cpp
   ACE.cpp
-  ACE_crc_ccitt.cpp
   ACE_crc32.cpp
+  ACE_crc_ccitt.cpp
   ace_wchar.cpp
   Activation_Queue.cpp
   Active_Map_Manager.cpp
@@ -32,17 +31,18 @@ set(ace_STAT_SRCS
   ATM_Stream.cpp
   Atomic_Op.cpp
   Atomic_Op_Sparc.c
+  Auto_Event.cpp
   Barrier.cpp
   Base_Thread_Adapter.cpp
   Based_Pointer_Repository.cpp
   Basic_Stats.cpp
   Basic_Types.cpp
   Capabilities.cpp
-  Codecs.cpp
   CDR_Base.cpp
-  CDR_Stream.cpp
   CDR_Size.cpp
+  CDR_Stream.cpp
   Cleanup.cpp
+  Codecs.cpp
   Codeset_IBM1047.cpp
   Codeset_Registry.cpp
   Codeset_Registry_db.cpp
@@ -59,18 +59,19 @@ set(ace_STAT_SRCS
   DEV_Addr.cpp
   DEV_Connector.cpp
   DEV_IO.cpp
-  DLL.cpp
-  DLL_Manager.cpp
   Dev_Poll_Reactor.cpp
   Dirent.cpp
   Dirent_Selector.cpp
+  DLL.cpp
+  DLL_Manager.cpp
   Dump.cpp
   Dynamic.cpp
-  Dynamic_Service.cpp
-  Dynamic_Service_Base.cpp
   Dynamic_Message_Strategy.cpp
+  Dynamic_Service_Base.cpp
   Dynamic_Service_Dependency.cpp
-  Event_Base.cpp
+  Encoding_Converter.cpp
+  Encoding_Converter_Factory.cpp
+  Event.cpp
   Event_Handler.cpp
   Event_Handler_Handle_Timeout_Upcall.cpp
   FIFO.cpp
@@ -83,6 +84,7 @@ set(ace_STAT_SRCS
   FILE_Connector.cpp
   FILE_IO.cpp
   File_Lock.cpp
+  Filecache.cpp
   Flag_Manip.cpp
   Framework_Component.cpp
   Functor.cpp
@@ -95,14 +97,15 @@ set(ace_STAT_SRCS
   ICMP_Socket.cpp
   INET_Addr.cpp
   Init_ACE.cpp
-  IO_SAP.cpp
   IO_Cntl_Msg.cpp
+  IO_SAP.cpp
   IOStream.cpp
   IPC_SAP.cpp
   Lib_Find.cpp
   Local_Memory_Pool.cpp
+  Local_Name_Space.cpp
+  Local_Tokens.cpp
   Lock.cpp
-  Log_Category.cpp
   Log_Msg.cpp
   Log_Msg_Backend.cpp
   Log_Msg_Callback.cpp
@@ -119,6 +122,7 @@ set(ace_STAT_SRCS
   LSOCK_Stream.cpp
   Malloc.cpp
   Malloc_Allocator.cpp
+  Manual_Event.cpp
   MEM_Acceptor.cpp
   MEM_Addr.cpp
   MEM_Connector.cpp
@@ -132,24 +136,27 @@ set(ace_STAT_SRCS
   Message_Queue_Vx.cpp
   Method_Request.cpp
   MMAP_Memory_Pool.cpp
-  Msg_WFMO_Reactor.cpp
   Monitor_Admin.cpp
   Monitor_Admin_Manager.cpp
   Monitor_Base.cpp
+  Monitor_Control_Action.cpp
+  Monitor_Control_Types.cpp
   Monitor_Point_Registry.cpp
   Monitor_Size.cpp
-  Monitor_Control_Types.cpp
-  Monitor_Control_Action.cpp
-  Monotonic_Time_Policy.cpp
+  Msg_WFMO_Reactor.cpp
   Multihomed_INET_Addr.cpp
   Mutex.cpp
+  Name_Proxy.cpp
+  Name_Request_Reply.cpp
+  Name_Space.cpp
+  Naming_Context.cpp
   Netlink_Addr.cpp
-  Notification_Strategy.cpp
   Notification_Queue.cpp
+  Notification_Strategy.cpp
+  NT_Service.cpp
   Obchunk.cpp
   Object_Manager.cpp
   Object_Manager_Base.cpp
-  Obstack.cpp
   OS_Errno.cpp
   OS_Log_Msg_Attributes.cpp
   OS_main.cpp
@@ -186,7 +193,6 @@ set(ace_STAT_SRCS
   OS_NS_time.cpp
   OS_NS_unistd.cpp
   OS_NS_wchar.cpp
-  OS_NS_wctype.cpp
   OS_QoS.cpp
   OS_Thread_Adapter.cpp
   OS_TLI.cpp
@@ -214,6 +220,9 @@ set(ace_STAT_SRCS
   Recursive_Thread_Mutex.cpp
   Recyclable.cpp
   Registry.cpp
+  Registry_Name_Space.cpp
+  Remote_Name_Space.cpp
+  Remote_Tokens.cpp
   Rtems_init.c
   RW_Mutex.cpp
   RW_Process_Mutex.cpp
@@ -223,17 +232,17 @@ set(ace_STAT_SRCS
   Sched_Params.cpp
   Select_Reactor_Base.cpp
   Semaphore.cpp
-  Shared_Memory.cpp
-  Shared_Memory_MM.cpp
-  Shared_Memory_Pool.cpp
-  Shared_Memory_SV.cpp
-  Shared_Object.cpp
   Service_Config.cpp
   Service_Gestalt.cpp
   Service_Manager.cpp
   Service_Object.cpp
   Service_Repository.cpp
   Service_Types.cpp
+  Shared_Memory.cpp
+  Shared_Memory_MM.cpp
+  Shared_Memory_Pool.cpp
+  Shared_Memory_SV.cpp
+  Shared_Object.cpp
   Sig_Adapter.cpp
   Sig_Handler.cpp
   Signal.cpp
@@ -266,8 +275,8 @@ set(ace_STAT_SRCS
   SV_Semaphore_Complex.cpp
   SV_Semaphore_Simple.cpp
   SV_Shared_Memory.cpp
-  Svc_Conf_y.cpp
   Svc_Conf_Lexer.cpp
+  Svc_Conf_y.cpp
   Synch_Options.cpp
   System_Time.cpp
   Task.cpp
@@ -288,6 +297,10 @@ set(ace_STAT_SRCS
   TLI_Connector.cpp
   TLI_Stream.cpp
   Token.cpp
+  Token_Collection.cpp
+  Token_Invariants.cpp
+  Token_Manager.cpp
+  Token_Request_Reply.cpp
   TP_Reactor.cpp
   Trace.cpp
   TSS_Adapter.cpp
@@ -296,11 +309,21 @@ set(ace_STAT_SRCS
   UPIPE_Acceptor.cpp
   UPIPE_Connector.cpp
   UPIPE_Stream.cpp
+  UTF16_Encoding_Converter.cpp
+  UTF32_Encoding_Converter.cpp
+  UTF8_Encoding_Converter.cpp
+  UUID.cpp
   WFMO_Reactor.cpp
   WIN32_Asynch_IO.cpp
   WIN32_Proactor.cpp
+  XML_Svc_Conf.cpp
   XTI_ATM_Mcast.cpp
 )
+
+if (USE_COREPCH)
+  set(ace_PCH_HDR PrecompiledHeaders/WinAcePCH.h)
+  set(ace_PCH_SRC PrecompiledHeaders/WinAcePCH.cpp)
+endif()
 
 include_directories(
   ${CMAKE_SOURCE_DIR}/dep/acelite
@@ -312,20 +335,21 @@ include_directories(
 set_source_files_properties(Atomic_Op_Sparc.c Rtems_init.c PROPERTIES LANGUAGE CXX)
 
 add_definitions(-DACE_BUILD_DLL)
-set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} iphlpapi.lib")
 
-add_library(ace SHARED ${ace_STAT_SRCS})
+add_library(ace SHARED
+  ${ace_STAT_SRCS}
+  ${ace_PCH_SRC}
+)
 
-if( WIN32 )
-    if (MSYS OR MINGW)
-        find_library(WS2_32_LIBRARY ws2_32)
-        target_link_libraries(ace ${WS2_32_LIBRARY})
-        #MESSAGE(STATUS "Link Flags for ACE: ${CMAKE_SHARED_LINKER_FLAGS}")
-        #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lws2_32")
-        #MESSAGE(STATUS "Link Flags for ACE after: ${CMAKE_SHARED_LINKER_FLAGS}")
-    endif()
+if (MINGW) # GCC ignores "#prama comment"
+  target_link_libraries(ace ws2_32 iphlpapi netapi32 mswsock)
 endif()
 
+# Generate precompiled header
 add_native_precompiled_header(ace ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/WinAcePCH)
+
+#if( USE_COREPCH )
+#  add_cxx_pch(ace ${ace_PCH_HDR} ${ace_PCH_SRC})
+#endif()
 
 install(TARGETS ace RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}")

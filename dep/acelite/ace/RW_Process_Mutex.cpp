@@ -1,7 +1,7 @@
-// $Id: RW_Process_Mutex.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: RW_Process_Mutex.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/RW_Process_Mutex.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/ACE.h"
 
 
@@ -45,9 +45,9 @@ ACE_RW_Process_Mutex::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
 // ACE_TRACE ("ACE_RW_Process_Mutex::dump");
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
   this->lock_.dump ();
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

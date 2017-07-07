@@ -1,7 +1,7 @@
-// $Id: File_Lock.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: File_Lock.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/File_Lock.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 
 #if !defined (__ACE_INLINE__)
 #include "ace/File_Lock.inl"
@@ -19,9 +19,9 @@ ACE_File_Lock::dump (void) const
 #if defined (ACE_HAS_DUMP)
 // ACE_TRACE ("ACE_File_Lock::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
   this->lock_.dump ();
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -32,7 +32,7 @@ ACE_File_Lock::ACE_File_Lock (ACE_HANDLE h,
 {
 // ACE_TRACE ("ACE_File_Lock::ACE_File_Lock");
   if (ACE_OS::flock_init (&this->lock_) == -1)
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_File_Lock::ACE_File_Lock")));
   this->set_handle (h);
@@ -47,7 +47,7 @@ ACE_File_Lock::ACE_File_Lock (const ACE_TCHAR *name,
 // ACE_TRACE ("ACE_File_Lock::ACE_File_Lock");
 
   if (this->open (name, flags, perms) == -1)
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p %s\n"),
                 ACE_TEXT ("ACE_File_Lock::ACE_File_Lock"),
                 name));

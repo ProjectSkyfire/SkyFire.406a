@@ -1,5 +1,5 @@
 /* -*- C++ -*- */
-// $Id: config-win32-common.h 97304 2013-08-29 21:14:43Z shuston $
+// $Id: config-win32-common.h 96094 2012-08-22 11:51:11Z johnnyw $
 
 
 #ifndef ACE_CONFIG_WIN32_COMMON_H
@@ -134,7 +134,7 @@
 //  #endif
 
 // Define the special export macros needed to export symbols outside a dll
-#if !defined (ACE_HAS_CUSTOM_EXPORT_MACROS) || (ACE_HAS_CUSTOM_EXPORT_MACROS == 0)
+#if !defined(__BORLANDC__) && (!defined (ACE_HAS_CUSTOM_EXPORT_MACROS) || (ACE_HAS_CUSTOM_EXPORT_MACROS == 0))
 #if defined (ACE_HAS_CUSTOM_EXPORT_MACROS)
 #undef ACE_HAS_CUSTOM_EXPORT_MACROS
 #endif
@@ -527,9 +527,9 @@
 #  else
 #    pragma comment(lib, "ws2_32.lib")
 #    pragma comment(lib, "mswsock.lib")
-#    if defined (ACE_HAS_IPV6)
+// #    if defined (ACE_HAS_IPV6)
 #      pragma comment(lib, "iphlpapi.lib")
-#    endif
+// #    endif
 #  endif /* ACE_HAS_WINCE */
 # endif /* _MSC_VER */
 
@@ -603,10 +603,8 @@
 #define ACE_LACKS_ALPHASORT
 #define ACE_LACKS_MKSTEMP
 #define ACE_LACKS_LSTAT
-// Looks like Win32 has a non-const swab function, and it takes the
-// non-standard int len (rather than ssize_t).
+// Looks like Win32 has a non-const swab function
 #define ACE_HAS_NONCONST_SWAB
-#define ACE_HAS_INT_SWAB
 
 // gethostbyaddr does not handle IPv6-mapped-IPv4 addresses
 #define ACE_HAS_BROKEN_GETHOSTBYADDR_V4MAPPED

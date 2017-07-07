@@ -4,7 +4,7 @@
 /**
  *  @file    post.h
  *
- *  $Id: post.h 97272 2013-08-09 17:58:02Z johnnyw $
+ *  $Id: post.h 80826 2008-03-04 14:51:23Z wotte $
  *
  *  @author Christopher Kohlhoff <chris@kohlhoff.com>
  *
@@ -17,9 +17,6 @@
 # pragma pack (pop)
 #elif defined (__BORLANDC__)
 # pragma option pop
-# if (__BORLANDC__ == 0x660)
-#  pragma option pop
-# endif
 # pragma nopushoptwarn
 # pragma nopackwarning
 #endif

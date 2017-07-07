@@ -1,4 +1,4 @@
-// $Id: Svc_Conf_y.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Svc_Conf_y.cpp 94034 2011-05-09 19:11:03Z johnnyw $
 /* A Bison parser, made by GNU Bison 2.3.  */
 
 /* Skeleton implementation for Bison's Yacc-like parsers in C
@@ -105,7 +105,7 @@
 /* Copy the first part of user declarations.  */
 
 
-// $Id: Svc_Conf_y.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Svc_Conf_y.cpp 94034 2011-05-09 19:11:03Z johnnyw $
 
 #include "ace/Svc_Conf.h"
 
@@ -1573,7 +1573,7 @@ ace_yyreduce:
 
       if (((ACE_Stream_Type *) sn->record (ACE_SVC_CONF_PARAM->config)->type ())->push (mt) == -1)
         {
-          ACELIB_ERROR ((LM_ERROR,
+          ACE_ERROR ((LM_ERROR,
                       ACE_TEXT ("Problem with static\n")));
           ACE_SVC_CONF_PARAM->yyerrno++;
         }
@@ -1617,7 +1617,7 @@ ace_yyreduce:
         dynamic_cast<ACE_Stream_Type *> (const_cast<ACE_Service_Type_Impl *> (stream->record (ACE_SVC_CONF_PARAM->config)->type ()));
       if (!st || (mt != 0 && st->remove (mt) == -1))
         {
-          ACELIB_ERROR ((LM_ERROR,
+          ACE_ERROR ((LM_ERROR,
                       ACE_TEXT ("cannot remove Module_Type %s from STREAM_Type %s\n"),
                       module->name (),
                       stream->name ()));
@@ -1934,7 +1934,7 @@ ace_yyerror (int ace_yyerrno, int ace_yylineno, ACE_TCHAR const * s)
   ACE_UNUSED_ARG (s);
 #endif /* ACE_NLOGGING */
 
-  ACELIB_ERROR ((LM_ERROR,
+  ACE_ERROR ((LM_ERROR,
               ACE_TEXT ("ACE (%P|%t) [error %d] on line %d: %C\n"),
               ace_yyerrno,
               ace_yylineno,
@@ -1963,7 +1963,7 @@ ace_get_module (ACE_Service_Type const * sr,
 
   if (sr == 0 || st == 0 || mt == 0)
     {
-      ACELIB_ERROR ((LM_ERROR,
+      ACE_ERROR ((LM_ERROR,
                   ACE_TEXT ("cannot locate Module_Type %s ")
                   ACE_TEXT ("in STREAM_Type %s\n"),
                   svc_name,

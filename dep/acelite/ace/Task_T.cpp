@@ -1,4 +1,4 @@
-// $Id: Task_T.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Task_T.cpp 96061 2012-08-16 09:36:07Z mcorino $
 
 #ifndef ACE_TASK_T_CPP
 #define ACE_TASK_T_CPP
@@ -23,20 +23,20 @@ ACE_Task<ACE_SYNCH_USE, TIME_POLICY>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Task<ACE_SYNCH_USE, TIME_POLICY>::dump");
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nthr_mgr_ = %x"), this->thr_mgr_));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nthr_mgr_ = %x"), this->thr_mgr_));
   this->msg_queue_->dump ();
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("delete_msg_queue_ = %d\n"), this->delete_msg_queue_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nflags = %x"), this->flags_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nmod_ = %x"), this->mod_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nnext_ = %x"), this->next_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\ngrp_id_ = %d"), this->grp_id_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nthr_count_ = %d"), this->thr_count_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("delete_msg_queue_ = %d\n"), this->delete_msg_queue_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nflags = %x"), this->flags_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nmod_ = %x"), this->mod_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nnext_ = %x"), this->next_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\ngrp_id_ = %d"), this->grp_id_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nthr_count_ = %d"), this->thr_count_));
 #if defined (ACE_MT_SAFE) && (ACE_MT_SAFE != 0)
   this->lock_.dump ();
 #endif /* ACE_MT_SAFE */
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

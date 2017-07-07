@@ -1,7 +1,7 @@
-// $Id: Lib_Find.cpp 97383 2013-10-23 08:44:20Z mhengstmengel $
+// $Id: Lib_Find.cpp 95630 2012-03-22 13:04:47Z johnnyw $
 
 #include "ace/Lib_Find.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/OS_NS_string.h"
 #include "ace/OS_NS_errno.h"
 #include "ace/OS_NS_stdio.h"
@@ -75,13 +75,13 @@ ACE_LD_Symbol_Registry::register_symbol (const ACE_TCHAR* symname,
   int const result = symbol_registry_.bind (symname, symaddr);
   if (result == 1)
     {
-      ACELIB_DEBUG((LM_INFO, ACE_TEXT ("ACE_LD_Symbol_Registry:")
+      ACE_DEBUG((LM_INFO, ACE_TEXT ("ACE_LD_Symbol_Registry:")
                           ACE_TEXT (" duplicate symbol %s registered\n"),
                           ACE_TEXT_ALWAYS_CHAR (symname)));
     }
   else if (result == -1)
     {
-      ACELIB_ERROR((LM_ERROR, ACE_TEXT ("ACE_LD_Symbol_Registry:")
+      ACE_ERROR((LM_ERROR, ACE_TEXT ("ACE_LD_Symbol_Registry:")
                            ACE_TEXT (" failed to register symbol %s\n"),
                            ACE_TEXT_ALWAYS_CHAR (symname)));
     }
@@ -104,9 +104,10 @@ ACE_SINGLETON_DECLARE (ACE_Singleton,
 typedef ACE_Singleton<ACE_LD_Symbol_Registry, ACE_Thread_Mutex>
         ACE_LD_SYMBOL_REGISTRY;
 
-ACE_SINGLETON_TEMPLATE_INSTANTIATE(ACE_Singleton, ACE_LD_Symbol_Registry, ACE_SYNCH_MUTEX);
-
-
+#if defined (ACE_HAS_EXPLICIT_STATIC_TEMPLATE_MEMBER_INSTANTIATION)
+template ACE_Singleton<ACE_LD_Symbol_Registry, ACE_Thread_Mutex> *
+  ACE_Singleton<ACE_LD_Symbol_Registry, ACE_Thread_Mutex>::singleton_;
+#endif /* ACE_HAS_EXPLICIT_STATIC_TEMPLATE_MEMBER_INSTANTIATION */
 #endif
 
 
@@ -267,7 +268,7 @@ ACE::ldfind (const ACE_TCHAR* filename,
       if (ACE_OS::strcmp (s, dll_suffix) != 0)
 #endif /* ACE_WIN32 */
         {
-          ACELIB_ERROR ((LM_WARNING,
+          ACE_ERROR ((LM_WARNING,
                       ACE_TEXT ("Warning: improper suffix for a ")
                       ACE_TEXT ("shared library on this platform: %s\n"),
                       s));

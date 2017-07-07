@@ -1,5 +1,5 @@
 //* -*- C++ -*- */
-// $Id: config-vxworks6.9.h 97138 2013-05-16 17:55:36Z mitza $
+// $Id: config-vxworks6.9.h 96017 2012-08-08 22:18:09Z mitza $
 
 // The following configuration file is designed to work for VxWorks
 // 6.9 platforms using one of these compilers:
@@ -26,9 +26,6 @@
 #if defined(__RTP__)
 // bzero is in strings.h
 # define ACE_HAS_STRINGS 1
-# if defined ACE_HAS_PTHREADS
-#  define ACE_HAS_RECURSIVE_THR_EXIT_SEMANTICS
-# endif
 #endif
 
 #include /**/ "ace/post.h"

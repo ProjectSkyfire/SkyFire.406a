@@ -1,4 +1,4 @@
-// $Id: MEM_SAP.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: MEM_SAP.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/MEM_SAP.h"
 
@@ -20,12 +20,12 @@ ACE_MEM_SAP::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_MEM_SAP::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
   if (this->shm_malloc_ != 0)
     this->shm_malloc_->dump ();
   else
-    ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("ACE_MEM_SAP uninitialized.\n")));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+    ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("ACE_MEM_SAP uninitialized.\n")));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

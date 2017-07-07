@@ -119,8 +119,8 @@ public:
         uint32 updateTime = sWorld->GetUpdateTime();
 
         handler->PSendSysMessage(_CLIENT_BUILD_REVISION_2);
-        handler->PSendSysMessage("Revision Hash: "_HASH);
-        handler->PSendSysMessage("Build Date: "_DATE);
+        handler->PSendSysMessage("Revision Hash: " _HASH);
+        handler->PSendSysMessage("Build Date: " _DATE);
         handler->PSendSysMessage("Using World DB: %s", sWorld->GetDBVersion());
         handler->PSendSysMessage(LANGUAGE_CONNECTED_PLAYERS, playersNum, maxPlayersNum);
         handler->PSendSysMessage(LANGUAGE_CONNECTED_USERS, activeClientsNum, maxActiveClientsNum, queuedClientsNum, maxQueuedClientsNum);

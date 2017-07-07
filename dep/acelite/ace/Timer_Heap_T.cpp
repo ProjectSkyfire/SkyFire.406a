@@ -1,10 +1,10 @@
-// $Id: Timer_Heap_T.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Timer_Heap_T.cpp 95630 2012-03-22 13:04:47Z johnnyw $
 
 #ifndef ACE_TIMER_HEAP_T_CPP
 #define ACE_TIMER_HEAP_T_CPP
 
 #include "ace/Timer_Heap_T.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/Guard_T.h"
 #include "ace/OS_NS_errno.h"
 #include "ace/OS_NS_string.h"
@@ -356,35 +356,35 @@ ACE_Timer_Heap_T<TYPE, FUNCTOR, ACE_LOCK, TIME_POLICY>::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Timer_Heap_T::dump");
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nmax_size_ = %d"), this->max_size_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\ncur_size_ = %d"), this->cur_size_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\ncur_limbo_= %d"), this->cur_limbo_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nids_curr_ = %d"),
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nmax_size_ = %d"), this->max_size_));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\ncur_size_ = %d"), this->cur_size_));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\ncur_limbo_= %d"), this->cur_limbo_));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nids_curr_ = %d"),
               this->timer_ids_curr_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nmin_free_ = %d"),
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nmin_free_ = %d"),
               this->timer_ids_min_free_));
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nheap_ =\n")));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nheap_ =\n")));
 
   for (size_t i = 0; i < this->cur_size_; ++i)
     {
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("%d\n"),
                   i));
       this->heap_[i]->dump ();
     }
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\ntimer_ids_ =\n")));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\ntimer_ids_ =\n")));
 
   for (size_t j = 0; j < this->max_size_; ++j)
-    ACELIB_DEBUG ((LM_DEBUG,
+    ACE_DEBUG ((LM_DEBUG,
                 ACE_TEXT ("%d\t%d\n"),
                 j,
                 this->timer_ids_[j]));
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: OS_NS_unistd.inl 97304 2013-08-29 21:14:43Z shuston $
+// $Id: OS_NS_unistd.inl 96017 2012-08-08 22:18:09Z mitza $
 
 #include "ace/OS_NS_sys_utsname.h"
 #include "ace/OS_NS_string.h"
@@ -498,7 +498,7 @@ ACE_OS::getpid (void)
 #elif defined (ACE_WIN32)
   return ::GetCurrentProcessId ();
 #else
-  ACE_OSCALL_RETURN (::getpid (), pid_t, -1);
+  ACE_OSCALL_RETURN (::getpid (), int, -1);
 #endif /* ACE_LACKS_GETPID */
 }
 
@@ -1009,12 +1009,7 @@ ACE_OS::swab (const void *src,
   const char *tmp = static_cast<const char*> (src);
   char *from = const_cast<char *> (tmp);
   char *to = static_cast<char *> (dest);
-#  if defined (ACE_HAS_INT_SWAB)
-  int ilength = ACE_Utils::truncate_cast<int> (length);
-  ::swab (from, to, ilength);
-#  else
   ::swab (from, to, length);
-#  endif /* ACE_HAS_INT_SWAB */
 #elif defined (ACE_HAS_CONST_CHAR_SWAB)
   const char *from = static_cast<const char*> (src);
   char *to = static_cast<char *> (dest);

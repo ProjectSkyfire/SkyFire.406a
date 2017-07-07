@@ -2,7 +2,7 @@
 /**
  * @file Condition_Thread_Mutex.cpp
  *
- * $Id: Condition_Thread_Mutex.cpp 96985 2013-04-11 15:50:32Z huangh $
+ * $Id: Condition_Thread_Mutex.cpp 96077 2012-08-20 08:13:23Z johnnyw $
  *
  * Originally in Synch.cpp
  *
@@ -17,7 +17,7 @@
 #include "ace/Condition_Thread_Mutex.inl"
 #endif /* __ACE_INLINE__ */
 
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -29,14 +29,14 @@ ACE_Condition<ACE_Thread_Mutex>::dump (void) const
 #if defined (ACE_HAS_DUMP)
 // ACE_TRACE ("ACE_Condition<ACE_Thread_Mutex>::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\n")));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\n")));
 #if defined (ACE_WIN32)
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("waiters = %d\n"),
               this->cond_.waiters ()));
 #endif /* ACE_WIN32 */
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -51,7 +51,7 @@ ACE_Condition<ACE_Thread_Mutex>::ACE_Condition (ACE_Thread_Mutex &m,
                          (short) USYNC_THREAD,
                          name,
                          arg) != 0)
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_Condition<ACE_Thread_Mutex>::ACE_Condition<ACE_Thread_Mutex>")));
 }
@@ -67,7 +67,7 @@ ACE_Condition<ACE_Thread_Mutex>::ACE_Condition (ACE_Thread_Mutex &m,
   if (ACE_OS::cond_init (&this->cond_,
                          const_cast<ACE_condattr_t &> (attributes.attributes ()),
                          name, arg) != 0)
-    ACELIB_ERROR ((LM_ERROR, ACE_TEXT ("%p\n"),
+    ACE_ERROR ((LM_ERROR, ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_Condition<ACE_Thread_Mutex>::ACE_Condition<ACE_Thread_Mutex>")));
 }
 

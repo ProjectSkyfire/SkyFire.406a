@@ -1,4 +1,4 @@
-// $Id: Read_Buffer.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Read_Buffer.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/Read_Buffer.h"
 
@@ -8,10 +8,13 @@
 #include "ace/Read_Buffer.inl"
 #endif /* __ACE_INLINE__ */
 
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/Malloc_Base.h"
 #include "ace/Service_Config.h"
 #include "ace/OS_NS_stdio.h"
+
+
+
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
@@ -20,21 +23,19 @@ ACE_Read_Buffer::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Read_Buffer::dump");
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("size_ = %d"), this->size_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\noccurrences_ = %d"), this->occurrences_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nstream_ = %x"), this->stream_));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nallocator_ = %x"), this->allocator_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("size_ = %d"), this->size_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\noccurrences_ = %d"), this->occurrences_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nstream_ = %x"), this->stream_));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("\nallocator_ = %x"), this->allocator_));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
 ACE_Read_Buffer::ACE_Read_Buffer (FILE *fp,
                                   bool close_on_delete,
                                   ACE_Allocator *alloc)
-  : size_ (0),
-    occurrences_ (0),
-    stream_ (fp),
+  : stream_ (fp),
     close_on_delete_ (close_on_delete),
     allocator_ (alloc)
 {
@@ -47,9 +48,7 @@ ACE_Read_Buffer::ACE_Read_Buffer (FILE *fp,
 ACE_Read_Buffer::ACE_Read_Buffer (ACE_HANDLE handle,
                                   bool close_on_delete,
                                   ACE_Allocator *alloc)
-  : size_ (0),
-    occurrences_ (0),
-    stream_ (ACE_OS::fdopen (handle, ACE_TEXT ("r"))),
+  : stream_ (ACE_OS::fdopen (handle, ACE_TEXT ("r"))),
     close_on_delete_ (close_on_delete),
     allocator_ (alloc)
 {

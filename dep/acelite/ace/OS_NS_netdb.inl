@@ -1,13 +1,13 @@
 // -*- C++ -*-
 //
-// $Id: OS_NS_netdb.inl 97130 2013-05-13 17:36:26Z mesnier_p $
+// $Id: OS_NS_netdb.inl 93597 2011-03-21 12:54:52Z johnnyw $
 
 #include "ace/OS_NS_macros.h"
 #include "ace/OS_NS_string.h"
 #include "ace/OS_NS_errno.h"
 
 #if defined (ACE_LACKS_NETDB_REENTRANT_FUNCTIONS)
-# if defined (ACE_MT_SAFE) && (ACE_MT_SAFE != 0) && !defined (HPUX_11)
+# if defined (ACE_MT_SAFE) && (ACE_MT_SAFE != 0)
 #   define ACE_NETDBCALL_RETURN(OP,TYPE,FAILVALUE,TARGET,SIZE) \
   do \
   { \
@@ -25,7 +25,7 @@
         return ace_result_; \
       } \
   } while(0)
-# else /* ! (ACE_MT_SAFE && ACE_MT_SAFE != 0 && !HPUX_11) */
+# else /* ! (ACE_MT_SAFE && ACE_MT_SAFE != 0) */
 #   define ACE_NETDBCALL_RETURN(OP,TYPE,FAILVALUE,TARGET,SIZE) \
   do \
   { \

@@ -1,4 +1,4 @@
-// $Id: Module.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Module.cpp 96080 2012-08-20 09:04:14Z johnnyw $
 
 #ifndef ACE_MODULE_CPP
 #define ACE_MODULE_CPP
@@ -193,7 +193,7 @@ ACE_Module<ACE_SYNCH_USE, TIME_POLICY>::ACE_Module (const ACE_TCHAR *module_name
   this->q_pair_[1] = 0;
 
   if (this->open (module_name, writer_q, reader_q, args, flags) == -1)
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_Module")));
 }

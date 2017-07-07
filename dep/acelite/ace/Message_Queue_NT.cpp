@@ -1,8 +1,8 @@
-// $Id: Message_Queue_NT.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Message_Queue_NT.cpp 92900 2010-12-17 14:45:11Z mcorino $
 
 #include "ace/Message_Queue.h"
 #include "ace/Message_Queue_NT.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 
 #if !defined (__ACE_INLINE__)
 #include "ace/Message_Queue_NT.inl"
@@ -197,24 +197,24 @@ ACE_Message_Queue_NT::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Message_Queue_NT::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
   switch (this->state_)
     {
     case ACE_Message_Queue_Base::ACTIVATED:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("state = ACTIVATED\n")));
       break;
     case ACE_Message_Queue_Base::DEACTIVATED:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("state = DEACTIVATED\n")));
       break;
     case ACE_Message_Queue_Base::PULSED:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("state = PULSED\n")));
       break;
     }
 
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("max_cthrs_ = %d\n")
               ACE_TEXT ("cur_thrs_ = %d\n")
               ACE_TEXT ("cur_bytes = %d\n")
@@ -227,7 +227,7 @@ ACE_Message_Queue_NT::dump (void) const
               this->cur_length_,
               this->cur_count_,
               this->completion_port_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

@@ -1,4 +1,4 @@
-// $Id: Select_Reactor_Base.cpp 97246 2013-08-07 07:10:20Z johnnyw $
+// $Id: Select_Reactor_Base.cpp 95574 2012-02-29 07:26:08Z johnnyw $
 
 #include "ace/Select_Reactor_Base.h"
 #include "ace/Reactor.h"
@@ -6,7 +6,7 @@
 #include "ace/SOCK_Acceptor.h"
 #include "ace/SOCK_Connector.h"
 #include "ace/Timer_Queue.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/Signal.h"
 #include "ace/OS_NS_fcntl.h"
 
@@ -475,15 +475,15 @@ ACE_Select_Reactor_Handler_Repository_Iterator::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Select_Reactor_Handler_Repository_Iterator::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("rep_ = %u"), this->rep_));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("rep_ = %u"), this->rep_));
 # ifdef ACE_WIN32
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("current_ = ")));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("current_ = ")));
   this->current_.dump ();
 # else
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("current_ = %@"), this->current_));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("current_ = %@"), this->current_));
 # endif  /* ACE_WIN32 */
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -501,20 +501,20 @@ ACE_Select_Reactor_Handler_Repository::dump (void) const
 #  define ACE_MAX_HANDLEP1_FORMAT_SPECIFIER ACE_TEXT("%d")
 # endif  /* ACE_WIN32 */
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("max_handlep1_ = ")
               ACE_MAX_HANDLEP1_FORMAT_SPECIFIER
               ACE_TEXT ("\n"),
               this->max_handlep1 ()));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("[")));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("[")));
 
   ACE_Event_Handler *event_handler = 0;
 
   for (ACE_Select_Reactor_Handler_Repository_Iterator iter (this);
        iter.next (event_handler) != 0;
        iter.advance ())
-    ACELIB_DEBUG ((LM_DEBUG,
+    ACE_DEBUG ((LM_DEBUG,
                 ACE_TEXT (" (event_handler = %@,")
                 ACE_TEXT (" event_handler->handle_ = ")
                 ACE_HANDLE_FORMAT_SPECIFIER
@@ -522,8 +522,8 @@ ACE_Select_Reactor_Handler_Repository::dump (void) const
                 event_handler,
                 event_handler->get_handle ()));
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT (" ]\n")));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT (" ]\n")));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -584,10 +584,10 @@ ACE_Select_Reactor_Notify::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Select_Reactor_Notify::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("select_reactor_ = %x"), this->select_reactor_));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("select_reactor_ = %x"), this->select_reactor_));
   this->notification_pipe_.dump ();
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -844,7 +844,7 @@ ACE_Select_Reactor_Notify::dispatch_notify (ACE_Notification_Buffer &buffer)
           break;
         default:
           // Should we bail out if we get an invalid mask?
-          ACELIB_ERROR ((LM_ERROR,
+          ACE_ERROR ((LM_ERROR,
                       ACE_TEXT ("invalid mask = %d\n"),
                       buffer.mask_));
         }
@@ -892,7 +892,7 @@ ACE_Select_Reactor_Notify::read_notify_pipe (ACE_HANDLE handle,
   if (n > 0)
     {
       // Check to see if we've got a short read.
-      if ((size_t)n != sizeof buffer)
+      if (n != sizeof buffer)
         {
           ssize_t const remainder = sizeof buffer - n;
 

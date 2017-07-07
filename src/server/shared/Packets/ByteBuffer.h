@@ -47,7 +47,7 @@ class ByteBufferPositionException : public ByteBufferException
     protected:
         void PrintError() const
         {
-            sLog->outError("Attempted to %s value with size: "SIZEFMTD" in ByteBuffer (pos: " SIZEFMTD " size: "SIZEFMTD") " ,
+            sLog->outError("Attempted to %s value with size: " SIZEFMTD" in ByteBuffer (pos: " SIZEFMTD " size: " SIZEFMTD") " ,
                 (_add ? "put" : "get"), ValueSize, Pos, Size);
         }
 
@@ -66,7 +66,7 @@ class ByteBufferSourceException : public ByteBufferException
     protected:
         void PrintError() const
         {
-            sLog->outError("Attempted to put a %s in ByteBuffer (pos: "SIZEFMTD" size: "SIZEFMTD")", (ValueSize > 0 ? "NULL-pointer" : "zero-sized value"), Pos, Size);
+            sLog->outError("Attempted to put a %s in ByteBuffer (pos: " SIZEFMTD" size: " SIZEFMTD")", (ValueSize > 0 ? "NULL-pointer" : "zero-sized value"), Pos, Size);
         }
 };
 

@@ -1,10 +1,10 @@
-// $Id: TP_Reactor.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: TP_Reactor.cpp 95332 2011-12-15 11:09:41Z mcorino $
 
 #include "ace/TP_Reactor.h"
 #include "ace/Thread.h"
 #include "ace/Timer_Queue.h"
 #include "ace/Sig_Handler.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/Functor_T.h"
 #include "ace/OS_NS_sys_time.h"
 
@@ -625,7 +625,7 @@ ACE_TP_Reactor::notify_handle (ACE_HANDLE,
                                ACE_Event_Handler *eh,
                                ACE_EH_PTMF)
 {
-  ACELIB_ERROR ((LM_ERROR,
+  ACE_ERROR ((LM_ERROR,
               ACE_TEXT ("ACE_TP_Reactor::notify_handle: ")
               ACE_TEXT ("Wrong version of notify_handle() got called\n")));
 

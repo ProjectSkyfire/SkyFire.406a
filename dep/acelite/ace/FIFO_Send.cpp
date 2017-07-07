@@ -1,7 +1,7 @@
-// $Id: FIFO_Send.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: FIFO_Send.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/FIFO_Send.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 
 #if !defined (__ACE_INLINE__)
 #include "ace/FIFO_Send.inl"
@@ -50,7 +50,7 @@ ACE_FIFO_Send::ACE_FIFO_Send (const ACE_TCHAR *fifo_name,
                                  flags,
                                  perms,
                                  sa) == -1)
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_FIFO_Send::ACE_FIFO_Send")));
 }

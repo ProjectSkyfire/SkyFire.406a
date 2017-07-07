@@ -1,4 +1,4 @@
-// $Id: Asynch_Pseudo_Task.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Asynch_Pseudo_Task.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/Asynch_Pseudo_Task.h"
 
@@ -22,7 +22,7 @@ int
 ACE_Asynch_Pseudo_Task::start (void)
 {
   if (this->reactor_.initialized () == 0)
-    ACELIB_ERROR_RETURN ((LM_ERROR,
+    ACE_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT ("%N:%l:%p\n"),
                        ACE_TEXT ("start reactor is not initialized")),
                        -1);
@@ -56,7 +56,7 @@ ACE_Asynch_Pseudo_Task::svc (void)
     sigaddset (&RT_signals, si);
 
   if (ACE_OS::pthread_sigmask (SIG_BLOCK, &RT_signals, 0) != 0)
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("Error:(%P | %t):%p\n"),
                 ACE_TEXT ("pthread_sigmask")));
 #endif
@@ -86,7 +86,7 @@ ACE_Asynch_Pseudo_Task::register_io_handler (ACE_HANDLE handle,
   // by the application.
   if (this->reactor_.suspend_handler (handle) == -1)
     {
-      ACELIB_ERROR
+      ACE_ERROR
         ((LM_ERROR,
           ACE_TEXT ("%N:%l:%p\n"),
           ACE_TEXT ("register_io_handler (suspended)")));

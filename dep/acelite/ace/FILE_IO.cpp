@@ -1,8 +1,8 @@
-// $Id: FILE_IO.cpp 97355 2013-09-27 22:16:09Z shuston $
+// $Id: FILE_IO.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/FILE_IO.h"
 
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/OS_NS_sys_stat.h"
 #include "ace/OS_Memory.h"
 #include "ace/Truncate.h"
@@ -23,9 +23,9 @@ ACE_FILE_IO::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_FILE_IO::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
   this->addr_.dump ();
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 
@@ -124,17 +124,16 @@ ACE_FILE_IO::recvv (iovec *io_vec)
   ACE_TRACE ("ACE_FILE_IO::recvv");
 
   io_vec->iov_base = 0;
-  ACE_OFF_T const length = ACE_OS::filesize (this->get_handle ());
+  size_t const length =
+    static_cast <size_t> (ACE_OS::filesize (this->get_handle ()));
 
   if (length > 0)
     {
-      // Restrict to max size we can record in iov_len.
-      size_t len = ACE_Utils::truncate_cast<u_long> (length);
       ACE_NEW_RETURN (io_vec->iov_base,
-                      char[len],
+                      char[length],
                       -1);
-      io_vec->iov_len = static_cast<u_long> (this->recv_n (io_vec->iov_base,
-                                                           len));
+      io_vec->iov_len = this->recv_n (io_vec->iov_base,
+                                      length);
       return io_vec->iov_len;
     }
   else

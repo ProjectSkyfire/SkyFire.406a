@@ -1,9 +1,9 @@
-// $Id: Name_Request_Reply.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Name_Request_Reply.cpp 96017 2012-08-08 22:18:09Z mitza $
 
 #include "ace/Name_Request_Reply.h"
 #include "ace/Basic_Types.h"
 #include "ace/CDR_Base.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/Time_Value.h"
 #include "ace/Truncate.h"
 #include "ace/OS_NS_string.h"
@@ -333,82 +333,82 @@ ACE_Name_Request::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Name_Request::dump");
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("*******\nlength = %d\n"),
               this->length ()));
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("message-type = ")));
 
   switch (this->msg_type ())
     {
     case ACE_Name_Request::BIND:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("BIND\n")));
       break;
     case ACE_Name_Request::REBIND:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("REBIND\n")));
       break;
     case ACE_Name_Request::RESOLVE:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("RESOLVE\n")));
       break;
     case ACE_Name_Request::UNBIND:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("UNBIND\n")));
       break;
     case ACE_Name_Request::LIST_NAMES:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("LIST_NAMES\n")));
       break;
     case ACE_Name_Request::LIST_VALUES:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("LIST_VALUES\n")));
       break;
     case ACE_Name_Request::LIST_TYPES:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("LIST_TYPES\n")));
       break;
     case ACE_Name_Request::LIST_NAME_ENTRIES:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("LIST_NAME_ENTRIES\n")));
       break;
     case ACE_Name_Request::LIST_VALUE_ENTRIES:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("LIST_VALUE_ENTRIES\n")));
       break;
     case ACE_Name_Request::LIST_TYPE_ENTRIES:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("LIST_TYPE_ENTRIES\n")));
       break;
     default:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("<unknown type> = %d\n"),
                   this->msg_type ()));
       break;
     }
 
   if (this->block_forever ())
-    ACELIB_DEBUG ((LM_DEBUG,
+    ACE_DEBUG ((LM_DEBUG,
                 ACE_TEXT ("blocking forever\n")));
   else
     {
 #if !defined (ACE_NLOGGING)
       ACE_Time_Value tv = this->timeout ();
 #endif /* ! ACE_NLOGGING */
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("waiting for %d secs and %d usecs\n"),
                   tv.sec (),
                   tv.usec ()));
     }
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("*******\nname_len = %d\n"),
               this->name_len ()));
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("*******\nvalue_len = %d\n"),
               this->value_len ()));
 
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("+++++++\n")));
 #endif /* ACE_HAS_DUMP */
 }
@@ -548,24 +548,24 @@ ACE_Name_Reply::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_Name_Reply::dump");
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("*******\nlength = %d\nerrnum = %d"),
               this->length (),
               this->errnum ()));
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT ("type = ")));
   switch (this->msg_type ())
     {
     case 0:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("SUCCESS\n")));
       break;
     case -1:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("FAILURE\n")));
       break;
     default:
-      ACELIB_DEBUG ((LM_DEBUG,
+      ACE_DEBUG ((LM_DEBUG,
                   ACE_TEXT ("<unknown type> = %d\n"),
                   this->msg_type ()));
       break;

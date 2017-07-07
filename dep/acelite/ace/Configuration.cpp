@@ -1,4 +1,4 @@
-// $Id: Configuration.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Configuration.cpp 92828 2010-12-08 09:38:57Z mcorino $
 #include "ace/Configuration.h"
 #include "ace/Auto_Ptr.h"
 #include "ace/SString.h"
@@ -1289,7 +1289,7 @@ ACE_Configuration_Heap::open (const ACE_TCHAR* file_name,
 #if !defined (ACE_LACKS_ACCESS)
   // Now check if the backing store has been created successfully.
   if (ACE_OS::access (file_name, F_OK) != 0)
-    ACELIB_ERROR_RETURN ((LM_ERROR,
+    ACE_ERROR_RETURN ((LM_ERROR,
                        ACE_TEXT ("create_index\n")),
                       -1);
 #endif /* ACE_LACKS_ACCESS */
@@ -1320,7 +1320,7 @@ ACE_Configuration_Heap::create_index (void)
                                      section_index) == -1)
         {
           // Attempt to clean up.
-          ACELIB_ERROR ((LM_ERROR,
+          ACE_ERROR ((LM_ERROR,
                       ACE_TEXT ("create_index failed\n")));
           this->allocator_->remove ();
           return -1;

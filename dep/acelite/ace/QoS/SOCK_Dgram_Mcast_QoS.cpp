@@ -1,7 +1,7 @@
-// $Id: SOCK_Dgram_Mcast_QoS.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: SOCK_Dgram_Mcast_QoS.cpp 91368 2010-08-16 13:03:34Z mhengstmengel $
 
 #include "SOCK_Dgram_Mcast_QoS.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/OS_NS_sys_socket.h"
 
 #if defined (ACE_WIN32)
@@ -50,7 +50,7 @@ ACE_SOCK_Dgram_Mcast_QoS::open (const ACE_INET_Addr &addr,
   if (this->get_handle () != ACE_INVALID_HANDLE)
     return 0;
 
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               "Get Handle Returns Invalid Handle\n"));
 
   if (ACE_SOCK::open (SOCK_DGRAM,
@@ -216,16 +216,16 @@ ACE_SOCK_Dgram_Mcast_QoS::subscribe (const ACE_INET_Addr &mcast_addr,
         {
           // Subscribe to the QoS session.
           if (this->qos_manager_.join_qos_session (qos_session) == -1)
-            ACELIB_ERROR_RETURN ((LM_ERROR,
+            ACE_ERROR_RETURN ((LM_ERROR,
                                ACE_TEXT ("Unable to join QoS Session\n")),
                               -1);
         }
       else
         {
           if (this->close () != 0)
-            ACELIB_ERROR ((LM_ERROR,
+            ACE_ERROR ((LM_ERROR,
                         ACE_TEXT ("Unable to close socket\n")));
-            ACELIB_ERROR_RETURN ((LM_ERROR,
+            ACE_ERROR_RETURN ((LM_ERROR,
                                ACE_TEXT ("Dest Addr in the QoS Session does")
                                ACE_TEXT (" not match the address passed into")
                                ACE_TEXT (" subscribe\n")),

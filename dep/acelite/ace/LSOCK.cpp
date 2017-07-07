@@ -1,4 +1,4 @@
-// $Id: LSOCK.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: LSOCK.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/LSOCK.h"
 
@@ -6,7 +6,7 @@
 
 #if !defined (ACE_LACKS_UNIX_DOMAIN_SOCKETS)
 
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/OS_NS_sys_socket.h"
 
 #if !defined (__ACE_INLINE__)
@@ -23,9 +23,9 @@ ACE_LSOCK::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_LSOCK::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG,  ACE_TEXT ("aux_handle_ = %d"), this->aux_handle_));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG,  ACE_TEXT ("aux_handle_ = %d"), this->aux_handle_));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

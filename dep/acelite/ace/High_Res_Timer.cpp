@@ -1,4 +1,4 @@
-// $Id: High_Res_Timer.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: High_Res_Timer.cpp 95788 2012-05-24 07:59:51Z johnnyw $
 
 // Be very carefull before changing the calculations inside
 // ACE_High_Res_Timer.  The precision matters and we are using integer
@@ -95,7 +95,7 @@ ACE_High_Res_Timer::get_cpuinfo (void)
     {
       char buf[128];
 
-      // ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nReading /proc/cpuinfo...")));
+      // ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nReading /proc/cpuinfo...")));
 
       while (ACE_OS::fgets (buf, sizeof buf, cpuinfo))
         {
@@ -162,12 +162,12 @@ ACE_High_Res_Timer::get_cpuinfo (void)
               if (supported)
                 {
                   scale_factor = (ACE_UINT32) (bmips + 0.5);
-                  // ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT (" setting the clock scale factor to %u"), scale_factor));
+                  // ACE_DEBUG ((LM_DEBUG, ACE_TEXT (" setting the clock scale factor to %u"), scale_factor));
                 }
 #if 0
               else
                 {
-                  ACELIB_DEBUG ((LM_DEBUG,
+                  ACE_DEBUG ((LM_DEBUG,
                               ACE_TEXT ("\nThe BogoMIPS metric is not supported on this platform"
                                          "\n\tReport the results of the clock calibration and"
                                          "\n\tthe contents of /proc/cpuinfo to the ace-users mailing list")));
@@ -178,7 +178,7 @@ ACE_High_Res_Timer::get_cpuinfo (void)
 #endif /* __alpha__ */
         }
 
-      // ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT (" (done)\n")));
+      // ACE_DEBUG ((LM_DEBUG, ACE_TEXT (" (done)\n")));
 
       ACE_OS::fclose (cpuinfo);
     }
@@ -302,10 +302,10 @@ ACE_High_Res_Timer::dump (void) const
 #if defined (ACE_HAS_DUMP)
   ACE_TRACE ("ACE_High_Res_Timer::dump");
 
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nglobal_scale_factor_: %u\n"),
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nglobal_scale_factor_: %u\n"),
              global_scale_factor ()));
-  ACELIB_DEBUG ((LM_DEBUG,
+  ACE_DEBUG ((LM_DEBUG,
               ACE_TEXT (":\nstart_.hi ():     %8x; start_.lo ():      %8x;\n")
               ACE_TEXT ("end_.hi ():       %8x; end_.lo ():        %8x;\n")
               ACE_TEXT ("total_.hi ():     %8x; total_.lo ():      %8x;\n")
@@ -318,7 +318,7 @@ ACE_High_Res_Timer::dump (void) const
               static_cast<ACE_UINT32> (total_ & 0xfffffffful),
               static_cast<ACE_UINT32> (start_incr_ >> 32),
               static_cast<ACE_UINT32> (start_incr_ & 0xfffffffful)));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 #endif /* ACE_HAS_DUMP */
 }
 

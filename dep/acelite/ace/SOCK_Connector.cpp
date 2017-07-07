@@ -1,8 +1,8 @@
-// $Id: SOCK_Connector.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: SOCK_Connector.cpp 91626 2010-09-07 10:59:20Z johnnyw $
 
 #include "ace/SOCK_Connector.h"
 #include "ace/INET_Addr.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/OS_NS_unistd.h"
 #include "ace/OS_NS_sys_socket.h"
 #include "ace/os_include/os_fcntl.h"
@@ -312,7 +312,7 @@ ACE_SOCK_Connector::ACE_SOCK_Connector (ACE_SOCK_Stream &new_stream,
                      protocol) == -1
       && timeout != 0
       && !(errno == EWOULDBLOCK || errno == ETIME || errno == ETIMEDOUT))
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_Connector::ACE_SOCK_Connector")));
 }
@@ -343,7 +343,7 @@ ACE_SOCK_Connector::ACE_SOCK_Connector (ACE_SOCK_Stream &new_stream,
                      perms) == -1
       && timeout != 0
       && !(errno == EWOULDBLOCK || errno == ETIME || errno == ETIMEDOUT))
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_SOCK_Connector::ACE_SOCK_Connector")));
 }

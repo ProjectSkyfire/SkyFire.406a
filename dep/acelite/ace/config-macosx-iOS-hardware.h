@@ -1,4 +1,4 @@
-// $Id: config-macosx-iOS-hardware.h 97130 2013-05-13 17:36:26Z mesnier_p $
+// $Id: config-macosx-iOS-hardware.h 95319 2011-12-13 14:54:44Z mhengstmengel $
 #ifndef ACE_CONFIG_MACOSX_IPHONE_HARDWARE_H
 #define ACE_CONFIG_MACOSX_IPHONE_HARDWARE_H
 

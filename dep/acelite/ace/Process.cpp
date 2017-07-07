@@ -1,4 +1,4 @@
-// $Id: Process.cpp 97305 2013-08-30 12:12:09Z shuston $
+// $Id: Process.cpp 95567 2012-02-28 14:36:02Z johnnyw $
 
 #include "ace/Process.h"
 
@@ -10,7 +10,7 @@
 #include "ace/Auto_Ptr.h"
 #include "ace/Signal.h"
 #include "ace/SString.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/OS_NS_stdio.h"
 #include "ace/OS_NS_stdlib.h"
 #include "ace/OS_NS_sys_socket.h"
@@ -102,8 +102,9 @@ ACE_Process::spawn (ACE_Process_Options &options)
   if (set_p && !ACE_BIT_ENABLED (options.creation_flags (),
                                  ACE_Process_Options::NO_EXEC))
     {
-      size_t max_len = 0;
-      ACE_TCHAR *cmd_line_buf = options.command_line_buf (&max_len);
+      int maxlen = 0;
+      ACE_TCHAR *cmd_line_buf = options.command_line_buf (&maxlen);
+      size_t max_len = static_cast<size_t> (maxlen);
       size_t curr_len = ACE_OS::strlen (cmd_line_buf);
       ACE_Handle_Set_Iterator h_iter (*set_p);
       // Because the length of the to-be-formatted +H option is not
@@ -115,14 +116,9 @@ ACE_Process::spawn (ACE_Process_Options &options)
         {
 #if defined (ACE_WIN32)
 # if defined (ACE_WIN64)
-// silence warnings coming from MinGW64 compilers
-#   pragma GCC diagnostic push
-#   pragma GCC diagnostic ignored "-Wformat"
-#   pragma GCC diagnostic ignored "-Wformat-extra-args"
           curr_len += ACE_OS::sprintf (&cmd_line_buf[curr_len],
                                        ACE_TEXT (" +H %I64p"),
                                        h);
-#   pragma GCC diagnostic pop
 # else
           curr_len += ACE_OS::sprintf (&cmd_line_buf[curr_len],
                                        ACE_TEXT (" +H %p"),
@@ -377,10 +373,10 @@ ACE_Process::spawn (ACE_Process_Options &options)
                               options.getgroup ()) < 0)
         {
 #if !defined (ACE_HAS_THREADS)
-          // We can't emit this log message because ACELIB_ERROR(), etc.
+          // We can't emit this log message because ACE_ERROR(), etc.
           // will invoke async signal unsafe functions, which results
           // in undefined behavior in threaded programs.
-          ACELIB_ERROR ((LM_ERROR,
+          ACE_ERROR ((LM_ERROR,
                       ACE_TEXT ("%p.\n"),
                       ACE_TEXT ("ACE_Process::spawn: setpgid failed.")));
 #endif
@@ -394,10 +390,10 @@ ACE_Process::spawn (ACE_Process_Options &options)
                               options.getegid ()) == -1)
           {
 #if !defined (ACE_HAS_THREADS)
-            // We can't emit this log message because ACELIB_ERROR(), etc.
+            // We can't emit this log message because ACE_ERROR(), etc.
             // will invoke async signal unsafe functions, which results
             // in undefined behavior in threaded programs.
-            ACELIB_ERROR ((LM_ERROR,
+            ACE_ERROR ((LM_ERROR,
                         ACE_TEXT ("%p.\n"),
                         ACE_TEXT ("ACE_Process::spawn: setregid failed.")));
 #endif
@@ -412,10 +408,10 @@ ACE_Process::spawn (ACE_Process_Options &options)
                               options.geteuid ()) == -1)
           {
 #if !defined (ACE_HAS_THREADS)
-            // We can't emit this log message because ACELIB_ERROR(), etc.
+            // We can't emit this log message because ACE_ERROR(), etc.
             // will invoke async signal unsafe functions, which results
             // in undefined behavior in threaded programs.
-            ACELIB_ERROR ((LM_ERROR,
+            ACE_ERROR ((LM_ERROR,
                         ACE_TEXT ("%p.\n"),
                         ACE_TEXT ("ACE_Process::spawn: setreuid failed.")));
 #endif
@@ -905,7 +901,7 @@ ACE_Process_Options::inherit_environment (void)
       // Add the string to our env buffer.
       if (this->setenv_i (existing_environment + slot, len) == -1)
         {
-          ACELIB_ERROR ((LM_ERROR,
+          ACE_ERROR ((LM_ERROR,
                       ACE_TEXT ("%p.\n"),
                       ACE_TEXT ("ACE_Process_Options::ACE_Process_Options")));
           break;
@@ -1202,7 +1198,7 @@ ACE_Process_Options::command_line (const ACE_TCHAR *const argv[])
 
           if (cur_len > command_line_buf_len_)
             {
-              ACELIB_ERROR_RETURN ((LM_ERROR,
+              ACE_ERROR_RETURN ((LM_ERROR,
                                  ACE_TEXT ("ACE_Process:command_line: ")
                                  ACE_TEXT ("command line is ")
                                  ACE_TEXT ("longer than %d\n"),

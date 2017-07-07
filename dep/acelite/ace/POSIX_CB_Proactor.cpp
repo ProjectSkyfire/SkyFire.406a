@@ -1,11 +1,11 @@
-// $Id: POSIX_CB_Proactor.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: POSIX_CB_Proactor.cpp 91683 2010-09-09 09:07:49Z johnnyw $
 
 #include "ace/POSIX_CB_Proactor.h"
 
 #if defined (ACE_HAS_AIO_CALLS) && !defined (ACE_HAS_BROKEN_SIGEVENT_STRUCT)
 
 #include "ace/Task_T.h"
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/Object_Manager.h"
 #include "ace/OS_NS_sys_time.h"
 
@@ -125,7 +125,7 @@ ACE_POSIX_CB_Proactor::handle_events_i (u_long milli_seconds)
       int const lerror = errno;
       if (lerror != ETIME &&   // timeout
           lerror != EINTR )    // interrupted system call
-        ACELIB_ERROR ((LM_ERROR,
+        ACE_ERROR ((LM_ERROR,
                     ACE_TEXT("%N:%l:(%P | %t)::%p\n"),
                     ACE_TEXT("ACE_POSIX_CB_Proactor::handle_events:")
                     ACE_TEXT("semaphore acquire failed")
@@ -164,7 +164,7 @@ ACE_POSIX_CB_Proactor::handle_events_i (u_long milli_seconds)
 
   // Uncomment this  if you want to test
   // and research the behavior of you system
-  // ACELIB_DEBUG ((LM_DEBUG,
+  // ACE_DEBUG ((LM_DEBUG,
   //            "(%t) NumAIO=%d NumQueue=%d\n",
   //             ret_aio, ret_que));
 

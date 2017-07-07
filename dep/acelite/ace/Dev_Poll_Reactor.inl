@@ -1,7 +1,7 @@
 // -*- C++ -*-
-// $Id: Dev_Poll_Reactor.inl 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Dev_Poll_Reactor.inl 91066 2010-07-12 11:05:04Z johnnyw $
 
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

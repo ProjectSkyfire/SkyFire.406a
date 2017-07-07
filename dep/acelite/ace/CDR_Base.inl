@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //
-// $Id: CDR_Base.inl 96943 2013-03-30 09:42:31Z mcorino $
+// $Id: CDR_Base.inl 80826 2008-03-04 14:51:23Z wotte $
 
 #if defined (ACE_HAS_INTRINSIC_BYTESWAP)
 // Take advantage of MSVC++ byte swapping compiler intrinsics (found
@@ -145,14 +145,12 @@ ACE_CDR::swap_8 (const char* orig, char* target)
 #elif defined (ACE_HAS_BSWAP_64)
   *reinterpret_cast<uint64_t *> (target) =
     bswap_64 (*reinterpret_cast<uint64_t const *> (orig));
-#elif (defined (__amd64__) || defined (__x86_64__)) && defined(__GNUG__) \
-    && !defined(ACE_LACKS_INLINE_ASSEMBLY)
+#elif (defined (__amd64__) || defined (__x86_64__)) && defined(__GNUG__)
   register unsigned long x =
     * reinterpret_cast<const unsigned long*> (orig);
   asm ("bswapq %1" : "=r" (x) : "0" (x));
   *reinterpret_cast<unsigned long*> (target) = x;
-#elif defined(ACE_HAS_PENTIUM) && defined(__GNUG__) \
-    && !defined(ACE_LACKS_INLINE_ASSEMBLY)
+#elif defined(ACE_HAS_PENTIUM) && defined(__GNUG__)
   register unsigned int i =
     *reinterpret_cast<const unsigned int*> (orig);
   register unsigned int j =

@@ -1,5 +1,6 @@
 // -*- C++ -*-
-// $Id: Condition_Attributes.inl 96265 2012-11-13 13:31:10Z johnnyw $
+//
+// $Id: Condition_Attributes.inl 96096 2012-08-23 12:34:02Z johnnyw $
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 

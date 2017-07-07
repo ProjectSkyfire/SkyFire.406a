@@ -1,4 +1,4 @@
-// $Id: OS_NS_stdio.cpp 97246 2013-08-07 07:10:20Z johnnyw $
+// $Id: OS_NS_stdio.cpp 91286 2010-08-05 09:04:31Z johnnyw $
 
 #include "ace/OS_NS_stdio.h"
 #include "ace/OS_NS_Thread.h"
@@ -37,40 +37,35 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
 
 ACE_BEGIN_VERSIONED_NAMESPACE_DECL
 
-namespace ACE_OS
-{
-
 void
-ace_flock_t::dump (void) const
+ACE_OS::ace_flock_t::dump (void) const
 {
 #if defined (ACE_HAS_DUMP)
   ACE_OS_TRACE ("ACE_OS::ace_flock_t::dump");
 
 # if 0
-  ACELIB_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("handle_ = %u"), this->handle_));
+  ACE_DEBUG ((LM_DEBUG, ACE_BEGIN_DUMP, this));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("handle_ = %u"), this->handle_));
 #   if defined (ACE_WIN32)
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nInternal = %d"),
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nInternal = %d"),
               this->overlapped_.Internal));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nInternalHigh = %d"),
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nInternalHigh = %d"),
               this->overlapped_.InternalHigh));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nOffsetHigh = %d"),
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nOffsetHigh = %d"),
               this->overlapped_.OffsetHigh));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nhEvent = %d"),
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nhEvent = %d"),
               this->overlapped_.hEvent));
 #   else
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nl_whence = %d"),
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nl_whence = %d"),
               this->lock_.l_whence));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nl_start = %d"), this->lock_.l_start));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nl_len = %d"), this->lock_.l_len));
-  ACELIB_DEBUG ((LM_DEBUG, ACE_TEXT ("\nl_type = %d"), this->lock_.l_type));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nl_start = %d"), this->lock_.l_start));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nl_len = %d"), this->lock_.l_len));
+  ACE_DEBUG ((LM_DEBUG, ACE_TEXT ("\nl_type = %d"), this->lock_.l_type));
 #   endif /* ACE_WIN32 */
-  ACELIB_DEBUG ((LM_DEBUG, ACE_END_DUMP));
+  ACE_DEBUG ((LM_DEBUG, ACE_END_DUMP));
 # endif /* 0 */
 #endif /* ACE_HAS_DUMP */
 }
-
-} /* namespace ACE_OS */
 
 /*****************************************************************************/
 

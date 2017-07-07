@@ -1,4 +1,4 @@
-// $Id: Cache_Map_Manager_T.cpp 96985 2013-04-11 15:50:32Z huangh $
+// $Id: Cache_Map_Manager_T.cpp 95790 2012-05-24 15:06:21Z shuston $
 
 #ifndef ACE_CACHE_MAP_MANAGER_T_CPP
 #define ACE_CACHE_MAP_MANAGER_T_CPP
@@ -9,7 +9,7 @@
 #pragma once
 #endif /* ACE_LACKS_PRAGMA_ONCE */
 
-#include "ace/Log_Category.h"
+#include "ace/Log_Msg.h"
 #include "ace/Malloc_Base.h"
 
 #if !defined (__ACE_INLINE__)
@@ -31,7 +31,7 @@ ACE_Cache_Map_Manager<KEY, VALUE, CMAP_TYPE, ITERATOR_IMPL, REVERSE_ITERATOR_IMP
   : caching_strategy_ (caching_s)
 {
   if (this->open (size, alloc) == -1)
-    ACELIB_ERROR ((LM_ERROR,
+    ACE_ERROR ((LM_ERROR,
                 ACE_TEXT ("%p\n"),
                 ACE_TEXT ("ACE_Cache_Map_Manager::ACE_Cache_Map_Manager")));
 
