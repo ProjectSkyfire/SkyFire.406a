@@ -17,7 +17,6 @@ git:
 branches:
   only:
     - master
-    - MyBranch_Bootz
     
 compiler:
   - gcc
