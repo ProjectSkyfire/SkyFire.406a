@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2008-2018 TrinityCore <http://www.trinitycore.org/>
- * Copyright (C) 2005-2018 MaNGOS <https://getmangos.com/>
+ * Copyright (C) 2008-2019 TrinityCore <http://www.trinitycore.org/>
+ * Copyright (C) 2005-2019 MaNGOS <https://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
